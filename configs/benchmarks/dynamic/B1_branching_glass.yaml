@@ -1,0 +1,82 @@
+schema_version: 1
+example: phast.examples.dynamic_branching_glass.run
+problem:
+  name: Glass Crack Branching
+  reference: Borden et al. (2012), CMAME
+# Mesh resolution:
+#   Borden 2012 Section 4.2 uses l0 = 0.25 mm and reports meshes
+#   h = l0, l0/2, l0/4. This default YAML is the Mesh 2 reference
+#   case, h_crack = 0.125 mm = l0/2, which is fine enough to recover
+#   the Y-shaped branching seen in Borden Fig. 9 and Liu et al. 2025
+#   Fig. 4. Use h_crack = 0.0625 mm for the Mesh 3 paper-quality run.
+#   Node count at this resolution is O(1e5). Run on GPU for production.
+#
+# Geometry: inline-primitive DSL (issue #192). Plate (W=100, H=40, a=50)
+# minus a triangular wedge notch polygon (edge-flush at x=0). Right-half
+# branching band reproduced via mode='box' refinement (PR #200).
+geometry:
+  units: mm
+  primitives:
+    plate: { type: rectangle, origin: [0, 0], size: [100.0, 40.0] }
+    # Triangular wedge notch: tip at (a, H/2)=(50, 20), mouth at left
+    # edge spanning H/2 +- eps. eps = min(0.01*min(W,H), 0.01) = 0.01.
+    notch:
+      type: polygon
+      vertices: [[0.0, 20.01], [50.0, 20.0], [0.0, 19.99]]
+  domain:
+    base: plate
+    subtract: [notch]
+  named_groups:
+    left:   { region: { type: rectangle, origin: [-0.005, 0.0],   size: [0.01, 40.0] } }
+    top:    { region: { type: rectangle, origin: [ 0.0,   39.995], size: [100.0, 0.01] } }
+    bottom: { region: { type: rectangle, origin: [ 0.0,  -0.005],  size: [100.0, 0.01] } }
+  mesh:
+    element_size:
+      default: 4.0       # h_coarse
+      refined:
+        - primitive: notch
+          size: 0.125    # h_crack
+          margin: 2.5    # crack_band = 5*l0
+        # Field[Box]: branching=True uniform fine band over the entire
+        # right half of the plate (Borden 2012 §4.2).
+        - region:
+            type: box
+            x: [45.0, 100.0]    # a - 5 = 45
+            y: [0.0, 40.0]
+          size: 0.125
+          thickness: 4.0
+# Inline material: Borden et al. (2012) soda-lime glass. Liu et al.
+# (2025) lists the same wave speeds as Borden; those speeds are
+# consistent with E=32 GPa, not the 26.5 GPa typo in that paper text.
+material:
+  E: "32 GPa"            # 32000.0 MPa
+  nu: 0.20
+  Gc: "3 J/m^2"          # 3.0e-3 N/mm
+  l0: "0.25 mm"          # Borden/Liu dynamic-branching reference
+  rho: "2450 kg/m^3"     # 2.45e-9 tonne/mm^3
+  energy_split: spectral
+  pf_model: AT2
+  eta_residual: 1.0e-7
+boundary_conditions:
+- nodes: left
+  type: fix
+  component: 0
+- {nodes: top,    type: traction, component: 1, value:  1.0, ramp_type: constant}
+- {nodes: bottom, type: traction, component: 1, value: -1.0, ramp_type: constant}
+loading:
+  protocol: simple
+  t_total: 8.0e-05
+  ramp_type: constant
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  # Keep validation runs at damage_every=1. Subcycling is useful for
+  # throughput studies, but Borden/Liu branching-onset comparisons are
+  # sensitive enough that the reference config should solve damage
+  # every explicit step.
+  damage_every: 1
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  print_every: 100

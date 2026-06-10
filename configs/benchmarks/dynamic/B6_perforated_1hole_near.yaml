@@ -1,0 +1,56 @@
+schema_version: 1
+example: phast.examples.dynamic_perforated_plate.run
+problem:
+  name: "Perforated Plate \u2014 1 hole near"
+  reference: Bleyer et al. (2017), Sec 4.3
+geometry:
+  type: perforated_sent
+  parameters:
+    W: 32.0
+    H: 16.0
+    a: 4.0
+    h_crack: 0.05
+    h_coarse: 1.0
+    n_holes: 1
+    hole_offset_y: 0.6
+    hole_start_x: 5.0
+# Geometry: kept on the perforated_sent generator. Multi-hole
+# layouts (1/10/30 holes with internal slit) exceed the
+# rectangle/circle base+subtract scope of the current inline
+# compiler (issue #147 scope note).
+# Inline material — Bleyer et al. (2017) PMMA, plane stress.
+material:
+  E: 3090.0             # 3.09 GPa
+  nu: 0.35
+  Gc: 0.3               # 0.3 N/mm = 300 J/m^2
+  l0: 0.1
+  rho: 1.18e-9
+  energy_split: amor
+  pf_model: AT1
+  plane_stress: true
+  eta_residual: 1.0e-7
+loading:
+  protocol: two_step_prestrain
+  prestrain_displacement: 0.04
+  t_total: 7.5e-05
+  ramp_type: constant
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  print_every: 100
+boundary_conditions:
+- nodes: left
+  type: fix
+  component: 0
+- nodes: top
+  type: prescribe
+  component: 1
+  value: 1.0
+- nodes: bottom
+  type: prescribe
+  component: 1
+  value: -1.0

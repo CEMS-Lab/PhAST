@@ -1,0 +1,81 @@
+# =============================================================================
+# Kalthoff-Winkler THREE-way timing comparison (torch + FEniCS + Akantu, amor).
+#
+# Sibling of config.yaml (spectral, two-way). This variant uses Amor's
+# volumetric-deviatoric split so that Akantu's `phasefield quadratic`
+# class — which maps our `amor` -> `volumetric_deviatoric` — can
+# participate. torch and FEniCS handle both splits natively, so the
+# same mesh + BCs + material + dt feed all three solvers here.
+#
+# Scientific note: Amor is NOT the canonical Kalthoff split. Borden
+# 2012, Hofacker 2012/2013 and Miehe 2010 all use the Miehe spectral
+# decomposition. On the half-plate the dominant failure mode near the
+# notch is tensile so Amor still produces a crack in roughly the right
+# place (~68 deg vs canonical 70 deg, see README 2026-04-18 note), but
+# the deviatoric driving force can generate secondary damage in the
+# compressive-shear lobe behind the notch. Treat the Amor column as a
+# cross-solver wall-clock baseline, NOT as the canonical Fig 13 row.
+#
+# Units: mm-tonne-s-MPa.
+# =============================================================================
+
+problem:
+  name: "Kalthoff-Winkler three-way (torch + FEniCS + Akantu, amor)"
+  reference: "Paper §6.2 three-way wall-clock; Amor 2009 split"
+
+solvers: [torch, fenics, akantu]
+
+# ---- Mesh (shared with config.yaml — generated once by run_comparison.sh) ----
+geometry:
+  mesh_path: ./kalthoff_half_h0.25.msh
+  h_crack: 0.25
+  h_coarse: 5.0
+  l0: 0.195
+  node_groups:
+    bottom:      "y=0; symmetry plane, u_y = 0"
+    top:         "y=100; free"
+    right:       "x=100; free"
+    left_impact: "x=0, y in [0, 24.875]; prescribed x-velocity BC"
+    left_top:    "x=0, y in [25.125, 100]; free"
+    notch:       "upper notch walls + tip, y~25"
+
+# ---- Material (maraging steel 18Ni(300), Kalthoff & Winkler 1987) ----
+material:
+  preset: maraging_steel_kw
+  overrides:
+    E: 190000.0
+    nu: 0.3
+    Gc: 22.13
+    l0: 0.195
+    rho: 8.0e-9
+    eta_residual: 1.0e-7
+    energy_split: amor           # <-- the only physics difference from config.yaml
+    pf_model: AT2
+    plane_stress: false
+
+boundary_conditions:
+- {nodes: bottom,      type: fix,       component: 1}
+- {nodes: left_impact, type: prescribe, component: 0, value: 1.0}
+
+loading:
+  protocol: simple
+  num_steps: 0
+  t_total: 1.0e-4
+  ramp_type: velocity_impact
+  v0: 16.5
+  v0_mm_per_s: 16500.0
+  t_ramp: 1.0e-6
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  damage_every: 1
+  use_multigrid: true
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 100
+  timing_csv: timing_per_step.csv
+  field_npz: field_snapshots.npz

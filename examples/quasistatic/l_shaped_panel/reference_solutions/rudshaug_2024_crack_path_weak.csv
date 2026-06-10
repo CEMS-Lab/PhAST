@@ -1,0 +1,34 @@
+# Rudshaug, Borvik, Hopperstad (2024), Int J Fract 245:57-73
+# DOI: 10.1007/s10704-023-00754-3
+# Fig 12d (page 71): crack path Y[mm] vs X[mm], WEAK L-shaped
+# soda-lime glass specimen, simulated with shell elements using three
+# tension-compression splits (Amor, Miehe, Hybrid).
+#
+# Specimen geometry: L-panel 100 x 100 mm, with the inner re-entrant
+# corner at (x,y)=(50,50). The crack initiates near the inner corner
+# (x ~ 0-2 mm in plot's local origin at corner) and propagates roughly
+# horizontally to the right edge (x=50 mm).
+#
+# Hand-digitised from PDF figure by visual reading; uncertainty
+# ~1-2 mm in y. The Amor split slopes downward from y~33 mm at x=0
+# before recovering, while Miehe/Hybrid stay nearly horizontal at
+# y~42-45 mm.
+#
+# Columns: x_mm, y_amor_w_mm, y_miehe_w_mm, y_hybrid_w_mm
+#
+x_mm, y_amor_w_mm, y_miehe_w_mm, y_hybrid_w_mm
+0.0,   33.0,  42.0,  44.0
+2.0,   34.0,  42.0,  44.0
+5.0,   37.0,  42.5,  44.0
+8.0,   40.0,  43.0,  44.0
+12.0,  41.0,  43.0,  44.0
+16.0,  42.0,  43.5,  44.5
+20.0,  42.5,  44.0,  45.0
+24.0,  43.0,  44.0,  45.0
+28.0,  43.5,  44.0,  45.5
+32.0,  44.0,  43.5,  46.0
+36.0,  44.5,  43.0,  46.5
+40.0,  45.0,  43.0,  47.0
+44.0,  46.0,  43.0,  47.5
+48.0,  46.5,  43.0,  48.0
+50.0,  47.0,  43.0,  48.0

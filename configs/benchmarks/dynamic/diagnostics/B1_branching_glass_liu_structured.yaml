@@ -1,0 +1,64 @@
+schema_version: 1
+problem:
+  name: Glass Crack Branching - Liu Structured Mesh Diagnostic
+  reference: Liu et al. (2025) Fig. 3/4; Borden et al. (2012) dynamic branching
+
+# Liu et al. (2025) show a quad-dominant computation mesh with a clean,
+# symmetric Y-refinement corridor. The solver is currently P1-triangle based,
+# so this diagnostic uses a structured split-quad mesh: every regular quad is
+# split into mirrored checkerboard triangles. This isolates mesh regularity and
+# symmetry from the default unstructured Gmsh triangular B1 setup.
+geometry:
+  type: rectangular_sent_liu_structured
+  parameters:
+    output_path: meshes/B1_branching_glass_liu_structured.msh
+    W: 100.0
+    H: 40.0
+    a: 50.0
+    l0: 0.25
+    h_crack: 0.125       # Borden mesh 2 spacing; use 0.0625 for mesh 3
+    h_coarse: 4.0        # accepted for API compatibility; not used here
+
+material:
+  E: "32 GPa"            # matches Borden wave speeds cited by Liu
+  nu: 0.20
+  Gc: "3 J/m^2"
+  l0: "0.25 mm"
+  rho: "2450 kg/m^3"
+  energy_split: spectral
+  pf_model: AT2
+  eta_residual: 1.0e-7
+
+boundary_conditions:
+- {nodes: left,   type: fix, component: 0}
+- {nodes: top,    type: traction, component: 1, value:  1.0, ramp_type: constant}
+- {nodes: bottom, type: traction, component: 1, value: -1.0, ramp_type: constant}
+# The structured mesh keeps the plate intact and represents the pre-crack as
+# a phase-field crack line, matching the common Borden/Liu initial-condition
+# convention more closely than a geometric slit.
+- {nodes: crack, type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [crack]
+
+loading:
+  protocol: simple
+  ramp_type: constant
+  t_total: 80.0e-6
+  num_steps: 0           # derive from CFL and t_total
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false
+  preconditioner: jacobi
+  bounds_method: projected_cg
+  damage_every: 1
+  damping_ratio_max: 0.10  # Liu/Newmark-like HF damping sensitivity
+
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  plots: true
+  print_every: 100

@@ -1,0 +1,116 @@
+schema_version: 1
+# =====================================================================
+# Quasi-static Notched Holed Plate — *welded baseline* variant for #223.
+#
+# Diagnostic copy of QS_notched_holed_plate.yaml that REPLACES both
+# rigid_connector MPCs with plain Dirichlet (`prescribe`) BCs that pin
+# every node on the upper_pin / lower_pin boundaries to the same
+# y-displacement that the rigid_connector master would have carried.
+#
+# Kinematic difference vs the MPC version:
+#   - MPC (rotation_free=true): pin-hole boundary rotates rigidly about
+#     the pin centre. theta is a free DOF; only the master's u_y is
+#     prescribed; the slaves' positions are reconstructed each Newton
+#     step from (master + theta * lever_arm).
+#   - Welded (this file): every node on the pin-hole boundary is
+#     directly Dirichlet-pinned to (u_x, u_y) = (0, ±2.0 * load_factor).
+#     No theta DOF. Lateral motion AND rotation of the pin face are
+#     fully welded to the prescribed value.
+#
+# Purpose: removes ``SecantCGSolver._solve_impl_mpc`` from the load
+# path entirely while keeping the load-application geometry the same
+# (upper_pin / lower_pin boundaries, ±2 mm vertical separation drive).
+# Compare disp at first peak against the MPC version (sim 0.154 mm)
+# and the reference (0.330 mm) to localize whether #223's stiffness
+# excess lives in the MPC code or in the model elsewhere.
+#
+# This is a one-shot diagnostic config — NOT a benchmark target.
+#
+# Run (CPU on Mac, manual dispatch):
+# Canonical benchmark-diagnostics location:
+#   configs/benchmarks/quasistatic/diagnostics/QS_notched_holed_plate_welded.yaml
+#
+#   python -u -m phast run \
+#       configs/benchmarks/quasistatic/diagnostics/QS_notched_holed_plate_welded.yaml \
+#       --output_dir runs/diag_223_welded --device cpu
+#
+# Schema check:
+#   python -m phast validate configs/benchmarks/quasistatic/diagnostics/QS_notched_holed_plate_welded.yaml
+# =====================================================================
+
+problem:
+  name: COMSOL Notched Holed Plate — WELDED diagnostic (issue #223)
+  reference: "Diagnostic variant of QS_notched_holed_plate.yaml; replaces rigid_connector MPCs with welded prescribe BCs to isolate the MPC code path from the model. NOT a published benchmark."
+
+geometry:
+  mesh_path: ../examples/quasistatic/notched_holed_plate/notched_holed_plate.msh
+
+# Material identical to QS_notched_holed_plate.yaml (Ambati 2015).
+material:
+  E: 6000.0
+  nu: 0.22
+  Gc: 2.280
+  l0: 0.25
+  rho: 2.4e-9
+  energy_split: isotropic
+  pf_model: AT2
+  plane_stress: true
+  eta_residual: 1.0e-6  # cement_mortar_ambati preset (Ambati 2015); intentional, not legacy default
+
+# WELDED Dirichlet BCs: every node on each pin-hole boundary is pinned
+# to the master's prescribed translation. u_x = 0 to remove rigid-body
+# horizontal motion; u_y = ±2.0 mm at load_factor = 1, ramped via the
+# loading protocol below.
+boundary_conditions:
+- nodes: upper_pin
+  type: prescribe
+  component: 0
+  value: 0.0
+- nodes: upper_pin
+  type: prescribe
+  component: 1
+  value: 2.0
+- nodes: lower_pin
+  type: prescribe
+  component: 0
+  value: 0.0
+- nodes: lower_pin
+  type: prescribe
+  component: 1
+  value: -2.0
+
+loading:
+  # Same protocol as QS_notched_holed_plate.yaml.
+  protocol: cyclic
+  cyclic_phases: "0.25:140,1.0:60"
+  num_steps: 200
+  dt: 0.01
+
+solver:
+  # Use the *default* quasi_static (QuasiStaticSolver) here — without
+  # rigid_connectors there is no need for the legacy MPC path. This
+  # also confirms the stiffness comparison is not contaminated by any
+  # SecantCGSolver-specific behaviour.
+  solver_type: quasi_static
+  stagger_tol: 1.0e-4
+  max_stagger: 50
+  stagger_criterion: relative
+  use_multigrid: true
+  preconditioner: jacobi  # AMG_QS_FALLBACK: QS CPU damage solve default
+  backend: auto           # sparse-direct mechanics when available
+  H_cap_factor: 0.0
+  damage_tol: 1.0e-6
+  static_tol: 1.0e-8
+  eta_residual: 1.0e-6  # cement_mortar_ambati preset (Ambati 2015); intentional, not legacy default
+
+output:
+  trajectory: true
+  h5_every: 5
+  plots: true
+  fast: true
+  print_every: 5
+  reaction_node_set: upper_pin
+  reaction_component: 1
+
+device:
+  device: cpu

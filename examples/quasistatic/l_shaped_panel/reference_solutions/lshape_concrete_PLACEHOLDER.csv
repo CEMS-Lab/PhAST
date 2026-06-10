@@ -1,0 +1,26 @@
+# PLACEHOLDER reference -- not a digitised literature curve.
+#
+# Scaffold for the L-shaped concrete panel using the Winkler 2001
+# EXPERIMENTAL band (~6.5 kN at u ~ 0.3 mm), NOT the Ambati 2015
+# simulation peak (~16 kN). The Ambati curve is already shipped as
+# ambati_2015_lshaped_concrete.csv and is the default concrete
+# reference -- compare.py will only fall back to this placeholder
+# if the Ambati file is missing OR --reference winkler_placeholder
+# is passed.
+#
+# Sampled by hand to rise approximately linearly from the origin to
+# a peak of ~6.5 kN at u ~ 0.30 mm. NO post-peak softening detail
+# is supplied -- closing #133 against Winkler 2001 (rather than
+# Ambati 2015) requires a proper digitisation of Winkler's reported
+# load-displacement, which has not been located.
+#
+# Format: two columns, whitespace-separated, "u_y [mm]  R [kN]".
+# u_y[mm]   R[kN]
+0.000      0.00
+0.050      1.10
+0.100      2.20
+0.150      3.30
+0.200      4.40
+0.250      5.50
+0.300      6.50
+0.350      6.30

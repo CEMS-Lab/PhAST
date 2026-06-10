@@ -1,0 +1,53 @@
+# Ambati, Gerasimov, De Lorenzis (2015), Comput. Mech. 55:383--405,
+# Fig 19 (L-shaped panel test, hybrid model), monotonic-loading
+# envelope only -- the cyclic unloading branches in Fig 19 (which
+# return to negative displacement and reload) are skipped.
+#
+# Material: lambda=6.16 kN/mm^2, mu=10.95 kN/mm^2 (E=25.85 GPa,
+# nu=0.18), Gc=8.9e-5 kN/mm = 89 J/m^2, l0=1.1875 mm. Quadrilateral
+# elements, 9650 with local refinement, AT2/spectral split. Hybrid
+# formulation (Ambati's contribution; the anisotropic-Miehe curve in
+# Fig 19 is nearly identical and not separately digitised).
+#
+# Hand-digitised by eye; uncertainty ~5-10% in force, ~0.005 mm in
+# displacement. Suitable for benchmark anchoring (peak-load + L2 in
+# the loading-and-softening envelope), not for sub-percent comparisons.
+#
+# Two columns, whitespace-separated, "u_y [mm]  R [kN]". The curve is
+# monotone-non-decreasing up to u=0.30 mm (peak ~16 kN), then softens
+# to ~1 kN by u=1.0 mm.
+#
+# Discrepancy note: Winkler (2001) experimental peak load is in the
+# 6-8 kN band; Ambati's simulation overshoots experiment by ~2x at
+# these material parameters. Our l_shaped_concrete preset matches
+# Ambati's parameters, so simulation should match Ambati (~16 kN), NOT
+# Winkler experiment.
+# u_y[mm]   R[kN]
+0.000     0.00
+0.025     1.40
+0.050     2.85
+0.075     4.30
+0.100     5.75
+0.125     7.20
+0.150     8.65
+0.175     10.10
+0.200     11.55
+0.225     12.90
+0.250     14.20
+0.275     15.30
+0.290     15.90
+0.300     16.05
+0.305     14.80
+0.310     11.50
+0.315     8.30
+0.320     5.80
+0.330     4.30
+0.350     3.30
+0.400     2.45
+0.450     2.05
+0.500     1.78
+0.600     1.50
+0.700     1.30
+0.800     1.15
+0.900     1.05
+1.000     0.95

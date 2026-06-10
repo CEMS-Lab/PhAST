@@ -1,0 +1,185 @@
+schema_version: 1
+title: quasistatic_reproducibility_catalog
+scope: canonical quasi-static benchmark reruns
+source: examples/quasistatic
+defaults:
+  mode: command
+  working_dir: /path/to/phast
+  output_dir_prefix: run
+
+runs:
+  - id: qs_notched_holed_plate
+    family: quasi_static
+    mode: direct_yaml
+    config: configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml
+    command:
+      - python
+      - -m
+      - phast
+      - run
+      - configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml
+    output:
+      - results.csv
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+    notes: COMSOL parity baseline with isotropic AT2 setup.
+
+  - id: qs_notched_holed_plate_comsol_strict
+    family: quasi_static
+    mode: direct_yaml
+    config: configs/benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml
+    command:
+      - python
+      - -m
+      - phast
+      - run
+      - configs/benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml
+    output:
+      - results.csv
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+    notes: COMSOL strict mode using volumetric-deviatoric split and `eta=1e-5`.
+
+  - id: qs_l_shaped_concrete
+    family: quasi_static
+    mode: direct_yaml
+    config: configs/benchmarks/quasistatic/QS_lshaped_concrete.yaml
+    command:
+      - python
+      - -m
+      - phast
+      - run
+      - configs/benchmarks/quasistatic/QS_lshaped_concrete.yaml
+    output:
+      - results.csv
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+    notes: Ambati/Winkler L-shaped concrete benchmark.
+
+  - id: qs_sent_miehe
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_mesh_convergence_arc_length.yaml
+    launcher: scripts/slurm/benchmarks/hpc_qs_mesh_convergence_arc.slurm
+    module: examples.quasistatic.miehe_tension.run
+    compare: examples/quasistatic/miehe_tension/compare.py
+    output:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+      - crack_path_stages.png
+    notes: Runs multiple SENT/SENS/TPB arc-length and mesh-convergence cases.
+
+  - id: qs_sens_tpb_peak_window
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_sens_tpb_peak_window_corrected.yaml
+    launcher: scripts/slurm/benchmarks/hpc_qs_sens_tpb_peak_window.slurm
+    output:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+      - crack_path_stages.png
+    notes: Peak-window SENS/TPB validation with PETSc/MUMPS and trajectory outputs.
+
+  - id: qs_sens_tpb_rescue_visuals
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_sens_tpb_rescue_visuals.yaml
+    launcher: scripts/slurm/benchmarks/hpc_qs_sens_tpb_rescue.slurm
+    output:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+      - crack_path_stages.png
+    notes: Targeted diagnostic visual rescue for difficult SENS/TPB peak continuation cells.
+
+  - id: qs_miehe_tension_repro
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_tension_repro.yaml
+    launcher:
+      - python
+      - -u
+      - examples/quasistatic/miehe_tension/run.py
+    output:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+      - crack_path_stages.png
+    notes: Clean single-case local reproducibility entry for Miehe SENT tension.
+
+  - id: qs_miehe_sens_repro
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_sens_repro.yaml
+    launcher:
+      - python
+      - -u
+      - examples/quasistatic/miehe_shear/run.py
+    output:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+      - crack_path_stages.png
+    notes: Clean single-case local reproducibility entry for Miehe SENS shear.
+
+  - id: qs_miehe_tpb_repro
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_tpb_repro.yaml
+    launcher:
+      - python
+      - -u
+      - examples/quasistatic/three_point_bending/run.py
+    output:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+      - damage_evolution.mp4
+      - initial_conditions.png
+      - load_displacement.png
+      - crack_path_stages.png
+    notes: Clean single-case local reproducibility entry for Miehe TPB peak window.

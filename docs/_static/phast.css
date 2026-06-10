@@ -1,0 +1,50 @@
+.phast-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin: 1.5rem 0 2rem;
+}
+
+.phast-card {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 0.1rem 0.35rem rgba(0, 0, 0, 0.06);
+}
+
+.phast-card h3 {
+  margin-top: 0;
+}
+
+.phast-hero-brand {
+  display: block;
+  width: min(100%, 64rem);
+  height: auto;
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.08);
+}
+
+.phast-thumb-grid {
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.phast-thumb-card {
+  overflow: hidden;
+}
+
+.phast-thumb-card img {
+  display: block;
+  width: calc(100% + 2rem);
+  max-width: none;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  margin: -1rem -1rem 0.85rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.phast-thumb-card p {
+  margin-bottom: 0;
+}

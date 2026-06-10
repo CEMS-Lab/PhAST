@@ -1,0 +1,93 @@
+# =====================================================================
+# B7 -- Dynamic crack branching, COMSOL 6.4 reference. UNIFIED CANDIDATE
+# combining the top-2 unverified knobs from the 2026-05-08 discrepancy
+# investigation (reports/B7_solver_discrepancy_2026-05-08.md):
+#
+#   1. energy_split: spectral_stress (Miehe sec 3.2; matches COMSOL PDF
+#      p.2 Eq 5; never run on HPC before)                       -> #310
+#   2. loading.ramp_type: smooth_step (Hermite cubic s^2(3-2s);
+#      matches COMSOL PDF p.10 step1 implementation)            -> #311
+#
+# Geometry inherited from B7_half_plate_symmetric.yaml (PR #302). The
+# half-plate + symmetry BC matches COMSOL exactly; per the discrepancy
+# investigation, geometry has been verified equivalent across H=20/40/80
+# (all branch ~79 us) so the geometry is NOT the issue. This config is
+# the apples-to-apples test of the energy-split + ramp combo.
+#
+# Hypothesis (advisor / agent 2026-05-08): #310 + #311 together close
+# part of the 79 us -> 33 us gap. Yu 2021 indicates ~10-15% timing
+# shift from energy split alone, so a partial close is the realistic
+# expectation. Full closure may need runtime instrumentation
+# (issue #314, compare.py morphology blindness).
+#
+# Acceptance (compare.py --half-plate):
+#   - branching onset 33 us +/-20%
+#   - full Y by 75 us
+#   - elastic-energy peak 0.13 - 0.14 J at thickness 1 m
+#
+# HPC:
+#   B7_CONFIG=configs/B7_debug/B7_half_plate_comsol_match.yaml \
+#       bash scripts/submit_job_auto.sh \
+#       scripts/slurm/benchmarks/hpc_b7_dynamic_branching.slurm \
+#       --gpu a100_80g
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (half-plate + spectral_stress + smooth_step, #299/#310/#311)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs in examples/dynamic/crack_branching_comsol/)"
+
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 100.0
+    H: 20.0                # COMSOL symmetry domain: sample height/2
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.125         # l0/4 (COMSOL p.10)
+    h_coarse: 1.0
+    branching: true        # uniform fine mesh in the right half
+    half_plate: true       # precrack along y=0; bottom split into
+                           # 'crack' + 'bottom_sym' physical groups
+
+material:
+  E: 32000.0
+  nu: 0.20
+  Gc: 3.0e-3
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: spectral_stress      # FIX #310: COMSOL PDF p.2 Eq 5 (Miehe 3.2)
+  pf_model: AT1
+  eta_residual: 1.0e-7
+
+boundary_conditions:
+- {nodes: top,         type: neumann,      component: 1, value: 1.0}
+- {nodes: bottom_sym,  type: fix,          component: 1}
+- {nodes: left,        type: fix,          component: 0}
+- {nodes: crack,       type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [crack]
+
+loading:
+  protocol: simple
+  ramp_type: smooth_step             # FIX #311: COMSOL PDF p.10 (Hermite cubic)
+  t_ramp: 5.0e-8
+  t_total: 80.0e-6
+  num_steps: 0
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false
+  bounds_method: projected_cg
+  damage_every: 2
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

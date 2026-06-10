@@ -1,0 +1,915 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cems-lab.github.io/PhAST/schema/v1.json",
+  "title": "phast YAML problem schema",
+  "description": "Editor-facing schema generated from phast config dataclasses, ENUMS, and RANGES. Runtime validation still uses python -m phast run <config.yaml> --validate-only.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1
+    },
+    "problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "Phase-Field Problem"
+        },
+        "reference": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "name": {
+      "type": "string",
+      "default": "Phase-Field Problem"
+    },
+    "reference": {
+      "type": "string",
+      "default": ""
+    },
+    "geometry": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "miehe_tension",
+          "enum": [
+            "bazant_gap_test",
+            "brazilian_disc",
+            "crack_coalescence",
+            "glass_impact_vnotch",
+            "kalthoff_winkler",
+            "l_shaped_panel",
+            "miehe_shear",
+            "miehe_tension",
+            "perforated_sent",
+            "plate_with_holes",
+            "rectangular_sent",
+            "rectangular_sent_comsol_structured",
+            "rectangular_sent_liu_structured",
+            "square_plate",
+            "three_point_bending"
+          ]
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true,
+          "default": {}
+        },
+        "mesh_path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "units": {
+          "type": "string",
+          "default": "mm"
+        },
+        "primitives": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true,
+          "default": null
+        },
+        "domain": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true,
+          "default": null
+        },
+        "named_groups": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true,
+          "default": null
+        },
+        "mesh": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": true,
+          "default": null
+        }
+      }
+    },
+    "material": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "preset": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": true,
+          "default": {},
+          "properties": {
+            "energy_split": {
+              "enum": [
+                "spectral",
+                "spectral_stress",
+                "amor",
+                "volumetric_deviatoric",
+                "star_convex",
+                "isotropic"
+              ]
+            },
+            "pf_model": {
+              "enum": [
+                "AT1",
+                "AT2",
+                "PFCZM",
+                "allencahn"
+              ]
+            },
+            "driving_force": {
+              "enum": [
+                "strain_energy",
+                "principal_stress"
+              ]
+            },
+            "pfczm_softening": {
+              "enum": [
+                "linear",
+                "exponential"
+              ]
+            },
+            "l0": {
+              "type": [
+                "number",
+                "string"
+              ],
+              "minimum": 0.0
+            },
+            "Gc": {
+              "type": [
+                "number",
+                "string"
+              ],
+              "minimum": 0.0
+            },
+            "E": {
+              "type": [
+                "number",
+                "string"
+              ],
+              "minimum": 0.0
+            },
+            "nu": {
+              "type": "number",
+              "minimum": -1.0,
+              "maximum": 0.5
+            },
+            "rho": {
+              "type": [
+                "number",
+                "string"
+              ],
+              "minimum": 0.0
+            },
+            "eta_residual": {
+              "type": "number",
+              "minimum": 0.0
+            },
+            "sigma_ts": {
+              "type": [
+                "number",
+                "string"
+              ],
+              "minimum": 0.0
+            },
+            "pfczm_p": {
+              "type": "number",
+              "minimum": 2
+            }
+          }
+        },
+        "E": {
+          "type": [
+            "number",
+            "null",
+            "string"
+          ],
+          "default": null,
+          "minimum": 0.0
+        },
+        "nu": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null,
+          "minimum": -1.0,
+          "maximum": 0.5
+        },
+        "Gc": {
+          "type": [
+            "number",
+            "null",
+            "string"
+          ],
+          "default": null,
+          "minimum": 0.0
+        },
+        "l0": {
+          "type": [
+            "number",
+            "null",
+            "string"
+          ],
+          "default": null,
+          "minimum": 0.0
+        },
+        "rho": {
+          "type": [
+            "number",
+            "null",
+            "string"
+          ],
+          "default": null,
+          "minimum": 0.0
+        },
+        "eta_residual": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null,
+          "minimum": 0.0
+        },
+        "energy_split": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "spectral",
+            "spectral_stress",
+            "amor",
+            "volumetric_deviatoric",
+            "star_convex",
+            "isotropic"
+          ]
+        },
+        "pf_model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "AT1",
+            "AT2",
+            "PFCZM",
+            "allencahn"
+          ]
+        },
+        "kinematics": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "plane_stress": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "driving_force": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "strain_energy",
+            "principal_stress"
+          ]
+        },
+        "cubic_s": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null
+        },
+        "sigma_ts": {
+          "type": [
+            "number",
+            "null",
+            "string"
+          ],
+          "default": null,
+          "minimum": 0.0
+        },
+        "pfczm_p": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "minimum": 2
+        },
+        "pfczm_softening": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "linear",
+            "exponential"
+          ]
+        }
+      }
+    },
+    "loading": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "default": "simple",
+          "enum": [
+            "simple",
+            "two_step_prestrain",
+            "cyclic"
+          ]
+        },
+        "ramp_type": {
+          "type": "string",
+          "default": "constant",
+          "enum": [
+            "constant",
+            "linear",
+            "smooth",
+            "smooth_step",
+            "velocity_impact"
+          ]
+        },
+        "num_steps": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 0
+        },
+        "t_total": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "default": 0.0,
+          "minimum": 0.0
+        },
+        "dt": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "default": 1e-05,
+          "minimum": 0.0
+        },
+        "t_ramp": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "default": 0.0,
+          "minimum": 0.0
+        },
+        "v0": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "default": 0.0
+        },
+        "disp_max": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "default": 0.0
+        },
+        "prestrain_displacement": {
+          "type": [
+            "number",
+            "string"
+          ],
+          "default": 0.0
+        },
+        "cyclic_phases": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "solver": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "solver_type": {
+          "type": "string",
+          "default": "explicit",
+          "enum": [
+            "explicit",
+            "quasi_static",
+            "quasi_static_legacy",
+            "static",
+            "lbfgs",
+            "monolithic"
+          ]
+        },
+        "time_integrator": {
+          "type": "string",
+          "default": "central_difference",
+          "enum": [
+            "central_difference",
+            "verlet",
+            "newmark",
+            "generalized_alpha",
+            "gen_alpha"
+          ]
+        },
+        "rho_inf": {
+          "type": "number",
+          "default": 0.5
+        },
+        "dt_safety": {
+          "type": "number",
+          "default": 0.8,
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "stagger_tol": {
+          "type": "number",
+          "default": 1e-06,
+          "minimum": 0.0
+        },
+        "max_stagger": {
+          "type": "integer",
+          "default": 500,
+          "minimum": 1
+        },
+        "stagger_criterion": {
+          "type": "string",
+          "default": "relative",
+          "enum": [
+            "relative",
+            "absolute",
+            "linf",
+            "residual",
+            "am_energy"
+          ]
+        },
+        "stagger_norm": {
+          "type": "string",
+          "default": "l2",
+          "enum": [
+            "l2",
+            "linf"
+          ]
+        },
+        "anderson_depth": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0
+        },
+        "adaptive_stagger_tol": {
+          "type": "boolean",
+          "default": false
+        },
+        "use_multigrid": {
+          "type": "boolean",
+          "default": true
+        },
+        "preconditioner": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            null,
+            "auto",
+            "amg",
+            "amgx",
+            "gmg",
+            "jacobi",
+            "none"
+          ]
+        },
+        "H_cap_factor": {
+          "type": "number",
+          "default": 0.0,
+          "minimum": 0.0
+        },
+        "damage_tol": {
+          "type": "number",
+          "default": 1e-05,
+          "minimum": 0.0
+        },
+        "static_tol": {
+          "type": "number",
+          "default": 1e-08,
+          "minimum": 0.0
+        },
+        "bounds_method": {
+          "type": "string",
+          "default": "post_clamp",
+          "enum": [
+            "post_clamp",
+            "projected_cg"
+          ]
+        },
+        "damage_every": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 1
+        },
+        "fresh_d_in_corrector": {
+          "type": "boolean",
+          "default": false
+        },
+        "damage_max_iter": {
+          "type": "integer",
+          "default": 5000,
+          "minimum": 1
+        },
+        "static_max_iter": {
+          "type": "integer",
+          "default": 5000,
+          "minimum": 1
+        },
+        "softmax_H_beta": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null
+        },
+        "H_update_method": {
+          "type": "string",
+          "default": "hard_max",
+          "enum": [
+            "hard_max",
+            "softmax",
+            "smooth_max",
+            "log_smooth",
+            "custom_subgrad"
+          ]
+        },
+        "enable_damage": {
+          "type": "boolean",
+          "default": true
+        },
+        "fail_on_mechanics_nonconvergence": {
+          "type": "boolean",
+          "default": true
+        },
+        "adaptive_dt": {
+          "type": "boolean",
+          "default": false
+        },
+        "adaptive_dt_d_threshold": {
+          "type": "number",
+          "default": 0.01
+        },
+        "eta_residual": {
+          "type": "number",
+          "default": 1e-07,
+          "minimum": 0.0
+        },
+        "damping_ratio_max": {
+          "type": "number",
+          "default": 0.0,
+          "minimum": 0.0
+        },
+        "backend": {
+          "type": "string",
+          "default": "auto"
+        }
+      }
+    },
+    "output": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "output_dir": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "h5": {
+          "type": "boolean",
+          "default": false
+        },
+        "trajectory": {
+          "type": "boolean",
+          "default": false
+        },
+        "h5_every": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1
+        },
+        "vtu": {
+          "type": "boolean",
+          "default": false
+        },
+        "vtu_every": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 1
+        },
+        "viz_format": {
+          "type": "string",
+          "default": "vtu"
+        },
+        "gif": {
+          "type": "boolean",
+          "default": false
+        },
+        "gif_frames": {
+          "type": "integer",
+          "default": 200,
+          "minimum": 1
+        },
+        "gif_fields": {
+          "type": "string",
+          "default": "damage"
+        },
+        "animation_format": {
+          "type": "string",
+          "default": "mp4"
+        },
+        "animation_renderer": {
+          "type": "string",
+          "default": "raster"
+        },
+        "animation_raster_width": {
+          "type": "integer",
+          "default": 960,
+          "minimum": 32
+        },
+        "plots": {
+          "type": "boolean",
+          "default": false
+        },
+        "profile": {
+          "type": "boolean",
+          "default": false
+        },
+        "fast": {
+          "type": "boolean",
+          "default": false
+        },
+        "print_every": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 1
+        },
+        "reaction_node_set": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "reaction_component": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "device": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "device": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            null,
+            "cpu",
+            "cuda",
+            "mps"
+          ]
+        },
+        "compile": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "initial_conditions": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "preseed_notch_nodesets": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "preseed_damage": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "default": null
+        }
+      }
+    },
+    "boundary_conditions": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nodes": {
+            "type": "string",
+            "default": ""
+          },
+          "type": {
+            "type": "string",
+            "default": "fix",
+            "enum": [
+              "fix",
+              "prescribe",
+              "neumann",
+              "traction",
+              "symmetry",
+              "rigid_connector",
+              "pf_dirichlet"
+            ]
+          },
+          "component": {
+            "type": "integer",
+            "default": 0,
+            "enum": [
+              0,
+              1
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "string"
+            ],
+            "default": 0.0
+          },
+          "ramp_type": {
+            "type": "string",
+            "default": "constant",
+            "enum": [
+              "constant",
+              "linear",
+              "smooth_step",
+              "cosine"
+            ]
+          },
+          "t_ramp": {
+            "type": [
+              "number",
+              "string"
+            ],
+            "default": 0.0
+          },
+          "t_hold": {
+            "type": [
+              "number",
+              "null",
+              "string"
+            ],
+            "default": null
+          },
+          "axis": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "enum": [
+              "x",
+              "y"
+            ]
+          },
+          "master": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "dofs": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "default": null
+          },
+          "prescribe": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": true,
+            "default": null
+          },
+          "rotation_free": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "default": []
+    },
+    "example": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "inversion": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "acceptance": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "description": "Free-form benchmark acceptance metadata: reference outputs, metric tolerances, required artifacts, and validation notes."
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# Rudshaug, Borvik, Hopperstad (2024), Int J Fract 245:57-73
+# DOI: 10.1007/s10704-023-00754-3
+# Page 64 + Fig 12c colorbar (page 71): fracture-initiation load band
+# from the experimental study (Rudshaug et al. 2023).
+#
+# The 2024 paper text states (p64): "the force level at fracture
+# initiation varied from ~75 N to ~115 N" across 20 quasi-static
+# experiments on L-shaped soda-lime glass specimens. The Fig 12c
+# colorbar runs from 70 N to 120 N (rounded).
+#
+# This is the only force quantity reported in the 2024 paper for the
+# L-panel test -- a force-displacement curve is NOT shown.
+# (For the F-d curve, see Rudshaug, Hopperstad, Borvik 2023, Glass
+# Struct Eng, doi 10.1007/s40940-023-00239-8 -- not in repo refs/.)
+#
+# Columns: quantity, value_N
+#
+quantity,value_N
+fracture_init_force_min_text,75.0
+fracture_init_force_max_text,115.0
+fracture_init_force_min_colorbar,70.0
+fracture_init_force_max_colorbar,120.0

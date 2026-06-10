@@ -1,0 +1,99 @@
+# =====================================================================
+# B7 -- Borden 2012 / Ren 2019 / Vinut FEniCS exact geometry replication.
+#
+# Discovered 2026-05-08 (literature extraction, reports/B7_literature_
+# parameter_comparison_2026-05-08.md): the 33 us branching-onset target
+# in our compare.py is COMSOL-only. Every numerical replication of the
+# Borden 2012 benchmark uses H = 40 mm full-plate (not 80 mm), reporting:
+#
+#   Borden 2012:  not stated ("not possible to say precisely")
+#   Ren 2019:     68.2 us (mesh 2) / 70.1 us (mesh 1)   <-- the closest
+#   PhaFiDyn:     not stated (CZM variant)
+#   Vinut FEniCS: not stated (T3 'crossed' mesh)
+#   OURS so far:  78-79 us at H=80 (within ~14% of Ren consensus)
+#
+# This config replicates the Borden geometry exactly:
+#   - H = 40 mm (NOT 80; full-plate, no symmetry plane)
+#   - W = 100 mm
+#   - Pre-crack on left edge at y = 20 mm (mid-height)
+#   - Top + bottom traction +/- 1 MPa (symmetric loading; no symmetry BC)
+#   - Strain-spectral Miehe 3.1 (matches Borden / Ren / Vinut)
+#   - AT2 (matches Borden / Ren; we usually use AT1)
+#   - Step-loading (instantaneous; matches Borden / Ren / Vinut)
+#
+# Acceptance (compare.py, COMSOL-derived gate REPLACED):
+#   - branching onset 68.2 us +/- 20% (Ren 2019 reference, NOT 33 us)
+#   - n_arms_final = 2 (Y morphology)
+#   - Energy peak 0.26-0.28 J (full-plate equivalent, like compare.py
+#     default; NOT 0.13-0.14 J half-plate)
+#
+# HPC:
+#   B7_CONFIG=configs/B7_debug/B7_borden_h40.yaml \
+#       bash scripts/submit_job_auto.sh \
+#       scripts/slurm/benchmarks/hpc_b7_dynamic_branching.slurm \
+#       --gpu a100_80g
+# =====================================================================
+
+problem:
+  name: Borden 2012 / Ren 2019 dynamic crack branching (H=40, AT2, step load, #299)
+  reference: "Borden 2012 (CMAME 217-220:77); Ren 2019 (Eng Fract Mech) 68.2/70.1 us; Vinut FEniCS code"
+
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 100.0
+    H: 40.0                # FULL plate; pre-crack at y = 20 (mid-height)
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.125         # l0/4 (matches COMSOL p.10)
+    h_coarse: 1.0
+    branching: true
+    half_plate: false      # NOT half-plate; full plate with crack at mid-height
+
+material:
+  E: 32000.0
+  nu: 0.20
+  Gc: 3.0e-3
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: spectral             # Miehe 3.1 (Borden / Ren / Vinut consensus)
+  pf_model: AT2                      # Matches Borden / Ren; differs from our usual AT1
+  eta_residual: 1.0e-7
+
+# Boundary conditions: top tension +1 MPa, bottom tension -1 MPa
+# (symmetric loading; no symmetry BC since this is the FULL plate)
+# Pre-crack uses notch_upper + notch_lower (full-plate convention; the
+# 'crack' set only exists when half_plate=true).
+boundary_conditions:
+- {nodes: top,          type: neumann,      component: 1, value: 1.0}
+- {nodes: bottom,       type: neumann,      component: 1, value: -1.0}
+- {nodes: left,         type: fix,          component: 0}
+- {nodes: notch_upper,  type: pf_dirichlet, value: 1.0}
+- {nodes: notch_lower,  type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [notch_upper, notch_lower]
+
+loading:
+  protocol: simple
+  ramp_type: smooth_step             # Closest match to step in Borden / Ren / Vinut
+  t_ramp: 1.0e-9                     # Effectively instantaneous (was 5e-8)
+  t_total: 80.0e-6
+  num_steps: 0
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false
+  bounds_method: projected_cg
+  damage_every: 1                    # Matches Borden / Ren / Vinut every-step
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

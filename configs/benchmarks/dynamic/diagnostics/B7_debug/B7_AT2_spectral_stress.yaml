@@ -1,0 +1,146 @@
+# =====================================================================
+# B7 -- Dynamic crack branching, COMSOL 6.4 reference cross-check
+# Issue #135. Third independent reference for the PMMA-style dynamic
+# Y-branching benchmark already validated in Paper 1 against
+# Borden 2012 (B1) and Bleyer 2017 (B5).
+#
+# Distinguishing feature: traction-controlled (Neumann sigma_n = 1 MPa
+# with smooth-step ramp), versus B1/B5 which are displacement-controlled.
+#
+# Run:
+#   python -m phast run configs/benchmarks/dynamic/B7_dynamic_crack_branching_comsol.yaml
+#
+# Acceptance (issue #135 + this task):
+#   - Initiation t ~ 10 us
+#   - Branching onset t ~ 33 us (within +/-20%)
+#   - Full Y-shape by 75 us
+#   - Elastic-energy peak ~0.26 J then ~0.28 J (at thickness 1 m;
+#     2x COMSOL's reported half-plate values 0.13 / 0.14 J)
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (PMMA-equiv.)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs in examples/dynamic/crack_branching_comsol/)"
+
+# Geometry: full-plate equivalent of COMSOL's half-plate setup.
+# COMSOL: full sample 100 x 40 mm, modeled as a 100 x 20 mm
+# symmetry half-plate. Mirroring about y=0 -> 100 x 40 mm
+# full plate with central pre-crack from x=0 to x=50 at y=H/2,
+# tractions on both top and bottom.
+# This matches COMSOL's *full-plate equivalent* energy budget
+# (half-plate energy x 2). Diverges from B1/B5/Borden Paper 1
+# convention (100 x 40 mid-notch); kept distinct on purpose so the
+# B7 elastic-energy ledger is comparable to COMSOL Fig 4 directly.
+#
+# Kept on the rectangular_sent generator. Inline migration is blocked
+# on polygon subtracts (issue #199; the legacy notch is a triangular
+# wedge) and Field[Box] refinement for ``branching: true`` (issue
+# #200). Migrate once both land.
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 100.0
+    H: 80.0                # full-plate height = 2 x COMSOL half-plate
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.25        # l0/4 to match COMSOL p.10 (was 0.25 = l0/2)
+    h_coarse: 0.25         # l0/2 in coarse region (was 2.0 = 4*l0)
+    # COMSOL audit (2026-05-06, reference_codes/COMSOL_comparison_audit.md):
+    # COMSOL B7 PDF p.10 specifies h_e = l_int/4 = 0.125 mm uniform in
+    # the refined band. Borden 2012 §5 shows branching onset converges
+    # only at h <= l_int/4; at l_int/2 (our previous setting) Bourdin-
+    # Marigo correction overestimates effective Gc by +18.75% → delayed
+    # branching by ~9% just from discretisation. This is the dominant
+    # cause of the 78us vs 33us gap (#213); t_ramp lowering (5e-8) was
+    # secondary. To be re-tested on HPC.
+    branching: false       # uniform fine mesh in the right half
+
+# Inline material — values from the COMSOL example, AT1 (finite
+# elastic threshold W_c0 = 3*Gc/(8*l0), auto-derived in
+# damage_solver.py).
+#
+# Note: the COMSOL example labels the material "PMMA" but the actual
+# parameter values (E=32 GPa, nu=0.2, rho=2450 kg/m^3, Gc=3 J/m^2)
+# match Borden 2012's soda-lime glass. See README for the naming
+# discrepancy.
+material:
+  E: 32000.0            # 32 GPa
+  nu: 0.20
+  Gc: 3.0e-3            # 3 J/m^2
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: spectral_stress
+  # Tuning history (#213 branching-onset diagnostic, 2026-05-06):
+  # was 'spectral' (Miehe §3.1, strain-spectral). HPC 28750 still
+  # reported branching at 79.57 us vs ref 33 us after the prior three
+  # fixes (mesh h_crack=l0/4, t_ramp=5e-8, pf_dirichlet). COMSOL audit
+  # (reference_codes/COMSOL_comparison_audit.md) identifies stress-
+  # spectral (Miehe §3.2) as COMSOL's actual split. Yu et al. 2021
+  # report a 10-15% timing shift between the two on dynamic branching
+  # benchmarks. New opt-in 'spectral_stress' added in
+  # fem_operators.py::compute_stress_spectral_stress for this probe.
+  # To be re-tested on HPC.
+  pf_model: AT2
+  eta_residual: 1.0e-7
+
+# Traction loading: sigma_n = 1 MPa on top edge (component 1 = y).
+# Smooth-step ramp over the first ~5 us (see loading.t_ramp).
+# Kept on the legacy ``neumann`` vocabulary because the global
+# loading.ramp_type=smooth (0.5*(1 - cos(pi*t/t_ramp))) drives this
+# Neumann load — the per-BC ``traction smooth_step`` factor is the
+# Hermite 3s^2-2s^3 polynomial, which is *different*. Migrating to
+# ``traction`` would silently change the ramp profile.
+boundary_conditions:
+- {nodes: top,    type: neumann,   component: 1, value:  1.0}    # +1 MPa
+- {nodes: bottom, type: neumann,   component: 1, value: -1.0}    # -1 MPa
+# Pin the bottom-left corner in x to remove rigid-body translation in x.
+# (Single point; doesn't perturb the global response.)
+- {nodes: left,   type: fix,       component: 0}
+# Phase-field Dirichlet (issue #213): lock damage phi=1 at the
+# pre-existing crack notch nodes for the entire simulation. This is
+# the COMSOL pre-crack convention — pf_dirichlet *constrains* the
+# damage solve at every step, while ``preseed_notch_nodesets`` below
+# only sets the initial elastic state at t=0. Both coexist cleanly:
+# preseed primes the H-field so the bulk near the crack starts in
+# the right elastic regime; pf_dirichlet then enforces the crack
+# itself never blunts under wave reflection / eta_residual damping.
+- {nodes: notch_upper, type: pf_dirichlet, value: 1.0}
+- {nodes: notch_lower, type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  # Pre-existing crack: pre-seed the notch nodes (the .geo names them
+  # automatically) so AT1 is initialised with d=1 there at t=0.
+  # Coexists with the ``pf_dirichlet`` BC above: preseed handles t=0,
+  # pf_dirichlet handles t > 0 (issue #213).
+  preseed_notch_nodesets: [notch_upper, notch_lower]
+
+loading:
+  protocol: simple
+  ramp_type: smooth          # 0.5*(1 - cos(pi*t/t_ramp)) traction ramp
+  t_ramp: 5.0e-8             # smooth-step over first 0.05 us
+  # Tuning history (#213 branching-onset diagnostic, 2026-05-06):
+  # was 5.0e-6 (5 us). HPC job 28652 reported branching at 78 us
+  # vs ref 33 us. COMSOL Geomechanics PDF p. 10 specifies smooth-
+  # step transition zone of 0.05 us; PhaFiDyn (Barki 2025) loads
+  # instantaneously. Hypothesis: slow ramp attenuated HF content
+  # of impulse, delaying the Yoffe-type velocity instability that
+  # drives branching. To be re-tested on HPC.
+  t_total: 80.0e-6           # 80 us (covers full Y-branching)
+  num_steps: 0               # 0 -> derive from t_total / dt_CFL
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false       # AT1 + projected_cg uses Jacobi (see B5)
+  bounds_method: projected_cg
+  damage_every: 2            # phase-field every 2nd step (per task spec)
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

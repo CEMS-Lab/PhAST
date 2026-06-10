@@ -1,0 +1,86 @@
+schema_version: 1
+example: phast.examples.dynamic_branching_pmma.run
+problem:
+  name: PMMA Dynamic Crack Branching
+  reference: Bleyer, Roux-Langlois & Molinari (2017), Comput. Mech.
+# Geometry: inline-primitive DSL (issue #192). Plate (W=32, H=16, a=4)
+# minus a triangular wedge notch (3-vertex polygon, edge-flush at x=0).
+# `branching: true` reproduced via mode='box' refinement over the right-
+# half band x in [a-5, W], y in [0, H] (PR #200, was Field[Box] in
+# legacy .geo). Boundary node sets via thin RegionGroup strips along
+# each base edge (PR #201). l0 = 0.1, h_crack = 0.025, h_coarse = 1.0,
+# crack_band = 5*l0 = 0.5 — matches mesh_generator.rectangular_sent.
+geometry:
+  units: mm
+  primitives:
+    plate: { type: rectangle, origin: [0, 0], size: [32.0, 16.0] }
+    # Triangular wedge notch: tip at (a, H/2)=(4, 8), mouth at left
+    # edge spanning H/2 +- eps. eps = min(0.01*min(W,H), 0.01) = 0.01.
+    notch:
+      type: polygon
+      vertices: [[0.0, 8.01], [4.0, 8.0], [0.0, 7.99]]
+  domain:
+    base: plate
+    subtract: [notch]
+  named_groups:
+    left:   { region: { type: rectangle, origin: [-0.005, 0.0],   size: [0.01, 16.0] } }
+    top:    { region: { type: rectangle, origin: [ 0.0,   15.995], size: [32.0, 0.01] } }
+    bottom: { region: { type: rectangle, origin: [ 0.0,  -0.005],  size: [32.0, 0.01] } }
+  mesh:
+    element_size:
+      default: 1.0       # h_coarse
+      refined:
+        # Distance+Threshold band around the notch curves (matches
+        # Field[1]+Field[2] in legacy .geo: 5*l0 wide).
+        - primitive: notch
+          size: 0.025    # h_crack
+          margin: 0.5    # crack_band = 5*l0
+        # Field[Box]: uniform fine mesh in the right half — required for
+        # branching pattern resolution (Borden 2012 §4.2). Matches the
+        # branching=true branch of mesh_generator.rectangular_sent.
+        - region:
+            type: box
+            x: [-1.0, 32.0]   # a - 5 = -1
+            y: [0.0, 16.0]
+          size: 0.025
+          thickness: 1.0
+# Inline material — Bleyer et al. (2017) PMMA, plane stress, AT1 + Amor.
+material:
+  E: 3090.0             # 3.09 GPa
+  nu: 0.35
+  Gc: 0.3               # 0.3 N/mm = 300 J/m^2
+  l0: 0.1
+  rho: 1.18e-9
+  energy_split: amor
+  pf_model: AT1
+  plane_stress: true
+  eta_residual: 1.0e-7
+loading:
+  protocol: two_step_prestrain
+  prestrain_displacement: 0.05
+  t_total: 7.5e-05
+  ramp_type: constant
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  # Bleyer (2017) reproduction: damage solved every step. Subcycling
+  # (damage_every=3) suppresses second-lobe nucleation at branching
+  # threshold (issue #149).
+  damage_every: 1
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  print_every: 100
+boundary_conditions:
+- nodes: left
+  type: fix
+  component: 0
+- nodes: top
+  type: prescribe
+  component: 1
+  value: 1.0
+- nodes: bottom
+  type: prescribe
+  component: 1
+  value: -1.0

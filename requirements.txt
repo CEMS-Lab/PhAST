@@ -1,0 +1,39 @@
+# PhAST — Dependencies
+# ====================
+# PyTorch + PyG are installed by install.sh (platform-specific wheels).
+# This file covers everything else.
+
+# Numerics
+numpy>=1.24
+scipy>=1.10
+
+# Mesh I/O
+meshio>=5.0
+gmsh>=4.10
+
+# Visualization
+matplotlib>=3.6
+Pillow>=9.0
+
+# --- Optional: MP4 animation output ---
+# ffmpeg (system package, not pip). Install via:
+#   conda install ffmpeg          (recommended)
+#   brew install ffmpeg           (macOS)
+#   apt install ffmpeg            (Ubuntu/Debian)
+# If ffmpeg is not installed, animations fall back to GIF automatically.
+
+# HDF5 output (GNO training data)
+h5py>=3.7
+
+# Zstd-compressed Zarr for the PF-Hetero-Bench dataset (issue #298)
+zarr>=2.18
+numcodecs>=0.13
+
+# --- Optional: AMG preconditioner (pip install phast[amg]) ---
+# pyamg>=5.0
+
+# --- Optional: NVIDIA AmgX, CUDA-only (pip install phast[amgx]) ---
+# pyamgx>=0.1
+
+# --- Optional: METIS partitioning (pip install phast[metis]) ---
+# pymetis>=2020.1

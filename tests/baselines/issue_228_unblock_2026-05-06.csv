@@ -1,0 +1,19 @@
+iter,loss_start,loss_end,grad_norm_end,xh,yh,pos_err_mm,closure_calls,note
+# Issue #228 inverse-problem unblock baseline.
+# Smoke (3844 nodes, n_steps=2500), softmax_H_beta=10, obs_mode=path, n_path_bins=40.
+# Truth (16.0, 9.5); init (12.0, 11.0); init err 4.272 mm.
+# Gate criteria all met:
+#   (a) loss decreases monotonically across all 5 outer iterations,
+#   (b) final loss (1.01e-04) is ~300x below iter-0 loss (3.02e-02),
+#   (c) final pos err 0.811 mm < 1.0 mm gate.
+# Note: --obs_step alone does not pass the gate at smoke resolution
+# because delta_U=0.05 saturates the entire field by step ~750; even
+# at obs_step=400 the bulk-damage signal swamps the inclusion signal,
+# producing |g|~1e-7 and parameters that never move. obs_mode=path
+# (mass-weighted crack-centerline MSE) is the working production
+# observable per the W3C diagnostic.
+0,3.0184e-02,2.9765e-02,1.7743e-02,12.039,10.974,4.226,3,L-BFGS strong-Wolfe; 3 closures (init + 2 line-search probes)
+1,2.9765e-02,8.1588e-04,1.2299e-03,16.476,8.226,1.360,7,Big descent into the basin around truth
+2,8.1588e-04,5.0155e-04,9.5704e-04,16.088,8.549,0.955,9,Inside 1mm gate
+3,5.0155e-04,1.2136e-04,4.0043e-04,15.355,9.141,0.738,12,Close to truth; loss down 4x
+4,1.2136e-04,1.0073e-04,3.1373e-04,15.211,9.314,0.811,14,Final; 300x improvement vs iter 0

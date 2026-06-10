@@ -1,0 +1,90 @@
+# =====================================================================
+# B7 -- Dynamic crack branching, isolation test of #310 alone (NO #311).
+#
+# Live HPC finding 2026-05-08 (job 29514, B7_half_plate_comsol_match):
+# combining spectral_stress (#310) + smooth_step (#311) overshot:
+#   onset 15.5 us  (ref 33 us, 2.1x EARLY)
+#   peak  0.055 J  (ref 0.13-0.14 J, 2.5x LOW)
+#
+# This config isolates ONLY #310 (energy_split: spectral_stress) on the
+# half-plate geometry. Loading ramp stays `smooth` (cosine half-cycle)
+# matching the prior 79 us reference run (B7_half_plate_symmetric.yaml).
+#
+# Hypothesis (advisor / 2026-05-08): the energy split alone is the
+# dominant knob; the smooth_step ramp adds extra HF content that pushes
+# branching even earlier. Expected onset between the two extremes:
+# somewhere in [33, 79] us — closer to 33 us if #310 is the right fix.
+#
+# Geometry: half-plate (PR #302) - geometry verified equivalent across
+# H=20/40/80 in the discrepancy investigation.
+#
+# Acceptance (compare.py --half-plate uses PR #319 morphology detector):
+#   - branching onset 33 us +/-20%
+#   - n_arms_final = 2 (Y-shape)
+#   - elastic-energy peak 0.13 - 0.14 J at thickness 1 m
+#
+# HPC:
+#   B7_CONFIG=configs/B7_debug/B7_half_plate_spectral_stress_only.yaml \
+#       bash scripts/submit_job_auto.sh \
+#       scripts/slurm/benchmarks/hpc_b7_dynamic_branching.slurm \
+#       --gpu a100_80g
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (half-plate + spectral_stress only, #310 isolation)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs in examples/dynamic/crack_branching_comsol/)"
+
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 100.0
+    H: 20.0                # COMSOL symmetry domain: sample height/2
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.125
+    h_coarse: 1.0
+    branching: true
+    half_plate: true
+
+material:
+  E: 32000.0
+  nu: 0.20
+  Gc: 3.0e-3
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: spectral_stress      # FIX #310 (Miehe 3.2): COMSOL match
+  pf_model: AT1
+  eta_residual: 1.0e-7
+
+boundary_conditions:
+- {nodes: top,         type: neumann,      component: 1, value: 1.0}
+- {nodes: bottom_sym,  type: fix,          component: 1}
+- {nodes: left,        type: fix,          component: 0}
+- {nodes: crack,       type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [crack]
+
+loading:
+  protocol: simple
+  ramp_type: smooth                  # NOT smooth_step (isolating #310 alone)
+  t_ramp: 5.0e-8
+  t_total: 80.0e-6
+  num_steps: 0
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false
+  bounds_method: projected_cg
+  damage_every: 2
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

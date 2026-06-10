@@ -1,0 +1,440 @@
+schema_version: 1
+manifest_type: reproducibility_contract
+purpose: Reproducible validation contracts for plasticity, cohesive, PF-CZM, and diffuse-interface examples.
+base_paths:
+  examples: examples/plasticity_interface
+  outputs: outputs/plasticity_interface
+  visual_requirements: docs/visualisation_requirements.md
+defaults:
+  working_dir: repository_root
+  mode: script_yaml_contract
+  output_dir_argument: --output-dir
+  output_contract:
+    provenance:
+      - summary.json
+    visual_policy:
+      font_family: STIXGeneral_or_compatible_serif
+      review_dimension_limit_px: 2000
+      damage_color_limits: [0.0, 1.0]
+      manifest_required_when_visuals_present: true
+
+runs:
+  - id: j2_validation
+    family: plasticity
+    script: examples/plasticity_interface/run_j2_validation.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_j2_validation.py
+      - --output-dir
+      - outputs/plasticity_interface/j2_validation
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - j2_stress_strain.csv
+      - j2_stress_strain.png
+      - visual_manifest.json
+    claim_boundary: Standalone J2 return-map kernel validation; not coupled PF-plasticity.
+
+  - id: ductile_pf_plasticity
+    family: ductile_phase_field
+    script: examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
+      - --output-dir
+      - outputs/plasticity_interface/ductile_pf_plasticity
+      - --backend
+      - scipy
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - mesh.geo
+      - mesh.msh
+      - results.csv
+      - history.csv
+      - energy.csv
+      - solver_telemetry.csv
+      - timing_per_step.csv
+      - initial_conditions.png
+      - ductile_pf_coupling.png
+      - load_displacement.png
+      - energy.png
+      - damage_final.png
+      - visual_manifest.json
+    claim_boundary: Sparse J2 mechanics plus ductile-driving AT2 validation; full benchmark-matched ductile fracture remains gated.
+
+  - id: ductile_pf_sensitivity
+    family: ductile_phase_field
+    script: examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
+      - --output-dir
+      - outputs/plasticity_interface/ductile_pf_sensitivity
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - ductile_sensitivity_table.csv
+      - ductile_damage_sensitivity.png
+      - ductile_driving_lift.png
+      - visual_manifest.json
+    claim_boundary: Ductile plastic-work sensitivity study; not SENT/TPB calibration.
+
+  - id: diffuse_interphase
+    family: diffuse_interface
+    script: examples/plasticity_interface/run_diffuse_interphase_validation.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_diffuse_interphase_validation.py
+      - --output-dir
+      - outputs/plasticity_interface/diffuse_interphase
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - diffuse_interphase_path_energy.csv
+      - diffuse_interphase_field_summary.csv
+      - diffuse_interphase_fields.png
+      - visual_manifest.json
+    claim_boundary: Diffuse material-field path validation; not a cohesive-zone benchmark.
+
+  - id: solid_interface_fracture
+    family: diffuse_interface
+    script: examples/plasticity_interface/run_solid_interface_fracture_examples.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_solid_interface_fracture_examples.py
+      - --output-dir
+      - outputs/plasticity_interface/solid_interface_fracture
+    expected_cases:
+      - weak_deflection
+      - strong_penetration
+    required_artifacts_per_case:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - mesh.geo
+      - mesh.msh
+      - path_energy.csv
+      - field_summary.csv
+      - initial_conditions.png
+      - material_fields.png
+      - damage_final.png
+      - crack_path.png
+      - energy.png
+      - load_displacement.png
+      - staggered_convergence.png
+      - compare.png
+      - compare_report.txt
+      - visual_manifest.json
+    one_of_artifacts_per_case:
+      - [damage_evolution.mp4, damage_evolution.gif]
+    claim_boundary: Deterministic interface deflection/penetration screening; not solved cohesive crack growth.
+
+  - id: solver_driven_interface_fracture
+    family: diffuse_interface
+    script: examples/plasticity_interface/run_solver_driven_interface_fracture_validation.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_solver_driven_interface_fracture_validation.py
+      - --output-dir
+      - outputs/plasticity_interface/solver_driven_interface_fracture
+    expected_cases:
+      - weak_deflection
+      - strong_penetration
+    required_artifacts_per_case:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - mesh.geo
+      - mesh.msh
+      - results.csv
+      - history.csv
+      - energy.csv
+      - solver_telemetry.csv
+      - timing_per_step.csv
+      - crack_path.csv
+      - setup.png
+      - material_fields.png
+      - damage_final.png
+      - load_displacement.png
+      - energy_split.png
+      - convergence.png
+      - visual_manifest.json
+    one_of_artifacts_per_case:
+      - [damage_evolution.mp4, damage_evolution.gif]
+    claim_boundary: Solver-driven AT2 diffuse-interface smoke; not cohesive-zone or ASTM calibration.
+
+  - id: cohesive_displacement_jump
+    family: cohesive_elements
+    script: examples/plasticity_interface/run_cohesive_displacement_jump_benchmark.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_cohesive_displacement_jump_benchmark.py
+      - --output-dir
+      - outputs/plasticity_interface/cohesive_displacement_jump
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - cohesive_response.csv
+      - cohesive_response.png
+      - cohesive_mesh_and_bc.png
+      - visual_manifest.json
+    claim_boundary: Zero-thickness cohesive operator benchmark with prescribed opening.
+
+  - id: cohesive_mixed_mode
+    family: cohesive_elements
+    script: examples/plasticity_interface/run_cohesive_mixed_mode_benchmark.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_cohesive_mixed_mode_benchmark.py
+      - --output-dir
+      - outputs/plasticity_interface/cohesive_mixed_mode
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - cohesive_mixed_mode_response.csv
+      - cohesive_mixed_mode_response.png
+      - cohesive_mixed_mode_mesh_and_bc.png
+      - visual_manifest.json
+    claim_boundary: Mixed-mode cohesive residual/tangent smoke benchmark.
+
+  - id: cohesive_contact_compression
+    family: cohesive_elements
+    script: examples/plasticity_interface/run_cohesive_contact_compression_benchmark.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_cohesive_contact_compression_benchmark.py
+      - --output-dir
+      - outputs/plasticity_interface/cohesive_contact_compression
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - cohesive_contact_compression_response.csv
+      - cohesive_contact_compression_response.png
+      - cohesive_contact_compression_mesh_and_bc.png
+      - visual_manifest.json
+    claim_boundary: Contact-compression branch smoke with no damage growth.
+
+  - id: cohesive_delamination_patch
+    family: cohesive_elements
+    script: examples/plasticity_interface/run_cohesive_delamination_patch_benchmark.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_cohesive_delamination_patch_benchmark.py
+      - --output-dir
+      - outputs/plasticity_interface/cohesive_delamination_patch
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - cohesive_delamination_patch_response.csv
+      - cohesive_delamination_patch_response.png
+      - cohesive_delamination_patch_damage_profile.png
+      - cohesive_delamination_patch_mesh_and_bc.png
+      - visual_manifest.json
+    claim_boundary: Multi-element delamination patch smoke; structural calibration remains gated.
+
+  - id: structural_dcb_cohesive
+    family: cohesive_elements
+    script: examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
+      - --output-dir
+      - outputs/plasticity_interface/structural_dcb_cohesive
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - mesh.geo
+      - mesh.msh
+      - structural_dcb_response.csv
+      - structural_dcb_load_displacement.png
+      - structural_dcb_damage_front.png
+      - structural_dcb_energy.png
+      - structural_dcb_deformed_mesh.png
+      - visual_manifest.json
+    claim_boundary: DCB-style structural cohesive smoke; not ASTM D5528 data reduction.
+
+  - id: coupled_pf_cohesive
+    family: coupled_brittle_pf_cohesive
+    script: examples/plasticity_interface/run_coupled_pf_cohesive_benchmark.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_coupled_pf_cohesive_benchmark.py
+      - --output-dir
+      - outputs/plasticity_interface/coupled_pf_cohesive
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - mesh.geo
+      - mesh.msh
+      - results.csv
+      - history.csv
+      - solver_telemetry.csv
+      - timing_per_step.csv
+      - energy.csv
+      - cohesive_front.csv
+      - initial_conditions.png
+      - damage_final.png
+      - cohesive_damage_front.png
+      - load_displacement.png
+      - energy_split.png
+      - convergence.png
+      - damage_evolution.gif
+      - mesh_deformed.png
+      - damage_history.png
+      - visual_manifest.json
+    claim_boundary: Coupled brittle AT2 matrix damage plus cohesive interface smoke; not calibrated PF-CZM or ductile PF-plasticity-cohesive.
+
+  - id: pfczm_uniaxial_strength
+    family: pfczm
+    script: examples/plasticity_interface/run_pfczm_uniaxial_strength_validation.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_pfczm_uniaxial_strength_validation.py
+      - --output-dir
+      - outputs/plasticity_interface/pfczm_uniaxial_strength
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - mesh.geo
+      - mesh.msh
+      - results.csv
+      - history.csv
+      - solver_telemetry.csv
+      - timing_per_step.csv
+      - energy.csv
+      - damage_final.png
+      - load_displacement.png
+      - damage_history.png
+      - energy_split.png
+      - convergence.png
+      - mesh_deformed.png
+      - damage_evolution.gif
+      - visual_manifest.json
+    claim_boundary: Forward Wu PF-CZM strength calibration smoke; structural crack growth and mixed-mode validation remain gated.
+
+  - id: q4_sparse_at2_smoke
+    family: q4_sparse_phase_field
+    script: examples/plasticity_interface/run_q4_sparse_at2_smoke.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_q4_sparse_at2_smoke.py
+      - --output-dir
+      - outputs/plasticity_interface/q4_sparse_at2_smoke
+      - --nx
+      - "32"
+      - --ny
+      - "16"
+      - --n-steps
+      - "5"
+      - --backend
+      - scipy
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - results.csv
+      - solver_telemetry.csv
+      - backend_evidence.csv
+      - damage_final.png
+      - mesh_deformed.png
+      - load_displacement.png
+      - visual_manifest.json
+    claim_boundary: Q4 sparse mechanics plus AT2 damage smoke; Q4 PF-CZM/plasticity/cohesive-coupled paths remain gated.
+
+  - id: sparse_j2_backend_promotion
+    family: backend_promotion
+    script: examples/plasticity_interface/run_sparse_j2_backend_promotion.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_sparse_j2_backend_promotion.py
+      - --output-dir
+      - outputs/plasticity_interface/sparse_j2_backend_promotion
+      - --backend
+      - auto
+      - --backend
+      - scipy
+      - --backend
+      - mumps
+      - --backend
+      - cudss
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - backend_promotion.csv
+    claim_boundary: Backend availability and fallback evidence; cuDSS remains gated until it resolves without fallback.
+
+  - id: ductile_pf_backend_promotion
+    family: backend_promotion
+    script: examples/plasticity_interface/run_ductile_pf_backend_promotion.py
+    launcher:
+      - python
+      - examples/plasticity_interface/run_ductile_pf_backend_promotion.py
+      - --output-dir
+      - outputs/plasticity_interface/ductile_pf_backend_promotion
+      - --backend
+      - auto
+      - --backend
+      - scipy
+      - --backend
+      - mumps
+      - --backend
+      - cudss
+    required_artifacts:
+      - summary.json
+      - config.yaml
+      - run_lockfile.json
+      - run_metadata.json
+      - run_manifest.json
+      - run.log
+      - backend_promotion.csv
+    claim_boundary: Ductile PF backend-selection evidence; PETSc/MUMPS and cuDSS promotion depend on active backend environment.

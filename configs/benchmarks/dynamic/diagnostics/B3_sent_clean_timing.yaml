@@ -1,0 +1,55 @@
+schema_version: 1
+problem:
+  name: Clean-IC SENT timing comparison
+  reference: Paper 1 cross-code SENT wall-clock comparison
+
+geometry:
+  type: rectangular_sent
+  parameters:
+    output_path: examples/dynamic/sent/timing_comparison/sent_clean.msh
+    W: 100.0
+    H: 40.0
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.5
+    h_coarse: 4.0
+    crack_band_width: 2.5
+    branching: false
+
+material:
+  preset: glass_borden
+  overrides:
+    E: 32000.0
+    nu: 0.2
+    Gc: 3.0e-3
+    l0: 0.5
+    rho: 2.45e-9
+    eta_residual: 1.0e-7
+    energy_split: amor
+    pf_model: AT2
+    plane_stress: false
+
+boundary_conditions:
+  - {nodes: bottom, type: fix, component: 0}
+  - {nodes: top, type: fix, component: 0}
+  - {nodes: top, type: prescribe, component: 1, value: 1.5e-3}
+  - {nodes: bottom, type: prescribe, component: 1, value: -1.5e-3}
+
+loading:
+  protocol: simple
+  ramp_type: smooth
+  t_ramp: 2.0e-5
+  num_steps: 3000
+  t_total: 5.0e-5
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  damage_every: 1
+  use_multigrid: false
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 100

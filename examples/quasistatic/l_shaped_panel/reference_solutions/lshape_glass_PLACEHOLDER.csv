@@ -1,0 +1,26 @@
+# PLACEHOLDER reference -- not a digitised literature curve.
+#
+# Scaffold for the L-shaped glass panel quantitative L2 check.
+# Sampled by hand to be consistent with the (0.27, 0.32) kN legacy
+# peak band used by compare.py and the rough loading slope of a
+# 70 GPa / 0.4 mm regularisation glass L-panel: approximately
+# linear rise from the origin to a peak of ~0.30 kN at u ~ 0.25 mm.
+# NO post-peak softening detail is supplied -- digitising the post-
+# peak branch from a real source (Rudshaug 2023 companion paper
+# F-d curve, when located) is what closes #133 for glass.
+#
+# Until then this file enables the L2 acceptance code path to run
+# end-to-end against a stand-in target. The PLACEHOLDER suffix and
+# this header are the load-bearing flag that the metric is scaffold,
+# not science. compare.py prints "(placeholder)" alongside the L2
+# number when this file is the active reference.
+#
+# Format: two columns, whitespace-separated, "u_y [mm]  R [kN]".
+# u_y[mm]   R[kN]
+0.000      0.000
+0.050      0.060
+0.100      0.120
+0.150      0.180
+0.200      0.250
+0.250      0.300
+0.300      0.290

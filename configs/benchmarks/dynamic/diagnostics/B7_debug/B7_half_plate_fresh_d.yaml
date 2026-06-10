@@ -1,0 +1,111 @@
+# =====================================================================
+# B7 -- Dynamic crack branching, COMSOL 6.4 reference (HALF-PLATE +
+# symmetry BC). Diagnostic variant for issue #299: tests the
+# "fresh d in corrector" Verlet ordering identified by the audit
+# reports/B7_dynamic_pipeline_audit_2026-05-08.md as the rank #1
+# non-energy-split candidate cause of the 79us-vs-COMSOL-33us
+# branching delay.
+#
+# Differences vs B7_half_plate_symmetric.yaml:
+#   solver.fresh_d_in_corrector: true   # PhaFiDyn / segregated ordering
+#   solver.damage_every: 1               # cleanest test (no subcycling
+#                                       # interaction with the new flag)
+#
+# Hypothesis under test
+# ---------------------
+# OUR step_full uses ``predictor + corrector(d_n)`` then ``step_solve_damage()``.
+# Half of all corrector calls (with damage_every=2) carry damage that is
+# 2 timesteps stale. The bias is "corrector underestimates the elastic-
+# energy release because K(d_n) is too stiff" -- branching delayed.
+#
+# PhaFiDyn (Barki 2025) uses ``predictor -> step_solve_damage(d_{n+1})
+# -> corrector(d_{n+1})``: corrector sees the freshly updated d on every
+# step. Setting ``fresh_d_in_corrector=true`` rewires our explicit step
+# to that ordering.
+#
+# Acceptance (compare.py --half-plate, post-merge HPC validation):
+#   - branching onset shifts EARLIER from 79us toward 33us (any non-
+#     trivial shift is a real signal). If branching does NOT shift,
+#     the corrector-lag conjecture is innocent and the gap is
+#     elsewhere (energy split, ramp, deeper).
+#   - full Y by 75us (target unchanged from symmetric.yaml)
+#   - elastic-energy peak 0.13 - 0.14 J at thickness 1 m
+#
+# Run:
+#   python -m phast run \
+#       configs/B7_debug/B7_half_plate_fresh_d.yaml
+# HPC:
+#   B7_CONFIG=configs/B7_debug/B7_half_plate_fresh_d.yaml \
+#       bash scripts/submit_job_auto.sh hpc_b7_dynamic_branching.slurm
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (half-plate + symmetry, fresh-d, #299)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs in examples/dynamic/crack_branching_comsol/); B7_dynamic_pipeline_audit_2026-05-08.md"
+
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 100.0
+    H: 20.0                # COMSOL symmetry domain: sample height/2
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.125         # l0/4 (COMSOL p.10)
+    h_coarse: 1.0
+    branching: true        # uniform fine mesh in the right half
+    half_plate: true       # precrack along y=0; bottom split into
+                           # 'crack' + 'bottom_sym' physical groups
+
+material:
+  E: 32000.0
+  nu: 0.20
+  Gc: 3.0e-3
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: spectral
+  pf_model: AT1
+  eta_residual: 1.0e-7
+
+# Boundary conditions
+# -------------------
+# - top:        sigma_n = +1 MPa (traction, smooth ramp via loading.ramp_type)
+# - bottom_sym: u_y = 0           (symmetry plane on x in [a, W])
+# - crack:      pf_dirichlet=1    (precrack along y=0, x in [0, a])
+# - left:       u_x = 0 at corner (rigid-body x removal)
+boundary_conditions:
+- {nodes: top,         type: neumann,      component: 1, value: 1.0}
+- {nodes: bottom_sym,  type: fix,          component: 1}
+- {nodes: left,        type: fix,          component: 0}
+- {nodes: crack,       type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [crack]
+
+loading:
+  protocol: simple
+  ramp_type: smooth
+  t_ramp: 5.0e-8
+  t_total: 80.0e-6
+  num_steps: 0
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false
+  bounds_method: projected_cg
+  damage_every: 1                   # CLEAN test: no subcycling x flag
+                                    # interaction. Master config keeps
+                                    # damage_every=2 for COMSOL parity.
+  fresh_d_in_corrector: true        # ISSUE #299 audit Fix #2: rewire
+                                    # to predictor -> damage -> corrector
+                                    # ordering, matching PhaFiDyn.
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

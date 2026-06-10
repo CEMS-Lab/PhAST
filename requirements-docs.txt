@@ -1,0 +1,5 @@
+sphinx<8.0
+myst-parser<4.0
+sphinx-immaterial
+sphinx-autodoc-typehints<2.0
+sphinx-copybutton>=0.5

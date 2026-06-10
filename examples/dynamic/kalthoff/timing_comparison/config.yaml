@@ -1,0 +1,68 @@
+# Kalthoff-Winkler two-way (torch + FEniCS, spectral split).
+# Half-plate 100x100, symmetry at y=0, upper notch at y=25 mm,
+# l0=0.195 mm, Miehe spectral, AT2 plane strain. Akantu is absent:
+# its quadratic phasefield class lacks the spectral split.
+# Units: mm-tonne-s-MPa.
+#
+# Cross-code metadata (informational; the schema validator rejects
+# unknown keys so we keep this in comments):
+#   solvers      : torch + fenics two-way
+#   h_crack      : 0.25 mm (fine around the 70-deg lobe)
+#   h_coarse     : 5.0 mm (far field)
+#   l0           : 0.195 mm (canonical Kalthoff per Borden Fig 13)
+#   node groups exposed by make_mesh_half.py:
+#     bottom      y=0; symmetry plane, u_y = 0
+#     top         y=100; free
+#     right       x=100; free
+#     left_impact x=0, y in [0, 24.875]; prescribed x-velocity BC
+#     left_top    x=0, y in [25.125, 100]; free
+#     notch       upper notch walls + tip, y~25
+
+problem:
+  name: "Kalthoff-Winkler two-way (torch + FEniCS, spectral)"
+  reference: "Borden 2012 §4.3 + PhaFiDyn convention; paper §5.2"
+
+# ---- Mesh (half-plate, graded; built by make_mesh_half.py) ----
+geometry:
+  mesh_path: ./kalthoff_half_h0.25.msh
+
+# ---- Material (maraging steel 18Ni(300), Kalthoff & Winkler 1987) ----
+material:
+  preset: maraging_steel_kw
+  overrides:
+    E: 190000.0          # MPa
+    nu: 0.3
+    Gc: 22.13            # N/mm
+    l0: 0.195            # mm (canonical)
+    rho: 8.0e-9          # tonne/mm^3
+    eta_residual: 1.0e-7
+    energy_split: spectral
+    pf_model: AT2
+    plane_stress: false  # plane strain
+
+boundary_conditions:
+- {nodes: bottom,      type: fix,       component: 1}
+- {nodes: left_impact, type: prescribe, component: 0, value: 1.0}
+
+# ---- Loading ----
+loading:
+  protocol: simple
+  num_steps: 0            # 0 -> t_total drives the step count via CFL dt;
+                          # required for mesh-convergence sweeps so every
+                          # resolution simulates the same physical time.
+  t_total: 1.0e-4
+  ramp_type: velocity_impact
+  v0: 16.5                # m/s (per the parser convention; converted internally)
+  t_ramp: 1.0e-6
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  damage_every: 1
+  use_multigrid: true
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 100

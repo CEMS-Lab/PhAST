@@ -1,0 +1,14 @@
+# PLACEHOLDER reference -- not a digitised literature curve.
+#
+# Schema stub for cross-validation against Galvis et al. 2026
+# (Eng. Fract. Mech., DOI 10.1016/j.engfracmech.2026.111846).
+#
+# Real digitisation pending: replace this single-row stub with one CSV
+# per benchmark (galvis_2026_sent.csv, galvis_2026_shear.csv,
+# galvis_2026_lshape.csv, galvis_2026_notched_holes.csv) once the
+# load-displacement curves from Figs 4-15 of the paper are digitised.
+#
+# Columns: u (mm), R (kN)
+#u_mm,R_kN
+0.0,0.0
+

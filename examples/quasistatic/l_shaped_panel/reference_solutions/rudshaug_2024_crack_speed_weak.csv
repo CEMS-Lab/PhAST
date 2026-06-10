@@ -1,0 +1,44 @@
+# Rudshaug, Borvik, Hopperstad (2024), Int J Fract 245:57-73
+# DOI: 10.1007/s10704-023-00754-3
+# Fig 12a (page 71): crack propagation speed vs time, weak L-shaped
+# soda-lime glass specimen, simulated using LS-DYNA dynamic phase-field
+# with three tension-compression splits.
+#
+# Material: density rho=2500 kg/m^3, E=70 GPa, nu=0.23, Gc=8 J/m^2,
+# l0=0.4 mm, eta=1e-9 Ns/mm^2, k=0 (no residual stiffness),
+# AT2 phase-field, plane stress (shell elements). Mesh: 174,375 shell
+# elements at 0.2 mm x 0.2 mm. Critical principal stress sigma_c set
+# from a damage-free elastic pre-run (paper p65) so fracture initiates
+# at the experimental load level. Loading: quasi-static displacement-
+# controlled tensile pull on the upper rigid block (geometry from
+# Fig 9b). Spring: kt=38.0 N/mm, kr=4750.0 N*mm.
+#
+# Hand-digitised from PDF figure by visual reading; uncertainty
+# ~50-100 m/s in speed and ~2-3 us in time. The simulated curves
+# oscillate strongly; only the salient peaks/troughs are sampled.
+#
+# Columns: time_us, speed_amor_w_mps, speed_miehe_w_mps, speed_hybrid_w_mps
+# (NaN where a value is unreadable / off-curve at the sample time)
+#
+time_us, speed_amor_w_mps, speed_miehe_w_mps, speed_hybrid_w_mps
+0.0,   1000.0,  800.0,  950.0
+5.0,    980.0,  820.0,  900.0
+10.0,   900.0,  850.0,  870.0
+15.0,   850.0,  870.0,  830.0
+20.0,   780.0,  820.0,  790.0
+25.0,   700.0,  730.0,  720.0
+30.0,   620.0,  650.0,  650.0
+35.0,   550.0,  580.0,  580.0
+40.0,   500.0,  520.0,  520.0
+45.0,   470.0,  470.0,  470.0
+50.0,   430.0,  430.0,  430.0
+55.0,   400.0,  400.0,  400.0
+60.0,   370.0,  370.0,  370.0
+65.0,   340.0,  340.0,  340.0
+70.0,   320.0,  320.0,  320.0
+75.0,   300.0,  300.0,  300.0
+85.0,   270.0,  270.0,  270.0
+95.0,   250.0,  250.0,  250.0
+105.0,  230.0,  230.0,  230.0
+115.0,  210.0,  210.0,  210.0
+125.0,  200.0,  200.0,  200.0

@@ -1,0 +1,75 @@
+# =====================================================================
+# B7 -- strict COMSOL dynamic crack branching parity candidate.
+#
+# Geometry/formulation follows B7_half_plate_comsol_structured.yaml:
+#   - symmetry-reduced 100 x 20 mm domain (COMSOL sample height/2)
+#   - bottom precrack, bottom symmetry, AT1, Amor/volDev, eta=1e-7
+#   - structured mapped-grid split-T3 approximation of COMSOL mapped quads
+#
+# Time integration follows COMSOL/Borden:
+#   - generalized-alpha
+#   - rho_inf = 0.5 / high-frequency amplification 0.5
+#   - manual dt = dtmax = 5e-8 s
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (half-plate + structured mapped-grid T3 + generalized-alpha)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching'; Borden et al. 2012 generalized-alpha rho_inf=0.5"
+
+geometry:
+  type: rectangular_sent_comsol_structured
+  parameters:
+    W: 100.0
+    H: 20.0
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.125
+    h_coarse: 1.0
+
+material:
+  E: 32000.0
+  nu: 0.20
+  Gc: 3.0e-3
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: amor
+  pf_model: AT1
+  eta_residual: 1.0e-7
+
+boundary_conditions:
+- {nodes: top,         type: neumann,      component: 1, value: 1.0}
+- {nodes: bottom_sym,  type: fix,          component: 1}
+- {nodes: left,        type: fix,          component: 0}
+- {nodes: crack,       type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [crack]
+
+loading:
+  protocol: simple
+  ramp_type: smooth_step
+  dt: 5.0e-8
+  t_ramp: 5.0e-8
+  t_total: 75.0e-6
+  num_steps: 1500
+
+solver:
+  solver_type: explicit
+  time_integrator: generalized_alpha
+  rho_inf: 0.5
+  dt_safety: 1.0
+  use_multigrid: false
+  bounds_method: projected_cg
+  damage_every: 2
+  eta_residual: 1.0e-7
+  static_tol: 1.0e-6
+  static_max_iter: 200
+
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  print_every: 100
+
+device:
+  device: cpu

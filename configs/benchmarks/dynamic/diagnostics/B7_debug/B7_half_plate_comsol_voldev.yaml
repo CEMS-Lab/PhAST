@@ -1,0 +1,90 @@
+# =====================================================================
+# B7 -- Dynamic crack branching, strict COMSOL .mph parity candidate.
+#
+# Direct XML extraction of the saved COMSOL 6.4 dynamic_crack_branching.mph
+# shows the Phase-Field Damage coupling uses strainEnergySplit=volDev
+# ("Volumetric only"), not the earlier PDF-only spectral-stress inference.
+# This keeps the exact half-plate geometry, h=l0/4 mesh, smooth-step load,
+# pf_dirichlet precrack and damage_every=2, but switches the split to
+# Amor/volumetric-deviatoric for the direct .mph test.
+#
+# Geometry note: COMSOL defines sample height=40 mm, then builds the
+# symmetry-reduced rectangle with height/2 = 20 mm. Older B7 debug configs
+# accidentally used H=40 for the half-plate, i.e. an 80 mm mirrored sample.
+# This config is the apples-to-apples test of the energy-split + ramp combo.
+#
+# Hypothesis: if the saved .mph formulation detail is material, this should
+# be a cleaner COMSOL-match test than the older spectral_stress variant.
+#
+# Acceptance (compare.py --half-plate):
+#   - branching onset 33 us +/-20%
+#   - full Y by 75 us
+#   - elastic-energy peak 0.13 - 0.14 J at thickness 1 m
+#
+# HPC:
+#   B7_CONFIG=configs/B7_debug/B7_half_plate_comsol_voldev.yaml \
+#       bash scripts/submit_job_auto.sh \
+#       scripts/slurm/benchmarks/hpc_b7_dynamic_branching.slurm \
+#       --gpu a100_80g
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (half-plate + volDev/Amor + smooth_step, #299/#531)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs in examples/dynamic/crack_branching_comsol/)"
+
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 100.0
+    H: 20.0                # COMSOL symmetry domain: sample height/2
+    a: 50.0
+    l0: 0.5
+    h_crack: 0.125         # l0/4 (COMSOL p.10)
+    h_coarse: 1.0
+    branching: true        # uniform fine mesh in the right half
+    half_plate: true       # precrack along y=0; bottom split into
+                           # 'crack' + 'bottom_sym' physical groups
+
+material:
+  E: 32000.0
+  nu: 0.20
+  Gc: 3.0e-3
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: amor                 # COMSOL .mph: strainEnergySplit=volDev
+  pf_model: AT1
+  eta_residual: 1.0e-7
+
+boundary_conditions:
+- {nodes: top,         type: neumann,      component: 1, value: 1.0}
+- {nodes: bottom_sym,  type: fix,          component: 1}
+- {nodes: left,        type: fix,          component: 0}
+- {nodes: crack,       type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  preseed_notch_nodesets: [crack]
+
+loading:
+  protocol: simple
+  ramp_type: smooth_step             # FIX #311: COMSOL PDF p.10 (Hermite cubic)
+  dt: 8.0e-9                         # explicit driver uses loading.dt; ~10k steps to 80 us
+  t_ramp: 5.0e-8
+  t_total: 80.0e-6
+  num_steps: 0
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false
+  bounds_method: projected_cg
+  damage_every: 2
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

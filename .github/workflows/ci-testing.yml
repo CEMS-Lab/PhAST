@@ -1,0 +1,78 @@
+name: "phast_CI"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Linux system libraries (Gmsh needs libGLU)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglu1-mesa libgl1 libegl1 libxcursor1 libxinerama1
+
+      - name: Install PyTorch and Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install .
+          pip install pytest
+
+      - name: Verify packaged benchmark modules and resources
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+
+          modules = [
+              "phast",
+              "phast.config",
+              "phast.solvers.sparse_solve",
+              "phast.solvers.time_integrators",
+              "phast.solvers.mixed_precision_cg",
+              "phast.research.process_zone",
+          ]
+          missing = [name for name in modules if importlib.util.find_spec(name) is None]
+          if missing:
+              raise SystemExit(f"missing packaged modules: {missing}")
+
+          repo_root = Path.cwd()
+          files_to_check = [
+              repo_root / "configs" / "REFERENCE.yaml",
+              repo_root / "configs" / "benchmarks" / "dynamic" / "B3_dynamic_sent.yaml",
+              repo_root / "configs" / "benchmarks" / "quasistatic" / "QS_notched_holed_plate.yaml",
+              repo_root / "examples" / "README.md",
+              repo_root / "docs" / "example-gallery.md",
+          ]
+          missing_files = [str(path) for path in files_to_check if not path.is_file()]
+          if missing_files:
+              raise SystemExit(f"missing release files: {missing_files}")
+          print("package layout OK")
+          PY
+
+      - name: Verify generated config reference is current
+        run: |
+          python scripts/generate_reference_yaml.py --check
+          python scripts/generate_json_schema.py --check
+          python scripts/check_docs_drift.py
+
+      - name: Run package test suite
+        run: |
+          python -m pytest tests/ -v -m "not slow and not hpc and not benchmark" --tb=short --durations=20

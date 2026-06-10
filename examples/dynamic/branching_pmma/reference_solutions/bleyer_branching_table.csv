@@ -1,0 +1,18 @@
+# Bleyer 2017 Fig 5 + Fig 6 reference values for the four loading
+# levels run on HPC by hpc_pmma_bleyer_{ab,cd}.slurm.
+# Source: refs/Bleyer 2017, pages 88-89.
+# Columns:
+#   delta_U_mm:           pre-strain ΔU (top edge moves +ΔU, bottom -ΔU)
+#   morphology:           expected n-arms in the right-of-precrack region
+#                         (Fig 5 panels a-d)
+#   gamma_over_gc_lo:     lower envelope of Γ/Gc before branching (Fig 6)
+#   gamma_over_gc_hi:     upper envelope / peak of Γ/Gc (Fig 6)
+#   v_over_cR_peak:       peak crack-tip velocity / Rayleigh wave speed
+#                         (Fig 4 / Fig 9 plateau ~ 0.6 cR)
+#   note:                 figure cite + remark
+#
+delta_U_mm,morphology,gamma_over_gc_lo,gamma_over_gc_hi,v_over_cR_peak,note
+0.035,1,1.0,1.5,0.6,"Fig 5a / Fig 6 red — straight, plateau ~1.5 Gc"
+0.038,1,1.0,1.6,0.6,"Fig 5b — straight, just below threshold"
+0.040,2,1.5,2.2,0.6,"Fig 5c / Fig 6 blue (lower-bound) — Y-branch, ~30 deg"
+0.045,2,2.0,2.7,0.65,"Fig 5d / Fig 6 blue — Y-branch, peaks > 2 Gc"

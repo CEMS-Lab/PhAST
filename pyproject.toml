@@ -1,0 +1,147 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phast"
+version = "0.16.2"
+authors = [
+  { name="Allamaprabhu Ani", email="allamaprabhu.ani@city.ac.uk" },
+]
+description = "PhAST: Phase-field Autograd Solver in Torch"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+keywords = ["phase-field", "fracture", "fem", "pytorch", "autograd", "scientific-computing"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.6",
+    "h5py>=3.7",
+    "meshio>=5.0",
+    "gmsh>=4.10",
+    "Pillow>=9.0",
+    "pyyaml>=6.0",
+    "zarr>=2.18",
+    "numcodecs>=0.13",
+]
+
+[project.optional-dependencies]
+# AMG preconditioner: PyAMG for hierarchy setup, torch V-cycle on GPU/CPU
+# Safe to install anywhere (pure Python + C extensions, no GPU deps)
+amg = [
+    "pyamg>=5.0",
+]
+# Fast visualisation output: pyvista-zstd binary .pv format via PyVista's
+# 0.48 reader/writer registry. Reports 43-90x faster writes than VTK XML
+# on multi-million-cell meshes. ParaView cannot open .pv natively; read
+# via PyVista or convert. Opt-in via `output.viz_format = 'pv'` in YAML
+# or SolverConfig(viz_format='pv') in code.
+viz-fast = [
+    "pyvista>=0.48",
+    "pyvista-zstd>=0.2",
+]
+# NVIDIA AmgX: fastest CUDA-native AMG. Requires AmgX C libs pre-installed
+# (module load amgx / build from source). Do NOT include in auto groups —
+# pip install will fail if AmgX libs are missing. Install separately:
+#   pip install pyamgx    (after: module load amgx)
+amgx = [
+    "pyamgx>=0.1",
+]
+# METIS mesh partitioning for multi-GPU domain decomposition
+metis = [
+    "pymetis>=2020.1",
+]
+# GPU direct solver: cupy for cupyx.scipy.sparse.linalg.spsolve on CUDA
+# Install the correct cupy wheel for your CUDA version, e.g.:
+#   pip install cupy-cuda12x   (CUDA 12.x)
+#   pip install cupy-cuda11x   (CUDA 11.x)
+cuda_direct = [
+    "cupy-cuda12x>=13.0",
+]
+# HPC: safe-to-pip packages only (amg + metis + cupy). Install amgx separately.
+hpc = [
+    "pyamg>=5.0",
+    "pymetis>=2020.1",
+    "cupy-cuda12x>=13.0",
+]
+# Everything pip-safe (no amgx — requires system libs)
+all = [
+    "pyamg>=5.0",
+    "pymetis>=2020.1",
+    "pytest>=7.0",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pytest-timeout>=2.3",
+    "sphinx<8.0",
+    "sphinx-immaterial",
+    "myst-parser<4.0",
+    "sphinx-copybutton>=0.5",
+]
+# PETSc/MUMPS backend stub (epic #105 phase 2, #107)
+petsc = [
+    "petsc>=3.20",
+    "petsc4py>=3.20",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/CEMS-Lab/PhAST"
+"Repository" = "https://github.com/CEMS-Lab/PhAST"
+"Documentation" = "https://cems-lab.github.io/PhAST/"
+"Bug Tracker" = "https://github.com/CEMS-Lab/PhAST/issues"
+"Changelog" = "https://github.com/CEMS-Lab/PhAST/releases"
+
+[tool.setuptools]
+# src/ layout: the importable `phast` package lives under
+# src/phast/. Tests, docs, papers, scripts, refs, and reference_codes stay at
+# the repo root and are NOT part of the package.
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["phast*"]
+
+
+[tool.cibuildwheel]
+build = "cp310-* cp311-* cp312-*"
+skip = "*-musllinux_* pp*"
+test-command = "python -c 'from phast.sparse_solve import solve; print(\"OK\")'"
+
+[tool.cibuildwheel.linux]
+archs = ["x86_64"]
+
+[tool.cibuildwheel.macos]
+archs = ["arm64"]
+
+[tool.cibuildwheel.windows]
+archs = ["AMD64"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-m 'not slow and not hpc and not benchmark' --import-mode=importlib --confcutdir=tests -ra --tb=short --durations=20"
+markers = [
+    "fast: laptop-safe smoke/regression tests intended to finish quickly",
+    "solver: core mechanics, damage, autograd, sparse-solve, and config behavior",
+    "docs: documentation, schema, citation, packaging, and drift checks",
+    "benchmark: benchmark-style validation or mesh-heavy tests",
+    "hpc: requires or emulates HPC/GPU/cluster-only behavior",
+    "artifact: validates generated files, figures, or stored outputs",
+    "slow: long-running tests (deselected by default; run via 'pytest -m slow')",
+    "timeout(seconds): per-test wall-clock limit, enforced when pytest-timeout is installed",
+]
