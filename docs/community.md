@@ -27,5 +27,5 @@ When opening bugs or documentation gaps, include:
 
 - Changelog: GitHub Releases for `CEMS-Lab/PhAST`
 - API + docs dependencies: `requirements-docs.txt`
-- Release and bug triage runbook: check project notes in
-  [distribution-strategy](distribution-strategy.md).
+- Release and bug triage runbook: use GitHub Releases and Issues in this
+  public repository.

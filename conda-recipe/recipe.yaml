@@ -62,7 +62,7 @@ about:
   description: |
     PhAST is a vectorized, GPU-compatible FEM solver for AT1/AT2
     phase-field fracture on unstructured triangular meshes. Key features:
-      - Native PyTorch autograd through the validated AT2 inverse workflows
+      - Native PyTorch tensor kernels through the validated AT2 forward workflows
       - SciPy SuperLU plus optional PETSc/MUMPS and CuPy sparse-direct backends
       - Hulbert-Chung generalized-alpha time integrator
       - Mixed-precision CG with iterative refinement

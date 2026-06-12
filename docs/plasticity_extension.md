@@ -231,9 +231,8 @@ and similar high-rate benchmarks already in the repo.
   triangles this collapses to per-element, but the moment we move to
   P2 or quad elements (already on the roadmap) the storage and
   rollback-on-Newton-failure logic must be redesigned. Refactor blast
-  radius is large and touches `FEMState`, the staggered driver, the
-  inverse problems pipeline (which expects pure functional state), and
-  the autograd path (state must be detached/cloned correctly).
+  radius is large and touches `FEMState`, the staggered driver, and the
+  autograd path (state must be detached/cloned correctly).
 - **Multiple incompatible PF + plasticity formulations.** Pick Hai 2026
   and stick with it; do **not** re-implement Miehe-Aldakheel mid-flight.
   Switching mid-paper rewrites every figure.

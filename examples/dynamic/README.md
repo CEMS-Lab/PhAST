@@ -12,8 +12,8 @@ reference data, timing comparisons, and run manifests.
 | `branching_pmma/` | PMMA branching driver, reference data, and historical sweeps |
 | `crack_branching_comsol/` | COMSOL crack-branching comparator and references |
 | `perforated_plate/` | Perforated-plate comparator and historical runs |
-| `brazilian_disc/` | Brazilian-disc dynamic runs |
 | `l_shaped_panel/` | Dynamic L-shaped-panel runs |
 
-Do not place raw run dumps directly in `papers/paper2/figures/`. Promote only final
-manuscript-ready figures there.
+Keep this folder limited to runnable public examples and curated reference
+artifacts. Private diagnostics, rejected runs, and paper-specific scratch
+outputs stay in the private development repository.

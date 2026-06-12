@@ -118,13 +118,10 @@ geometry:
     # rectangular_sent_liu_structured     # Liu/Borden full-plate regular split-quad diagnostic
     # theta: 45.0                        # kalthoff_winkler: notch angle [deg]
     # hole_config: "30holes"             # perforated_sent: hole layout name
-    # R: 25.0                            # brazilian_disc: disc radius [mm]
     # L: 1.0                             # miehe_tension/shear: square side [mm]
 
 # Available geometry types:
 #   bazant_gap_test
-#   brazilian_disc
-#   crack_coalescence
 #   glass_impact_vnotch
 #   kalthoff_winkler
 #   l_shaped_panel
@@ -266,7 +263,6 @@ material:
 # | l_shaped_concrete   | Concrete |  25.85 | 0.095e-3 | Winkler (2001)        |
 # | soda_lime_glass     | Glass    |  72    | 8e-6     | Standard              |
 # | pmma                | PMMA     |   5.76 | 0.32e-3  | Standard              |
-# | basalt_brazilian    | Basalt   |  20.11 | 0.044e-3 | Literature            |
 # | three_point_bending | Concrete |  20.8  | 0.113e-3 | Literature            |
 # | alumina_kumar       | Alumina  | 340    | 0.026e-3 | Kumar et al.          |
 # | brittle_ceramic     | Ceramic  | 300    | 0.02e-3  | Generic               |

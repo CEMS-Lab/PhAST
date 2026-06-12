@@ -117,8 +117,7 @@ the sharp-crack model unless the mesh is fine enough).
 - Bourdin et al. (2011) - time-discrete dynamic fracture.pdf -- the
   canonical AT2 dynamic phase-field formulation.
 - Borden et al. (2012) - phase-field dynamic brittle fracture.pdf --
-  the SENT/Kalthoff/branching benchmarks reproduced as `B1`-`B4` in
-  `configs/`.
+  the SENT/Kalthoff/branching benchmarks reproduced in `configs/`.
 - Ambati et al. (2015) - review phase-field brittle fracture.pdf --
   comprehensive review including energy-split comparison.
 - Bleyer, Roux-Langlois, Molinari (2017) - phase-field dynamic

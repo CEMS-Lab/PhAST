@@ -1,4 +1,4 @@
-# phast — Examples
+# PhAST Examples
 
 Phase-field fracture benchmarks organized by solver type.
 
@@ -9,7 +9,6 @@ Phase-field fracture benchmarks organized by solver type.
 | YAML `configs/benchmarks/dynamic/B1_branching_glass.yaml` | Crack branching (Borden 4.2) | Glass | Dynamic YAML benchmark |
 | YAML `configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml` | Kalthoff-Winkler impact (Borden 4.3) | Steel | Dynamic YAML benchmark |
 | YAML `configs/benchmarks/dynamic/B3_dynamic_sent.yaml` | Straight crack propagation | Glass | Dynamic YAML benchmark |
-| YAML `configs/benchmarks/dynamic/B4_coalescence.yaml` | Two-crack coalescence | Glass | Dynamic YAML benchmark |
 | [dynamic/branching_pmma](dynamic/branching_pmma/) | PMMA branching (Bleyer) | PMMA | AT1 projected CG + plane stress |
 | [dynamic/perforated_plate](dynamic/perforated_plate/) | Perforated plate | PMMA | Bleyer-style dynamic benchmark |
 | [dynamic/crack_branching_comsol](dynamic/crack_branching_comsol/) | COMSOL dynamic branching | PMMA/glass preset | Vendor-reference benchmark |
@@ -39,8 +38,6 @@ cd /path/to/phast
 python -u -m phast run configs/benchmarks/dynamic/B1_branching_glass.yaml --plots --gif
 python -u -m phast run configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml --plots --gif
 python -u -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --plots --gif
-python -u -m phast run configs/benchmarks/dynamic/B4_coalescence.yaml --plots --gif
-
 # Quasi-static benchmarks (implicit, iterative staggered)
 python -u examples/quasistatic/miehe_tension/run.py --backend auto --preconditioner jacobi --all_outputs
 python -u examples/quasistatic/miehe_shear/run.py --backend auto --preconditioner jacobi --all_outputs

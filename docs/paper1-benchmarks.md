@@ -37,5 +37,5 @@ documentation does not publish those ratios as validated results.
   per explicit step.
 - SENT should use AT2/Amor so Akantu can participate. Kalthoff-Winkler uses the
   Miehe spectral split, so Akantu is omitted there.
-- For broader timing notes and reproducibility commands, see
-  [Beat this benchmark](BEAT_THIS_BENCHMARK.md).
+- For broader reproducibility commands, use the canonical configs and example
+  READMEs linked from this section.

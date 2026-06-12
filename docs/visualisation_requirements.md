@@ -67,9 +67,6 @@ Use `docs/STANDARD_OUTPUTS.md` for the full artifact list. At minimum:
 - Quasistatic validation: `damage_final.png`, load-displacement plot,
   staggered/residual convergence plot, and comparison plot/report when a
   reference exists.
-- Inverse demos: truth, init, and recovered final damage PNGs; truth, init, and
-  recovered damage evolution animations; loss curve; parameter/error curve; and
-  a JSON/CSV trajectory.
 - HPC-promoted results: include `run_manifest.json` or `PROMOTION.md` so the
   figure can be traced to job id, git commit, slurm script, and result path.
 

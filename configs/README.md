@@ -42,11 +42,9 @@ overrides the `device:` block, and output flags such as `--gif` or
 ## Layout
 
 - `configs/benchmarks/dynamic/`: canonical dynamic benchmark configs.
-- `configs/benchmarks/dynamic/diagnostics/`: dynamic timing, structured-mesh,
-  and debug variants.
+- `configs/benchmarks/dynamic/diagnostics/`: private/developer diagnostics.
 - `configs/benchmarks/quasistatic/`: canonical quasi-static benchmark configs.
-- `configs/benchmarks/quasistatic/diagnostics/`: quasi-static diagnostic
-  variants.
+- `configs/benchmarks/quasistatic/diagnostics/`: private/developer diagnostics.
 - `configs/benchmarks/quasistatic/manifests/`: Slurm/benchmark orchestration
   manifests, not solver problem configs.
 - `configs/benchmarks/plasticity_interface/manifests/`: command manifests for
@@ -74,11 +72,8 @@ summaries for reproducibility audits.
 | YAML | Solver class | Problem |
 |---|---|---|
 | `benchmarks/dynamic/B1_branching_glass.yaml` | explicit dynamics | Glass crack branching, Borden 2012 |
-| `benchmarks/dynamic/diagnostics/B1_branching_glass_liu_structured.yaml` | explicit dynamics | Liu 2025-style structured split-quad diagnostic for B1 |
 | `benchmarks/dynamic/B2_kalthoff_winkler.yaml` | explicit dynamics | Kalthoff-Winkler impact |
 | `benchmarks/dynamic/B3_dynamic_sent.yaml` | explicit dynamics | Dynamic SENT straight crack |
-| `benchmarks/dynamic/diagnostics/B3_sent_clean_timing.yaml` | explicit dynamics | Clean SENT timing/regression config |
-| `benchmarks/dynamic/B4_coalescence.yaml` | explicit dynamics | Two-crack coalescence |
 | `benchmarks/dynamic/B5_pmma_branching.yaml` | explicit dynamics | PMMA pre-strained branching, Bleyer 2017 |
 | `benchmarks/dynamic/B5_pmma_branching_dU*.yaml` | explicit dynamics | PMMA branching displacement variants |
 | `benchmarks/dynamic/B6_perforated_10holes.yaml` | explicit dynamics | Perforated plate, 10 holes |

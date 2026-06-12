@@ -293,8 +293,7 @@ class J2Plasticity:
     The kernel is implemented in plain torch ops; gradients flow
     through the return-mapping path (the plastic multiplier is
     differentiable wrt material params and strain), making the
-    kernel compatible with the solver's autograd-driven inverse-
-    problem workflow.
+    kernel compatible with differentiable material-parameter studies.
     """
 
     def __init__(

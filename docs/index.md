@@ -147,9 +147,7 @@ developer/testing
 :caption: Supplemental
 
 COMSOL_COMPARISON
-BEAT_THIS_BENCHMARK
 QUICKSTART_PACKAGED_BENCHMARK
-distribution-strategy
 visualisation_requirements
 user_guide/data_and_devices
 user_guide/roadmap

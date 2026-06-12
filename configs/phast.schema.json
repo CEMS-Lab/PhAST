@@ -45,8 +45,6 @@
           "default": "miehe_tension",
           "enum": [
             "bazant_gap_test",
-            "brazilian_disc",
-            "crack_coalescence",
             "glass_impact_vnotch",
             "kalthoff_winkler",
             "l_shaped_panel",

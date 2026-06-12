@@ -120,7 +120,6 @@ exclude_patterns = [
     "MAC_ENV_SETUP.md",
     "developer/torchlean_relevance_triage_2026-05-12.md",
     "dynamics_integrators_and_amr_assessment_2026-05-15.md",
-    "paper2_manuscript_wording_requirements.md",
     "pfczm_formulation.md",
     "plasticity_extension.md",
     "tutorial/04_exploration_experiments.md",

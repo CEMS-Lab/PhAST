@@ -97,9 +97,8 @@ precision.
 
 The kernel is implemented in plain torch ops; gradients flow through
 the return-mapping path (the plastic multiplier is differentiable wrt
-material params and strain). This makes the kernel compatible with
-the solver's autograd-driven inverse-problem workflow once coupling
-is wired in.
+material params and strain). Coupling into full phase-field fracture
+workflows is tracked separately from this low-level kernel.
 
 ## Coupling to the phase-field solver — NOT YET DONE
 

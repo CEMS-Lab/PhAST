@@ -49,8 +49,6 @@ MIGRATED_MATERIALS = [
      'maraging_steel_kw', {'l0': 0.5, 'energy_split': 'spectral'}),
     ('B3_dynamic_sent.yaml',
      'glass_borden', {'l0': 0.5, 'energy_split': 'spectral'}),
-    ('B4_coalescence.yaml',
-     'glass_borden', {'l0': 0.5, 'energy_split': 'spectral'}),
     ('B5_pmma_branching.yaml',
      'pmma_bleyer', {}),
     ('B6_perforated_10holes.yaml',
