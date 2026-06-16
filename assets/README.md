@@ -10,7 +10,7 @@ Zarr/H5 stores, and paper-specific evidence packs out of the public repository.
 | File | Capability | Source |
 |---|---|---|
 | `kalthoff_winkler_long_crack.gif` | Dynamic phase-field fracture | Long-crack Kalthoff-Winkler raw mesh1 multipanel converted to a lightweight fixed-viewport README GIF |
-| `b7_crack_branching_evolution.gif` | Dynamic crack branching | Damage evolution animation copied from Hyperion job 47961 public extract (`b7_branching_47961`) |
+| `b7_crack_branching_evolution.gif` | Dynamic crack branching | Regenerated from Hyperion job 47961 Zarr trajectory; sampled through step 183900 with the final branch frame held |
 | `b7_crack_branching_final.png` | Dynamic crack branching | Curated B7 final damage field |
 | `kalthoff_winkler_crack_growth.png` | Dynamic fracture impact | Paper-1 Kalthoff-Winkler crack-growth panel through the full comparison window |
 | `perforated_microstructure_damage.png` | Microstructured fracture | Curated perforated-plate damage visual |

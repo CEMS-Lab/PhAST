@@ -47,17 +47,25 @@
   {
     "file": "damage_evolution.gif",
     "artifact_type": "animation",
-    "size_bytes": 650049,
+    "size_bytes": 386782,
     "visual_scope": "dynamic",
     "review_dimension_passed": true,
-    "width_px": 1288,
-    "height_px": 528
+    "width_px": 1032,
+    "height_px": 432,
+    "source_job": "47961",
+    "source_zarr": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
+    "source_steps": "0..183900 sampled; final frame held"
   },
   {
     "file": "damage_evolution.mp4",
     "artifact_type": "animation",
-    "size_bytes": 62957,
+    "size_bytes": 46234,
     "visual_scope": "dynamic",
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "width_px": 1032,
+    "height_px": 432,
+    "source_job": "47961",
+    "source_zarr": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
+    "source_steps": "0..183900 sampled; final frame held"
   }
 ]

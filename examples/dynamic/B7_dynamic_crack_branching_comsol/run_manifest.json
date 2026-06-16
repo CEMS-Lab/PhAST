@@ -10,5 +10,11 @@
   "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and heavy artifacts stay private.",
   "source_job": "47961",
   "trajectory_source": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
-  "animation_source": "/users/adfw476/sharedscratch/phast_bench/public_extract/b7_branching_47961/damage_evolution.gif"
+  "animation_source": "/users/adfw476/sharedscratch/phast_bench/public_extract/b7_branching_47961_regenerated/damage_evolution.gif",
+  "animation_manifest": "animation_manifest.json",
+  "artifacts": [
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
+    "animation_manifest.json"
+  ]
 }
