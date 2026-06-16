@@ -1,0 +1,63 @@
+schema_version: 1
+example: phast.examples.quasistatic.l_shaped_panel.run
+problem:
+  name: L-Shaped Panel (Ambati 2015)
+  reference: Ambati et al. (2015), Comput. Mech.
+geometry:
+  type: l_shaped_panel
+  parameters:
+    L: 250.0
+    l0: 1.1875
+    h_crack: 0.3
+    h_coarse: 25.0
+# Inline material — Winkler (2001) / Ambati (2015) L-shaped concrete.
+# Geometry kept on the l_shaped_panel generator. The rectangle-minus-
+# corner-cutout shape itself compiles under #191's OCC fragment, and
+# the ``bottom`` BC tags fine via a thin RegionGroup strip on the base
+# rectangle's outline. The ``load_segment`` BC is the Ambati Fig. 16a
+# displacement point on the cutout horizontal edge, 30 mm right of the
+# re-entrant corner. The procedural benchmark generator emits this as a
+# Physical Point named ``load_segment`` for compatibility with existing
+# configs.
+material:
+  E: 25850.0            # 25.85 GPa (Ambati 2015: lambda=6.16, mu=10.95 GPa)
+  nu: 0.18
+  Gc: 0.089             # N/mm = 89 J/m^2
+  l0: 1.1875
+  rho: 2.4e-9
+  energy_split: spectral
+  pf_model: AT2
+  eta_residual: 1.0e-7
+boundary_conditions:
+- nodes: bottom
+  type: fix
+  component: 0
+- nodes: bottom
+  type: fix
+  component: 1
+- nodes: load_segment
+  type: prescribe
+  component: 1
+  value: -1.0
+loading:
+  protocol: cyclic
+  num_steps: 1400
+  dt: 0.001
+  cyclic_phases: 0.3:100,-0.2:100,1.0:1200
+solver:
+  solver_type: quasi_static
+  stagger_tol: 1e-6
+  max_stagger: 500
+  stagger_criterion: relative
+  use_multigrid: true
+  preconditioner: jacobi  # AMG_QS_FALLBACK: QS CPU damage solve default
+  backend: auto           # sparse-direct mechanics when available
+  H_cap_factor: 0.0
+  eta_residual: 1e-2
+output:
+  trajectory: true
+  h5_every: 1
+  plots: true
+  print_every: 10
+  reaction_node_set: load_segment
+  reaction_component: 1

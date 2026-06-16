@@ -1,0 +1,77 @@
+{
+  "example": "B5_pmma_branching",
+  "status": "selected_public_sweep",
+  "config": "config.yaml",
+  "curated_source": "selected public PMMA sweep retained from reviewed private development evidence",
+  "problem": "PMMA Dynamic Crack Branching -- Pre-Strained Plate (Bleyer 2017)",
+  "material": {
+    "E": 3090.0,
+    "nu": 0.35,
+    "Gc": 0.3,
+    "l0": 0.1,
+    "energy_split": "amor",
+    "pf_model": "AT1",
+    "eta_residual": 1e-06,
+    "rho": 1.18e-09
+  },
+  "mesh": {
+    "n_nodes": 949210,
+    "n_elements": 1894256,
+    "h_min": 0.008523610623398334
+  },
+  "solver": {
+    "solver_type": "explicit",
+    "protocol": "two-step: pre-strain + dynamic release",
+    "num_steps": 19001,
+    "dt": 3.947288919637911e-09,
+    "dt_us": "0.0039",
+    "t_total_us": "75.00",
+    "delta_U_mm": 0.05,
+    "c_R_mm_s": 919893.8,
+    "c_R_m_s": 919.9
+  },
+  "branch_detection": {
+    "crack_step": 62,
+    "branch_step": null,
+    "branch_time_us": null,
+    "note": "The promoted visual result shows the selected PMMA crack path; automatic branch-step detection was not triggered in the archived metadata."
+  },
+  "files": [
+    "README.md",
+    "config.yaml",
+    "mesh.geo",
+    "run_metadata.json",
+    "run_manifest.json",
+    "visual_manifest.json",
+    "history.csv",
+    "energy.csv",
+    "crack_tip.csv",
+    "initial_conditions.png",
+    "thumbnail.png",
+    "damage_final.png",
+    "damage_multipanel.png",
+    "damage_profiles_multi.png",
+    "compare.png",
+    "space_time_diagram.png",
+    "damage_profile.png",
+    "displacement_multipanel.png",
+    "stress_max_principal_multipanel.png",
+    "energy_balance.png",
+    "energy_normalized.png",
+    "dissipation_rate.png",
+    "dissipation_vs_velocity.png",
+    "crack_velocity_vs_time.png",
+    "crack_velocity_vs_position.png",
+    "max_damage_vs_time.png",
+    "mesh_convergence.png",
+    "velocity_with_holes.png",
+    "velocity_parametric.png",
+    "response_evolution.mp4",
+    "damage_evolution.mp4"
+  ],
+  "private_exclusions": [
+    "raw sweep archives",
+    "heavy trajectory/checkpoint stores"
+  ],
+  "notes": "Curated public PMMA visual-evidence bundle. Raw sweep archives stay private."
+}

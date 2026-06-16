@@ -1,0 +1,34 @@
+# Plasticity and Interface Beta Workflows
+
+Plasticity, cohesive, PF-CZM, and interface examples are beta validation slices
+unless the capability matrix says otherwise. They remain useful and tested, but
+they are not presented as a fully coupled production product.
+
+## Public beta path
+
+The beta family is driven through the curated reproducibility manifest:
+
+```bash
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation --output_dir examples/plasticity_interface/results/j2_validation
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_cohesive --output_dir examples/plasticity_interface/results/structural_dcb_cohesive
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id pfczm_uniaxial_strength --output_dir examples/plasticity_interface/results/pfczm_uniaxial_strength
+```
+
+Those validation IDs are mirrored in `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`
+and checked by `tests/test_public_examples_contract.py`.
+
+The retained #708 result bundles live under
+`examples/plasticity_interface/results/` and are indexed by
+`examples/plasticity_interface/results/issue_708_promoted_results.yaml`.
+They include YAML-resolved configs, provenance JSON, CSV histories, setup and
+final PNGs, GIF animations, visual manifests, and `training_data.zarr` stores
+that can be inspected with `phast.load_result(path)`. The matching fluent setup
+surfaces live in `examples/plasticity_interface/fluent_setups/` and are for
+authoring/inspection; the reproducibility path remains the curated YAML
+dispatcher above.
+
+## Boundary
+
+Do not generalize a passing beta script contract to arbitrary coupled
+plasticity/cohesive fracture. Public docs should state the exact validation ID,
+script, output artifacts, and claim boundary for each beta example.

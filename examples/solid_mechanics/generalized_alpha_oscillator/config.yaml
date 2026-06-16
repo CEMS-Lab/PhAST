@@ -1,0 +1,11 @@
+schema_version: 1
+example: solid_mechanics.generalized_alpha_oscillator
+time:
+  n_steps: 100
+  dt: 1.0e-3
+integrator:
+  rho_inf_values:
+    - 1.0
+    - 0.5
+output:
+  directory: .

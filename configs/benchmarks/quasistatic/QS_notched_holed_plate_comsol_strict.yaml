@@ -1,0 +1,156 @@
+schema_version: 1
+# =====================================================================
+# Quasi-static Notched Holed Plate -- strict COMSOL parity variant.
+#
+# The COMSOL 6.4 Application Library comparison settings use:
+#   - Damage feature strainEnergySplit = volDev ("Volumetric only")
+#   - maxDmg = 0.99999, i.e. residual stiffness eta = 1e-5
+#
+# This file changes only those formulation knobs relative to the
+# accepted historical QS_notched_holed_plate.yaml so we can test exact
+# strict parity without replacing the existing PASS evidence.
+#
+# Run:
+#   python -m phast run configs/benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml
+#
+# Acceptance (issue #119):
+#   - First peak  load 0.63 kN at u = 0.33 mm    (+/-10% load, +/-15% u)
+#   - Second peak load 0.15 kN at u = 1.7  mm    (+/-20% load)
+#   - Crack diverts from notch tip toward the large hole.
+# =====================================================================
+
+problem:
+  name: COMSOL Notched Holed Plate strict parity (volDev + eta=1e-5)
+  reference: "COMSOL 6.4 Application Library Damage settings; Ambati et al. (2015), Comput. Mech. 55, 383-405."
+
+# Geometry: inline-primitive DSL (issue #192). Plate (65 x 120) minus a
+# rectangular notch slit (edge-flush at x=0; OCC fragment via PR #191)
+# and three circular holes (one large interior; two pin holes that are
+# strictly interior so they use OCC cut). Pin centres are PointGroups
+# that fragment the surface (PR #201) so they survive as standalone
+# Physical Points usable as the rigid_connector master DOFs.
+# Field[Box] interior refinement over the y in [45, 70] crack band uses
+# mode='box' (PR #200).
+geometry:
+  units: mm
+  primitives:
+    plate: { type: rectangle, origin: [0.0, 0.0], size: [65.0, 120.0] }
+    # Notch slit (rectangle, edge-flush at x=0): 10 mm long, 0.5 mm
+    # tall, centred on y=65 (so y in [64.75, 65.25]).
+    notch: { type: rectangle, origin: [0.0, 64.75], size: [10.0, 0.5] }
+    # Large interior hole: r=10 mm at (36.5, 51).
+    big_hole: { type: circle, center: [36.5, 51.0], radius: 10.0 }
+    # Pin holes (kinematic loading): r=5 mm.
+    upper_pin: { type: circle, center: [20.0, 100.0], radius: 5.0 }
+    lower_pin: { type: circle, center: [20.0,  20.0], radius: 5.0 }
+  domain:
+    base: plate
+    subtract: [notch, big_hole, upper_pin, lower_pin]
+  named_groups:
+    # Pin centres as Physical Points (master DOFs for the rigid_connector
+    # BCs below). The compiler fragments the surface with each point so
+    # the centre survives as a standalone vertex even though it sits
+    # inside the excluded hole loop (PR #201).
+    upper_pin_centre: { point: [20.0, 100.0] }
+    lower_pin_centre: { point: [20.0,  20.0] }
+  mesh:
+    element_size:
+      default: 4.0          # h_coarse
+      refined:
+        # Crack-band interior refinement (replaces legacy Field[1] = Box
+        # over y in [45, 70]). mode='box' uses Field[Box] in the
+        # compiler so the entire band's interior gets h_fine.
+        - region:
+            type: box
+            x: [0.0, 65.0]
+            y: [45.0, 70.0]
+          size: 0.30        # h_fine ~ 1.2 * l0
+          thickness: 4.0    # one-coarse-element-wide smoothing
+        # Distance+Threshold around the big hole (8 mm margin).
+        - primitive: big_hole
+          size: 0.30
+          margin: 8.0
+        # Pin-hole boundary refinement so the kinematic rigid_connector
+        # is well-sampled (~31 nodes/pin at h_pin=1.0).
+        - primitive: upper_pin
+          size: 1.0         # h_pin
+          margin: 6.0
+        - primitive: lower_pin
+          size: 1.0
+          margin: 6.0
+
+# Inline material — COMSOL Damage settings used for strict parity.
+material:
+  E: 6000.0             # 6 GPa
+  nu: 0.22
+  Gc: 2.280             # N/mm = 2280 J/m^2
+  l0: 0.25
+  rho: 2.4e-9
+  energy_split: amor
+  pf_model: AT2
+  plane_stress: true
+  eta_residual: 1.0e-5  # COMSOL maxDmg=0.99999
+
+# Rigid connector (full MPC, rotation-free) on each pin-hole boundary.
+# PR #164/#174/#182 ships rotation_free=True across the static solver
+# path. The master node is the *pin centre* -- (20, 100) for the upper
+# pin and (20, 20) for the lower pin -- emitted as an isolated
+# ``Physical Point`` via the named_groups PointGroup form. The centre
+# point carries DOFs but has no element connectivity, so it contributes
+# zero stiffness to the global system and acts purely as the kinematic
+# control point. The slave nodes (entire pin-hole boundary, i.e.
+# upper_pin.boundary / lower_pin.boundary auto-exposed by the circle
+# subtract) are tied to that centre via the linearised rigid-body
+# constraint, so the boundary rotates rigidly about the geometric
+# centre with prescribed u_y on the master and a free rotation DOF --
+# matching COMSOL's rigid connector.
+boundary_conditions:
+- nodes: upper_pin.boundary
+  type: rigid_connector
+  master: upper_pin_centre   # PointGroup at (20, 100), pin-hole centre
+  dofs: [x, y]               # lock master x=0, y=prescribed; theta free
+  prescribe: {y:  2.0}       # +u_y_max at load_factor = 1
+  rotation_free: true
+- nodes: lower_pin.boundary
+  type: rigid_connector
+  master: lower_pin_centre   # PointGroup at (20, 20), pin-hole centre
+  dofs: [x, y]
+  prescribe: {y: -2.0}       # -u_y_max at load_factor = 1
+  rotation_free: true
+
+loading:
+  # Dense sampling pre-peak (0 -> 0.5 mm in 140 steps), then coarse
+  # post-peak (0.5 -> 2.0 mm in 60 steps). load_factor = u/2 mm.
+  protocol: cyclic
+  cyclic_phases: "0.25:140,1.0:60"
+  num_steps: 200
+  dt: 0.01
+
+solver:
+  # Historical SecantCGSolver path retained for this benchmark's accepted
+  # comparison envelope. QuasiStaticSolver now has a rigid_connector MPC path
+  # too; switch to ``quasi_static`` only with a fresh load-displacement
+  # comparison and updated acceptance notes.
+  solver_type: quasi_static_legacy
+  stagger_tol: 1.0e-4
+  max_stagger: 50
+  stagger_criterion: relative
+  use_multigrid: true
+  preconditioner: jacobi  # AMG_QS_FALLBACK: QS CPU damage solve default
+  backend: auto           # sparse-direct mechanics when available
+  H_cap_factor: 0.0
+  damage_tol: 1.0e-6
+  static_tol: 1.0e-8
+  eta_residual: 1.0e-5  # COMSOL maxDmg=0.99999
+
+output:
+  trajectory: true
+  h5_every: 5
+  plots: true
+  fast: true
+  print_every: 5
+  reaction_node_set: upper_pin.boundary   # writes results.csv (load-displacement)
+  reaction_component: 1
+
+device:
+  device: cpu

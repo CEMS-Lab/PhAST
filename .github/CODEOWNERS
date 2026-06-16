@@ -1,0 +1,17 @@
+# GitHub CODEOWNERS File
+# Ref: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# By default, Allamaprabhu Ani is the owner of all files in the repository.
+* @allamaprabhuani
+
+# Core solver package and physics algorithms
+/src/ @allamaprabhuani
+
+# Testing suite and validation scripts
+/tests/ @allamaprabhuani
+/tools/ @allamaprabhuani
+
+# GitHub Action CI/CD workflows and settings
+/.github/ @allamaprabhuani
+/pyproject.toml @allamaprabhuani
+/setup.py @allamaprabhuani

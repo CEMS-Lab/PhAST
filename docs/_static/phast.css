@@ -1,0 +1,124 @@
+.phast-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin: 1.5rem 0 2rem;
+}
+
+.phast-card {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 0.1rem 0.35rem rgba(0, 0, 0, 0.06);
+}
+
+.phast-card h3 {
+  margin-top: 0;
+}
+
+.phast-eyebrow {
+  color: #e95420;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.phast-hero-brand {
+  display: block;
+  width: min(100%, 64rem);
+  height: auto;
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.08);
+}
+
+.phast-hero-panel {
+  align-items: stretch;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  margin: 1.25rem 0 2rem;
+}
+
+.phast-hero-panel h2 {
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  line-height: 1.12;
+  margin: 0 0 0.75rem;
+}
+
+.phast-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.phast-button {
+  background: #e95420;
+  border: 1px solid #e95420;
+  border-radius: 0.38rem;
+  color: #ffffff !important;
+  display: inline-block;
+  font-weight: 700;
+  padding: 0.5rem 0.75rem;
+}
+
+.phast-button-secondary {
+  background: transparent;
+  color: var(--md-typeset-a-color) !important;
+}
+
+.phast-command-card {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.1rem 0.35rem rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+}
+
+.phast-command-title {
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.phast-wide-figure {
+  margin: 1.5rem 0 2rem;
+}
+
+.phast-wide-figure img {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+.phast-thumb-grid {
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.phast-thumb-card {
+  overflow: hidden;
+}
+
+.phast-thumb-card img {
+  display: block;
+  width: calc(100% + 2rem);
+  max-width: none;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  margin: -1rem -1rem 0.85rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.phast-thumb-card p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 52rem) {
+  .phast-hero-panel {
+    grid-template-columns: 1fr;
+  }
+}

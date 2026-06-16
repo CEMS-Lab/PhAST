@@ -1,0 +1,43 @@
+name: docs
+# Trigger policy (2026-06-02): manual-only.
+#   - workflow_dispatch: manual ("gh workflow run docs.yml")
+# No auto-fire on push, PR, or schedule. Manually trigger after a docs-content
+# merge if you want immediate publish.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-docs.txt
+      - name: Build
+        run: |
+          sphinx-build -b html docs docs/_build/html --keep-going
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

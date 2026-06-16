@@ -1,0 +1,38 @@
+name: Benchmark validation
+description: Track a benchmark setup, reference comparison, or validation gap.
+title: "[benchmark]: "
+labels: ["benchmark", "validation", "needs-triage"]
+body:
+  - type: input
+    id: benchmark
+    attributes:
+      label: Benchmark
+      description: Name, config path, or example folder.
+      placeholder: configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference Standard
+      description: Paper, vendor tutorial, reference implementation, digitised curve, or accepted run bundle.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: State the metrics, tolerances, required plots, and required output files.
+      value: |
+        - Required outputs:
+        - Numerical tolerances:
+        - Visual/morphology checks:
+    validations:
+      required: true
+  - type: textarea
+    id: current_status
+    attributes:
+      label: Current Status
+      description: Include latest local/HPC run path, job id, pass/fail state, and blockers.
+    validations:
+      required: false

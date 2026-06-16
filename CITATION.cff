@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use PhAST, please cite this repository and the relevant paper or benchmark report."
+title: "PhAST: Phase-field Autograd Solver in Torch"
+authors:
+  - family-names: Ani
+    given-names: Allamaprabhu
+    email: allamaprabhu.ani@city.ac.uk
+version: 0.16.2
+date-released: 2026-05-20
+license: MIT
+repository-code: "https://github.com/CEMS-Lab/PhAST"
+url: "https://cems-lab.github.io/PhAST/"
+keywords:
+  - phase-field fracture
+  - finite element method
+  - PyTorch
+  - matrix-free solvers
+  - differentiable mechanics

@@ -1,0 +1,29 @@
+{
+  "example": "pfczm_uniaxial_strength_validation",
+  "validation_passed": true,
+  "capability_boundary": "Forward Wu PF-CZM damage-law strength calibration smoke; not a full structural crack-growth, mixed-mode delamination, or PF-plasticity-cohesive benchmark.",
+  "n_nodes": 126,
+  "n_elements": 200,
+  "l0_values": [
+    0.08,
+    0.12,
+    0.18
+  ],
+  "target_sigma_ts": 3.0,
+  "peak_degraded_stresses": [
+    2.9998401497555225,
+    2.999759650394073,
+    2.999639372345934
+  ],
+  "max_peak_strength_relative_error": 0.00012020921802206412,
+  "damage_onset_sigma_over_sigma_ts": [
+    1.0161290322580647,
+    1.0161290322580647,
+    1.0161290322580647
+  ],
+  "all_solvers_converged": true,
+  "max_residual_norm": 1.1174720630557248e-07,
+  "max_solver_iters": 202,
+  "visual_manifest_passed": true,
+  "max_rss_kib": 333168
+}

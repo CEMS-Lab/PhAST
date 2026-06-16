@@ -1,0 +1,9 @@
+# COMSOL 6.4 dynamic crack branching -- reference event times.
+# Source: models.geomech.dynamic_crack_branching.pdf, Fig 3 + report text.
+# All times in microseconds (us).
+#
+# event              t_us
+initiation           10
+branching_onset      33
+full_Y_45us          45
+full_Y_75us          75

@@ -1,0 +1,69 @@
+schema_version: 1
+example: phast.examples.dynamic_sent_tension.run
+problem:
+  name: Dynamic SENT
+  reference: Borden et al. (2012), CMAME
+# Geometry: inline-primitive DSL (issue #192). Plate rectangle minus a
+# triangular wedge notch (3-vertex polygon, edge-flush at x=0 — routed
+# through OCC fragment by the geometry compiler, PR #191/#199).
+# `left`/`top`/`bottom` BC node sets are tagged via thin RegionGroup
+# strips along each base edge; the bbox-aspect-ratio gate in
+# geometry_compiler._on_outline disambiguates which base edge each
+# strip targets (PR #201). l0 = 0.5, h_crack = 0.5, h_coarse = 4.0,
+# crack_band = 5*l0 = 2.5 — matches the legacy rectangular_sent
+# generator at branching=False (mesh_generator.py L1218 onwards).
+geometry:
+  units: mm
+  primitives:
+    plate: { type: rectangle, origin: [0, 0], size: [100.0, 40.0] }
+    # Triangular wedge notch: tip at (a, H/2), mouth at left edge
+    # spanning H/2 +- eps. eps = min(0.01*min(W,H), 0.01) = 0.01,
+    # matching mesh_generator.rectangular_sent (notch_eps).
+    notch:
+      type: polygon
+      vertices: [[0.0, 20.01], [50.0, 20.0], [0.0, 19.99]]
+  domain:
+    base: plate
+    subtract: [notch]
+  named_groups:
+    left:   { region: { type: rectangle, origin: [-0.01,  0.0],   size: [0.02,   40.0] } }
+    top:    { region: { type: rectangle, origin: [ 0.0,   39.99], size: [100.0,  0.02] } }
+    bottom: { region: { type: rectangle, origin: [ 0.0,  -0.01],  size: [100.0,  0.02] } }
+  mesh:
+    element_size:
+      default: 4.0       # h_coarse
+      refined:
+        # Distance+Threshold band around the notch walls (matches
+        # Field[1]/Field[2] in legacy .geo: refinement of width 5*l0
+        # around the notch curves at h_crack).
+        - primitive: notch
+          size: 0.5      # h_crack
+          margin: 2.5    # crack_band = 5*l0
+# Inline material — Borden (2012) soda-lime glass.
+material:
+  E: 32000.0            # 32 GPa
+  nu: 0.20
+  Gc: 3.0e-3            # 3 J/m^2
+  l0: 0.5
+  rho: 2.45e-9
+  energy_split: spectral
+  pf_model: AT2
+  eta_residual: 1.0e-7
+boundary_conditions:
+- nodes: left
+  type: fix
+  component: 0
+- {nodes: top,    type: traction, component: 1, value:  1.0, ramp_type: constant}
+- {nodes: bottom, type: traction, component: 1, value: -1.0, ramp_type: constant}
+loading:
+  protocol: simple
+  t_total: 5.0e-05
+  ramp_type: constant
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  print_every: 100

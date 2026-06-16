@@ -1,0 +1,146 @@
+schema_version: 1
+manifest_type: reproducibility_contract
+purpose: Clean rerun contracts for quasi-static benchmark families.
+base_paths:
+  configs: configs/benchmarks/quasistatic
+  manifests: configs/benchmarks/quasistatic/manifests
+  scheduler_templates: private_site_templates/benchmarks
+
+runs:
+  - id: qs_notched_holed_plate_baseline
+    family: quasi_static
+    mode: direct_yaml
+    canonical_config: configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml
+    legacy_alias: configs/QS_notched_holed_plate.yaml
+    launcher:
+      - python
+      - -m
+      - phast
+      - run
+      - configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml
+    required_artifacts:
+      - results.csv
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+
+  - id: qs_notched_holed_plate_comsol_strict
+    family: quasi_static
+    mode: direct_yaml
+    canonical_config: configs/benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml
+    legacy_alias: configs/QS_notched_holed_plate_comsol_strict.yaml
+    launcher:
+      - python
+      - -m
+      - phast
+      - run
+      - configs/benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml
+    required_artifacts:
+      - results.csv
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+
+  - id: qs_lshaped_concrete
+    family: quasi_static
+    mode: direct_yaml
+    canonical_config: configs/benchmarks/quasistatic/QS_lshaped_concrete.yaml
+    legacy_alias: configs/QS_lshaped_concrete.yaml
+    launcher:
+      - python
+      - -m
+      - phast
+      - run
+      - configs/benchmarks/quasistatic/QS_lshaped_concrete.yaml
+    required_artifacts:
+      - results.csv
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+
+  - id: qs_miehe_sent_mesh_arc
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_mesh_convergence_arc_length.yaml
+    launcher: private_site_templates/benchmarks/hpc_qs_mesh_convergence_arc.slurm
+    note: Arc-length post-peak and mesh-convergence study for SENT, SENS, TPB.
+    required_artifacts:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+
+  - id: qs_sens_tpb_peak_window
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_sens_tpb_peak_window_corrected.yaml
+    launcher: private_site_templates/benchmarks/hpc_qs_sens_tpb_peak_window.slurm
+    note: Clean peak-window SENS and TPB validation with PETSc/MUMPS mechanics.
+    required_artifacts:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+
+  - id: qs_sens_tpb_rescue_visuals
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_sens_tpb_rescue_visuals.yaml
+    launcher: private_site_templates/benchmarks/hpc_qs_sens_tpb_rescue.slurm
+    note: Targeted rescue visual cells; diagnostic usage only.
+    required_artifacts:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+
+  - id: qs_miehe_tension_repro
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_tension_repro.yaml
+    launcher:
+      - python
+      - -u
+      - examples/quasistatic/miehe_tension/run.py
+    note: Clean single-case Miehe SENT reproducibility track for local reruns.
+    required_artifacts:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+
+  - id: qs_miehe_sens_repro
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_sens_repro.yaml
+    launcher:
+      - python
+      - -u
+      - examples/quasistatic/miehe_shear/run.py
+    note: Clean single-case Miehe SENS reproducibility track for local reruns.
+    required_artifacts:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr
+
+  - id: qs_miehe_tpb_repro
+    family: quasi_static
+    mode: manifest
+    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_tpb_repro.yaml
+    launcher:
+      - python
+      - -u
+      - examples/quasistatic/three_point_bending/run.py
+    note: Clean single-case Miehe TPB reproducibility track for local reruns.
+    required_artifacts:
+      - compare_report.txt
+      - compare.png
+      - run_metadata.json
+      - case.yaml
+      - training_data.zarr

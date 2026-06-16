@@ -1,0 +1,11 @@
+{
+  "example": "B2_kalthoff_winkler",
+  "status": "public_candidate",
+  "config": "config.yaml",
+  "curated_source": "../kalthoff/B2_kalthoff_mesh1",
+  "private_exclusions": [
+    "../kalthoff/B2_kalthoff_mesh1/training_data.h5",
+    "../kalthoff/B2_kalthoff_mesh1/RECOVERY.md"
+  ],
+  "notes": "Flat curated package copied from mesh-1 evidence; heavy trajectory store stays private."
+}

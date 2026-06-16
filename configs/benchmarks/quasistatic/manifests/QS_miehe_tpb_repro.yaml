@@ -1,0 +1,59 @@
+schema_version: 1
+manifest_type: command_manifest
+description: >
+  Reproducible single-case Miehe three-point bending peak-window verification.
+  This is a displacement-controlled peak validation track.
+
+common_args:
+  - --device
+  - cpu
+  - --plots
+  - --profile
+  - --trajectory
+  - --trajectory_format
+  - zarr
+  - --gif
+  - --animation_format
+  - mp4
+  - --gif_frames
+  - 70
+  - --newton_line_search
+  - --line_search_max_steps
+  - 10
+  - --checkpoint_every
+  - 1
+  - --stagger_nonconvergence_policy
+  - phasefieldx
+
+cases:
+  - label: tpb_peak_repro
+    module: examples.quasistatic.three_point_bending.run
+    compare: examples/quasistatic/three_point_bending/compare.py
+    args:
+      - --num_steps
+      - 66
+      - --h_crack
+      - 0.005
+      - --l0
+      - 0.06
+      - --stagger_tol
+      - 1e-5
+      - --max_stagger
+      - 1000
+      - --backend
+      - mumps
+      - --preconditioner
+      - jacobi
+      - --adaptive_load_steps
+      - --damage_refine_trigger
+      - 0.10
+      - --damage_increment_limit
+      - 0.08
+      - --min_load_step
+      - 1e-5
+      - --max_cutbacks
+      - 24
+      - --residual_cutback_limit
+      - 2e-4
+      - --energy_jump_limit
+      - 0.75

@@ -1,0 +1,12 @@
+{
+  "example": "B3_dynamic_sent",
+  "status": "public_candidate_smoke_warning",
+  "config": "config.yaml",
+  "curated_source": "../sent",
+  "private_exclusions": [
+    "raw HPC dumps",
+    "training_data.h5",
+    "training_data.zarr"
+  ],
+  "notes": "Schema validation warns about h/l0 for this smoke-scale setup; do not present it as a convergence-quality benchmark."
+}

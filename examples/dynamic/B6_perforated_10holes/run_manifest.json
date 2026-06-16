@@ -1,0 +1,46 @@
+{
+  "schema": "phast_run_manifest_v1",
+  "example": "B6_perforated_10holes",
+  "status": "public_candidate_b6_variant",
+  "config": "config.yaml",
+  "hpc_source": {
+    "job": "8585",
+    "curated_case": "B6b_perforated_10holes",
+    "note": "Only lightweight public artifacts are retained here; raw HPC folders and trajectory stores remain private."
+  },
+  "files": [
+    "README.md",
+    "config.yaml",
+    "crack_tip.csv",
+    "crack_velocity_vs_position.png",
+    "crack_velocity_vs_time.png",
+    "damage_final.png",
+    "damage_multipanel.png",
+    "damage_profile.png",
+    "damage_profiles_multi.png",
+    "displacement_multipanel.png",
+    "dissipation_rate.png",
+    "dissipation_vs_velocity.png",
+    "energy.csv",
+    "energy_balance.png",
+    "energy_normalized.png",
+    "history.csv",
+    "initial_conditions.png",
+    "max_damage_vs_time.png",
+    "mesh.geo",
+    "mesh.msh",
+    "run_manifest.json",
+    "run_metadata.json",
+    "space_time_diagram.png",
+    "stress_max_principal_multipanel.png",
+    "thumbnail.png",
+    "velocity_with_holes.png",
+    "visual_manifest.json",
+    "response_evolution.mp4",
+    "damage_evolution.mp4"
+  ],
+  "notes": [
+    "This flat public candidate keeps only lightweight derived artifacts from HPC job 8585; raw trajectories stay private until a public artifact release exists.",
+    "The copied run_metadata.json preserves original provenance and may contain historical source labels; this public folder is the authoritative B6 name."
+  ]
+}

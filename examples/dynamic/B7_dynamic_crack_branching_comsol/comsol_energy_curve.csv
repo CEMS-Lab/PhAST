@@ -1,0 +1,10 @@
+# COMSOL 6.4 dynamic crack branching -- reference energy points.
+# Source: models.geomech.dynamic_crack_branching.pdf, Fig 4 (visual read).
+# Three discrete reference points: two elastic-energy peaks and the
+# fracture-energy value at 75 us.  Energies are at thickness = 1 m
+# (COMSOL convention); see PROVENANCE.md for the mm-thickness conversion.
+#
+# t_us, elastic_energy_J, fracture_energy_J
+20.0, 0.13, 0.05
+40.0, 0.14, 0.30
+75.0, 0.10, 0.50

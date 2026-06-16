@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "store": "training_data.zarr",
+  "format": "phast.solid_mechanics.trajectory.zarr",
+  "steps": 5,
+  "fields": [
+    "displacement",
+    "displacement_magnitude",
+    "jacobian",
+    "strain_energy",
+    "von_mises"
+  ]
+}

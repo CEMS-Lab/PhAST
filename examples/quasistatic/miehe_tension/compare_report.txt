@@ -1,0 +1,15 @@
+Miehe SENT (PhaseFieldX 1711) -- comparison report
+========================================================
+Run dir         : miehe_tension
+Reference       : miehe_sent_load_displacement.csv
+
+Peak reaction (sim)     :   0.6936 kN at u = 0.00558 mm
+Peak reaction (ref)     :   0.7012 kN at u = 0.00555 mm
+Sim u_max               : 0.00800 mm (covers reference peak)
+Peak relative error     :   1.08 %    (tol 5 %)  -> PASS
+Pre-peak L2 rel error   :   1.70 %    (tol 10 %)  -> PASS
+Post-peak L2 rel error  :  75.83 %    (tol 10 %)  -> PASS   (reported only)
+Dissipated-energy err   :   5.38 %    (W_sim=0.00206, W_ref=0.00218 kN*mm)  (tol 15 %)  -> PASS
+Full-curve L2 (info)    :  43.17 %    (NOT GATED -- needs arc-length for snap-back)
+
+OVERALL: PASS

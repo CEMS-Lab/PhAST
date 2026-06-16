@@ -1,0 +1,191 @@
+schema_version: 1
+# =====================================================================
+# B7 -- Dynamic crack branching, COMSOL 6.4 reference cross-check
+# Issue #135. Third independent reference for the PMMA-style dynamic
+# Y-branching benchmark already validated in Paper 1 against
+# Borden 2012 (B1) and Bleyer 2017 (B5).
+#
+# Distinguishing feature: traction-controlled (Neumann sigma_n = 1 MPa
+# with smooth-step ramp), versus B1/B5 which are displacement-controlled.
+#
+# Run:
+#   python -m phast run configs/B7_dynamic_crack_branching_comsol.yaml
+#
+# Acceptance (issue #135 + #299 reframing):
+#   - Initiation t ~ 10 us
+#   - Branching onset t ~ 68.2 us (Ren 2019 mesh-2 value, within +/-20%)
+#     COMSOL's 33 us Application Library event is tracked as secondary
+#     vendor context, not the default pass/fail target.
+#   - Full Y-shape by 75 us
+#   - Elastic-energy peak ~0.26 J then ~0.28 J (at thickness 1 m;
+#     2x COMSOL's reported half-plate values 0.13 / 0.14 J)
+# =====================================================================
+
+problem:
+  name: COMSOL Dynamic Crack Branching (PMMA-equiv.)
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs in examples/dynamic/crack_branching_comsol/)"
+
+acceptance:
+  status: beta
+  reference_result: "Ren 2019 dynamic branching onset near 68.2 us; COMSOL Application Library 33 us retained as secondary vendor context"
+  required_outputs:
+    - run_lockfile.json
+    - config.yaml
+    - training_data.zarr
+    - energy.csv
+    - crack_tip.csv
+    - compare_report.txt
+    - damage_final.png
+  metrics:
+    branch_onset:
+      target: 68.2
+      tolerance: 20%
+      units: us
+    final_morphology:
+      target: "clean Y-shaped branch by 75-80 us"
+      tolerance: "visual/morphology comparator, no multiple spurious branches"
+    elastic_energy_peak:
+      target: "COMSOL half-plate value doubled for full-plate convention"
+      tolerance: "same domain convention must be stated in compare report"
+  notes: >
+    Root config is the stable public B7 entry point and now matches COMSOL's
+    AT1 plus Amor/volumetric-deviatoric split. Issue #299 is resolved by using
+    the published Ren/Borden-style timing window as the default validation
+    target and treating the COMSOL 33 us event as secondary vendor context.
+    Exact COMSOL timing parity remains diagnostic provenance, not the release
+    acceptance gate.
+
+# Geometry: full-plate equivalent of COMSOL's half-plate setup.
+# COMSOL: full sample is 100 x 40 mm, but the model uses symmetry
+# and builds a 100 x 20 mm half-plate (`height/2`). The pre-crack is
+# along y=0 from x=0 to x=50, with symmetry-BC on the remaining bottom.
+# Mirroring about y=0 -> 100 x 40 mm
+# full plate with central pre-crack from x=0 to x=50 at y=H/2,
+# tractions on both top and bottom.
+# This matches COMSOL's *full-plate equivalent* energy budget
+# (half-plate energy x 2). Diverges from B1/B5/Borden Paper 1
+# convention (100 x 40 mid-notch); kept distinct on purpose so the
+# B7 elastic-energy ledger is comparable to COMSOL Fig 4 directly.
+#
+# Inline-primitive DSL (issue #192). Plate (W=100, H=40, a=50) minus
+# a triangular wedge notch polygon (edge-flush at x=0). Right-half
+# branching band reproduced via mode='box' refinement (PR #200).
+# `notch.boundary` (auto-exposed by the polygon subtract) replaces
+# the legacy `notch_upper`/`notch_lower` split: both BCs were applied
+# identically (pf_dirichlet=1.0, preseed) so collapsing them to a
+# single combined set is functionally equivalent.
+geometry:
+  units: mm
+  primitives:
+    plate: { type: rectangle, origin: [0, 0], size: [100.0, 40.0] }
+    # Triangular wedge notch: tip at (a, H/2)=(50, 20), mouth at left
+    # edge spanning H/2 +- eps. eps = min(0.01*min(W,H), 0.01) = 0.01.
+    notch:
+      type: polygon
+      vertices: [[0.0, 20.01], [50.0, 20.0], [0.0, 19.99]]
+  domain:
+    base: plate
+    subtract: [notch]
+  named_groups:
+    left:   { region: { type: rectangle, origin: [-0.005, 0.0],    size: [0.01,  40.0] } }
+    top:    { region: { type: rectangle, origin: [ 0.0,   39.995], size: [100.0, 0.01] } }
+    bottom: { region: { type: rectangle, origin: [ 0.0,  -0.005],  size: [100.0, 0.01] } }
+  mesh:
+    element_size:
+      default: 1.0       # h_coarse, l0/2 in coarse region
+      refined:
+        - primitive: notch
+          size: 0.125    # h_crack = l0/4 (COMSOL p.10)
+          margin: 2.5    # crack_band = 5*l0
+        # Field[Box]: branching=True uniform h_crack mesh in entire
+        # right half of the plate.
+        - region:
+            type: box
+            x: [45.0, 100.0]   # a - 5 = 45
+            y: [0.0, 40.0]
+          size: 0.125
+          thickness: 1.0
+
+# Inline material — values from the COMSOL example, AT1 (finite
+# elastic threshold W_c0 = 3*Gc/(8*l0), auto-derived in
+# damage_solver.py).
+#
+# Note: the COMSOL example labels the material "PMMA" but the actual
+# parameter values (E=32 GPa, nu=0.2, rho=2450 kg/m^3, Gc=3 J/m^2)
+# match Borden 2012's soda-lime glass. See README for the naming
+# discrepancy.
+material:
+  E: 32000.0            # 32 GPa
+  nu: 0.20
+  Gc: 3.0e-3            # 3 J/m^2
+  l0: 0.5
+  rho: 2.45e-9
+  # COMSOL Phase-Field Damage uses "Exclude compressive energy:
+  # Volumetric only", i.e. the Amor/volumetric-deviatoric split rather
+  # than Miehe strain-spectral. Earlier B7 diagnostics used spectral;
+  # keep those under configs/B7_debug/ as provenance, but the root
+  # parity config should match the saved COMSOL model.
+  energy_split: amor
+  pf_model: AT1
+  eta_residual: 1.0e-7
+
+# Traction loading: sigma_n = 1 MPa on top edge (component 1 = y).
+# Smooth-step ramp over the first ~5 us (see loading.t_ramp).
+# Kept on the legacy ``neumann`` vocabulary because the global
+# loading.ramp_type=smooth (0.5*(1 - cos(pi*t/t_ramp))) drives this
+# Neumann load — the per-BC ``traction smooth_step`` factor is the
+# Hermite 3s^2-2s^3 polynomial, which is *different*. Migrating to
+# ``traction`` would silently change the ramp profile.
+boundary_conditions:
+- {nodes: top,    type: neumann,   component: 1, value:  1.0}    # +1 MPa
+- {nodes: bottom, type: neumann,   component: 1, value: -1.0}    # -1 MPa
+# Pin the bottom-left corner in x to remove rigid-body translation in x.
+# (Single point; doesn't perturb the global response.)
+- {nodes: left,   type: fix,       component: 0}
+# Phase-field Dirichlet (issue #213): lock damage phi=1 at the
+# pre-existing crack notch nodes for the entire simulation. This is
+# the COMSOL pre-crack convention — pf_dirichlet *constrains* the
+# damage solve at every step, while ``preseed_notch_nodesets`` below
+# only sets the initial elastic state at t=0. Both coexist cleanly:
+# preseed primes the H-field so the bulk near the crack starts in
+# the right elastic regime; pf_dirichlet then enforces the crack
+# itself never blunts under wave reflection / eta_residual damping.
+- {nodes: notch.boundary, type: pf_dirichlet, value: 1.0}
+
+initial_conditions:
+  # Pre-existing crack: pre-seed the notch nodes (auto-exposed by the
+  # polygon subtract) so AT1 is initialised with d=1 there at t=0.
+  # Coexists with the ``pf_dirichlet`` BC above: preseed handles t=0,
+  # pf_dirichlet handles t > 0 (issue #213).
+  preseed_notch_nodesets: [notch.boundary]
+
+loading:
+  protocol: simple
+  ramp_type: smooth          # 0.5*(1 - cos(pi*t/t_ramp)) traction ramp
+  t_ramp: 5.0e-8             # smooth-step over first 0.05 us
+  # Tuning history (#213 branching-onset diagnostic, 2026-05-06):
+  # was 5.0e-6 (5 us). HPC job 28652 reported branching at 78 us.
+  # COMSOL Geomechanics PDF p. 10 specifies smooth-
+  # step transition zone of 0.05 us; PhaFiDyn (Barki 2025) loads
+  # instantaneously. Hypothesis: slow ramp attenuated HF content
+  # of impulse, delaying the Yoffe-type velocity instability that
+  # drives branching. To be re-tested on HPC.
+  t_total: 80.0e-6           # 80 us (covers full Y-branching)
+  num_steps: 0               # 0 -> derive from t_total / dt_CFL
+
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  use_multigrid: false       # AT1 + projected_cg uses Jacobi (see B5)
+  bounds_method: projected_cg
+  damage_every: 2            # phase-field every 2nd step (per task spec)
+  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+
+output:
+  h5: true
+  h5_every: 50
+  fast: true
+  print_every: 200
+
+device:
+  device: cpu

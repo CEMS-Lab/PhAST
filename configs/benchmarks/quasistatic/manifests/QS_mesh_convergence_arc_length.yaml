@@ -1,0 +1,118 @@
+schema_version: 1
+manifest_type: command_manifest
+description: >
+  CPU-runnable quasistatic mesh-convergence matrix with Riks-style augmented
+  arc-length continuation enabled for SENS/TPB post-peak diagnostics. Each
+  cell writes Zarr trajectories, MP4 animations, publication plots, and
+  compare reports where a benchmark comparator exists.
+
+common_args:
+  - --device
+  - cpu
+  - --plots
+  - --profile
+  - --trajectory
+  - --trajectory_format
+  - zarr
+  - --gif
+  - --animation_format
+  - mp4
+  - --gif_frames
+  - 60
+  - --backend
+  - auto
+  - --preconditioner
+  - jacobi
+  - --checkpoint_every
+  - 1
+
+cases:
+  - label: sent_at2_coarse
+    module: examples.quasistatic.miehe_tension.run
+    compare: examples/quasistatic/miehe_tension/compare.py
+    args: [--at_mode, at2, --h_crack, 0.004, --l0, 0.015, --num_steps, 150,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --adaptive_load_steps, --damage_refine_trigger, 0.30,
+           --damage_increment_limit, 0.025, --min_load_step, 1.25e-6,
+           --max_cutbacks, 40, --residual_cutback_limit, 5e-5,
+           --energy_jump_limit, 0.50]
+  - label: sent_at2_medium
+    module: examples.quasistatic.miehe_tension.run
+    compare: examples/quasistatic/miehe_tension/compare.py
+    args: [--at_mode, at2, --h_crack, 0.003, --l0, 0.015, --num_steps, 150,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --adaptive_load_steps, --damage_refine_trigger, 0.30,
+           --damage_increment_limit, 0.025, --min_load_step, 1.25e-6,
+           --max_cutbacks, 40, --residual_cutback_limit, 5e-5,
+           --energy_jump_limit, 0.50]
+  - label: sent_at2_fine
+    module: examples.quasistatic.miehe_tension.run
+    compare: examples/quasistatic/miehe_tension/compare.py
+    args: [--at_mode, at2, --h_crack, 0.002, --l0, 0.015, --num_steps, 150,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --adaptive_load_steps, --damage_refine_trigger, 0.30,
+           --damage_increment_limit, 0.025, --min_load_step, 1.25e-6,
+           --max_cutbacks, 40, --residual_cutback_limit, 5e-5,
+           --energy_jump_limit, 0.50]
+
+  - label: sens_at2_coarse_arc
+    module: examples.quasistatic.miehe_shear.run
+    compare: examples/quasistatic/miehe_shear/compare.py
+    args: [--at_mode, at2, --h_crack, 0.010, --l0, 0.060, --num_steps, 120,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --arc_length, --arc_length_steps, 140, --arc_length_ds, 0.0001,
+           --arc_length_solver, riks,
+           --arc_length_max_disp, 0.014, --arc_length_damage_trigger, 0.30,
+           --adaptive_load_steps, --damage_increment_limit, 0.08,
+           --min_load_step, 2.5e-6, --max_cutbacks, 32]
+  - label: sens_at2_medium_arc
+    module: examples.quasistatic.miehe_shear.run
+    compare: examples/quasistatic/miehe_shear/compare.py
+    args: [--at_mode, at2, --h_crack, 0.0075, --l0, 0.060, --num_steps, 120,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --arc_length, --arc_length_steps, 140, --arc_length_ds, 0.0001,
+           --arc_length_solver, riks,
+           --arc_length_max_disp, 0.014, --arc_length_damage_trigger, 0.30,
+           --adaptive_load_steps, --damage_increment_limit, 0.08,
+           --min_load_step, 2.5e-6, --max_cutbacks, 32]
+  - label: sens_at2_fine_arc
+    module: examples.quasistatic.miehe_shear.run
+    compare: examples/quasistatic/miehe_shear/compare.py
+    args: [--at_mode, at2, --h_crack, 0.005, --l0, 0.060, --num_steps, 120,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --arc_length, --arc_length_steps, 140, --arc_length_ds, 0.0001,
+           --arc_length_solver, riks,
+           --arc_length_max_disp, 0.014, --arc_length_damage_trigger, 0.30,
+           --adaptive_load_steps, --damage_increment_limit, 0.08,
+           --min_load_step, 2.5e-6, --max_cutbacks, 32]
+
+  - label: tpb_at2_coarse_arc
+    module: examples.quasistatic.three_point_bending.run
+    compare: examples/quasistatic/three_point_bending/compare.py
+    args: [--at_mode, at2, --h_crack, 0.010, --l0, 0.060, --num_steps, 72,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --arc_length, --arc_length_steps, 100, --arc_length_ds, 0.001,
+           --arc_length_solver, riks,
+           --arc_length_max_disp, 0.045, --arc_length_damage_trigger, 0.30,
+           --adaptive_load_steps, --damage_increment_limit, 0.10,
+           --min_load_step, 5e-6, --max_cutbacks, 32]
+  - label: tpb_at2_medium_arc
+    module: examples.quasistatic.three_point_bending.run
+    compare: examples/quasistatic/three_point_bending/compare.py
+    args: [--at_mode, at2, --h_crack, 0.0075, --l0, 0.060, --num_steps, 72,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --arc_length, --arc_length_steps, 100, --arc_length_ds, 0.001,
+           --arc_length_solver, riks,
+           --arc_length_max_disp, 0.045, --arc_length_damage_trigger, 0.30,
+           --adaptive_load_steps, --damage_increment_limit, 0.10,
+           --min_load_step, 5e-6, --max_cutbacks, 32]
+  - label: tpb_at2_fine_arc
+    module: examples.quasistatic.three_point_bending.run
+    compare: examples/quasistatic/three_point_bending/compare.py
+    args: [--at_mode, at2, --h_crack, 0.005, --l0, 0.060, --num_steps, 72,
+           --stagger_tol, 1e-6, --max_stagger, 1000,
+           --arc_length, --arc_length_steps, 100, --arc_length_ds, 0.001,
+           --arc_length_solver, riks,
+           --arc_length_max_disp, 0.045, --arc_length_damage_trigger, 0.30,
+           --adaptive_load_steps, --damage_increment_limit, 0.10,
+           --min_load_step, 5e-6, --max_cutbacks, 32]

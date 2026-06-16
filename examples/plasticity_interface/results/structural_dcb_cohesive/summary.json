@@ -1,0 +1,105 @@
+{
+  "example": "structural_dcb_cohesive_benchmark",
+  "capability": "DCB-style structural Mode-I cohesive delamination with free bulk DOFs through QuasiStaticSolver cohesive_operator hook",
+  "capability_boundary": "clamped-end structural validation smoke; not an ASTM D5528 fixture/data-reduction or analytical DCB calibration",
+  "references": [
+    "ASTM D5528 Mode-I DCB interlaminar fracture toughness standard",
+    "Skec et al. 2018 analytical DCB with bilinear cohesive interface",
+    "Krueger 2015 quasi-static delamination benchmark methodology"
+  ],
+  "n_nodes": 102,
+  "n_elements": 128,
+  "n_cohesive_elements": 12,
+  "initial_crack_length": 1.5,
+  "bonded_interface_length": 4.5,
+  "n_load_steps": 11,
+  "all_steps_converged": true,
+  "max_residual_norm": 1.243213093426542e-10,
+  "peak_opening_force": 2.0584559637345805,
+  "peak_force_step": 6,
+  "final_opening_force": 1.706473222987365,
+  "post_peak_softening": true,
+  "final_damage_max": 1.0,
+  "final_damage_mean": 0.4163259175657937,
+  "final_active_segments": 6,
+  "final_delamination_front_x": 3.75,
+  "front_advanced": true,
+  "cohesive_dissipation_monotone": true,
+  "final_cohesive_dissipated_energy": 0.22991857208931327,
+  "fracture_energy_capacity": 0.9,
+  "final_bulk_elastic_energy": 0.20270963453921417,
+  "final_external_work": 0.48336514446493833,
+  "max_energy_balance_gap": 0.051322540598179645,
+  "max_energy_balance_gap_fraction": 0.10617757855707861,
+  "energy_balance_gap_tolerance": 0.15,
+  "energy_balance_gap_pass": true,
+  "energy_balance_note": "Diagnostic displacement-control work balance using trapezoidal reaction work, bulk elastic energy, and cohesive dissipation.",
+  "validation_passed": true,
+  "csv": "structural_dcb_response.csv",
+  "plots": [
+    "structural_dcb_load_displacement.png",
+    "structural_dcb_damage_front.png",
+    "structural_dcb_energy.png",
+    "structural_dcb_deformed_mesh.png",
+    "initial_conditions.png",
+    "cohesive_damage_final.png",
+    "damage_evolution.gif"
+  ],
+  "visual_manifest": [
+    {
+      "artifact_type": "image",
+      "path": "structural_dcb_load_displacement.png",
+      "width_px": 1440,
+      "height_px": 672,
+      "size_bytes": 71176,
+      "review_dimension_passed": true
+    },
+    {
+      "artifact_type": "image",
+      "path": "structural_dcb_damage_front.png",
+      "width_px": 1440,
+      "height_px": 672,
+      "size_bytes": 70327,
+      "review_dimension_passed": true
+    },
+    {
+      "artifact_type": "image",
+      "path": "structural_dcb_energy.png",
+      "width_px": 1120,
+      "height_px": 672,
+      "size_bytes": 73862,
+      "review_dimension_passed": true
+    },
+    {
+      "artifact_type": "image",
+      "path": "structural_dcb_deformed_mesh.png",
+      "width_px": 1280,
+      "height_px": 672,
+      "size_bytes": 133227,
+      "review_dimension_passed": true
+    },
+    {
+      "artifact_type": "image",
+      "path": "initial_conditions.png",
+      "width_px": 1360,
+      "height_px": 714,
+      "size_bytes": 49859,
+      "review_dimension_passed": true
+    },
+    {
+      "artifact_type": "image",
+      "path": "cohesive_damage_final.png",
+      "width_px": 1360,
+      "height_px": 714,
+      "size_bytes": 67908,
+      "review_dimension_passed": true
+    },
+    {
+      "artifact_type": "animation",
+      "path": "damage_evolution.gif",
+      "size_bytes": 93622,
+      "media_passed": true
+    }
+  ],
+  "max_rss_kib": 336640
+}

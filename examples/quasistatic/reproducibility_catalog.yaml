@@ -1,0 +1,91 @@
+schema_version: 1
+title: quasistatic_reproducibility_catalog
+scope: curated public quasi-static examples
+source: examples/quasistatic
+defaults:
+  mode: direct_yaml
+  working_dir: repository_root
+  trajectory_format: zarr
+
+runs:
+  - id: miehe_tension
+    family: quasi_static
+    config: examples/quasistatic/miehe_tension/config.yaml
+    command:
+      - python
+      - -m
+      - phast
+      - run
+      - examples/quasistatic/miehe_tension/config.yaml
+      - --output_dir
+      - runs/miehe_tension
+    validation:
+      verdict: PASS
+      peak_reaction_error_percent: 1.08
+      pre_peak_l2_percent: 1.70
+      dissipated_energy_error_percent: 5.38
+    expected_lightweight_outputs:
+      - config.yaml
+      - mesh.geo
+      - mesh.msh
+      - run_lockfile.json
+      - run_metadata.json
+      - results.csv
+      - history.csv
+      - energy.csv
+      - timing_per_step.csv
+      - solver_telemetry.csv
+      - initial_conditions.png
+      - damage_final.png
+      - energy.png
+    promoted_artifacts:
+      - compare_report.txt
+      - compare.png
+      - load_displacement.png
+      - staggered_convergence.png
+      - damage_evolution.mp4
+      - thumbnail.png
+    notes: >
+      Full snap-back is informational only; acceptance is gated on peak,
+      pre-peak response, and dissipated energy.
+
+  - id: notched_holed_plate
+    family: quasi_static
+    config: examples/quasistatic/notched_holed_plate/config.yaml
+    command:
+      - python
+      - -m
+      - phast
+      - run
+      - examples/quasistatic/notched_holed_plate/config.yaml
+      - --output_dir
+      - runs/notched_holed_plate
+    validation:
+      verdict: PASS
+      first_peak_load_error_percent: 4.68
+      first_peak_displacement_error_percent: 9.09
+      second_peak_load_error_percent: 10.51
+    expected_lightweight_outputs:
+      - config.yaml
+      - mesh.geo
+      - mesh.msh
+      - run_lockfile.json
+      - run_metadata.json
+      - results.csv
+      - history.csv
+      - energy.csv
+      - timing_per_step.csv
+      - solver_telemetry.csv
+      - initial_conditions.png
+      - damage_final.png
+      - energy.png
+    promoted_artifacts:
+      - compare_report.txt
+      - compare.png
+      - load_displacement.png
+      - damage_evolution.mp4
+      - damage_multipanel.png
+      - thumbnail.png
+    notes: >
+      Strict-parity Amor/volumetric-deviatoric split with eta_residual=1e-5.
+      The second peak is retained as a post-peak diagnostic.

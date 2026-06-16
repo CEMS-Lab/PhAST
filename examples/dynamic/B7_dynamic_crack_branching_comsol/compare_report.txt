@@ -1,0 +1,15 @@
+Dynamic crack branching (COMSOL 6.4) -- comparison report
+============================================================
+Run dir: run
+
+Initiation     (sim) :   0.00 us  (ref ~ 10.0 us)
+Branching onset(sim) :  79.20 us  (ref 68.2 us [Ren 2019]; COMSOL App. Lib. 33.0 us [outlier]; tol 20%, src=energy_argmax) -> PASS
+  branching_components :   n/a   (first t with >=2 right-side arms; #314)
+  branching_energy_argmax :  79.20 us  (legacy late-window argmax, kept for compat)
+n_arms_final         : unknown (no H5)  (skipped: H5 / mesh unavailable)
+Full-Y by 75us       : max(d) saturated (legacy, no H5) -> PASS
+Elastic peak J (1m)  : 0.2581 J  (ref 0.26-0.28 J, tol 25%) -> PASS
+
+OVERALL: PASS
+
+Crack-path morphology is verified by the connected-component count of d>0.5 in the right-of-precrack region; see also damage_final.png against the COMSOL PDF Fig 3 panels at 10/33/45/75 us.

@@ -1,0 +1,28 @@
+{
+  "schema": "phast_run_manifest_v1",
+  "artifacts": [
+    "summary.json",
+    "config.yaml",
+    "run_lockfile.json",
+    "run_metadata.json",
+    "run_manifest.json",
+    "run.log",
+    "mesh.geo",
+    "mesh.msh",
+    "training_data.zarr",
+    "results.csv",
+    "history.csv",
+    "energy.csv",
+    "solver_telemetry.csv",
+    "timing_per_step.csv",
+    "damage_final.png",
+    "initial_conditions.png",
+    "load_displacement.png",
+    "damage_history.png",
+    "energy_split.png",
+    "convergence.png",
+    "mesh_deformed.png",
+    "damage_evolution.gif",
+    "visual_manifest.json"
+  ]
+}

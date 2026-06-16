@@ -1,0 +1,11 @@
+{
+  "example": "B7_dynamic_crack_branching_comsol",
+  "status": "public_candidate_without_comsol_binary",
+  "config": "config.yaml",
+  "private_exclusions": [
+    "COMSOL binary model files",
+    "vendor PDFs",
+    "heavy trajectory archives"
+  ],
+  "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and heavy artifacts stay private."
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "file": "initial_conditions.png",
+    "artifact_type": "image",
+    "size_bytes": 297817,
+    "visual_scope": "dynamic",
+    "width_px": 1727,
+    "height_px": 827,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "damage_final.png",
+    "artifact_type": "image",
+    "size_bytes": 39410,
+    "visual_scope": "dynamic",
+    "width_px": 927,
+    "height_px": 807,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "thumbnail.png",
+    "artifact_type": "image",
+    "size_bytes": 39410,
+    "visual_scope": "dynamic",
+    "width_px": 927,
+    "height_px": 807,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "response_evolution.mp4",
+    "artifact_type": "animation",
+    "label": "response evolution",
+    "visual_scope": "standard"
+  },
+  {
+    "file": "damage_evolution.mp4",
+    "artifact_type": "animation",
+    "label": "damage evolution",
+    "visual_scope": "standard"
+  }
+]

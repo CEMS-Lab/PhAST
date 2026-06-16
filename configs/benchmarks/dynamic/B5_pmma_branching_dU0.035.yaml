@@ -1,0 +1,60 @@
+schema_version: 1
+example: phast.examples.dynamic_branching_pmma.run
+problem:
+  name: PMMA Dynamic Crack Branching dU=0.035
+  reference: Bleyer, Roux-Langlois & Molinari (2017), Comput. Mech.
+# Geometry: kept on the rectangular_sent generator. The legacy notch is
+# a triangular wedge (polygon), not a rectangle. The inline-primitive
+# compiler does not yet support polygon subtracts (issue #199); also
+# blocked on inline Field[Box] refinement for the ``branching: true``
+# right-half band (issue #200). Migrate once #199 + #200 land.
+geometry:
+  type: rectangular_sent
+  parameters:
+    W: 32.0
+    H: 16.0
+    a: 4.0
+    h_crack: 0.02
+    h_coarse: 1.0
+    branching: true
+# Inline material — Bleyer et al. (2017) PMMA, plane stress, AT1 + Amor.
+material:
+  E: 3090.0             # 3.09 GPa
+  nu: 0.35
+  Gc: 0.3               # 0.3 N/mm = 300 J/m^2
+  l0: 0.1
+  rho: 1.18e-9
+  energy_split: amor
+  pf_model: AT1
+  plane_stress: true
+  eta_residual: 1.0e-7
+loading:
+  protocol: two_step_prestrain
+  prestrain_displacement: 0.035
+  coupled_prestrain: true
+  t_total: 7.5e-05
+  ramp_type: constant
+solver:
+  solver_type: explicit
+  dt_safety: 0.8
+  # Bleyer (2017) reproduction: damage solved every step. Subcycling
+  # (damage_every=3) suppresses second-lobe nucleation at branching
+  # threshold (issue #149).
+  damage_every: 1
+output:
+  h5: true
+  h5_every: 20
+  fast: true
+  print_every: 100
+boundary_conditions:
+- nodes: left
+  type: fix
+  component: 0
+- nodes: top
+  type: prescribe
+  component: 1
+  value: 1.0
+- nodes: bottom
+  type: prescribe
+  component: 1
+  value: -1.0

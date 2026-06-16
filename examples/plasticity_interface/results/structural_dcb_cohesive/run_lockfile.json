@@ -1,0 +1,8 @@
+{
+  "schema": "phast_run_lockfile_v1",
+  "created_utc": "2026-06-16T20:18:11.041440+00:00",
+  "git_sha": "89f0d830a091977865e530f9d320bbeae65c1f85",
+  "config_sha256": "fcb703efba1ac1825224c1254d4d67cf674666096543a2aacb63e2426c73727a",
+  "deterministic": true,
+  "n_load_steps": 11
+}

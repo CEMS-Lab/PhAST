@@ -1,0 +1,56 @@
+[
+  {
+    "artifact_type": "image",
+    "path": "structural_dcb_load_displacement.png",
+    "width_px": 1440,
+    "height_px": 672,
+    "size_bytes": 71176,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "structural_dcb_damage_front.png",
+    "width_px": 1440,
+    "height_px": 672,
+    "size_bytes": 70327,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "structural_dcb_energy.png",
+    "width_px": 1120,
+    "height_px": 672,
+    "size_bytes": 73862,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "structural_dcb_deformed_mesh.png",
+    "width_px": 1280,
+    "height_px": 672,
+    "size_bytes": 133227,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "initial_conditions.png",
+    "width_px": 1360,
+    "height_px": 714,
+    "size_bytes": 49859,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "cohesive_damage_final.png",
+    "width_px": 1360,
+    "height_px": 714,
+    "size_bytes": 67908,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "animation",
+    "path": "damage_evolution.gif",
+    "size_bytes": 93622,
+    "media_passed": true
+  }
+]

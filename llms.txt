@@ -1,0 +1,67 @@
+# PhAST
+
+PhAST (Phase-field Autograd Solver in Torch) is a PyTorch-native finite-element
+solver for 2D phase-field fracture, explicit dynamics, and foundational solid
+mechanics workflows. The public release emphasizes brittle phase-field fracture,
+runnable YAML examples, a fluent Python authoring surface, result inspection,
+and curated validation visuals.
+
+## Public Entry Points
+
+- Package code: `src/phast/`
+- Python API: `phast.Problem`, `phast.load_result`
+- CLI: `python -m phast doctor`, `python -m phast run <config.yaml>`,
+  `python -m phast explain-config <config.yaml>`
+- Examples: `examples/dynamic/`, `examples/quasistatic/`,
+  `examples/solid_mechanics/`, `examples/plasticity_interface/`
+- Documentation: `docs/`
+- Visual assets: `assets/`
+
+## Important Boundaries
+
+- Public examples are YAML-first. The fluent API is the authoring path, while
+  checked-in `config.yaml` decks are the canonical shared run inputs.
+- Schema-v2 `ProblemSpec` serialization is a migration/validation helper. Do not
+  imply that every fluent workflow is executable through a new universal FEM
+  compiler.
+- Advanced inverse, hybrid/deep-learning, and future paper-specific workflows are
+  intentionally not part of the public release surface.
+- Do not expose local paths, private HPC locations, raw cluster logs, proprietary
+  solver files, or heavy trajectory stores in public documentation.
+
+## Numerical Rules For Agents
+
+- Preserve differentiability where it is part of the solver contract.
+- Keep mechanics/fracture tensors in double precision by default.
+- Use vectorized PyTorch operations and sparse operators rather than Python loops
+  over elements or nodes in solver kernels.
+- Use CPU/GPU transfers only at explicit boundaries such as I/O, postprocessing,
+  or SciPy-backed sparse solves.
+- Do not weaken validation tolerances or remove manifest checks to make tests
+  pass.
+
+## Visualization Rules
+
+- Public figures should render with white backgrounds and black text.
+- Damage fields should use `Reds` for a white-to-red crack-path convention.
+- Equivalent plastic strain and similar scalar fields should use `plasma` unless
+  a case-specific visual standard overrides it.
+- Public README/GitHub media should be lightweight GIF/PNG/MP4 assets, not raw
+  result stores.
+
+## Recommended Commands
+
+```bash
+pip install -e .
+python -m phast doctor
+python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
+python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate
+```
+
+For development checkouts with tests available:
+
+```bash
+PYTHONPATH=src:. python -m pytest -q tests/test_public_examples_contract.py --tb=short
+PYTHONPATH=src:. python -m pytest -q tests/test_result_api.py --tb=short
+```

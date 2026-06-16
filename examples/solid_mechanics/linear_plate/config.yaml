@@ -1,0 +1,14 @@
+schema_version: 1
+example: solid_mechanics.linear_plate
+mesh:
+  nx: 20
+  ny: 10
+  length: 1.0
+  height: 0.2
+material:
+  E: 2.1e11
+  nu: 0.3
+loading:
+  tip_force_y: -1.0e3
+output:
+  directory: .

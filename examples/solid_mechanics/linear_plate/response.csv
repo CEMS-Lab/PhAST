@@ -1,0 +1,5 @@
+quantity,value,unit
+tip_displacement_fe,-2.0241943794405334e-06,m
+tip_displacement_euler_bernoulli,-2.3809523809523803e-06,m
+relative_error_percent,-14.983836063497574,%
+d_abs_tip_displacement_dE,-9.639020850794218e-18,m/Pa

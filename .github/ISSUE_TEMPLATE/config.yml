@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://cems-lab.github.io/PhAST/
+    about: Start with the hosted documentation for installation, examples, and capability status.

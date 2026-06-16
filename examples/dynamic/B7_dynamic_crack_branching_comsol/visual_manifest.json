@@ -1,0 +1,47 @@
+[
+  {
+    "file": "initial_conditions.png",
+    "artifact_type": "image",
+    "size_bytes": 70226,
+    "visual_scope": "dynamic",
+    "width_px": 1280,
+    "height_px": 768,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "compare.png",
+    "artifact_type": "image",
+    "size_bytes": 61887,
+    "visual_scope": "dynamic",
+    "width_px": 1200,
+    "height_px": 800,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "damage_final.png",
+    "artifact_type": "image",
+    "size_bytes": 54560,
+    "visual_scope": "dynamic",
+    "width_px": 969,
+    "height_px": 596,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "energy.png",
+    "artifact_type": "image",
+    "size_bytes": 60936,
+    "visual_scope": "dynamic",
+    "width_px": 1184,
+    "height_px": 733,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "thumbnail.png",
+    "artifact_type": "image",
+    "size_bytes": 54560,
+    "visual_scope": "dynamic",
+    "width_px": 969,
+    "height_px": 596,
+    "review_dimension_passed": true
+  }
+]

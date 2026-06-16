@@ -1,0 +1,24 @@
+# COMSOL "Brittle Fracture of a Holed Plate" -- Application Library 6.4
+# Source: models.geomech.holed_plate_fracture.pdf (Geomechanics Module)
+#
+# Two columns: total elongation [mm] (= top_pin_y - bottom_pin_y =
+#   2 x per-pin displacement), reaction force [kN]
+# Quantitative peaks (0.33 mm, 0.63 kN) and (1.7 mm, 0.15 kN) are taken
+# verbatim from the report text on page 3-4. Other points are read off
+# Figure 2 (the green snapshot markers fall on the curve at the values
+# noted below). See PROVENANCE.md for the extraction protocol.
+#
+displacement_mm,load_kN
+0.000,0.000
+0.165,0.330
+0.300,0.580
+0.330,0.630
+0.400,0.520
+0.500,0.060
+0.700,0.080
+1.000,0.110
+1.300,0.130
+1.500,0.140
+1.700,0.150
+1.800,0.030
+2.000,0.020

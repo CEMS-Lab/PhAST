@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "example": "solid_mechanics.generalized_alpha_oscillator",
+  "command": "python examples/solid_mechanics/generalized_alpha_oscillator/run.py",
+  "runtime_seconds": 0.162104,
+  "git_commit": "e6bda65b80458343f07ba0786dc4c307e55fc295",
+  "config": {
+    "schema_version": 1,
+    "example": "solid_mechanics.generalized_alpha_oscillator",
+    "time": {
+      "n_steps": 100,
+      "dt": 0.001
+    },
+    "integrator": {
+      "rho_inf_values": [
+        1.0,
+        0.5
+      ]
+    },
+    "output": {
+      "directory": "."
+    }
+  },
+  "metrics": {
+    "rho_inf_1": {
+      "E_lo_final_over_initial": 0.9999999999999991,
+      "E_hi_final_over_initial": 0.9999999999999653
+    },
+    "rho_inf_0.5": {
+      "E_lo_final_over_initial": 0.9999996176058378,
+      "E_hi_final_over_initial": 1.466005436184726e-25
+    }
+  },
+  "files": [
+    "response.csv",
+    "response.png",
+    "initial_conditions.png",
+    "thumbnail.png",
+    "visual_manifest.json",
+    "run_manifest.json"
+  ]
+}

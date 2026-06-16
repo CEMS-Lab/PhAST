@@ -1,0 +1,64 @@
+[
+  {
+    "artifact_type": "image",
+    "path": "initial_conditions.png",
+    "width_px": 1224,
+    "height_px": 680,
+    "size_bytes": 43105,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "damage_final.png",
+    "width_px": 1224,
+    "height_px": 680,
+    "size_bytes": 38629,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "load_displacement.png",
+    "width_px": 1224,
+    "height_px": 714,
+    "size_bytes": 56907,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "damage_history.png",
+    "width_px": 1224,
+    "height_px": 714,
+    "size_bytes": 69390,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "energy_split.png",
+    "width_px": 1224,
+    "height_px": 714,
+    "size_bytes": 64621,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "convergence.png",
+    "width_px": 1224,
+    "height_px": 714,
+    "size_bytes": 48725,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "image",
+    "path": "mesh_deformed.png",
+    "width_px": 1224,
+    "height_px": 680,
+    "size_bytes": 91127,
+    "review_dimension_passed": true
+  },
+  {
+    "artifact_type": "animation",
+    "path": "damage_evolution.gif",
+    "size_bytes": 80781,
+    "media_passed": true
+  }
+]

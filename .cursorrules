@@ -1,0 +1,47 @@
+# PhAST Agent Instructions
+
+PhAST is a PyTorch-native finite-element solver for phase-field fracture,
+explicit dynamics, and foundational solid mechanics workflows. Treat the
+public repository as a scientific software package: changes must preserve
+mechanics fidelity, differentiability boundaries, and reproducible examples.
+
+## Core Rules
+
+- Preserve PyTorch tensor semantics. Do not insert `.numpy()`, `.item()`, or
+  `.tolist()` inside differentiable forward paths unless the value is strictly
+  telemetry or postprocessing.
+- Default mechanics and fracture calculations to `torch.float64` unless a
+  documented mixed-precision path explicitly permits otherwise.
+- Avoid in-place tensor mutations in autograd-sensitive code. Prefer
+  out-of-place expressions, `torch.where`, `scatter_add`, sparse operators, and
+  vectorized batch operations.
+- Do not add inverse, hybrid/deep-learning, paper-2, paper-4, private HPC, or
+  proprietary-solver artifacts to the public surface.
+- Keep public examples flat, runnable, and reproducible: `config.yaml`,
+  optional fluent setup, standard manifests, CSV histories, lightweight visuals,
+  and documented result bundles.
+
+## Visual Standards
+
+- Use `plt.style.use("default")` before applying project-specific font settings.
+- Use solid white figure backgrounds with black labels for public artifacts.
+- Use `Reds` for phase-field/cohesive damage fields and `plasma` for equivalent
+  plastic strain or von Mises style scalar fields unless a local standard says
+  otherwise.
+- Keep generated README/docs media lightweight. Do not commit raw HPC folders or
+  heavy trajectory stores.
+
+## Validation
+
+- Prefer focused pytest coverage for changed contracts, runners, result APIs, and
+  public examples.
+- For promoted example scripts, run with the repository root and `src` on the
+  Python path:
+
+```bash
+PYTHONPATH=src:. python examples/plasticity_interface/run_j2_validation.py --output-dir /tmp/phast_j2_check
+PYTHONPATH=src:. python -m pytest -q tests/test_public_examples_contract.py --tb=short
+```
+
+Only curated, lightweight result artifacts that are part of the public examples
+contract should be committed.

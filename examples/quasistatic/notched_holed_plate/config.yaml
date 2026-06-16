@@ -1,0 +1,207 @@
+schema_version: 1
+name: COMSOL Notched Holed Plate strict parity (volDev + eta=1e-5)
+reference: COMSOL 6.4 Application Library Damage settings; Ambati et al.
+  (2015), Comput. Mech. 55, 383-405.
+acceptance:
+  status: validated
+  reference_result: COMSOL 6.4 Application Library / strict-parity matrix run 33819 task 34
+  required_outputs:
+  - mesh.geo
+  - mesh.msh
+  - run_metadata.json
+  - history.csv
+  - energy.csv
+  - timing_per_step.csv
+  - solver_telemetry.csv
+  - load_displacement.png
+  - damage_final.png
+  - damage_evolution.mp4
+  - damage_multipanel.png
+  - compare.png
+  - compare_report.txt
+  - thumbnail.png
+  metrics:
+    first_peak_load:
+      reference: 0.63
+      observed_error_percent: 4.68
+      tolerance_percent: 10.0
+      units: kN
+    first_peak_displacement:
+      reference: 0.165
+      observed_error_percent: 9.09
+      tolerance_percent: 15.0
+      units: mm_per_pin
+    second_peak_load:
+      reference: 0.15
+      observed_error_percent: 10.51
+      tolerance_percent: 20.0
+      units: kN
+  notes: >
+    Strict-parity run using the Amor/volumetric-deviatoric split and
+    eta_residual=1.0e-5. The crack path bends from the notch toward the hole,
+    matching the reference morphology. The second peak is retained as a
+    post-peak diagnostic.
+geometry:
+  type: miehe_tension
+  parameters: {}
+  mesh_path: null
+  units: mm
+  primitives:
+    plate:
+      type: rectangle
+      origin:
+      - 0.0
+      - 0.0
+      size:
+      - 65.0
+      - 120.0
+    notch:
+      type: rectangle
+      origin:
+      - 0.0
+      - 64.75
+      size:
+      - 10.0
+      - 0.5
+    big_hole:
+      type: circle
+      center:
+      - 36.5
+      - 51.0
+      radius: 10.0
+    upper_pin:
+      type: circle
+      center:
+      - 20.0
+      - 100.0
+      radius: 5.0
+    lower_pin:
+      type: circle
+      center:
+      - 20.0
+      - 20.0
+      radius: 5.0
+  domain:
+    base: plate
+    subtract:
+    - notch
+    - big_hole
+    - upper_pin
+    - lower_pin
+  named_groups:
+    upper_pin_centre:
+      point:
+      - 20.0
+      - 100.0
+    lower_pin_centre:
+      point:
+      - 20.0
+      - 20.0
+  mesh:
+    element_size:
+      default: 4.0
+      refined:
+      - region:
+          type: box
+          x:
+          - 0.0
+          - 65.0
+          y:
+          - 45.0
+          - 70.0
+        size: 0.3
+        thickness: 4.0
+      - primitive: big_hole
+        size: 0.3
+        margin: 8.0
+      - primitive: upper_pin
+        size: 1.0
+        margin: 6.0
+      - primitive: lower_pin
+        size: 1.0
+        margin: 6.0
+material:
+  E: 6000.0
+  nu: 0.22
+  Gc: 2.28
+  l0: 0.25
+  rho: 2.4e-09
+  eta_residual: 1.0e-05
+  energy_split: amor
+  pf_model: AT2
+  plane_stress: true
+boundary_conditions:
+- nodes: upper_pin.boundary
+  type: rigid_connector
+  master: upper_pin_centre
+  dofs:
+  - x
+  - y
+  prescribe:
+    y: 2.0
+  rotation_free: true
+- nodes: lower_pin.boundary
+  type: rigid_connector
+  master: lower_pin_centre
+  dofs:
+  - x
+  - y
+  prescribe:
+    y: -2.0
+  rotation_free: true
+loading:
+  protocol: cyclic
+  num_steps: 200
+  dt: 0.01
+  cyclic_phases: "0.25:140,1.0:60"
+solver:
+  solver_type: quasi_static_legacy
+  stagger_tol: 0.0001
+  max_stagger: 50
+  stagger_criterion: relative
+  stagger_norm: l2
+  anderson_depth: 0
+  adaptive_stagger_tol: false
+  use_multigrid: true
+  preconditioner: jacobi
+  H_cap_factor: 0.0
+  damage_tol: 1.0e-06
+  static_tol: 1.0e-08
+  bounds_method: post_clamp
+  damage_every: 3
+  fresh_d_in_corrector: false
+  damage_max_iter: 5000
+  static_max_iter: 5000
+  softmax_H_beta: null
+  H_update_method: hard_max
+  enable_damage: true
+  fail_on_mechanics_nonconvergence: true
+  adaptive_dt: false
+  adaptive_dt_d_threshold: 0.01
+  eta_residual: 1.0e-05
+  damping_ratio_max: 0.0
+  backend: auto
+output:
+  output_dir: null
+  h5: true
+  trajectory: true
+  trajectory_format: zarr
+  h5_every: 5
+  gif: false
+  gif_frames: 200
+  gif_fields: damage
+  animation_format: mp4
+  animation_renderer: raster
+  animation_raster_width: 960
+  plots: true
+  profile: true
+  fast: true
+  print_every: 5
+  reaction_node_set: upper_pin.boundary
+  reaction_component: 1
+device:
+  device: cpu
+  compile: false
+initial_conditions:
+  preseed_notch_nodesets: null
+  preseed_damage: null

@@ -1,0 +1,44 @@
+{
+  "example": "B6_perforated_30holes",
+  "status": "public_candidate_renamed_from_old_B4_source",
+  "config": "config.yaml",
+  "curated_source": "../perforated_plate/B4a_perforated_30holes",
+  "public_family_variants": [
+    "B6_perforated_10holes",
+    "B6_perforated_1hole_near",
+    "B6_perforated_1hole_far"
+  ],
+  "private_exclusions": [
+    "../perforated_plate/B4e_15holes_off0.5_dU0.04",
+    "../perforated_plate/B4f_15holes_off0.5_dU0.05",
+    "../perforated_plate/B4g_15holes_off0.6_dU0.04",
+    "../perforated_plate/B4h_15holes_off0.6_dU0.05"
+  ],
+  "files": [
+    "README.md",
+    "config.yaml",
+    "crack_tip.csv",
+    "crack_velocity_vs_position.png",
+    "crack_velocity_vs_time.png",
+    "damage_final.png",
+    "damage_multipanel.png",
+    "damage_profile.png",
+    "displacement_multipanel.png",
+    "dissipation_rate.png",
+    "energy.csv",
+    "energy_balance.png",
+    "energy_normalized.png",
+    "history.csv",
+    "initial_conditions.png",
+    "max_damage_vs_time.png",
+    "mesh.geo",
+    "mesh.msh",
+    "run_manifest.json",
+    "stress_max_principal_multipanel.png",
+    "thumbnail.png",
+    "visual_manifest.json",
+    "response_evolution.mp4",
+    "damage_evolution.mp4"
+  ],
+  "notes": "Public release name is B6; old B4 naming is retained only as private source provenance."
+}

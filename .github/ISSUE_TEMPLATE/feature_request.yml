@@ -1,0 +1,27 @@
+name: Feature request
+description: Request a new solver capability, workflow, or documentation surface.
+title: "[feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case
+      description: What engineering or research workflow should this enable?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed Deliverable
+      description: Describe the smallest useful deliverable, not only the broad capability.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation Plan
+      description: What tests, examples, references, or output artifacts would prove this is ready?
+    validations:
+      required: false
+
