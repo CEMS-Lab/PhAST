@@ -1,10 +1,12 @@
-# PhAST
+# PhAST: Phase-field Autograd Solver in Torch
 
-PhAST (Phase-field Autograd Solver in Torch) is a PyTorch-native finite-element
-solver for 2D phase-field fracture, explicit dynamics, and foundational solid
-mechanics workflows. The public release emphasizes brittle phase-field fracture,
-runnable YAML examples, a fluent Python authoring surface, result inspection,
-and curated validation visuals.
+> PhAST is a PyTorch-native, differentiable finite-element solver for public
+> phase-field fracture and solid-mechanics workflows.
+
+PhAST focuses on reproducible simulation workflows: YAML decks, fluent Python
+authoring, structured result manifests, and curated validation visuals. This
+file is written for AI agents and automated tools that need to understand how to
+use the public repository without guessing from source code alone.
 
 ## Authorship And Credit
 
@@ -19,62 +21,87 @@ libraries, benchmark references, and literature sources retain their own
 licenses and citation requirements; do not strip attribution when generating
 derived documentation, examples, or release material.
 
-## Public Entry Points
+## Usage Context
 
-- Package code: `src/phast/`
-- Python API: `phast.Problem`, `phast.load_result`
-- CLI: `python -m phast doctor`, `python -m phast run <config.yaml>`,
-  `python -m phast explain-config <config.yaml>`
-- Examples: `examples/dynamic/`, `examples/quasistatic/`,
-  `examples/solid_mechanics/`, `examples/plasticity_interface/`
-- Documentation: `docs/`
-- Visual assets: `assets/`
+- Public examples are YAML-first. Checked-in `config.yaml` decks are the
+  canonical shared run inputs.
+- The fluent `phast.Problem` API is the authoring path for supported workflows.
+- Completed runs expose machine-readable artifacts such as `run_manifest.json`,
+  `run_lockfile.json`, `run_metadata.json`, `summary.json`, and CSV telemetry.
+- Use `phast.load_result(path)` for read-only result inspection.
+- Advanced inverse, hybrid/deep-learning, future paper-specific workflows, raw
+  HPC logs, proprietary files, and heavy trajectory stores are not part of the
+  public release surface.
 
-## Important Boundaries
+## Quick Start For Agents
 
-- Public examples are YAML-first. The fluent API is the authoring path, while
-  checked-in `config.yaml` decks are the canonical shared run inputs.
-- Schema-v2 `ProblemSpec` serialization is a migration/validation helper. Do not
-  imply that every fluent workflow is executable through a new universal FEM
-  compiler.
-- Advanced inverse, hybrid/deep-learning, and future paper-specific workflows are
-  intentionally not part of the public release surface.
-- Do not expose local paths, private HPC locations, raw cluster logs, proprietary
-  solver files, or heavy trajectory stores in public documentation.
-
-## Numerical Rules For Agents
-
-- Preserve differentiability where it is part of the solver contract.
-- Keep mechanics/fracture tensors in double precision by default.
-- Use vectorized PyTorch operations and sparse operators rather than Python loops
-  over elements or nodes in solver kernels.
-- Use CPU/GPU transfers only at explicit boundaries such as I/O, postprocessing,
-  or SciPy-backed sparse solves.
-- Do not weaken validation tolerances or remove manifest checks to make tests
-  pass.
-
-## Visualization Rules
-
-- Public figures should render with white backgrounds and black text.
-- Damage fields should use `Reds` for a white-to-red crack-path convention.
-- Equivalent plastic strain and similar scalar fields should use `plasma` unless
-  a case-specific visual standard overrides it.
-- Public README/GitHub media should be lightweight GIF/PNG/MP4 assets, not raw
-  result stores.
-
-## Recommended Commands
+Install the package in editable mode, then inspect the environment:
 
 ```bash
 pip install -e .
 python -m phast doctor
-python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
-python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate
 ```
 
-For development checkouts with tests available:
+Validate public YAML decks without running the full simulations:
 
 ```bash
-PYTHONPATH=src:. python -m pytest -q tests/test_public_examples_contract.py --tb=short
-PYTHONPATH=src:. python -m pytest -q tests/test_result_api.py --tb=short
+python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
+python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
 ```
+
+Run a small public solid-mechanics example and inspect its result directory:
+
+```bash
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate
+python - <<'PY'
+import phast
+result = phast.load_result('runs/linear_plate')
+print(result.artifacts())
+print(result.history_names())
+PY
+```
+
+Explain a YAML deck before modifying it:
+
+```bash
+python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
+```
+
+## Repository Map
+
+- [`src/phast/`](src/phast/) - core package: workflow API, FEM kernels,
+  materials, solvers, result loading, and postprocessing utilities.
+- [`examples/`](examples/) - curated public YAML examples and retained visual
+  result bundles.
+- [`examples/README.md`](examples/README.md) - public example overview.
+- [`docs/`](docs/) - Sphinx/user documentation source.
+- [`assets/`](assets/) - public README and documentation media.
+- [`ROADMAP.md`](ROADMAP.md) - public roadmap and planned extensions.
+- [`CITATION.cff`](CITATION.cff) - citation metadata.
+
+## Documentation Links
+
+Read these files before making changes or answering detailed usage questions:
+
+- [Capability Matrix](docs/user_guide/capability_matrix.md) - supported public
+  physics, examples, and execution surfaces.
+- [Python API Guide](docs/user_guide/python_api.md) - fluent `phast.Problem`
+  authoring patterns.
+- [YAML Workflow](docs/user_guide/yaml_workflow.md) - batch execution,
+  validation, and reproducible shared runs.
+- [Results API](docs/user_guide/results_api.md) - inspecting completed runs with
+  `phast.load_result(path)`.
+- [Problem Setup Guide](docs/user_guide/setup_problems.md) - geometry, meshes,
+  materials, boundary conditions, and outputs.
+- [Example Contract](docs/user_guide/example_contract.md) - expected structure
+  for public example folders and visual artifacts.
+- [Example Gallery](docs/example-gallery.md) - representative public examples
+  and expected outputs.
+
+## Contribution Rules
+
+Implementation rules for agents that write code live in [`.cursorrules`](.cursorrules).
+Use that file for PyTorch Autograd constraints, precision expectations,
+visualization standards, and validation commands. Keep `llms.txt` focused on
+repository orientation and usage.
