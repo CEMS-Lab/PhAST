@@ -129,7 +129,6 @@ supported_workflows/unsupported_experimental
 :caption: Example Gallery
 
 example-gallery
-examples/solid_mechanics
 benchmarks/catalogue
 benchmarks/examples
 ```
@@ -144,7 +143,6 @@ api/sparse_solve
 api/time_integrators
 api/mixed_precision_cg
 api/adaptive
-api/process_zone
 ```
 
 ```{toctree}
@@ -163,7 +161,6 @@ user_guide/data_and_devices
 :caption: Performance & Reproducibility
 
 performance_reproducibility/index
-customer_readiness
 ```
 
 ```{toctree}

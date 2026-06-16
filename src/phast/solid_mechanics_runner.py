@@ -11,9 +11,9 @@ import yaml
 
 
 _SUPPORTED_EXAMPLES = {
-    "solid_mechanics.linear_plate": "phast.solid_mechanics_examples.linear_plate",
-    "solid_mechanics.neohookean_plate": "phast.solid_mechanics_examples.neohookean_plate",
-    "solid_mechanics.j2_bar": "phast.solid_mechanics_examples.j2_bar",
+    "solid_mechanics.linear_plate": "phast.solid_mechanics_runners.linear_plate",
+    "solid_mechanics.neohookean_plate": "phast.solid_mechanics_runners.neohookean_plate",
+    "solid_mechanics.j2_bar": "phast.solid_mechanics_runners.j2_bar",
 }
 
 

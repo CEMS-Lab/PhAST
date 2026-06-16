@@ -99,16 +99,3 @@ Promoted validation runs should retain:
 - Functional cuDSS GPU backend promotion without fallback.
 - General customer YAML problem-definition layer for arbitrary plasticity,
   cohesive, and PF-CZM workflows.
-
-## Customer Messaging
-
-Use:
-
-> Technical-preview beta validation package for 2D sparse J2 plasticity,
-> ductile-driving AT2 damage, cohesive-interface smoke benchmarks,
-> diffuse-interface fracture examples, and PF-CZM uniaxial strength validation,
-> with reproducible YAML contracts and visual/provenance artifacts.
-
-Avoid:
-
-> Mature SOTA coupled elastoplastic cohesive fracture solver.

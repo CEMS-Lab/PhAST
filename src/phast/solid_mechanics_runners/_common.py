@@ -1,4 +1,4 @@
-"""Shared helpers for public solid-mechanics examples."""
+"""Shared helpers for promoted solid-mechanics runners."""
 from __future__ import annotations
 
 import argparse

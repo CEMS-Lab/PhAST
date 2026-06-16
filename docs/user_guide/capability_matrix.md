@@ -151,26 +151,3 @@ compatibility boundary.
 | Reaction-force logging | Production for QS benchmarks | Set `output.reaction_node_set` and `output.reaction_component` for load-displacement comparisons. |
 | Benchmark `compare.py` scripts | Beta | Available for selected examples; tolerance coverage is still expanding across the full suite. |
 | CPU/HPC portability | Production for core CPU/CUDA paths | CPU is valid for small and quasi-static validation; large dynamic runs are GPU/HPC-oriented. |
-
-## Customer messaging
-
-Use:
-
-> The solver supports YAML-driven 2D brittle phase-field fracture with
-> differentiable PyTorch mechanics, explicit dynamics, staggered
-> quasi-static/static solves, heterogeneous `E(x)`/`Gc(x)` fields, sparse
-> quasi-static J2 plasticity validation APIs, a bounded ductile AT2 damage
-> validation example plus sensitivity study, solver-driven diffuse
-> solid-interface examples,
-> cohesive displacement-jump, mixed-mode, contact-compression, and
-> delamination patch benchmarks plus DCB-style structural and coupled brittle
-> PF+cohesive smoke examples, and review tooling such as `validate-only` and
-> `explain-config`.
-
-Avoid:
-
-> Abaqus/COMSOL-equivalent coupled elastoplastic cohesive fracture.
-
-That claim becomes defensible only after the plasticity, cohesive interface,
-and PF-CZM tracks have coupled residual/tangent implementations plus benchmark
-evidence.

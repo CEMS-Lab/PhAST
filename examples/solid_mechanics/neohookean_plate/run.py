@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
 
-from phast.solid_mechanics_examples.neohookean_plate import run
+from phast.solid_mechanics_runners.neohookean_plate import run
 
 
 def main() -> None:
