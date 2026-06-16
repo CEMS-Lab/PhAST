@@ -163,5 +163,14 @@
     "artifact_type": "animation",
     "label": "damage evolution",
     "visual_scope": "standard"
+  },
+  {
+    "file": "damage_evolution.gif",
+    "artifact_type": "animation",
+    "size_bytes": 166078,
+    "visual_scope": "dynamic",
+    "review_dimension_passed": true,
+    "width_px": 1745,
+    "height_px": 1236
   }
 ]

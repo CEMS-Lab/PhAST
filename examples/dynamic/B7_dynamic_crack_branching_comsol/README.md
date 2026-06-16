@@ -11,6 +11,8 @@ python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.ya
 ```
 
 Use `initial_conditions.png`, `thumbnail.png`, `damage_final.png`,
-`energy.png`, `compare.png`, and `compare_report.txt` as the public evidence
-set. The raw 98 GB Zarr trajectory and internal branching montage remain
+`damage_evolution.gif`, `damage_evolution.mp4`, `energy.png`, `compare.png`,
+and `compare_report.txt` as the public evidence set. The animation is copied
+from Hyperion job 47961 (`b7_branching_47961`), matching the retained raw Zarr
+trajectory. The raw 98 GB Zarr trajectory and internal branching montage remain
 HPC/private.

@@ -7,5 +7,8 @@
     "vendor PDFs",
     "heavy trajectory archives"
   ],
-  "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and heavy artifacts stay private."
+  "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and heavy artifacts stay private.",
+  "source_job": "47961",
+  "trajectory_source": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
+  "animation_source": "/users/adfw476/sharedscratch/phast_bench/public_extract/b7_branching_47961/damage_evolution.gif"
 }

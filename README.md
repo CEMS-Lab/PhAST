@@ -90,7 +90,7 @@ print(result.history_names())
       <img src="examples/quasistatic/notched_holed_plate/damage_evolution.gif" alt="Notched-holed plate damage evolution" width="78%">
     </td>
     <td align="center" width="33%">
-      <img src="assets/b7_crack_branching_final.png" alt="B7 dynamic crack branching final damage field" width="100%">
+      <img src="assets/b7_crack_branching_evolution.gif" alt="B7 dynamic crack branching damage evolution" width="100%">
     </td>
   </tr>
   <tr>
