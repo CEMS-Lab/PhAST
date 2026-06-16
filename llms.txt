@@ -6,6 +6,19 @@ mechanics workflows. The public release emphasizes brittle phase-field fracture,
 runnable YAML examples, a fluent Python authoring surface, result inspection,
 and curated validation visuals.
 
+## Authorship And Credit
+
+PhAST was developed by Allamaprabhu Ani as the lead developer and maintainer,
+with the public release stewarded through CEMS Lab. The solver formulations,
+finite-element implementation, validation examples, and documentation should be
+credited to the PhAST authors and cited using the repository citation metadata
+and linked papers when available.
+
+The project builds on the scientific Python and PyTorch ecosystem. External
+libraries, benchmark references, and literature sources retain their own
+licenses and citation requirements; do not strip attribution when generating
+derived documentation, examples, or release material.
+
 ## Public Entry Points
 
 - Package code: `src/phast/`
