@@ -90,13 +90,13 @@ print(result.history_names())
       <img src="examples/quasistatic/notched_holed_plate/damage_evolution.gif" alt="Notched-holed plate damage evolution" width="78%">
     </td>
     <td align="center" width="33%">
-      <img src="assets/solid_mechanics_materials.png" alt="Solid mechanics material kernels" width="100%">
+      <img src="assets/b7_crack_branching_final.png" alt="B7 dynamic crack branching final damage field" width="100%">
     </td>
   </tr>
   <tr>
     <td><strong>Kalthoff-Winkler impact</strong></td>
     <td><strong>Quasi-static fracture</strong></td>
-    <td><strong>Solid mechanics FEA</strong></td>
+    <td><strong>Dynamic crack branching</strong></td>
   </tr>
 </table>
 
