@@ -12,7 +12,8 @@ python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.ya
 
 Use `initial_conditions.png`, `thumbnail.png`, `damage_final.png`,
 `damage_evolution.gif`, `damage_evolution.mp4`, `energy.png`, `compare.png`,
-and `compare_report.txt` as the public evidence set. The animation was
-regenerated from the retained reference trajectory for run
-`b7_branching_47961`. The raw trajectory and internal branching montage are
-not distributed with the public repository.
+and `compare_report.txt` as the public evidence set. The vendor reference is
+COMSOL's [Phase-Field Modeling of Dynamic Crack Branching](https://www.comsol.com/model/phase-field-modeling-of-dynamic-crack-branching-131361)
+Application Gallery model. The animation was regenerated from the retained
+reference trajectory for run `b7_branching_47961`; the raw trajectory is not
+distributed with the public repository.

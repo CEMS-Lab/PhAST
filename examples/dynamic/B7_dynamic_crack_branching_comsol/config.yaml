@@ -23,7 +23,7 @@ schema_version: 1
 
 problem:
   name: COMSOL Dynamic Crack Branching (PMMA-equiv.)
-  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (vendor reference documentation not distributed with this repository)"
+  reference: "COMSOL Application Gallery: Phase-Field Modeling of Dynamic Crack Branching, https://www.comsol.com/model/phase-field-modeling-of-dynamic-crack-branching-131361"
 
 acceptance:
   status: beta
