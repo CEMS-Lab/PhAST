@@ -121,8 +121,8 @@ material:
   # COMSOL Phase-Field Damage uses "Exclude compressive energy:
   # Volumetric only", i.e. the Amor/volumetric-deviatoric split rather
   # than Miehe strain-spectral. Earlier B7 diagnostics used spectral;
-  # keep those under configs/B7_debug/ as provenance, but the root
-  # parity config should match the saved COMSOL model.
+  # keep those as internal provenance. The public parity config should
+  # match the saved COMSOL model.
   energy_split: amor
   pf_model: AT1
   eta_residual: 1.0e-7

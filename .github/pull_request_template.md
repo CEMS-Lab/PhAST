@@ -29,6 +29,5 @@ the implementation.
       media were added to git.
 - [ ] New trajectory output is Zarr-first, or legacy H5 use is explicitly
       compatibility-only.
-- [ ] New/changed benchmark configs are represented in `configs/status/`.
+- [ ] New/changed benchmark configs pass `python -m phast run <config> --validate-only`, or are documented as command manifests/contracts.
 - [ ] `CHANGELOG.md` and relevant docs were updated.
-

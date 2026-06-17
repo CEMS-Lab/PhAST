@@ -113,10 +113,10 @@ findings to track are:
 | Severity | Area | Finding |
 |---|---|---|
 | Fixed | `examples/dynamic/B7_dynamic_crack_branching_comsol/` | Public manifests now use a retained-run identifier instead of absolute machine paths. |
-| High | `configs/` | Some top-level aliases are broken or diagnostic-only. Remove or replace with public benchmark configurations. |
+| Fixed | `configs/` | Top-level aliases and diagnostic-only configs were removed; public docs now use canonical `configs/benchmarks/...` paths. |
 | High | Examples | Several public manifests reference missing `run_metadata.json`, `run_lockfile.json`, or MP4 artifacts. Regenerate or update manifests. |
 | High | Root/CI | Public docs and CI mention `tests/`, but this snapshot has no top-level `tests/` directory. Either restore public tests or remove those commands from public workflows. |
-| High | Root/CI | `CHANGELOG.md` and `configs/status/` are referenced by contribution templates but absent. Add them or update the templates. |
+| Fixed | Root/CI | The contribution template no longer references absent `configs/status/`. |
 | Fixed | Packaging | `pyproject.toml` discovers only the public `phast*` package namespace. |
 | Medium | Docs | Some excluded scoping documents remain in the repo and should stay out of the public build or be rewritten as public notes. |
 | Medium | Docs/API | Some older docs mention unsupported CLI flags or old H5 behavior. Update before publication. |

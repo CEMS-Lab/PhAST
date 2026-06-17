@@ -261,11 +261,11 @@ starting points:
 | Use case | Template |
 |----------|----------|
 | Dynamic SENT | `configs/benchmarks/dynamic/B3_dynamic_sent.yaml` |
-| Kalthoff impact | `configs/B2_kalthoff_winkler.yaml` |
-| PMMA dynamic branching | `configs/B5_pmma_branching.yaml` |
-| COMSOL cross-check | `configs/B7_dynamic_crack_branching_comsol.yaml` |
-| Quasi-static L-panel | `configs/QS_lshaped_concrete.yaml` |
-| Quasi-static notched plate | `configs/QS_notched_holed_plate.yaml` |
+| Kalthoff impact | `configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml` |
+| PMMA dynamic branching | `configs/benchmarks/dynamic/B5_pmma_branching.yaml` |
+| COMSOL cross-check | `configs/benchmarks/dynamic/B7_dynamic_crack_branching_comsol.yaml` |
+| Quasi-static L-panel | `configs/benchmarks/quasistatic/QS_lshaped_concrete.yaml` |
+| Quasi-static notched plate | `configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml` |
 
 Once a config runs cleanly, head to
 [exploration experiments](04_exploration_experiments.md) for ideas on

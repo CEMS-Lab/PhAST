@@ -16,7 +16,7 @@ strain is partitioned. Big-`nu` materials behave more like rubber and
 crack paths tend to curve more sharply.
 
 ```bash
-# Edit configs/B7_dynamic_crack_branching_comsol.yaml in a copy:
+# Edit configs/benchmarks/dynamic/B7_dynamic_crack_branching_comsol.yaml in a copy:
 #   material.overrides.nu: 0.20    (default for glass_borden)
 # Try 0.10, 0.30, 0.40 in three separate runs.
 python -m phast run my_B7_nu010.yaml --device cpu
@@ -39,7 +39,7 @@ under the same load can produce a single straight crack, a curving
 crack, or a bilateral branch depending on the split.
 
 ```bash
-# Make four copies of configs/B3_dynamic_sent.yaml with
+# Make four copies of configs/benchmarks/dynamic/B3_dynamic_sent.yaml with
 #   material.overrides.energy_split: isotropic  | amor | spectral | star_convex
 # (skip spectral_stress unless you are checking COMSOL parity)
 python -m phast run B3_isotropic.yaml --device cpu

@@ -9,7 +9,7 @@ schema_version: 1
 # with smooth-step ramp), versus B1/B5 which are displacement-controlled.
 #
 # Run:
-#   python -m phast run configs/B7_dynamic_crack_branching_comsol.yaml
+#   python -m phast run configs/benchmarks/dynamic/B7_dynamic_crack_branching_comsol.yaml
 #
 # Acceptance (issue #135 + #299 reframing):
 #   - Initiation t ~ 10 us
@@ -123,8 +123,8 @@ material:
   # COMSOL Phase-Field Damage uses "Exclude compressive energy:
   # Volumetric only", i.e. the Amor/volumetric-deviatoric split rather
   # than Miehe strain-spectral. Earlier B7 diagnostics used spectral;
-  # keep those under configs/B7_debug/ as provenance, but the root
-  # parity config should match the saved COMSOL model.
+  # keep those as internal provenance. The public parity config should
+  # match the saved COMSOL model.
   energy_split: amor
   pf_model: AT1
   eta_residual: 1.0e-7

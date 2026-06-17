@@ -14,10 +14,8 @@
 # ----------------------------------------------------------------------------
 # THIS FILE IS AUTO-GENERATED — DO NOT HAND-EDIT
 # ----------------------------------------------------------------------------
-# Source: configs/REFERENCE.template.yaml + dataclass schema in config.py
-#         + ENUMS / RANGES / MUTEX side dicts in config_validation.py.
-# Regenerate from the private release tooling when schema tables change.
-# CI guards against drift via tests/test_reference_yaml_consistency.py.
+# Source: phast config dataclasses plus enum/range validation tables.
+# Regenerate with the project release tooling when schema tables change.
 #
 # ----------------------------------------------------------------------------
 # UNITS — canonical convention (issue #141)

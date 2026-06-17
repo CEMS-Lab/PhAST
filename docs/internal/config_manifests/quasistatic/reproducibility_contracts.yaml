@@ -3,15 +3,14 @@ manifest_type: reproducibility_contract
 purpose: Clean rerun contracts for quasi-static benchmark families.
 base_paths:
   configs: configs/benchmarks/quasistatic
-  manifests: configs/benchmarks/quasistatic/manifests
-  scheduler_templates: private_site_templates/benchmarks
+  manifests: docs/internal/config_manifests/quasistatic/manifests
+  scheduler_templates: site_templates/benchmarks
 
 runs:
   - id: qs_notched_holed_plate_baseline
     family: quasi_static
     mode: direct_yaml
     canonical_config: configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml
-    legacy_alias: configs/QS_notched_holed_plate.yaml
     launcher:
       - python
       - -m
@@ -28,7 +27,6 @@ runs:
     family: quasi_static
     mode: direct_yaml
     canonical_config: configs/benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml
-    legacy_alias: configs/QS_notched_holed_plate_comsol_strict.yaml
     launcher:
       - python
       - -m
@@ -45,7 +43,6 @@ runs:
     family: quasi_static
     mode: direct_yaml
     canonical_config: configs/benchmarks/quasistatic/QS_lshaped_concrete.yaml
-    legacy_alias: configs/QS_lshaped_concrete.yaml
     launcher:
       - python
       - -m
@@ -61,8 +58,8 @@ runs:
   - id: qs_miehe_sent_mesh_arc
     family: quasi_static
     mode: manifest
-    manifest: configs/benchmarks/quasistatic/manifests/QS_mesh_convergence_arc_length.yaml
-    launcher: private_site_templates/benchmarks/hpc_qs_mesh_convergence_arc.slurm
+    manifest: docs/internal/config_manifests/quasistatic/manifests/QS_mesh_convergence_arc_length.yaml
+    launcher: site_templates/benchmarks/hpc_qs_mesh_convergence_arc.slurm
     note: Arc-length post-peak and mesh-convergence study for SENT, SENS, TPB.
     required_artifacts:
       - compare_report.txt
@@ -74,8 +71,8 @@ runs:
   - id: qs_sens_tpb_peak_window
     family: quasi_static
     mode: manifest
-    manifest: configs/benchmarks/quasistatic/manifests/QS_sens_tpb_peak_window_corrected.yaml
-    launcher: private_site_templates/benchmarks/hpc_qs_sens_tpb_peak_window.slurm
+    manifest: docs/internal/config_manifests/quasistatic/manifests/QS_sens_tpb_peak_window_corrected.yaml
+    launcher: site_templates/benchmarks/hpc_qs_sens_tpb_peak_window.slurm
     note: Clean peak-window SENS and TPB validation with PETSc/MUMPS mechanics.
     required_artifacts:
       - compare_report.txt
@@ -87,8 +84,8 @@ runs:
   - id: qs_sens_tpb_rescue_visuals
     family: quasi_static
     mode: manifest
-    manifest: configs/benchmarks/quasistatic/manifests/QS_sens_tpb_rescue_visuals.yaml
-    launcher: private_site_templates/benchmarks/hpc_qs_sens_tpb_rescue.slurm
+    manifest: docs/internal/config_manifests/quasistatic/manifests/QS_sens_tpb_rescue_visuals.yaml
+    launcher: site_templates/benchmarks/hpc_qs_sens_tpb_rescue.slurm
     note: Targeted rescue visual cells; diagnostic usage only.
     required_artifacts:
       - compare_report.txt
@@ -100,7 +97,7 @@ runs:
   - id: qs_miehe_tension_repro
     family: quasi_static
     mode: manifest
-    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_tension_repro.yaml
+    manifest: docs/internal/config_manifests/quasistatic/manifests/QS_miehe_tension_repro.yaml
     launcher:
       - python
       - -u
@@ -116,7 +113,7 @@ runs:
   - id: qs_miehe_sens_repro
     family: quasi_static
     mode: manifest
-    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_sens_repro.yaml
+    manifest: docs/internal/config_manifests/quasistatic/manifests/QS_miehe_sens_repro.yaml
     launcher:
       - python
       - -u
@@ -132,7 +129,7 @@ runs:
   - id: qs_miehe_tpb_repro
     family: quasi_static
     mode: manifest
-    manifest: configs/benchmarks/quasistatic/manifests/QS_miehe_tpb_repro.yaml
+    manifest: docs/internal/config_manifests/quasistatic/manifests/QS_miehe_tpb_repro.yaml
     launcher:
       - python
       - -u
