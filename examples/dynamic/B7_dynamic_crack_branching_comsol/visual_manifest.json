@@ -52,8 +52,8 @@
     "review_dimension_passed": true,
     "width_px": 1032,
     "height_px": 432,
-    "source_job": "47961",
-    "source_zarr": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
+    "source_run_id": "b7_branching_47961",
+    "source_trajectory": "external retained trajectory; not distributed with the public repository",
     "source_steps": "0..183900 sampled; final frame held"
   },
   {
@@ -64,8 +64,8 @@
     "review_dimension_passed": true,
     "width_px": 1032,
     "height_px": 432,
-    "source_job": "47961",
-    "source_zarr": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
+    "source_run_id": "b7_branching_47961",
+    "source_trajectory": "external retained trajectory; not distributed with the public repository",
     "source_steps": "0..183900 sampled; final frame held"
   }
 ]

@@ -1,6 +1,6 @@
 {
   "source_job": "47961",
-  "source_zarr": "/users/adfw476/sharedscratch/phast_bench/results/b7_branching_47961/run/training_data.zarr",
+  "source_trajectory": "external retained trajectory for reference run b7_branching_47961",
   "step_count_available": 3679,
   "first_step": 0,
   "last_step": 183900,

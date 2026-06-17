@@ -120,7 +120,7 @@ include-package-data = false
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["phast*", "torch_pf_solver*"]
+include = ["phast*"]
 
 
 [tool.cibuildwheel]
