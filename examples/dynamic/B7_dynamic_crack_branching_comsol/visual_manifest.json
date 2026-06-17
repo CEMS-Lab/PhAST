@@ -9,15 +9,6 @@
     "review_dimension_passed": true
   },
   {
-    "file": "borden_glass_dynamic_branching_evolution_styled.png",
-    "artifact_type": "image",
-    "size_bytes": 564502,
-    "visual_scope": "dynamic",
-    "width_px": 3364,
-    "height_px": 1517,
-    "review_dimension_passed": true
-  },
-  {
     "file": "compare.png",
     "artifact_type": "image",
     "size_bytes": 61887,

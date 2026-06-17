@@ -14,7 +14,7 @@ archives. They point to the same workflows listed in the sections that follow.
 |---|---|---|---|---|---|---|
 | Miehe tension | Production | YAML-first | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` | CSV histories, run metadata/lockfile, and checked-in gallery visuals/comparison artifacts; run explicit postprocessing if you need regenerated animations from a fresh solve | `phast.load_result("runs/miehe_tension")` | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, `tests/test_public_examples_contract.py` |
 | Notched-holed plate | Production | YAML-first | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | final damage, response CSVs, comparison report, visual manifest | `phast.load_result("runs/notched_holed_plate")` | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, `tests/test_public_examples_contract.py` |
-| Linear plate | Production | YAML-first | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` | `tests/test_solid_mechanics_yaml_runner.py` |
+| Linear plate | Production | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` | `tests/test_solid_mechanics_yaml_runner.py` |
 | Kalthoff-Winkler | Public candidate | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, `tests/test_public_examples_contract.py` |
 
 Use the [capability matrix](user_guide/capability_matrix.md) before assuming a
@@ -83,31 +83,27 @@ The quasi-static family is the production path for many literature comparisons.
   2. Run `compare.py` in the corresponding `examples/dynamic/<case>/` directory.
   3. Save comparison artifacts (`compare.txt`, `compare.png`) in run folder.
 
-### Solid mechanics FEA and solver diagnostics
+### Solid mechanics FEA
 
-- `python -m phast run examples/solid_mechanics/linear_plate/config.yaml`
+- `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml`
   Linear elastic plate FEA with displacement, stress, deformed-shape, response,
   and visual-manifest outputs.
-- `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml`
+- `python -m phast run examples/solid_mechanics_beta/neohookean_plate/config.yaml`
   Nonlinear neo-Hookean cantilever FEA with Newton convergence and final-state
   field outputs.
-- `python -m phast run examples/solid_mechanics/j2_bar/config.yaml`
+- `python -m phast run examples/solid_mechanics_beta/j2_bar/config.yaml`
   Mesh-level J2 plasticity bar FEA with von Mises and equivalent-plastic-strain
   fields.
-- `examples/solid_mechanics/mixed_precision_cg/run.py`
-  Mixed-precision CG stability and residual behavior.
-- `examples/solid_mechanics/generalized_alpha_oscillator/run.py`
-  Generalized-alpha exploration for implicit-dynamics prototyping.
 
 ### Beta plasticity, cohesive, and PF-CZM validation
 
 - **J2 plasticity and ductile PF-plasticity**:
-  `examples/plasticity_interface/run_j2_validation.py` and
-  `examples/plasticity_interface/run_ductile_pf_plasticity_validation.py`.
+  `examples/plasticity_interface_beta/run_j2_validation.py` and
+  `examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py`.
 - **Cohesive/interface benchmarks**:
   mode-I jump, mixed-mode, contact-compression, delamination patch, structural
   DCB, diffuse-interface, and coupled PF-cohesive validation workflows live under
-  `examples/plasticity_interface/`.
+  `examples/plasticity_interface_beta/`.
 - **Manifested reproduction set**:
   `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml`.
 - **Generated visual outputs**:

@@ -37,7 +37,7 @@ promoted examples:
 | Config | Material | Reference | Notes |
 |---|---|---|---|
 | `B2_kalthoff_winkler.yaml` | maraging_steel_kw | Kalthoff 2000 / Borden 2012 Fig 12 | half-plate + symmetry; spectral split |
-| `B3_dynamic_sent.yaml` | glass_borden | Borden 2012 §4.1 SENT | spectral split, AT2; public folder contains the curated runnable deck and retained visuals |
+| `B3_dynamic_sent.yaml` | glass_borden | Borden 2012 §4.1 SENT | spectral split, AT2; public folder contains the curated runnable configuration file and retained visuals |
 | `B5_pmma_branching.yaml` | pmma_bleyer (E=3.09 GPa, Gc=0.3 J/m²) | Bleyer 2017 PMMA branching | AT1 + Amor/volumetric-deviatoric split; two-step prestrain + dynamic release |
 | `B6_perforated_*.yaml` | pmma_bleyer | Bleyer 2017 perforated plate | dynamic, AT1 + Amor; hole layouts: 1hole_near, 1hole_far, 10holes, 30holes |
 | `B7_dynamic_crack_branching_comsol.yaml` | glass_borden override (PMMA equivalent) | COMSOL 6.4 Application Library "Phase-Field Modeling of Dynamic Crack Branching" | AT1 + Amor/vol-dev; traction-controlled (third independent reference for the Y-branching benchmark) |

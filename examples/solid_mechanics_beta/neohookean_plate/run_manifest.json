@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "example": "solid_mechanics.neohookean_plate",
+  "command": "python -m phast run examples/solid_mechanics_beta/neohookean_plate/config.yaml --output_dir examples/solid_mechanics_beta/neohookean_plate",
+  "runtime_seconds": 10.753817,
+  "git_commit": "e35778a23ac6c3b719bfc95c1beeb1803aee7488",
+  "config": {
+    "schema_version": 1,
+    "example": "solid_mechanics.neohookean_plate",
+    "mesh": {
+      "nx": 20,
+      "ny": 10,
+      "length": 1.0,
+      "height": 0.2
+    },
+    "material": {
+      "E": "2.1e11",
+      "nu": 0.3
+    },
+    "loading": {
+      "load_steps": 5,
+      "target_linear_tip_displacement_fraction": 0.05,
+      "load_scale": 0.5
+    },
+    "output": {
+      "directory": "."
+    }
+  },
+  "metrics": {
+    "final_tip_displacement_m": -0.021247030699642826,
+    "linear_eb_tip_displacement_m": -0.025,
+    "max_newton_iterations": 3,
+    "d_abs_tip_displacement_dE": -1.011010453806553e-13,
+    "max_displacement_m": 0.021457175909646055,
+    "max_von_mises_Pa": 1197521719.288498,
+    "min_detF": 0.9956103263141243,
+    "max_strain_energy_density": 5037657.434569601
+  },
+  "files": [
+    "response.csv",
+    "response.png",
+    "initial_conditions.png",
+    "deformed_shape.png",
+    "displacement_magnitude.png",
+    "displacement_final.png",
+    "von_mises.png",
+    "stress_final.png",
+    "strain_energy.png",
+    "strain_final.png",
+    "jacobian.png",
+    "field_evolution.mp4",
+    "thumbnail.png",
+    "visual_manifest.json",
+    "run_metadata.json",
+    "run_lockfile.json",
+    "run_manifest.json",
+    "fluent_setup.py"
+  ]
+}

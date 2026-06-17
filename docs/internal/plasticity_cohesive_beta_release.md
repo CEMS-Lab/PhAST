@@ -8,7 +8,7 @@ Recommended tag: `v0.16.2-plasticity-cohesive-beta.1`
 
 This is a technical-preview beta validation release for plasticity,
 cohesive-interface, diffuse-interface, and PF-CZM examples. It is appropriate
-for customer evaluation when accompanied by the capability boundary below.
+for researcher evaluation when accompanied by the capability boundary below.
 
 Do not describe this release as a mature Abaqus/COMSOL-equivalent coupled
 elastoplastic cohesive fracture product. The fully coupled plasticity +
@@ -22,11 +22,11 @@ phase-field + cohesive/PF-CZM production workflow remains gated.
 - Ductile plastic-work-driven AT2 damage validation and sensitivity study.
 - Solver-driven diffuse-interface weak/strong deflection examples.
 - Zero-thickness bilinear cohesive elements with mode-I, mixed-mode,
-  contact-compression, delamination patch, structural DCB-style smoke, and
-  coupled brittle PF+cohesive smoke examples.
-- Wu PF-CZM uniaxial strength/length-scale smoke with residual, convergence,
+  contact-compression, delamination patch, structural DCB-style validation, and
+  coupled brittle PF+cohesive validation examples.
+- Wu PF-CZM uniaxial strength/length-scale validation with residual, convergence,
   telemetry, visuals, and manifest checks.
-- Native Q4 isotropic mechanics + AT2 smoke coverage.
+- Native Q4 isotropic mechanics + AT2 validation coverage.
 
 ## Reproduce the Validation Suite
 
@@ -97,5 +97,5 @@ Promoted validation runs should retain:
 - Ductile fracture benchmark parity for Borden/Aldakheel/SENT/TPB-style cases.
 - ASTM-style cohesive DCB/material data reduction and structural calibration.
 - Functional cuDSS GPU backend promotion without fallback.
-- General customer YAML problem-definition layer for arbitrary plasticity,
+- General researcher YAML problem-definition layer for arbitrary plasticity,
   cohesive, and PF-CZM workflows.

@@ -8,7 +8,7 @@ This folder is self-contained: the canonical YAML configuration, mesh files,
 COMSOL reference curve, comparison script, validation report, CSV outputs, and
 reference visual artifacts are kept beside each other.
 
-## What This Example Solves
+## 1. Problem Description
 
 This is the COMSOL/Ambati notched-holed plate benchmark:
 
@@ -34,33 +34,8 @@ This is the COMSOL/Ambati notched-holed plate benchmark:
 The checked-in reference result used 200 load steps on CPU and took about
 10.5 hours in the recorded run metadata.
 
-## Files
 
-| File | Purpose |
-| --- | --- |
-| `README.md` | This guide. |
-| `config.yaml` | Canonical simulation input deck. Defines geometry, material, rigid-connector boundary conditions, loading, solver settings, device, and output options. |
-| `run_manifest.json` | Public artifact manifest for the flat example bundle. |
-| `mesh.geo` | Gmsh geometry source for the plate, notch, hole, pins, named groups, and refinement fields. |
-| `mesh.msh` | Generated Gmsh mesh used by the reference example. |
-| `comsol_load_displacement.csv` | Lightweight COMSOL reference curve used by `compare.py`. |
-| `compare.py` | Local comparison script for a newly generated run directory. |
-| `compare_report.txt` | Text validation report against the COMSOL 6.4 reference values. |
-| `compare.png` | Load-displacement comparison against the COMSOL reference curve. |
-| `initial_conditions.png` | Initial setup and damage-state visual. |
-| `damage_final.png` | Final damage field. |
-| `damage_multipanel.png` | Damage snapshots across selected load steps. |
-| `damage_evolution.gif` | Damage evolution animation for GitHub/docs preview. |
-| `damage_evolution.mp4` | MP4 damage evolution animation. |
-| `load_displacement.png` | Simulation load-displacement response. |
-| `energy.png` | Energy component plot. |
-| `results.csv` | Per-step displacement, reaction force, max damage, max history field, stagger iterations, and elapsed time. |
-| `history.csv` | Coarser fracture/history output over selected steps. |
-| `energy.csv` | Per-step elastic, fracture, kinetic, external, and total energy. |
-
-Detailed logs, complete lockfiles, and large trajectory stores are supporting reproducibility artifacts rather than public-facing example files.
-
-## Run The Canonical YAML Deck
+## Run The Canonical YAML configuration
 
 From the repository root:
 
@@ -92,13 +67,13 @@ python -u examples/quasistatic/notched_holed_plate/compare.py \
   --run-dir examples/quasistatic/notched_holed_plate/run_local
 ```
 
-The YAML deck is the canonical public input for this example because it
+The YAML configuration is the canonical public input for this example because it
 contains the exact rigid-connector setup used for the reference validation run.
 
 ### How The YAML Is Used
 
 `python -m phast run ...` reads `config.yaml`, validates the schema, applies any
-CLI overrides, resolves the input deck into runtime objects, writes a resolved
+CLI overrides, resolves the declarative configuration into runtime objects, writes a resolved
 copy of the config into the output directory, and then starts the staggered
 solver. The main YAML blocks map to solver setup as follows:
 
@@ -112,8 +87,8 @@ solver. The main YAML blocks map to solver setup as follows:
 | `loading` | Defines the load schedule. Here `cyclic_phases: "0.25:140,1.0:60"` means 140 steps to 0.25 mm per-pin displacement, then 60 steps to 1.0 mm. |
 | `solver` | Configures the quasi-static legacy staggered solver, tolerances, iteration limits, damage cadence, preconditioner, and backend. |
 | `output` | Chooses CSV files, plots, trajectory settings, profiling, and animation settings. |
-| `device` | Selects CPU/CUDA/MPS behavior. This reference deck is CPU by default. |
-| `initial_conditions` | Optional damage preseeding; this deck leaves it unset. |
+| `device` | Selects CPU/CUDA/MPS behavior. This reference configuration file is CPU by default. |
+| `initial_conditions` | Optional damage preseeding; this configuration file leaves it unset. |
 
 Use YAML when the goal is reproducibility, review, record keeping, or batch
 execution. It gives a stable text input that can be hashed, copied into the
@@ -122,7 +97,7 @@ output directory, and compared across machines.
 ## Run Without YAML
 
 This example is currently YAML-first only. A `run_fluent.py` companion is not
-included because the reference deck depends on the legacy quasi-static
+included because the reference configuration file depends on the legacy quasi-static
 rigid-connector path. The fluent API can describe the mesh regions and boundary
 condition parameters, but the exact reference `quasi_static_legacy` execution
 path is not yet exposed as a stable manual/API example.

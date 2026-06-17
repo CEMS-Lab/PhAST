@@ -7,7 +7,7 @@ This folder is self-contained: the canonical YAML configuration, equivalent
 Python fluent example, mesh files, validation report, run metadata, CSV outputs,
 and reference visual artifacts are kept beside each other.
 
-## What This Example Solves
+## 1. Problem Description
 
 This is the Miehe single-edge-notched tension benchmark:
 
@@ -27,37 +27,8 @@ This is the Miehe single-edge-notched tension benchmark:
 The checked-in reference result used 350 load steps on CPU and took about
 905 seconds in the recorded run metadata.
 
-## Files
 
-| File | Purpose |
-| --- | --- |
-| `config.yaml` | Canonical simulation input deck. Defines geometry, material, boundary conditions, loading, solver settings, device, and output options. |
-| `run_fluent.py` | Equivalent Python example using the fluent PhAST API instead of a YAML deck. |
-| `mesh.geo` | Gmsh geometry source for the notched plate, named physical curves, and refinement fields. |
-| `mesh.msh` | Generated Gmsh mesh used by the reference example. |
-| `README.md` | This guide. |
-| `run_manifest.json` | Public artifact manifest for the flat example bundle. |
-| `run_metadata.json` | Compact run summary: platform, package/runtime versions, material, mesh size, solver settings, runtime, peak reaction, and memory. |
-| `run_lockfile.json` | Reproducibility lockfile containing the command, config hash, resolved config, runtime metadata, and solver/material/mesh metadata. |
-| `results.csv` | Per-step displacement, reaction force, max damage, max history field, stagger iterations, and elapsed time. |
-| `history.csv` | Per-step fracture/history values, reaction force, and applied displacement. |
-| `energy.csv` | Per-step elastic, fracture, kinetic, external, and total energy. |
-| `timing_per_step.csv` | Per-step timing output. |
-| `solver_telemetry.csv` | Solver iterations, residuals, time step, and line-search telemetry. |
-| `crack_tip.csv` | Crack-tip tracking output. |
-| `compare_report.txt` | Text validation report against the PhaseFieldX 1711 reference response. |
-| `compare.png` | Load-displacement comparison against reference data. |
-| `load_displacement.png` | Simulation load-displacement curve. |
-| `energy.png` | Energy component plot. |
-| `staggered_convergence.png` | Staggered-solver convergence plot. |
-| `initial_conditions.png` | Initial setup and damage-state visual. |
-| `damage_final.png` | Final damage field. |
-| `thumbnail.png` | Thumbnail image for catalogs and docs. |
-| `damage_evolution.gif` | Damage evolution animation. |
-| `damage_evolution.mp4` | MP4 damage evolution animation. |
-| `visual_manifest.json` | Manifest for reference visual artifacts, dimensions, sizes, and review status. |
-
-## Run The Canonical YAML Deck
+## Run The Canonical YAML configuration
 
 From the repository root:
 
@@ -82,13 +53,13 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml \
   --output_dir examples/quasistatic/miehe_tension/run_quick
 ```
 
-The YAML deck is the canonical public input for exact reproduction because it
+The YAML configuration is the canonical public input for exact reproduction because it
 is the artifact saved into the lockfile and validation evidence.
 
 ### How The YAML Is Used
 
 `python -m phast run ...` reads `config.yaml`, validates the schema, applies any
-CLI overrides, resolves the input deck into runtime objects, writes a resolved
+CLI overrides, resolves the declarative configuration into runtime objects, writes a resolved
 copy of the config into the output directory, and then starts the staggered
 solver. The main YAML blocks map to solver setup as follows:
 
@@ -102,8 +73,8 @@ solver. The main YAML blocks map to solver setup as follows:
 | `loading` | Defines the load schedule. Here `cyclic_phases: "0.005:50,0.008:300"` means 50 steps to displacement 0.005, then 300 steps to 0.008. |
 | `solver` | Configures the quasi-static staggered mechanics/damage solver, tolerances, iteration limits, preconditioner, and backend. |
 | `output` | Chooses which CSV files, plots, trajectories, profiles, and animations are written. |
-| `device` | Selects CPU/CUDA/MPS behavior. This reference deck is CPU by default. |
-| `initial_conditions` | Optional damage preseeding; this deck leaves it unset. |
+| `device` | Selects CPU/CUDA/MPS behavior. This reference configuration file is CPU by default. |
+| `initial_conditions` | Optional damage preseeding; this configuration file leaves it unset. |
 
 Use YAML when the goal is reproducibility, review, record keeping, or batch execution.
 It gives a stable text input that can be hashed, copied into the output
@@ -220,7 +191,7 @@ For solver development, the lower-level path is:
 6. Write outputs using the same helpers used by `python -m phast run`.
 
 That path is intentionally more verbose and is mainly for solver development.
-Most users should choose either the YAML deck or `run_fluent.py`.
+Most users should choose either the YAML configuration or `run_fluent.py`.
 
 ## Reference Result
 

@@ -4,7 +4,7 @@ This page explains the pieces of a PhAST forward model: geometry or mesh,
 regions, materials, initial conditions, boundary conditions, analysis steps,
 solver controls, outputs, validation, and result inspection.
 
-Use the fluent `phast.Problem` API while designing a new setup. Use YAML decks
+Use the fluent `phast.Problem` API while designing a new setup. Use YAML configurations
 for reproducible public examples, shared runs, CI, and HPC submission.
 
 ## FEM Workflow Map
@@ -12,7 +12,7 @@ for reproducible public examples, shared runs, CI, and HPC submission.
 If you are coming from Abaqus, COMSOL, FEniCS, deal.II, or another FEM code,
 the PhAST workflow is the same sequence with different names:
 
-| FEM concept | Abaqus/COMSOL-style term | PhAST fluent API | YAML deck location |
+| FEM concept | Abaqus/COMSOL-style term | PhAST fluent API | YAML configuration location |
 |---|---|---|---|
 | Model or study | Model database / component / study | `phast.Problem("name")` | `problem:` |
 | Part geometry | Part / geometry sequence | `.geometry(...)` | `geometry:` |
@@ -87,10 +87,10 @@ problem.validate_setup()
 result = problem.run(output_dir="runs/linear_plate", return_result=True)
 ```
 
-For the same workflow as a durable input deck:
+For the same workflow as a durable declarative configuration:
 
 ```bash
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 
@@ -260,7 +260,7 @@ problem.analysis_step(
 
 Current public fluent workflows use one primary analysis step. For staged
 loading, use the loading protocol supported by that workflow, or encode the
-staged run in the canonical YAML deck for that example. Do not assume chained
+staged run in the canonical YAML configuration for that example. Do not assume chained
 `.analysis_step(...)` calls create a full Abaqus-style step sequence unless the
 specific workflow documents that behavior.
 
@@ -270,7 +270,7 @@ Common controls:
 |---|---|---|
 | `solid_mechanics` | `tip_force_y`, load magnitude or displacement controls used by the promoted solid runner | Small solid-mechanics examples and material-kernel demonstrations. |
 | `quasi_static` | `protocol`, `num_steps`, `dt`, active boundary conditions | Staggered phase-field fracture loading. |
-| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture examples; public YAML decks expose the full control set. |
+| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture examples; public YAML configurations expose the full control set. |
 
 The solver settings select numerical controls:
 
@@ -294,7 +294,7 @@ problem.outputs(
 )
 ```
 
-A promoted example result directory should include the input deck, lockfile,
+A promoted example result directory should include the declarative configuration, lockfile,
 metadata, history CSVs, standard figures, and a visual manifest. See
 [Example result contract](example_contract.md) for output conventions.
 
@@ -307,14 +307,14 @@ problem.validate_setup()
 problem.preview(output="runs/my_case/setup.png")
 ```
 
-Validate a YAML deck:
+Validate a YAML configuration:
 
 ```bash
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
 python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
 ```
 
-Run a YAML deck:
+Run a YAML configuration:
 
 ```bash
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml \
@@ -336,7 +336,7 @@ print(result.visuals())
 
 Each public example should be boringly predictable:
 
-- one `config.yaml` input deck,
+- one `config.yaml` declarative configuration,
 - one optional `fluent_setup.py` companion when the fluent path is promoted,
 - setup visual,
 - final field plots,

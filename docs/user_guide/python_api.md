@@ -1,7 +1,7 @@
 # Python API
 
 Use the fluent `phast.Problem` API when you are designing a new model in
-Python. Use YAML when the setup needs to become a reproducible input deck for
+Python. Use YAML when the setup needs to become a reproducible declarative configuration for
 public examples, CI, shared runs, or HPC submission.
 
 ## Fluent API Mental Model
@@ -119,10 +119,10 @@ problem = (
 problem.validate_setup()
 ```
 
-For published examples and benchmark reruns, prefer the checked-in YAML deck in
+For published examples and benchmark reruns, prefer the checked-in YAML configuration in
 `examples/` so that every user starts from the same input file.
 
-To discover supported geometry arguments, inspect the closest public YAML deck:
+To discover supported geometry arguments, inspect the closest public YAML configuration:
 
 ```bash
 python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
@@ -220,7 +220,7 @@ with `dof="x"`, `dof="y"`, or `dof="xy"`.
 
 Current public fluent workflows use one primary analysis step. For complex
 sequential loading, use the workflow's loading protocol or a canonical YAML
-deck that documents the staged schedule.
+configuration file that documents the staged schedule.
 
 The valid `controls` keys depend on the step kind:
 
@@ -228,7 +228,7 @@ The valid `controls` keys depend on the step kind:
 |---|---|---|
 | `solid_mechanics` | `tip_force_y`, example-specific load controls | Promoted solid-mechanics examples. |
 | `quasi_static` | `protocol`, `num_steps`, `dt`, active boundary conditions | Staggered quasi-static phase-field fracture. |
-| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture decks; use YAML for full reproducibility. |
+| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture configurations; use YAML for full reproducibility. |
 
 When in doubt, start from a public `config.yaml`, run `python -m phast
 explain-config <config.yaml>`, and transfer only the controls used by that
@@ -272,7 +272,7 @@ derive missing fields.
 The fluent API is the recommended Python authoring surface, but execution is
 bounded by the supported workflows in the capability matrix. Current public
 examples keep YAML as the reproducible run surface. If you need a durable input
-deck, author with Python if convenient, then record the final setup as a YAML
+configuration file, author with Python if convenient, then record the final setup as a YAML
 example with a standard result bundle.
 
 Next pages:

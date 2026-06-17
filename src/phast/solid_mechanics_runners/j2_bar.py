@@ -30,11 +30,9 @@ from ._common import (
     parse_config_arg,
     prepare_output_dir,
     save_field_animation,
-    save_response_animation,
     write_run_lockfile,
     write_run_metadata,
     write_solid_setup_preview,
-    write_solid_zarr,
     write_manifest,
 )
 
@@ -260,7 +258,7 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
     disp_mag = torch.linalg.norm(u_nodes, dim=1)
     vm_nodal = mesh.elem_to_node(von_mises(plasticity.state.stress))
     eqp_nodal = mesh.elem_to_node(plasticity.state.eps_p_eq)
-    save_deformed_shape(
+    deformation_scale = save_deformed_shape(
         mesh,
         u_nodes,
         out_dir / "deformed_shape.png",
@@ -297,13 +295,6 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
     shutil.copyfile(out_dir / "von_mises.png", out_dir / "stress_final.png")
     shutil.copyfile(out_dir / "equivalent_plastic_strain.png", out_dir / "strain_final.png")
     shutil.copyfile(out_dir / "equivalent_plastic_strain.png", out_dir / "plastic_strain_final.png")
-    save_response_animation(
-        out_dir,
-        csv_rows=[(r[1], r[2]) for r in rows],
-        xlabel=r"axial strain $\varepsilon_{xx}$",
-        ylabel=r"$\sigma_{xx}$ [MPa]",
-        title="J2 bar response evolution",
-    )
     save_field_animation(
         out_dir,
         mesh=mesh,
@@ -311,34 +302,8 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
         title="J2 plastic strain evolution",
         colorbar_label=r"$\bar{\varepsilon}^p$",
         cmap="plasma",
-    )
-    write_solid_zarr(
-        out_dir,
-        mesh=mesh,
-        steps=[
-            {
-                "step": int(r[0]),
-                "eps_xx": float(r[1]),
-                "sigma_xx_mean_MPa": float(r[2]),
-                "von_mises_mean_MPa": float(r[3]),
-                "von_mises_max_MPa": float(r[4]),
-                "eps_p_eq_mean": float(r[5]),
-                "eps_p_eq_max": float(r[6]),
-                "yield_mean_MPa": float(r[7]),
-                "reaction_x_MPa_mm": float(r[8]),
-                "newton_iterations": int(r[9]),
-                "residual": float(r[10]),
-            }
-            for r in rows
-        ],
-        fields={
-            "displacement": torch.stack(u_history),
-            "displacement_magnitude": torch.stack([
-                torch.linalg.norm(u_step, dim=1) for u_step in u_history
-            ]),
-            "von_mises": torch.stack(vm_history),
-            "equivalent_plastic_strain": torch.stack(eqp_history),
-        },
+        displacements=u_history,
+        deformation_scale=deformation_scale,
     )
     write_solid_setup_preview(
         out_dir,
@@ -358,7 +323,6 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
         "equivalent_plastic_strain.png",
         "strain_final.png",
         "plastic_strain_final.png",
-        "response_evolution.mp4",
         "field_evolution.mp4",
         "thumbnail.png",
     ]
@@ -372,7 +336,7 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
     write_run_lockfile(
         out_dir,
         config=cfg,
-        command="python examples/solid_mechanics/j2_bar/run.py",
+        command="python examples/solid_mechanics_beta/j2_bar/run.py",
     )
 
     metrics = {
@@ -386,7 +350,7 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
     write_manifest(
         out_dir,
         example="solid_mechanics.j2_bar",
-        command="python examples/solid_mechanics/j2_bar/run.py",
+        command="python examples/solid_mechanics_beta/j2_bar/run.py",
         config=cfg,
         metrics=metrics,
         files=[
@@ -401,10 +365,7 @@ def run(config_path: str | Path | None = None) -> dict[str, float]:
             "equivalent_plastic_strain.png",
             "strain_final.png",
             "plastic_strain_final.png",
-            "response_evolution.mp4",
             "field_evolution.mp4",
-            "training_data.zarr",
-            "zarr_manifest.json",
             "thumbnail.png",
             "visual_manifest.json",
             "run_metadata.json",

@@ -19,7 +19,7 @@ If a feature is marked scaffold, beta, optional-backend, or unsupported in the
 [capability matrix](../user_guide/capability_matrix.md), treat docs and
 examples as implementation notes until the feature is promoted through:
 
-1. a public YAML deck or script-contract manifest;
+1. a public YAML configuration or script-contract manifest;
 2. required outputs from `docs/user_guide/example_contract.md`;
 3. tests that validate the contract;
 4. a clear capability-matrix status update.

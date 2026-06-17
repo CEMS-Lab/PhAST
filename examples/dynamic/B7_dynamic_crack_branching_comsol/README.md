@@ -1,41 +1,20 @@
 # B7 Dynamic Crack Branching COMSOL Cross-Check
 
-Dynamic crack branching cross-check against the COMSOL 6.4 Application Library setup and Ren/Borden-style timing window. The public folder contains the YAML deck, curated PNG/CSV/report evidence, and sanitized metadata; the COMSOL binary, vendor PDF, and 98 GB trajectory remain outside this folder.
+Dynamic crack branching cross-check against the COMSOL 6.4 Application Library setup and Ren/Borden-style timing window. The public folder contains the YAML configuration, curated PNG/CSV/report evidence, and sanitized metadata; the COMSOL binary, vendor PDF, and 98 GB trajectory remain outside this folder.
 
 All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic diagnostics are intentionally excluded.
 
-## What This Example Solves
+## 1. Problem Description
 
 - 100 mm x 40 mm full-plate equivalent of the COMSOL half-plate dynamic branching setup.
 - Material model: COMSOL-style AT1 plus Amor split using glass-like parameters documented in the YAML.
 - Loading: traction-controlled top and bottom Neumann loading with notch damage preseed and pf_dirichlet constraint.
 - Claim boundary: beta cross-check evidence; exact COMSOL timing parity is diagnostic provenance, not the release acceptance gate.
 
-The YAML deck is the canonical public input for this example. Expected runtime depends strongly on mesh size, device, and output cadence; the checked-in outputs are curated evidence and should not be regenerated during lightweight contract checks.
+The YAML configuration is the canonical public input for this example. Expected runtime depends strongly on mesh size, device, and output cadence; the checked-in outputs are curated evidence and should not be regenerated during lightweight contract checks.
 
-## Files
 
-| File | Purpose |
-| --- | --- |
-| `README.md` | This contract-shaped public example guide. |
-| `borden_glass_dynamic_branching_evolution_styled.png` | Reference PNG visual: borden glass dynamic branching evolution styled. |
-| `compare.png` | Reference PNG visual: compare. |
-| `compare_report.txt` | Text comparison report against the reference or cross-check target. |
-| `comsol_branching_times.txt` | COMSOL/Ren branching-time context retained as lightweight comparison evidence. |
-| `comsol_energy_curve.csv` | Digitized or exported COMSOL energy curve used as comparison context. |
-| `config.yaml` | Canonical YAML input deck for `python -m phast run`. |
-| `damage_final.png` | Reference PNG visual: damage final. |
-| `energy.png` | Reference PNG visual: energy. |
-| `initial_conditions.png` | Reference PNG visual: initial conditions. |
-| `mesh.geo` | Public Gmsh geometry/provenance file matching the YAML geometry setup. |
-| `run_fluent.py` | Equivalent Python/manual setup using `phast.Problem` and public config dataclasses. |
-| `run_lockfile.json` | Reproducibility lockfile with resolved config and execution metadata. |
-| `run_manifest.json` | Public manifest describing curated source, status, and included artifact list when available. |
-| `run_metadata.json` | Run metadata for the included output set. |
-| `thumbnail.png` | Reference PNG visual: thumbnail. |
-| `visual_manifest.json` | Manifest for reference visual artifacts. |
-
-## Run The Canonical YAML Deck
+## Run The Canonical YAML configuration
 
 From the repository root:
 
@@ -45,7 +24,7 @@ python -m phast doctor
 python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only
 ```
 
-Run the full YAML deck only when you intend to regenerate the dynamic result bundle:
+Run the full YAML configuration only when you intend to regenerate the dynamic result bundle:
 
 ```bash
 python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml \
@@ -60,11 +39,11 @@ python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.ya
   --output_dir examples/dynamic/B7_dynamic_crack_branching_comsol/run_quick
 ```
 
-Do not treat the short check as benchmark evidence; it is only a quick check for the input deck and runner plumbing.
+Do not treat the short check as benchmark evidence; it is only a quick check for the declarative configuration and runner plumbing.
 
 ## How The YAML Is Used
 
-`python -m phast run ...` reads `config.yaml`, validates the schema, applies any CLI overrides, resolves the deck into runtime objects, writes the resolved config into the output directory, and then starts the explicit dynamic solver. The main YAML blocks map to runtime setup as follows:
+`python -m phast run ...` reads `config.yaml`, validates the schema, applies any CLI overrides, resolves the configuration file into runtime objects, writes the resolved config into the output directory, and then starts the explicit dynamic solver. The main YAML blocks map to runtime setup as follows:
 
 | YAML block | Runtime meaning |
 | --- | --- |
@@ -78,11 +57,11 @@ Do not treat the short check as benchmark evidence; it is only a quick check for
 | `solver` | Explicit dynamics settings such as `solver_type`, `dt_safety`, damage cadence, and solver options. |
 | `output` | Requested trajectories, CSV histories, plots, animations, print cadence, and fast-output settings. |
 
-Use YAML for reproduction, review, and batch/accelerated compute execution because the deck is the artifact hashed into lockfiles and copied with run outputs.
+Use YAML for reproduction, review, and batch/accelerated compute execution because the configuration file is the artifact hashed into lockfiles and copied with run outputs.
 
 ## Run Without YAML
 
-Use `run_fluent.py` when you want to assemble the same explicit-dynamics model directly through Python instead of loading the YAML deck:
+Use `run_fluent.py` when you want to assemble the same explicit-dynamics model directly through Python instead of loading the YAML configuration:
 
 ```bash
 python examples/dynamic/B7_dynamic_crack_branching_comsol/run_fluent.py \
@@ -97,7 +76,7 @@ python examples/dynamic/B7_dynamic_crack_branching_comsol/run_fluent.py \
   --output-dir examples/dynamic/B7_dynamic_crack_branching_comsol/run_fluent_quick
 ```
 
-The YAML deck remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 
@@ -121,7 +100,6 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 
 | Initial conditions | Damage evolution |
 |---|---|
-| <img src="initial_conditions.png" alt="B7 Dynamic Crack Branching COMSOL Cross-Check initial conditions" width="360"> | <img src="borden_glass_dynamic_branching_evolution_styled.png" alt="B7 Dynamic Crack Branching COMSOL Cross-Check reference result" width="360"> |
 
 | Quantity | Reference evidence | Status |
 | --- | --- | --- |

@@ -13,7 +13,7 @@ The public repository is organized as:
 ├── .github/                 issue templates, PR template, workflows, CODEOWNERS
 ├── assets/                  lightweight README/docs media
 ├── conda-recipe/            experimental conda packaging recipe
-├── configs/                 schemas, reference YAML, benchmark decks
+├── configs/                 schemas, reference YAML, benchmark configurations
 ├── docs/                    Sphinx documentation source
 ├── examples/                runnable public examples and retained visuals
 ├── notebooks/               lightweight notebook quickstarts
@@ -39,8 +39,8 @@ Tracked-file count at the time of this audit: 968 files.
 |---|---:|---|
 | `examples/dynamic/` | 188 | README, example gallery, YAML workflow, dynamic supported-workflow page. |
 | `examples/quasistatic/` | 50 | README, example gallery, quasi-static supported-workflow page. |
-| `examples/solid_mechanics/` | 188 | README, example gallery, solid-mechanics supported-workflow page. |
-| `examples/plasticity_interface/` | 298 | Beta supported-workflow page and capability matrix. |
+| `examples/solid_mechanics_beta/` | 188 | README, example gallery, solid-mechanics supported-workflow page. |
+| `examples/plasticity_interface_beta/` | 298 | Beta supported-workflow page and capability matrix. |
 | `examples/` root | 3 | Public examples overview and contract. |
 | `src/phast/` | 116 | Python API, public API reference, YAML workflow, results API, API notes. |
 | `docs/` | 56 | Sphinx toctree and this inventory page. |
@@ -71,7 +71,7 @@ The stable public entry points for new users are `phast.Problem`,
 `phast.load_result`, `phast.inspect_mesh`, and the CLI commands documented in
 the getting-started and YAML workflow pages. Lower-level exported helpers are
 available for advanced users, but they should not be treated as the primary
-customer API unless a dedicated docs page describes them.
+researcher API unless a dedicated docs page describes them.
 
 ## Example Tree
 
@@ -113,7 +113,7 @@ findings to track are:
 | Severity | Area | Finding |
 |---|---|---|
 | Fixed | `examples/dynamic/B7_dynamic_crack_branching_comsol/` | Public manifests now use a retained-run identifier instead of absolute machine paths. |
-| High | `configs/` | Some top-level aliases are broken or diagnostic-only. Remove or replace with public benchmark decks. |
+| High | `configs/` | Some top-level aliases are broken or diagnostic-only. Remove or replace with public benchmark configurations. |
 | High | Examples | Several public manifests reference missing `run_metadata.json`, `run_lockfile.json`, or MP4 artifacts. Regenerate or update manifests. |
 | High | Root/CI | Public docs and CI mention `tests/`, but this snapshot has no top-level `tests/` directory. Either restore public tests or remove those commands from public workflows. |
 | High | Root/CI | `CHANGELOG.md` and `configs/status/` are referenced by contribution templates but absent. Add them or update the templates. |
@@ -121,7 +121,7 @@ findings to track are:
 | Medium | Docs | Some excluded scoping documents remain in the repo and should stay out of the public build or be rewritten as public notes. |
 | Medium | Docs/API | Some older docs mention unsupported CLI flags or old H5 behavior. Update before publication. |
 | Medium | Assets | Some asset provenance text mentions private job/source context. Replace with public-safe provenance. |
-| Low | API boundary | `src/phast/__init__.py` exports more low-level helpers than the main docs present as stable customer API. Clarify stability or reduce exports later. |
+| Low | API boundary | `src/phast/__init__.py` exports more low-level helpers than the main docs present as stable researcher API. Clarify stability or reduce exports later. |
 
 ## Verification Commands
 
@@ -132,7 +132,7 @@ changes:
 python -m phast doctor
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --validate-only
 sphinx-build -W -b html docs docs/_build/html
 ```
 

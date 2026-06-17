@@ -267,8 +267,10 @@ def save_field_animation(
     colorbar_label: str,
     filename: str = "field_evolution.mp4",
     cmap: str = "viridis",
+    displacements: list[Any] | None = None,
+    deformation_scale: float | None = None,
 ) -> None:
-    """Animate a scalar nodal field over a solid-mechanics load/history path."""
+    """Animate a scalar field, optionally on the deformed bending shape."""
     import matplotlib
 
     matplotlib.use("Agg")
@@ -279,13 +281,37 @@ def save_field_animation(
     nodes = mesh.nodes.detach().cpu().numpy()
     elems = mesh.elements.detach().cpu().numpy()
     values = [np.asarray(v.detach().cpu().numpy() if hasattr(v, "detach") else v, dtype=float) for v in nodal_fields]
+    disp_values = None
+    if displacements is not None:
+        disp_values = [
+            np.asarray(d.detach().cpu().numpy() if hasattr(d, "detach") else d, dtype=float)
+            for d in displacements
+        ]
     if len(values) == 1:
         values = [np.zeros_like(values[0]), values[0]]
+        if disp_values is not None:
+            disp_values = [np.zeros_like(disp_values[0]), disp_values[0]]
+    if disp_values is not None and len(disp_values) != len(values):
+        raise ValueError("displacements must have the same length as nodal_fields")
     vmin = min(float(np.nanmin(v)) for v in values)
     vmax = max(float(np.nanmax(v)) for v in values)
     if vmax <= vmin:
         vmax = vmin + 1.0
-    tri = mtri.Triangulation(nodes[:, 0], nodes[:, 1], elems)
+    if disp_values is not None and deformation_scale is None:
+        span = max(float(np.ptp(nodes[:, 0])), float(np.ptp(nodes[:, 1])), 1.0)
+        umax = max(float(np.linalg.norm(d, axis=1).max()) for d in disp_values)
+        deformation_scale = 0.12 * span / max(umax, 1.0e-30)
+    elif deformation_scale is None:
+        deformation_scale = 0.0
+    reference_tri = mtri.Triangulation(nodes[:, 0], nodes[:, 1], elems)
+    if disp_values is not None:
+        all_nodes = np.vstack([nodes + float(deformation_scale) * d for d in disp_values])
+    else:
+        all_nodes = nodes
+    xmin, xmax = float(np.min(all_nodes[:, 0])), float(np.max(all_nodes[:, 0]))
+    ymin, ymax = float(np.min(all_nodes[:, 1])), float(np.max(all_nodes[:, 1]))
+    xpad = 0.08 * max(xmax - xmin, 1.0)
+    ypad = 0.12 * max(ymax - ymin, 1.0)
     fig, ax = plt.subplots(figsize=(5.8, 3.2), dpi=150)
     scalar = plt.cm.ScalarMappable(
         norm=plt.Normalize(vmin=vmin, vmax=vmax),
@@ -294,26 +320,45 @@ def save_field_animation(
     cbar = fig.colorbar(scalar, ax=ax)
     cbar.set_label(colorbar_label)
 
-    def draw_frame(field: np.ndarray) -> None:
+    def draw_frame(field: np.ndarray, disp: np.ndarray | None) -> None:
         ax.clear()
         ax.set_aspect("equal", adjustable="box")
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_title(title)
+        if disp is None:
+            frame_nodes = nodes
+            tri = reference_tri
+        else:
+            frame_nodes = nodes + float(deformation_scale) * disp
+            tri = mtri.Triangulation(frame_nodes[:, 0], frame_nodes[:, 1], elems)
+            ax.triplot(reference_tri, color="0.82", lw=0.35, alpha=0.7)
         ax.tricontourf(tri, field, levels=24, cmap=cmap, vmin=vmin, vmax=vmax)
+        ax.triplot(tri, color="0.25", lw=0.25, alpha=0.45)
+        ax.set_xlim(xmin - xpad, xmax + xpad)
+        ax.set_ylim(ymin - ypad, ymax + ypad)
+        if disp is not None:
+            ax.text(
+                0.02,
+                0.02,
+                f"deformation x{float(deformation_scale):.2g}",
+                transform=ax.transAxes,
+                fontsize=8,
+                color="0.25",
+            )
 
     writer = FFMpegWriter(fps=6)
     try:
         with writer.saving(fig, out_dir / filename, dpi=150):
-            for field in values:
-                draw_frame(field)
+            for i, field in enumerate(values):
+                draw_frame(field, None if disp_values is None else disp_values[i])
                 writer.grab_frame()
     except Exception:
         fallback = out_dir / filename.replace(".mp4", ".gif")
         gif_writer = PillowWriter(fps=6)
         with gif_writer.saving(fig, fallback, dpi=150):
-            for field in values:
-                draw_frame(field)
+            for i, field in enumerate(values):
+                draw_frame(field, None if disp_values is None else disp_values[i])
                 gif_writer.grab_frame()
         if fallback.name != filename:
             shutil.copyfile(fallback, out_dir / filename)

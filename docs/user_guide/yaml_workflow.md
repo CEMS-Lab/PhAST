@@ -1,49 +1,36 @@
-# YAML Workflow
+# Declarative YAML Workflows
 
-YAML is the canonical input-deck format for reproducible PhAST runs. Use YAML
-when you want to share an exact setup, submit a batch/HPC job, run CI checks,
-or reproduce a public example without writing a Python driver.
+YAML is the canonical configuration format for reproducible simulations in PhAST. Declarative configurations should be used for sharing exact geometric and physical setups, submitting batch/HPC jobs, and enforcing strict reproducibility for academic publications.
 
-Use the fluent `phast.Problem` API while designing a model. Move the final
-setup into YAML when the run needs to be durable and repeatable.
+While the fluent `phast.Problem` API is ideal for interactive model design, the final implementation should be serialized to YAML to ensure durability.
 
-## Basic Commands
+## Configuration Scope
 
-Validate a configuration without running the solver:
+A declarative YAML configuration explicitly defines:
+- **Geometry**: Built-in primitives or paths to external meshes.
+- **Constitutive Models**: Material definitions, physics presets, and specific parameters.
+- **Boundary Conditions**: Kinematic constraints and loading protocols.
+- **Solver Execution**: Mathematical backend, temporal discretization, tolerances, and hardware device.
+- **Artifact Generation**: Desired volumetric fields, CSV histories, visualization rendering, and trajectory storage formats.
+
+## Execution Workflow
+
+PhAST provides three primary CLI entry points for interacting with YAML configurations:
 
 ```bash
+# 1. Validate schema constraints and semantic logic without solving
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
-```
 
-Explain a configuration in a readable form:
-
-```bash
+# 2. Inspect the parsed configuration graph and hardware placement
 python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
+
+# 3. Execute the simulation and specify an artifact output directory
+python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate
 ```
 
-Run the case:
+For batch processing and HPC environments, this identical sequence ensures configurations are mathematically valid on the head node before consuming cluster compute resources.
 
-```bash
-python -m phast run examples/quasistatic/notched_holed_plate/config.yaml \
-  --output_dir runs/notched_holed_plate
-```
-
-## What a YAML Deck Controls
-
-A YAML deck can define:
-
-- geometry or imported mesh path,
-- material model and parameters,
-- initial conditions such as seeded damage,
-- boundary conditions and loading protocol,
-- solver type, tolerances, backend, device, and time stepping,
-- requested fields, histories, plots, animations, and trajectory stores,
-- acceptance metadata for curated validation examples.
-
-The deck is intended to behave like a conventional FEM input file: validate it,
-run it, and inspect the standard result directory.
-
-## Minimal Shape
+## Schema Structure
 
 ```yaml
 problem:
@@ -78,134 +65,69 @@ output:
   trajectory_format: zarr
 ```
 
-Public examples contain the exact keys required by their runner. Start from an
-existing example when creating a related case.
+*Note: Public validation examples contain the exact keys required by their execution pathways. It is recommended to use existing examples as a foundation for novel configurations.*
 
-## Geometry and Meshes
+## External Meshes and Provenance
 
-For built-in examples, geometry can be described directly in YAML and PhAST
-will generate a Gmsh mesh. For custom geometry, generate a `.msh` file and
-reference it:
+For built-in examples, structural geometry can be declared directly in YAML and PhAST will generate the underlying computational mesh via Gmsh. For custom domains, generate a format-compliant mesh (e.g., `.msh`) and reference it:
 
 ```yaml
 geometry:
-  mesh_path: meshes/my_plate.msh
+  mesh_path: meshes/custom_domain.msh
 ```
 
-The mesh should preserve named physical groups for every boundary or domain
-used by the deck. Inspect external mesh groups before writing the YAML:
+External meshes must preserve named physical groups for every boundary or domain referenced in the YAML configuration. You can inspect parsed mesh groups programmatically:
 
 ```python
 import phast
 
-summary = phast.inspect_mesh("meshes/my_plate.msh")
+summary = phast.inspect_mesh("meshes/custom_domain.msh")
 print(summary["named_groups"])
 ```
 
-## Trajectory Output
+## High-Fidelity Volumetric Storage
 
-Use Zarr for new runs:
-
-```yaml
-output:
-  trajectory: true
-  trajectory_format: zarr
-  h5_every: 5
-```
-
-Use H5 only for legacy tools:
+PhAST defaults to chunked, parallel-friendly `zarr` stores for recording volumetric field trajectories. The legacy `h5` format is maintained strictly for compatibility with older external post-processing scripts.
 
 ```yaml
 output:
   trajectory: true
-  trajectory_format: h5
+  trajectory_format: zarr  # Options: zarr, h5, both
   h5_every: 5
 ```
 
-Write both stores only when comparing old and new post-processing:
-
-```yaml
-output:
-  trajectory: true
-  trajectory_format: both
-  h5_every: 5
-```
-
-The CLI can override trajectory settings:
+Trajectory formats can also be dynamically overridden via the CLI without modifying the underlying configuration file:
 
 ```bash
-python -m phast run case.yaml --trajectory --trajectory-format zarr
+python -m phast run config.yaml --trajectory --trajectory-format zarr
 ```
 
-## Standard Result Directory
+## Standardized Artifact Directory
 
-A normal run writes a directory such as `runs/notched_holed_plate/`. Promoted
-examples should include:
+A successfully executed configuration writes an immutable artifact directory (e.g., `runs/notched_holed_plate/`). For promoted academic examples, this directory guarantees:
+- The exact `config.yaml` used for execution.
+- `run_lockfile.json` capturing the parsed state, Git hashes, and dependencies.
+- CSV histories (response, kinetic energy, nonlinear convergence).
+- High-fidelity Zarr trajectories.
+- Visual manifests and pre-rendered plots.
 
-- copied or resolved `config.yaml`,
-- `run_lockfile.json`,
-- `run_metadata.json`,
-- `run_manifest.json` or `visual_manifest.json`,
-- mesh provenance where applicable,
-- CSV histories such as response, energy, timing, or convergence,
-- final field plots,
-- setup images and animations where meaningful,
-- trajectory stores when requested.
+## Result Inspection
 
-See [Example result contract](example_contract.md) and
-the repository output standards page for output conventions.
-
-## Inspecting a Completed Run
+The resulting artifact directory is strictly read-only and can be queried programmatically:
 
 ```python
 import phast
 
 result = phast.load_result("runs/notched_holed_plate")
 print(result.metadata())
-print(result.mesh())
 print(result.history_names())
-print(result.visuals())
-print(result.field_names())
 
 if result.has_field("damage"):
     damage = result.field("damage", step=-1)
 ```
 
-`Result` is read-only. It exposes stored manifests, metadata, CSV histories,
-visual artifacts, mesh metadata, and raw trajectory fields when present. It
-does not silently synthesize derived quantities that were not written by the
-run.
+The `Result` object exposes only quantities that were explicitly written during the simulation; it does not silently synthesize derived fields.
 
-## Batch and HPC Use
+## Extensibility Boundary
 
-YAML is the recommended surface for batch execution because the same file can
-be validated locally, committed with an example, submitted to a queue, and
-loaded later with the Result API.
-
-Typical sequence:
-
-```bash
-python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
-python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
-python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml \
-  --device cpu \
-  --output_dir runs/B2_kalthoff_winkler
-```
-
-For larger dynamic or quasi-static runs, use the same `config.yaml` inside the
-cluster submission script and keep the output directory intact.
-
-## Current Boundary
-
-YAML decks route to supported PhAST runners. They do not evaluate arbitrary
-Python launcher strings or arbitrary weak-form equations. If a deck requests a
-workflow outside the supported capability matrix, validation should report that
-boundary before the solver is launched.
-
-Next pages:
-
-- [Setting up new problems](setup_problems.md)
-- [Python API](python_api.md)
-- [Results API](results_api.md)
-- [Example result contract](example_contract.md)
-- [Capability matrix](capability_matrix.md)
+YAML configurations strictly route to validated PhAST solver execution pathways. They do not execute arbitrary Python scripts or compile arbitrary weak-form PDEs. If a configuration requests physics outside the supported [Capability Matrix](capability_matrix.md), the validation phase will cleanly intercept and report the violation before any compute is allocated.

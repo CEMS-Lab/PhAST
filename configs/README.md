@@ -88,7 +88,7 @@ Some historical configs retain an `example:` field for provenance or for
 older demo wrappers. It is accepted by the schema, but it is not required
 for the canonical `python -m phast run ...` path.
 
-Benchmark and customer-validation configs should also include an
+Benchmark and researcher-validation configs should also include an
 `acceptance:` block. This is structured but extensible metadata for the
 reference result, required artifacts, numerical/visual metrics, tolerances, and
 known caveats. The standard fields are validated: `status` must be one of
@@ -129,7 +129,7 @@ runs, or explicit `generalized_alpha` / `fresh_d_in_corrector` with
 Non-fatal advisories are printed for physically risky but legal setups,
 including missing `schema_version` and declared fracture meshes with
 `h/l0 > 0.5` near the crack path. These warnings do not fail
-`--validate-only`, but they should be resolved before customer validation
+`--validate-only`, but they should be resolved before external validation
 or paper-quality runs.
 
 For IDE autocomplete and external tooling, use the generated JSON Schema:

@@ -7,7 +7,7 @@ until it is validated and promoted through the public example contract.
 ## Short Term
 
 - Harden YAML and fluent workflow parity for curated public examples.
-- Expand installation, validation, result-loading, and postprocessing smoke tests.
+- Expand installation, validation, result-loading, and postprocessing validation tests.
 - Promote additional validated 2D fracture and solid-mechanics examples with
   standard visual manifests.
 - Improve public postprocessing tools for animations, response curves, and

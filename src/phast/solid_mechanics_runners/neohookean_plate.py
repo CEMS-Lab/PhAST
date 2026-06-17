@@ -31,11 +31,9 @@ from ._common import (
     parse_config_arg,
     prepare_output_dir,
     save_field_animation,
-    save_response_animation,
     write_run_lockfile,
     write_run_metadata,
     write_solid_setup_preview,
-    write_solid_zarr,
     write_manifest,
 )
 
@@ -274,7 +272,7 @@ def run(config_path: str | Path | None = None):
     energy_nodal = mesh.elem_to_node(energy_elem)
     vm_nodal = mesh.elem_to_node(vm_elem)
     detF_nodal = mesh.elem_to_node(detF_elem)
-    save_deformed_shape(
+    deformation_scale = save_deformed_shape(
         mesh,
         u_nodes,
         out_dir / "deformed_shape.png",
@@ -332,13 +330,6 @@ def run(config_path: str | Path | None = None):
         vm_history.append(mesh.elem_to_node(vm_step))
         energy_history.append(mesh.elem_to_node(e_step))
         detf_history.append(mesh.elem_to_node(detf_step))
-    save_response_animation(
-        out_dir,
-        csv_rows=[(abs(r[4]) * 1.0e3, abs(r[1])) for r in rows],
-        xlabel=r"$|u_y^\mathrm{tip}|$ [mm]",
-        ylabel=r"$|P|$ [N]",
-        title="Neo-Hookean response evolution",
-    )
     save_field_animation(
         out_dir,
         mesh=mesh,
@@ -346,28 +337,8 @@ def run(config_path: str | Path | None = None):
         title="Neo-Hookean stress evolution",
         colorbar_label=r"$\sigma_\mathrm{vm}$ [Pa]",
         cmap="magma",
-    )
-    write_solid_zarr(
-        out_dir,
-        mesh=mesh,
-        steps=[
-            {
-                "step": int(i + 1),
-                "load_fraction": float(r[0]),
-                "force_N": float(r[1]),
-                "newton_iterations": int(r[2]),
-                "residual": float(r[3]),
-                "tip_displacement_m": float(r[4]),
-            }
-            for i, r in enumerate(rows)
-        ],
-        fields={
-            "displacement": torch.stack(displacement_history),
-            "displacement_magnitude": torch.stack(disp_history),
-            "von_mises": torch.stack(vm_history),
-            "strain_energy": torch.stack(energy_history),
-            "jacobian": torch.stack(detf_history),
-        },
+        displacements=displacement_history,
+        deformation_scale=deformation_scale,
     )
     write_solid_setup_preview(
         out_dir,
@@ -387,7 +358,6 @@ def run(config_path: str | Path | None = None):
         "strain_energy.png",
         "strain_final.png",
         "jacobian.png",
-        "response_evolution.mp4",
         "field_evolution.mp4",
         "thumbnail.png",
     ]
@@ -401,7 +371,7 @@ def run(config_path: str | Path | None = None):
     write_run_lockfile(
         out_dir,
         config=cfg,
-        command="python examples/solid_mechanics/neohookean_plate/run.py",
+        command="python examples/solid_mechanics_beta/neohookean_plate/run.py",
     )
 
     metrics = {
@@ -417,7 +387,7 @@ def run(config_path: str | Path | None = None):
     write_manifest(
         out_dir,
         example="solid_mechanics.neohookean_plate",
-        command="python examples/solid_mechanics/neohookean_plate/run.py",
+        command="python examples/solid_mechanics_beta/neohookean_plate/run.py",
         config=cfg,
         metrics=metrics,
         files=[
@@ -432,10 +402,7 @@ def run(config_path: str | Path | None = None):
             "strain_energy.png",
             "strain_final.png",
             "jacobian.png",
-            "response_evolution.mp4",
             "field_evolution.mp4",
-            "training_data.zarr",
-            "zarr_manifest.json",
             "thumbnail.png",
             "visual_manifest.json",
             "run_metadata.json",

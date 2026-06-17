@@ -4,7 +4,6 @@
   "config": "config.yaml",
   "files": [
     "README.md",
-    "borden_glass_dynamic_branching_evolution_styled.png",
     "compare.png",
     "compare_report.txt",
     "comsol_branching_times.txt",

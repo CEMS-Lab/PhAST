@@ -1,6 +1,6 @@
 # Dynamic Fracture
 
-Dynamic fracture examples use YAML input decks for explicit phase-field runs.
+Dynamic fracture examples use YAML input configurations for explicit phase-field runs.
 They are useful for crack propagation, impact, branching, and dataset-style
 trajectories, but each example carries its own status in the public contract.
 
@@ -13,7 +13,7 @@ python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml --validate-only
 
 For full production reruns, prefer CPU nodes when the GPU queue is busy and the
 case fits CPU memory; otherwise use CUDA for large trajectory-producing runs.
-Keep `dtype: float64` where the validation deck requires it.
+Keep `dtype: float64` where the validation configuration file requires it.
 
 ## Expected outputs
 

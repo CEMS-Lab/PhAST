@@ -4,7 +4,7 @@ Based on COMSOL 6.4 documentation, Application Library examples, and release not
 
 Status note, 2026-06-10: this comparison is a capability-boundary document,
 not a claim of COMSOL parity. `phast` now has beta validation slices
-for sparse J2 plasticity, cohesive elements, PF-CZM uniaxial strength smoke,
+for sparse J2 plasticity, cohesive elements, PF-CZM uniaxial strength validation,
 and coupled brittle PF+cohesive examples. It does not yet provide a mature
 commercial-style coupled plasticity + PF-CZM + cohesive-interface production
 workflow.
@@ -30,7 +30,7 @@ workflow.
 |---------|-----------|-----------------|
 | **AT1** | ✓ (w(φ)=φ, c_w=8/3) | ✓ (same formulation) |
 | **AT2** | ✓ (w(φ)=φ², c_w=2) | ✓ (same formulation) |
-| **PF-CZM** | ✓ (cohesive zone model) | Beta smoke: Wu PF-CZM forward damage solves with uniaxial strength/`l0` validation; structural crack growth and mixed-mode benchmarks remain gated |
+| **PF-CZM** | ✓ (cohesive zone model) | Beta validation: Wu PF-CZM forward damage solves with uniaxial strength/`l0` validation; structural crack growth and mixed-mode benchmarks remain gated |
 | **Energy splits** | Volumetric, Spectral (stress), Spectral (strain), None | Isotropic, Amor (vol-dev), Spectral (strain), Star-convex |
 | **Degradation** | Power law (m=2), Cubic (Borden), User-defined | Standard (1-d)², Cubic, Rational |
 | **Crack driving force** | Strain energy density or Principal stress criterion | Strain energy density (ψ⁺); principal-stress criterion scaffold exists for selected validation cases |
@@ -40,7 +40,7 @@ workflow.
 
 ### Still not COMSOL-equivalent in phast:
 - **PF-CZM production parity** — current support is a forward Wu PF-CZM
-  strength-calibration smoke, not a full structural/mixed-mode PF-CZM product.
+  strength-calibration validation, not a full structural/mixed-mode PF-CZM product.
 - **Principal stress criterion production path** — scaffold exists, but
   strain-energy driving force remains the validated default for most brittle
   fracture workflows.
@@ -50,7 +50,7 @@ workflow.
   strain. Prefer plane-strain `spectral` or plane-stress `amor` for mature
   validated public examples.
 - **Fully coupled plasticity + PF-CZM + cohesive interfaces** — unsupported as
-  a single calibrated customer workflow.
+  a single calibrated researcher workflow.
 
 ## Solver / Time Integration
 
@@ -72,7 +72,7 @@ workflow.
 ### Key COMSOL advantages we should adopt:
 1. **Implicit dynamics hardening** — production generalized-alpha/Newmark with adjoints and robust preconditioning
 2. **Adaptive time stepping** — broaden cutback/growth controls and validation
-3. **Higher-order / quad elements** — improve accuracy per DOF for customer meshes
+3. **Higher-order / quad elements** — improve accuracy per DOF for researcher meshes
 4. **Integrated commercial-style postprocessing** — richer derived fields and report templates
 
 ### Direct solver terminology
@@ -87,11 +87,11 @@ sense; they factorise the assembled sparse system directly.
 `phast` currently calls two CPU sparse-direct backends:
 
 - `mumps`: PETSc/MUMPS through `petsc4py`, selected by `backend='auto'` when
-  the runtime smoke test passes.
+  the runtime validation test passes.
 - `scipy`: SciPy SuperLU through `scipy.sparse.linalg`, used as the portable
   CPU fallback.
 
-When the runtime PETSc/MUMPS smoke test succeeds, SENS/TPB jobs launched with
+When the runtime PETSc/MUMPS validation test succeeds, SENS/TPB jobs launched with
 `backend='auto'` use MUMPS for the mechanics linear solve. PARDISO and SPOOLES
 are not wired into this repository.
 
@@ -109,7 +109,7 @@ are not wired into this repository.
 - **Quadratic production elements** — higher-order primitives exist, but global
   solver dispatch and benchmark coverage remain gated.
 - **Broad quad production support** — Q4 isotropic mechanics + AT2 damage has a
-  beta smoke path; Q4 PF-CZM, plasticity, cohesive-coupled damage, and
+  beta validation path; Q4 PF-CZM, plasticity, cohesive-coupled damage, and
   differentiable damage adjoints remain gated.
 
 ## Postprocessing
@@ -180,14 +180,14 @@ are not wired into this repository.
 - [x] **AT1 model with projected CG** — bound-constrained solve (v0.12.0)
 - [x] **Plane stress** — full support with Amor split (v0.12.0)
 
-### Implemented as beta / smoke
+### Implemented as beta / validation
 - [x] **Sparse J2 validation slice** — per-element state, return mapping,
   commit/rollback, internal force, sparse quasi-static dispatch, and
   plastic-work accounting are covered by validation examples.
 - [x] **Cohesive element validation slices** — bilinear residual/tangent,
-  mixed-mode/contact/delamination/structural smoke examples, and visual
+  mixed-mode/contact/delamination/structural validation examples, and visual
   manifests exist.
-- [x] **PF-CZM smoke** — Wu PF-CZM uniaxial strength/length-scale validation
+- [x] **PF-CZM validation** — Wu PF-CZM uniaxial strength/length-scale validation
   bundle exists with residual/convergence/visual gates.
 
 ### Not yet production-ready
@@ -197,7 +197,7 @@ are not wired into this repository.
 - [ ] **Principal stress criterion production validation** — alternative driving force
 - [x] **Symmetry BCs** — half-model support via node-set fix/symmetry constraints
 - [ ] **Adaptive time stepping** — increase dt when Δd < threshold
-- [ ] **Implicit dynamics production hardening** — forward-only generalized-alpha exists; adjoint/preconditioner/customer gates remain open
+- [ ] **Implicit dynamics production hardening** — forward-only generalized-alpha exists; adjoint/preconditioner/researcher gates remain open
 - [x] **Higher-order element primitives** — T6 plus Q4/Q8/Q9 shape functions,
   quadrature, and single-element stiffness are tested; production solver
   dispatch remains a separate hardening step.

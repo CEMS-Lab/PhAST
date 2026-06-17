@@ -1,20 +1,11 @@
 [
   {
-    "file": "crack_velocity_vs_position.png",
-    "artifact_type": "image",
-    "size_bytes": 137958,
+    "file": "damage_evolution.gif",
+    "artifact_type": "animation",
+    "size_bytes": 1023522,
     "visual_scope": "dynamic",
-    "width_px": 2307,
-    "height_px": 1123,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "crack_velocity_vs_time.png",
-    "artifact_type": "image",
-    "size_bytes": 113849,
-    "visual_scope": "dynamic",
-    "width_px": 2117,
-    "height_px": 1122,
+    "width_px": 700,
+    "height_px": 450,
     "review_dimension_passed": true
   },
   {
@@ -27,78 +18,6 @@
     "review_dimension_passed": true
   },
   {
-    "file": "damage_multipanel.png",
-    "artifact_type": "image",
-    "size_bytes": 206690,
-    "visual_scope": "dynamic",
-    "width_px": 6981,
-    "height_px": 1236,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "damage_profile.png",
-    "artifact_type": "image",
-    "size_bytes": 138625,
-    "visual_scope": "dynamic",
-    "width_px": 1872,
-    "height_px": 1124,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "damage_profiles_multi.png",
-    "artifact_type": "image",
-    "size_bytes": 178289,
-    "visual_scope": "dynamic",
-    "width_px": 2411,
-    "height_px": 1267,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "displacement_multipanel.png",
-    "artifact_type": "image",
-    "size_bytes": 166976,
-    "visual_scope": "dynamic",
-    "width_px": 5399,
-    "height_px": 1243,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "dissipation_rate.png",
-    "artifact_type": "image",
-    "size_bytes": 84228,
-    "visual_scope": "dynamic",
-    "width_px": 2072,
-    "height_px": 1123,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "dissipation_vs_velocity.png",
-    "artifact_type": "image",
-    "size_bytes": 126118,
-    "visual_scope": "dynamic",
-    "width_px": 2223,
-    "height_px": 1275,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "energy_balance.png",
-    "artifact_type": "image",
-    "size_bytes": 180852,
-    "visual_scope": "dynamic",
-    "width_px": 2054,
-    "height_px": 1122,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "energy_normalized.png",
-    "artifact_type": "image",
-    "size_bytes": 168274,
-    "visual_scope": "dynamic",
-    "width_px": 2190,
-    "height_px": 1122,
-    "review_dimension_passed": true
-  },
-  {
     "file": "initial_conditions.png",
     "artifact_type": "image",
     "size_bytes": 316807,
@@ -108,48 +27,12 @@
     "review_dimension_passed": true
   },
   {
-    "file": "max_damage_vs_time.png",
-    "artifact_type": "image",
-    "size_bytes": 76261,
-    "visual_scope": "dynamic",
-    "width_px": 2120,
-    "height_px": 972,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "space_time_diagram.png",
-    "artifact_type": "image",
-    "size_bytes": 120465,
-    "visual_scope": "dynamic",
-    "width_px": 2178,
-    "height_px": 1122,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "stress_max_principal_multipanel.png",
-    "artifact_type": "image",
-    "size_bytes": 479196,
-    "visual_scope": "dynamic",
-    "width_px": 5373,
-    "height_px": 1243,
-    "review_dimension_passed": true
-  },
-  {
     "file": "thumbnail.png",
     "artifact_type": "image",
     "size_bytes": 206690,
     "visual_scope": "dynamic",
     "width_px": 6981,
     "height_px": 1236,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "velocity_with_holes.png",
-    "artifact_type": "image",
-    "size_bytes": 126465,
-    "visual_scope": "dynamic",
-    "width_px": 2291,
-    "height_px": 1123,
     "review_dimension_passed": true
   }
 ]

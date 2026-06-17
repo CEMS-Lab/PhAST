@@ -13,7 +13,7 @@ python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --outpu
 ```
 
 Use `python -m phast explain-config <config.yaml>` before launching longer
-runs. For HPC or batch work, submit the same YAML deck and keep the resulting
+runs. For HPC or batch work, submit the same YAML configuration and keep the resulting
 metadata, manifests, and comparison artifacts together.
 
 ## Expected outputs

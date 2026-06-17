@@ -108,7 +108,7 @@ Is the problem pure Mode I tension?
 
 ### Benchmark Acceptance Metadata
 
-Customer-facing and paper-facing configs should include a top-level
+primary public and paper-facing configs should include a top-level
 `acceptance:` block. It is structured but extensible metadata for reviewers and
 post-processing scripts; it does not change the solve. PhAST validates the
 standard fields while preserving custom benchmark-specific keys. Use it to

@@ -106,10 +106,10 @@ the same configuration falls back to `scipy` SuperLU for sparse direct
 mechanics; if the problem is above the configured sparse-DOF threshold or no
 direct backend is available, it falls back to `cg`.
 
-Timing comparisons must be regenerated with the current YAML deck, backend
+Timing comparisons must be regenerated with the current YAML configuration, backend
 versions, hardware, and output settings before citation. See
 `docs/performance_reproducibility/index.md` for the public reporting checklist.
-See `examples/solid_mechanics/` for the linear elastic plate demo and the
+See `examples/solid_mechanics_beta/` for the linear elastic plate demo and the
 neo-Hookean extension; `tests/test_sparse_solve_autograd.py` exercises the
 gradient via finite differences in the development test suite.
 
@@ -118,9 +118,9 @@ gradient via finite differences in the development test suite.
 **Tutorial primitives** (small, self-contained — exercise `SparseSolveAutograd`
 end-to-end on a plate geometry):
 
-- `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` — plane-strain CST cantilever;
+- `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml` — plane-strain CST cantilever;
   clamp left, point load right; writes response CSV, plot, thumbnail, and manifest while verifying autograd through E.
-- `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml` — Newton iteration over
+- `python -m phast run examples/solid_mechanics_beta/neohookean_plate/config.yaml` — Newton iteration over
   compressible neo-Hookean; same geometry as the linear demo with 5 load
   increments, with load-response and convergence outputs.
 

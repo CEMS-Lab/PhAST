@@ -47,7 +47,7 @@ scripts rather than by `python -m phast run` directly.
 The active HPC launcher for the peak-window manifest is maintained as a
 site-specific scheduler template outside the public repository. It requires a
 functional PETSc/MUMPS backend by default and should fail fast if the runtime
-smoke test does not select `mumps`.
+validation test does not select `mumps`.
 
 ## Reproducibility Index
 
@@ -66,7 +66,7 @@ Use this compact list when re-running each quasistatic benchmark family.
 | `manifests/QS_sens_tpb_rescue_visuals.yaml` | Private site scheduler template |
 
 A machine-readable contract file mirrors this table and can be used for scripted
-reruns or smoke checks:
+reruns or validation checks:
 
 - `configs/benchmarks/quasistatic/reproducibility_contracts.yaml`
 

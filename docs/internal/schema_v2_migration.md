@@ -1,7 +1,7 @@
 # Schema v2 Migration
 
 `schema_version: 2` is an additive workflow-contract schema. It lets PhAST
-compile a customer-style input deck into the internal `ProblemSpec` contract
+compile a researcher-style declarative configuration into the internal `ProblemSpec` contract
 used by YAML adapters, the Python API, validation, and result planning.
 
 v1 YAML remains supported. Do not rename existing v1 YAML keys when maintaining
@@ -17,15 +17,15 @@ python -m phast run path/to/schema_v2.yaml --validate-only
 ```
 
 Direct schema-v2 execution is available for two deliberately narrow slices:
-supported quasi-static phase-field fracture decks and promoted solid-mechanics
+supported quasi-static phase-field fracture configurations and promoted solid-mechanics
 examples that declare `solver.type: solid_mechanics` plus a supported
 `solver.example`, such as `solid_mechanics.linear_plate`. PhAST validates the
 v2 contract and lowers it to the existing v1 compatibility runner shape.
-Unsupported fracture v2 decks, including explicit/dynamic v2 decks, remain
+Unsupported fracture v2 configurations, including explicit/dynamic v2 configurations, remain
 validate-only until each v2-to-runner adapter is deliberately implemented and
 tested.
 
-The v2 deck is not an arbitrary weak-form compiler. It also does not promote beta plasticity/cohesive/interface workflows into a general public schema. Those
+The v2 configuration file is not an arbitrary weak-form compiler. It also does not promote beta plasticity/cohesive/interface workflows into a general public schema. Those
 beta paths remain allowlisted validation contracts or explicit scripts until
 their solver support and output contracts are promoted separately.
 
@@ -47,7 +47,7 @@ The migration target is the internal workflow contract:
 
 The split between materials plus assignments is intentional. Material
 definitions describe constitutive parameters; assignments say which region
-receives each material. This keeps future region-wise material decks explicit
+receives each material. This keeps future region-wise material configurations explicit
 without changing current v1 behavior.
 
 ## Programmatic Migration
@@ -65,9 +65,9 @@ print(yaml.safe_dump(payload, sort_keys=False))
 ```
 
 `problem_spec_to_schema_v2_dict()` is a migration helper, not a broad promise
-that the emitted v2 deck is directly executable. Validate the result with
+that the emitted v2 configuration file is directly executable. Validate the result with
 `python -m phast run path/to/schema_v2.yaml --validate-only`; supported
-quasi-static phase-field fracture decks and promoted solid-mechanics decks can
+quasi-static phase-field fracture configurations and promoted solid-mechanics configurations can
 then run through their compatibility lowering adapters.
 
 Public contract tests roundtrip the YAML-first dynamic, quasi-static, and

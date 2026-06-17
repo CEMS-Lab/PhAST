@@ -182,7 +182,7 @@ For the full schema (every option, defaults, allowed values) see
 
 ## Step 6 -- state the acceptance target
 
-For benchmark or customer-validation runs, add an `acceptance:` block before
+For benchmark or researcher-validation runs, add an `acceptance:` block before
 submitting to a workstation or HPC queue. This block is structured but
 extensible: it records what the run is expected to reproduce, not another set
 of solver controls. PhAST validates the standard fields (`status`,

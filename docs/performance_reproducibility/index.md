@@ -7,10 +7,10 @@ runs.
 
 | Situation | Recommended route |
 |---|---|
-| Validate a public YAML deck | `python -m phast run <config.yaml> --validate-only` |
+| Validate a public YAML configuration | `python -m phast run <config.yaml> --validate-only` |
 | Small or moderate float64 validation run | CPU first, especially when GPUs are queued |
 | Large dynamic trajectory run | CUDA if available and queue wait is reasonable |
-| Quasi-static fracture | `backend: auto`, Jacobi-safe defaults unless the deck pins another tested backend |
+| Quasi-static fracture | `backend: auto`, Jacobi-safe defaults unless the configuration file pins another tested backend |
 | Optional sparse-direct backends | Use PETSc/MUMPS, cuDSS, AmgX, or PyVista only where the capability matrix and local doctor output support them |
 
 When submitting to HPC, prefer CPU nodes for runs that are memory-safe and
@@ -20,7 +20,7 @@ the exact command.
 
 ## Reproducibility checklist
 
-1. Validate the YAML deck.
+1. Validate the YAML configuration.
 2. Run with an explicit `--output_dir`.
 3. Keep `run_manifest.json`, `run_metadata.json`, `run_lockfile.json`, CSVs,
    visuals, and `visual_manifest.json` together.
@@ -36,7 +36,7 @@ See `docs/output_standards/index.md` and
 Performance comparisons are engineering snapshots, not fixed product claims.
 Solver versions, optional backends, hardware, threading, tolerances, mesh
 regeneration, and output settings can all change the result. Rerun the public
-YAML deck and record the generated manifests before using a timing number in a
+YAML configuration and record the generated manifests before using a timing number in a
 paper, proposal, release note, or external comparison.
 
 For fresh timing work, start from the same public entry points used by the
@@ -52,4 +52,4 @@ When publishing a timing comparison, report the exact command, device, PyTorch
 version, mesh size, time step or load-step count, enabled output writers,
 `run_lockfile.json`, and `run_metadata.json`. Avoid reusing older timing tables
 unless the external solvers were rebuilt in release mode and the PhAST run was
-regenerated with the current public deck.
+regenerated with the current public configuration file.

@@ -49,10 +49,10 @@ Validation checks the setup without launching the full solve. For imported
 meshes, this is where you catch missing or misspelled region names before
 submitting a longer job.
 
-For YAML decks, the equivalent preflight is:
+For YAML configurations, the equivalent preflight is:
 
 ```bash
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --validate-only
 ```
 
 ## 3. Run the Solve
@@ -86,10 +86,10 @@ invent missing derived fields.
 
 ## 5. Use YAML for Reproducible Runs
 
-The equivalent public example is kept as a YAML input deck:
+The equivalent public example is kept as a YAML declarative configuration:
 
 ```bash
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 

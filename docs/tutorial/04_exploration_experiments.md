@@ -65,7 +65,7 @@ diffuse damage band, so the rule of thumb is `l0 >= 2 h`. Pushing
 below that under-resolves the band; pushing above wastes resolution.
 
 ```bash
-# In a copied dynamic SENT YAML deck:
+# In a copied dynamic SENT YAML configuration:
 #   geometry.parameters.h_crack: 0.25
 #   material.overrides.l0:  0.125 / 0.25 / 0.5 / 1.0
 python -m phast run sent_l0_0p125.yaml --device cpu  # under-resolved

@@ -15,7 +15,7 @@ human-facing source of truth.
 
 | Tier | Command shape | Public meaning |
 |---|---|---|
-| YAML-first | `python -m phast run <config.yaml>` | Public runnable input deck with a curated result bundle. |
+| YAML-first | `python -m phast run <config.yaml>` | Public runnable declarative configuration with a curated result bundle. |
 | Script contract | `python <run.py> --output-dir <dir>` | Beta or specialist workflow not yet expressible through the generic YAML runner. |
 | Diagnostic | Case-specific | Developer evidence only; not a gallery example until deliberately promoted. |
 
@@ -87,7 +87,7 @@ comparison report and pass/fail metrics are present.
 
 ## YAML-first rules
 
-For public YAML examples, `config.yaml` is the exact input deck. It must be
+For public YAML examples, `config.yaml` is the exact declarative configuration. It must be
 checked in and runnable from the repository root:
 
 ```bash
@@ -110,7 +110,7 @@ The YAML must document or encode:
   comparison settings.
 
 Use the fluent `phast.Problem` API to author new models when convenient, but
-the promoted example is reproduced through the saved YAML deck.
+the promoted example is reproduced through the saved YAML configuration.
 
 ## Script-contract rules
 
@@ -127,7 +127,7 @@ They must include:
 - a claim-boundary paragraph in the README.
 
 If a script-contract workflow becomes a public standard path, promote it by adding
-a YAML deck, updating `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, and adding a
+a YAML configuration, updating `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, and adding a
 test for the expected artifacts.
 
 ## Tutorial readiness flags
@@ -336,7 +336,7 @@ for large dynamic runs, long quasi-static validations, and batch regeneration.
 
 ### Submit one example
 
-Use validated YAML decks locally first. Site-specific Slurm templates and
+Use validated YAML configurations locally first. Site-specific Slurm templates and
 queue wrappers are maintained outside the public repository:
 
 ```bash
@@ -360,7 +360,7 @@ before any site-specific scheduler wrapper is used.
 
 Before submitting a batch:
 
-1. run `--validate-only` on each YAML deck;
+1. run `--validate-only` on each YAML configuration;
 2. run your site scheduler wrapper in dry-run or plan-only mode for GPU jobs;
 3. confirm output roots and log paths are public-safe or internal-only;
 4. record the issue number or review target in the job manifest.

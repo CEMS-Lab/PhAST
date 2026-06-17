@@ -47,13 +47,13 @@ Validate public YAML decks without running the full simulations:
 ```bash
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --validate-only
 ```
 
 Run a small public solid-mechanics example and inspect its result directory:
 
 ```bash
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate
 python - <<'PY'
 import phast
 result = phast.load_result('runs/linear_plate')

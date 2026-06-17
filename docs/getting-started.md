@@ -4,7 +4,7 @@ This page gives the shortest path from a clone to a validated run. Use the
 deeper user guide when you need to design a new geometry, choose solver
 backends, or interpret benchmark outputs.
 
-Use the fluent `phast.Problem` API to author new models. Use YAML decks for public examples, reproducibility, batch/HPC runs, and sharing exact simulations.
+Use the fluent `phast.Problem` API to author new models. Use YAML configurations for public examples, reproducibility, batch/HPC runs, and sharing exact simulations.
 
 ## 1. Install
 
@@ -68,7 +68,7 @@ print(result.metadata())
 ```
 
 For public examples, reproducible sharing, CI, and HPC queues, validate the
-YAML input deck that will be run:
+YAML declarative configuration that will be run:
 
 ```bash
 python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --validate-only

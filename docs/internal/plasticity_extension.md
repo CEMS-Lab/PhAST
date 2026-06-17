@@ -4,10 +4,10 @@ Status, 2026-06-10: beta validation slices are implemented and merged. This is
 no longer only a research scoping note. The solver now has a standalone J2
 material-point kernel, sparse quasi-static mesh-level J2 mechanics with
 per-element state/commit/rollback, a guarded T3 `j2_isotropic` + AT2 ductile
-phase-field smoke path, ductile plastic-work validation examples, and
+phase-field validation path, ductile plastic-work validation examples, and
 reproducible plasticity/interface YAML contracts.
 
-Customer boundary: this is suitable for a technical-preview / beta validation
+researcher boundary: this is suitable for a technical-preview / beta validation
 release. It is not yet a mature Abaqus/COMSOL-equivalent ductile fracture
 product, and it does not yet provide a fully coupled plasticity + PF-CZM +
 cohesive-interface production workflow.
@@ -28,7 +28,7 @@ Implemented beta capabilities:
   backend-selectable validation harnesses.
 - Ductile-driving AT2 damage validation, where accumulated plastic work
   contributes to the phase-field driving history.
-- Guarded quasi-static T3 `j2_isotropic` + AT2 staggered smoke coverage.
+- Guarded quasi-static T3 `j2_isotropic` + AT2 staggered validation coverage.
 - Reproducibility contracts in
   `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml`.
 

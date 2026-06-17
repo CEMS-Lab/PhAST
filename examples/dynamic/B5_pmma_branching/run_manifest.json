@@ -47,24 +47,7 @@
     "crack_tip.csv",
     "initial_conditions.png",
     "thumbnail.png",
-    "damage_final.png",
-    "damage_multipanel.png",
-    "damage_profiles_multi.png",
-    "compare.png",
-    "space_time_diagram.png",
-    "damage_profile.png",
-    "displacement_multipanel.png",
-    "stress_max_principal_multipanel.png",
-    "energy_balance.png",
-    "energy_normalized.png",
-    "dissipation_rate.png",
-    "dissipation_vs_velocity.png",
-    "crack_velocity_vs_time.png",
-    "crack_velocity_vs_position.png",
-    "max_damage_vs_time.png",
-    "mesh_convergence.png",
-    "velocity_with_holes.png",
-    "velocity_parametric.png"
+    "damage_final.png"
   ],
   "notes": "Promoted from the specific B5a PMMA dU=0.05 reference environment archive requested for public B5 visual evidence. Raw job clutter stays external."
 }

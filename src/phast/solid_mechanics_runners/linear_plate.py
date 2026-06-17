@@ -29,11 +29,9 @@ from ._common import (
     parse_config_arg,
     prepare_output_dir,
     save_field_animation,
-    save_response_animation,
     write_run_lockfile,
     write_run_metadata,
     write_solid_setup_preview,
-    write_solid_zarr,
     write_manifest,
 )
 
@@ -219,7 +217,7 @@ def run(config_path: str | Path | None = None):
     strain_energy_density = 0.5 * torch.sum(strains * stresses, dim=1)
     energy_nodal = mesh.elem_to_node(strain_energy_density)
 
-    save_deformed_shape(
+    deformation_scale = save_deformed_shape(
         mesh,
         u_nodes,
         out_dir / "deformed_shape.png",
@@ -257,16 +255,7 @@ def run(config_path: str | Path | None = None):
     shutil.copyfile(out_dir / "strain_energy.png", out_dir / "strain_final.png")
     ramp = torch.linspace(0.0, 1.0, 9, dtype=torch.float64)
     vm_steps = [factor * vm_nodal for factor in ramp]
-    save_response_animation(
-        out_dir,
-        csv_rows=[
-            (abs(float(factor * u_tip.detach().item())) * 1.0e6, abs(float(factor * P)))
-            for factor in ramp
-        ],
-        xlabel=r"$|u_y^\mathrm{tip}|$ [$\mu$m]",
-        ylabel=r"$|P|$ [N]",
-        title="Linear plate response evolution",
-    )
+    u_steps = [factor * u_nodes for factor in ramp]
     save_field_animation(
         out_dir,
         mesh=mesh,
@@ -274,25 +263,8 @@ def run(config_path: str | Path | None = None):
         title="Linear plate stress evolution",
         colorbar_label=r"$\sigma_\mathrm{vm}$ [Pa]",
         cmap="magma",
-    )
-    write_solid_zarr(
-        out_dir,
-        mesh=mesh,
-        steps=[
-            {
-                "step": int(i),
-                "load_fraction": float(factor),
-                "tip_displacement_m": float(factor * u_tip.detach().item()),
-                "force_N": float(factor * P),
-            }
-            for i, factor in enumerate(ramp)
-        ],
-        fields={
-            "displacement": torch.stack([factor * u_nodes for factor in ramp]),
-            "displacement_magnitude": torch.stack([factor * disp_mag for factor in ramp]),
-            "von_mises": torch.stack(vm_steps),
-            "strain_energy": torch.stack([factor * energy_nodal for factor in ramp]),
-        },
+        displacements=u_steps,
+        deformation_scale=deformation_scale,
     )
     write_solid_setup_preview(
         out_dir,
@@ -311,7 +283,6 @@ def run(config_path: str | Path | None = None):
         "stress_final.png",
         "strain_energy.png",
         "strain_final.png",
-        "response_evolution.mp4",
         "field_evolution.mp4",
         "thumbnail.png",
     ]
@@ -325,7 +296,7 @@ def run(config_path: str | Path | None = None):
     write_run_lockfile(
         out_dir,
         config=cfg,
-        command="python examples/solid_mechanics/linear_plate/run.py",
+        command="python examples/solid_mechanics_beta/linear_plate/run.py",
     )
 
     metrics = {
@@ -339,7 +310,7 @@ def run(config_path: str | Path | None = None):
     write_manifest(
         out_dir,
         example="solid_mechanics.linear_plate",
-        command="python examples/solid_mechanics/linear_plate/run.py",
+        command="python examples/solid_mechanics_beta/linear_plate/run.py",
         config=cfg,
         metrics=metrics,
         files=[
@@ -353,10 +324,7 @@ def run(config_path: str | Path | None = None):
             "stress_final.png",
             "strain_energy.png",
             "strain_final.png",
-            "response_evolution.mp4",
             "field_evolution.mp4",
-            "training_data.zarr",
-            "zarr_manifest.json",
             "thumbnail.png",
             "visual_manifest.json",
             "run_metadata.json",

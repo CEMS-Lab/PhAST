@@ -1,42 +1,20 @@
 # B2 Kalthoff-Winkler
 
-Dynamic Kalthoff-Winkler impact example based on Borden et al. (2012). The public folder contains the runnable YAML deck and lightweight mesh-3 evidence from the canonical half-plate reference environment run `kalthoff_halfplate_19148/mesh3_h0.25`.
+Dynamic Kalthoff-Winkler impact example based on Borden et al. (2012). The public folder contains the runnable YAML configuration and lightweight mesh-3 evidence from the canonical half-plate reference environment run `kalthoff_halfplate_19148/mesh3_h0.25`.
 
 All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic diagnostics are intentionally excluded.
 
-## What This Example Solves
+## 1. Problem Description
 
 - 100 mm x 100 mm half-plate Kalthoff-Winkler impact geometry with bottom symmetry.
 - Material model: maraging steel, AT2 phase field, spectral split, plane strain, explicit dynamics.
 - Loading: x-direction velocity impact on the left impact set, ramped to 16.5 m/s.
 - Reference evidence: mesh-3 initial conditions, final damage, field damage animation, energy response animation, history, energy, crack-tip, timing, and run metadata.
 
-The YAML deck is the canonical public input for this example. The reference evidence was produced in the reference environment with a single A100 80 GB GPU; the mesh-3 run metadata records 35,487 nodes, 70,447 elements, 11,775 explicit steps, and 79.22 s wall time. Do not regenerate this full benchmark during lightweight contract checks.
+The YAML configuration is the canonical public input for this example. The reference evidence was produced in the reference environment with a single A100 80 GB GPU; the mesh-3 run metadata records 35,487 nodes, 70,447 elements, 11,775 explicit steps, and 79.22 s wall time. Do not regenerate this full benchmark during lightweight contract checks.
 
-## Files
 
-| File | Purpose |
-| --- | --- |
-| `README.md` | This contract-shaped public example guide. |
-| `config.yaml` | Canonical public YAML input deck for `python -m phast run`. |
-| `crack_tip.csv` | Mesh-3 crack-tip tracking output. |
-| `damage_evolution.gif` | GitHub-renderable mesh-3 damage evolution animation generated from the retained H5 trajectory in the reference environment. |
-| `damage_evolution.mp4` | MP4 version of the mesh-3 damage evolution animation. |
-| `damage_final.png` | Mesh-3 final damage field. |
-| `energy.csv` | Mesh-3 dynamic energy history output. |
-| `history.csv` | Mesh-3 lightweight damage/history output. |
-| `initial_conditions.png` | Mesh-3 initial-condition visual. |
-| `mesh.geo` | Gmsh geometry/provenance file for the half-plate h=0.25 mm mesh. |
-| `mesh.msh` | Exact reference mesh exported from the reference environment H5 trajectory; matches `run_metadata.json` node and element counts. |
-| `run_fluent.py` | Optional Python/manual setup companion mirroring the public YAML deck. |
-| `run_lockfile.json` | Reproducibility lockfile with resolved public config and reference run metadata. |
-| `run_manifest.json` | Public manifest describing curated source, reference source, files, and omitted large artifacts. |
-| `run_metadata.json` | Recorded mesh-3 run metadata for the reference output bundle. |
-| `thumbnail.png` | Compact preview image, currently the final damage field. |
-| `timing_per_step.csv` | Mesh-3 per-step timing output. |
-| `visual_manifest.json` | Manifest for reference visual artifacts, dimensions, sizes, and media checks. |
-
-## Run The Canonical YAML Deck
+## Run The Canonical YAML configuration
 
 From the repository root:
 
@@ -46,7 +24,7 @@ python -m phast doctor
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
 ```
 
-Run the full YAML deck only when you intend to regenerate the dynamic result bundle:
+Run the full YAML configuration only when you intend to regenerate the dynamic result bundle:
 
 ```bash
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml \
@@ -61,7 +39,7 @@ python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml \
   --output_dir examples/dynamic/B2_kalthoff_winkler/run_quick
 ```
 
-Do not treat the short check as benchmark evidence; it is only a quick check for the input deck and runner plumbing.
+Do not treat the short check as benchmark evidence; it is only a quick check for the declarative configuration and runner plumbing.
 
 To regenerate a fresh Gmsh mesh from the public geometry recipe:
 
@@ -75,7 +53,7 @@ The checked-in `mesh.msh` is the authoritative executed mesh exported from the r
 
 ## How The YAML Is Used
 
-`python -m phast run ...` reads `config.yaml`, validates the schema, applies any CLI overrides, resolves the deck into runtime objects, writes the resolved config into the output directory, and then starts the explicit dynamic solver. The main YAML blocks map to runtime setup as follows:
+`python -m phast run ...` reads `config.yaml`, validates the schema, applies any CLI overrides, resolves the configuration file into runtime objects, writes the resolved config into the output directory, and then starts the explicit dynamic solver. The main YAML blocks map to runtime setup as follows:
 
 | YAML block | Runtime meaning |
 | --- | --- |
@@ -87,11 +65,11 @@ The checked-in `mesh.msh` is the authoritative executed mesh exported from the r
 | `solver` | Explicit dynamics settings such as `solver_type`, `dt_safety`, and damage cadence. |
 | `output` | Requested trajectory, CSV, animation, print-cadence, and fast-output settings. |
 
-Use YAML for reproduction, review, and batch/accelerated compute execution because the deck is the artifact copied with run outputs and mirrored in the lockfile.
+Use YAML for reproduction, review, and batch/accelerated compute execution because the configuration file is the artifact copied with run outputs and mirrored in the lockfile.
 
 ## Run Without YAML
 
-Use `run_fluent.py` when you want to assemble the same explicit-dynamics model directly through Python instead of loading the YAML deck:
+Use `run_fluent.py` when you want to assemble the same explicit-dynamics model directly through Python instead of loading the YAML configuration:
 
 ```bash
 python examples/dynamic/B2_kalthoff_winkler/run_fluent.py \
@@ -106,7 +84,7 @@ python examples/dynamic/B2_kalthoff_winkler/run_fluent.py \
   --output-dir examples/dynamic/B2_kalthoff_winkler/run_fluent_quick
 ```
 
-The YAML deck remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 

@@ -24,7 +24,7 @@ supporting extension.
 |---|---|---|
 | `B2_kalthoff_winkler` | Mesh-1 curated outputs exist; local H5 trajectory is not distributed. | Publish flat curated CSV/PNG/metadata outputs, not `external trajectory store`. |
 | `B3_dynamic_sent` | Curated outputs exist; config validates with an `h/l0 = 1` warning. | Publish as a runnable dynamic baseline verification example unless finer evidence is promoted. |
-| `B5_pmma_branching` | Representative PMMA parametric-study result retained as a flat public folder. | Publish the selected deck and curated visuals only. Keep other parametric studies outside the public repository. |
+| `B5_pmma_branching` | Representative PMMA parametric-study result retained as a flat public folder. | Publish the selected configuration file and curated visuals only. Keep other parametric studies outside the public repository. |
 | `B6_perforated_*` | Perforated-plate variants retained as flat public folders. | Publish only the B6 public folders; do not expose old naming or raw run dumps. |
 | `B7_dynamic_crack_branching_comsol` | Curated dynamic branching comparison package. | Publish PNG/CSV/report/metadata only. Link to vendor documentation instead of distributing proprietary binaries or vendor PDFs. |
 

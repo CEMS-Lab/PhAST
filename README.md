@@ -6,13 +6,13 @@
 
 <p align="center">
   <strong>Phase-field Autograd Solver in Torch</strong><br>
-  A GPU-accelerated, differentiable phase-field fracture solver built natively on PyTorch.
+  A State-of-the-Art (SOTA) differentiable finite element framework for phase-field fracture mechanics built natively on PyTorch.
 </p>
 
 <p align="center">
   <a href="https://cems-lab.github.io/PhAST/">Documentation</a> |
   <a href="docs/installation.md">Installation</a> |
-  <a href="#quick-start">Quickstart</a> |
+  <a href="#quickstart">Quickstart</a> |
   <a href="docs/example-gallery.md">Examples</a> |
   <a href="CITATION.cff">Citation</a>
 </p>
@@ -27,29 +27,21 @@
 
 ---
 
-PhAST is a state-of-the-art differentiable finite-element framework for 2D
-phase-field fracture mechanics, explicit dynamics, and solid mechanics. It
-combines phase-field fracture workflows with familiar PyTorch execution, so
-mechanics, damage, and postprocessing pipelines can run through inspectable
-tensor operations.
+PhAST is a PyTorch-native finite-element solver for 2D phase-field fracture, explicit dynamics, and solid mechanics. It embeds phase-field fracture workflows within familiar PyTorch execution graphs, enabling mechanics, damage evolution, and post-processing pipelines to run as inspectable tensor operations.
 
-The public release focuses on brittle phase-field fracture and foundational
-solid mechanics, with advanced plasticity, cohesive-interface, and PF-CZM
-capabilities documented in the
-[capability matrix](docs/user_guide/capability_matrix.md). Use the fluent
-`phast.Problem` API to author models in Python, or use declarative YAML decks
-for batch runs, HPC jobs, and shared simulations.
+The public release provides robust support for brittle phase-field fracture and foundational solid mechanics. Advanced implementations covering plasticity, cohesive-interfaces, and PF-CZM capabilities are detailed in the [capability matrix](docs/user_guide/capability_matrix.md).
+
+Models can be authored programmatically via the fluent `phast.Problem` Python API, or executed declaratively via YAML configurations for batch processing, HPC submission, and exact reproducibility.
 
 ## Core Strengths
 
-- **PyTorch-native mechanics.** Mechanics, damage, and solid-mechanics routines use ordinary PyTorch tensors, making device placement and precision choices explicit.
-- **Phase-field fracture workflows.** Dynamic impact, crack branching, quasi-static fracture, and cohesive-interface studies share a consistent solver and output style.
-- **Python and YAML entry points.** Author models with the fluent `phast.Problem` API or run declarative YAML decks for batch execution and shared simulations.
-- **Animation-led examples.** Curated examples include damage evolution, response histories, final fields, and lightweight visual summaries.
-- **Result inspection.** `phast.load_result` reads stored manifests, histories, visuals, mesh metadata, and trajectory fields when present.
-- **Documented capabilities.** The capability matrix summarizes supported physics, optional backends, and current feature coverage.
+- **PyTorch-Native Mechanics:** Mechanics, damage evolution, and foundational routines use PyTorch tensors, offering explicit control over device placement (CPU/GPU) and precision.
+- **Unified Phase-Field Workflows:** Dynamic impact, crack branching, and quasi-static fracture studies share a consistent algorithmic framework and output schema.
+- **Dual Authoring Interfaces:** Formulate models using the `phast.Problem` API for iterative exploration, or deploy declarative YAML configurations for batch execution.
+- **Curated Validation Suite:** Promoted examples include load-displacement histories, final damage fields, and strict-parity checks against reference literature.
+- **Standardized Post-Processing:** `phast.load_result` automatically handles stored manifests, CSV histories, and Zarr trajectory fields.
 
-## Quick Start
+## Quickstart
 
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
@@ -57,30 +49,21 @@ cd PhAST
 pip install -e .
 
 python -m phast doctor
-python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only
-python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
-python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate
 ```
 
-Inspect an input deck before launching a solve:
+Verify the installation by running a foundational solid mechanics case:
+
+```bash
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate
+```
+
+To inspect the structural definition of an input deck before execution:
 
 ```bash
 python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
 ```
 
-Read an existing result directory:
-
-```python
-import phast
-
-result = phast.load_result("runs/linear_plate")
-print(result.metadata())
-print(result.visuals())
-print(result.history_names())
-```
-
-## Visual Examples
+## Reproducible Workflows
 
 <table>
   <tr>
@@ -95,32 +78,31 @@ print(result.history_names())
     </td>
   </tr>
   <tr>
-    <td><strong>Kalthoff-Winkler impact</strong></td>
-    <td><strong>Quasi-static fracture</strong></td>
-    <td><strong>Dynamic crack branching</strong></td>
+    <td align="center"><strong>Kalthoff-Winkler Impact</strong></td>
+    <td align="center"><strong>Quasi-Static Fracture</strong></td>
+    <td align="center"><strong>Dynamic Crack Branching</strong></td>
   </tr>
 </table>
 
-| Workflow | What to run | What you get |
+| Simulation Category | Execution Command | Expected Artifacts |
 |---|---|---|
-| Dynamic crack branching | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --output_dir runs/B7_dynamic_crack_branching_comsol` | Crack-branching comparison package with curated damage fields, energy outputs, metadata, and visual summaries. |
-| Dynamic fracture | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | Explicit crack propagation with generated run metadata, CSV histories, damage plots, and trajectory/provenance outputs. |
-| Quasi-static fracture | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml` | Load-displacement response, final damage, comparison-ready artifacts. |
-| Solid mechanics | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` | Mesh-level FEA fields, response curves, visual manifest, result metadata. |
+| **Dynamic Crack Branching** | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` | Curated damage fields, kinetic energy histories, metadata, and visual summaries. |
+| **Dynamic Fracture** | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` | Explicit crack propagation states, CSV histories, damage plots, and Zarr trajectory outputs. |
+| **Quasi-Static Fracture** | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml` | Load-displacement response curves, final phase-field damage, and parity comparison artifacts. |
+| **Solid Mechanics** | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml` | Mesh-level FEA fields, nodal displacements, visual manifests, and structured metadata. |
 
-Browse the full [example gallery](docs/example-gallery.md) for runnable
-YAML-first examples and visual result bundles.
+Browse the full [example gallery](docs/example-gallery.md) for the complete list of runnable YAML-first benchmarks.
 
-## Documentation & Workflows
+## Documentation & API
 
-| Goal | Use | Start here |
+| Objective | Interface | Documentation Link |
 |---|---|---|
-| Author a new forward model | Fluent `phast.Problem` | [Python API](docs/user_guide/python_api.md) |
-| Run public examples or submit to HPC | YAML `config.yaml` | [YAML workflow](docs/user_guide/yaml_workflow.md) |
-| Inspect a completed run | `phast.load_result(path)` | [Results API](docs/user_guide/results_api.md) |
-| Check supported physics and backends | Capability matrix | [Capability matrix](docs/user_guide/capability_matrix.md) |
+| Author a forward model | Fluent `phast.Problem` API | [Python API](docs/user_guide/python_api.md) |
+| Execute public benchmarks | Declarative `config.yaml` | [YAML Workflow](docs/user_guide/yaml_workflow.md) |
+| Post-process simulation data | `phast.load_result(path)` | [Results API](docs/user_guide/results_api.md) |
+| Review supported physics | Verification Matrix | [Capability Matrix](docs/user_guide/capability_matrix.md) |
 
-Minimal Python authoring:
+### Programmatic Authoring
 
 ```python
 import phast
@@ -138,14 +120,12 @@ problem = (
 spec = problem.to_spec()
 ```
 
-Use Python when designing a new model interactively. Use YAML when you want an
-exact input deck for sharing, CI, or cluster runs. Both paths write standard
-result directories that can be inspected with `phast.load_result(...)`.
-
-Result inspection:
+### Result Inspection
 
 ```python
-result = phast.load_result("runs/notched_holed_plate")
+import phast
+
+result = phast.load_result("runs/linear_plate")
 print(result.metadata())
 print(result.visuals())
 print(result.history_names())
@@ -155,17 +135,16 @@ print(result.history_names())
 
 | Path | Purpose |
 |---|---|
-| `src/phast/` | Solver package, mechanics/damage kernels, workflow helpers, CLI entry points. |
-| `examples/` | Runnable examples with YAML decks, visuals, and result metadata. |
-| `configs/` | Benchmark YAMLs, schema files, and reusable configuration templates. |
-| `docs/` | Sphinx documentation, gallery, user guide, and capability matrix. |
-| `assets/` | Lightweight README and documentation visuals. |
-| `tools/` | Small public maintenance utilities for regenerating curated visuals. |
-| `.github/` | Public issue templates, PR template, code ownership, and GitHub Actions workflows. |
-| `conda-recipe/` | Experimental conda packaging recipe and submission notes. |
-| `notebooks/` | Lightweight notebook entry points for hosted or browser-based quickstarts. |
-| `llms.txt`, `.cursorrules` | Agent-facing repository orientation and coding constraints. |
-| `install.sh` | Convenience installer; prefer documented `pip install -e .` and `python -m phast ...` commands for normal use. |
+| `src/phast/` | Core PyTorch solver packages, mechanics/damage kernels, and CLI entry points. |
+| `examples/` | Publicly validated simulations featuring declarative YAML configurations and visual references. |
+| `configs/` | JSON schema definitions and reusable configuration templates. |
+| `docs/` | Comprehensive Sphinx documentation, capability matrices, and architectural guides. |
+| `assets/` | Lightweight visual assets for repository documentation. |
+| `tools/` | Maintenance utilities for regenerating documentation artifacts. |
+| `.github/` | Issue templates, Pull Request guidelines, and CI/CD Action workflows. |
+| `conda-recipe/` | Build instructions and recipes for conda-forge distribution. |
+| `notebooks/` | Interactive Colab/Jupyter entry points for zero-installation onboarding. |
+| `llms.txt`, `.cursorrules` | Agent-facing repository orientation and rigorous coding constraints. |
 
 ## Build The Docs
 
@@ -179,30 +158,10 @@ Hosted documentation is published at <https://cems-lab.github.io/PhAST/>.
 
 ## Citation
 
-Use [`CITATION.cff`](CITATION.cff) when citing PhAST. Paper-specific links will
-be updated as manuscripts and archived releases become public.
+Use [`CITATION.cff`](CITATION.cff) when referencing the PhAST solver framework. Links to specific technical manuscripts will be updated as accompanying articles become public.
 
 ## Acknowledgments and AI Usage
 
-The theoretical formulations, phase-field continuum equations, constitutive
-assumptions, and numerical discretization choices in PhAST are derived from the
-established computational solid mechanics literature and were selected,
-interpreted, and validated by the human authors, as described in the associated
-article and documentation. AI coding assistants, including Codex, GitHub
-Copilot, and Claude/Gemini-class tools, were used as auxiliary software
-engineering aids for tasks such as Python boilerplate generation, script
-refactoring, docstring and documentation formatting, unit-test scaffolding, and
-data-pipeline organization. These tools did not formulate the physics or define
-the solver claims. The authors reviewed and verified the computational
-mechanics kernels, benchmark configurations, and validation artifacts, and take
-full responsibility for the correctness, limitations, and scientific content of
-the codebase.
+The theoretical formulations, phase-field continuum equations, constitutive assumptions, and numerical discretization choices in PhAST are derived from the established computational solid mechanics literature and were selected, interpreted, and validated by the human authors, as described in the associated article and documentation. AI coding assistants, including Codex, GitHub Copilot, and Claude/Gemini-class tools, were used as auxiliary software engineering aids for tasks such as Python boilerplate generation, script refactoring, docstring and documentation formatting, unit-test scaffolding, and data-pipeline organization. These tools did not formulate the physics or define the solver claims. The authors reviewed and verified the computational mechanics kernels, benchmark configurations, and validation artifacts, and take full responsibility for the correctness, limitations, and scientific content of the codebase.
 
-PhAST is also organized with modern agent-assisted scientific computing in
-mind. Machine-readable manifests, structured result metadata, headless CLI/API
-entry points, and repository-level guidance files such as `llms.txt` and
-`.cursorrules` are provided so human researchers and their software agents can
-inspect, reproduce, and extend simulations without relying on hidden local
-state. These files are engineering aids; the scientific claims and solver
-validity remain governed by the documented formulations, tests, and validation
-artifacts above.
+PhAST is also organized with modern agent-assisted scientific computing in mind. Machine-readable manifests, structured result metadata, headless CLI/API entry points, and repository-level guidance files such as `llms.txt` and `.cursorrules` are provided so human researchers and their software agents can inspect, reproduce, and extend simulations without relying on hidden local state. These files are engineering aids; the scientific claims and solver validity remain governed by the documented formulations, tests, and validation artifacts above.

@@ -2,7 +2,7 @@ schema_version: 1
 manifest_type: reproducibility_contract
 purpose: Reproducible validation contracts for plasticity, cohesive, PF-CZM, and diffuse-interface examples.
 base_paths:
-  examples: examples/plasticity_interface
+  examples: examples/plasticity_interface_beta
   outputs: outputs/plasticity_interface
   visual_requirements: docs/output_standards/index.md
 defaults:
@@ -21,10 +21,10 @@ defaults:
 runs:
   - id: j2_validation
     family: plasticity
-    script: examples/plasticity_interface/run_j2_validation.py
+    script: examples/plasticity_interface_beta/run_j2_validation.py
     launcher:
       - python
-      - examples/plasticity_interface/run_j2_validation.py
+      - examples/plasticity_interface_beta/run_j2_validation.py
       - --output-dir
       - outputs/plasticity_interface/j2_validation
     required_artifacts:
@@ -37,10 +37,10 @@ runs:
 
   - id: ductile_pf_plasticity
     family: ductile_phase_field
-    script: examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
+    script: examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py
     launcher:
       - python
-      - examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
+      - examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py
       - --output-dir
       - outputs/plasticity_interface/ductile_pf_plasticity
       - --backend
@@ -69,10 +69,10 @@ runs:
 
   - id: ductile_pf_sensitivity
     family: ductile_phase_field
-    script: examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
+    script: examples/plasticity_interface_beta/run_ductile_pf_sensitivity_study.py
     launcher:
       - python
-      - examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
+      - examples/plasticity_interface_beta/run_ductile_pf_sensitivity_study.py
       - --output-dir
       - outputs/plasticity_interface/ductile_pf_sensitivity
     required_artifacts:
@@ -90,10 +90,10 @@ runs:
 
   - id: diffuse_interphase
     family: diffuse_interface
-    script: examples/plasticity_interface/run_diffuse_interphase_validation.py
+    script: examples/plasticity_interface_beta/run_diffuse_interphase_validation.py
     launcher:
       - python
-      - examples/plasticity_interface/run_diffuse_interphase_validation.py
+      - examples/plasticity_interface_beta/run_diffuse_interphase_validation.py
       - --output-dir
       - outputs/plasticity_interface/diffuse_interphase
     required_artifacts:
@@ -107,10 +107,10 @@ runs:
 
   - id: solid_interface_fracture
     family: diffuse_interface
-    script: examples/plasticity_interface/run_solid_interface_fracture_examples.py
+    script: examples/plasticity_interface_beta/run_solid_interface_fracture_examples.py
     launcher:
       - python
-      - examples/plasticity_interface/run_solid_interface_fracture_examples.py
+      - examples/plasticity_interface_beta/run_solid_interface_fracture_examples.py
       - --output-dir
       - outputs/plasticity_interface/solid_interface_fracture
     expected_cases:
@@ -143,10 +143,10 @@ runs:
 
   - id: solver_driven_interface_fracture
     family: diffuse_interface
-    script: examples/plasticity_interface/run_solver_driven_interface_fracture_validation.py
+    script: examples/plasticity_interface_beta/run_solver_driven_interface_fracture_validation.py
     launcher:
       - python
-      - examples/plasticity_interface/run_solver_driven_interface_fracture_validation.py
+      - examples/plasticity_interface_beta/run_solver_driven_interface_fracture_validation.py
       - --output-dir
       - outputs/plasticity_interface/solver_driven_interface_fracture
     expected_cases:
@@ -180,10 +180,10 @@ runs:
 
   - id: cohesive_displacement_jump
     family: cohesive_elements
-    script: examples/plasticity_interface/run_cohesive_displacement_jump_benchmark.py
+    script: examples/plasticity_interface_beta/run_cohesive_displacement_jump_benchmark.py
     launcher:
       - python
-      - examples/plasticity_interface/run_cohesive_displacement_jump_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_displacement_jump_benchmark.py
       - --output-dir
       - outputs/plasticity_interface/cohesive_displacement_jump
     required_artifacts:
@@ -201,10 +201,10 @@ runs:
 
   - id: cohesive_mixed_mode
     family: cohesive_elements
-    script: examples/plasticity_interface/run_cohesive_mixed_mode_benchmark.py
+    script: examples/plasticity_interface_beta/run_cohesive_mixed_mode_benchmark.py
     launcher:
       - python
-      - examples/plasticity_interface/run_cohesive_mixed_mode_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_mixed_mode_benchmark.py
       - --output-dir
       - outputs/plasticity_interface/cohesive_mixed_mode
     required_artifacts:
@@ -222,10 +222,10 @@ runs:
 
   - id: cohesive_contact_compression
     family: cohesive_elements
-    script: examples/plasticity_interface/run_cohesive_contact_compression_benchmark.py
+    script: examples/plasticity_interface_beta/run_cohesive_contact_compression_benchmark.py
     launcher:
       - python
-      - examples/plasticity_interface/run_cohesive_contact_compression_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_contact_compression_benchmark.py
       - --output-dir
       - outputs/plasticity_interface/cohesive_contact_compression
     required_artifacts:
@@ -243,10 +243,10 @@ runs:
 
   - id: cohesive_delamination_patch
     family: cohesive_elements
-    script: examples/plasticity_interface/run_cohesive_delamination_patch_benchmark.py
+    script: examples/plasticity_interface_beta/run_cohesive_delamination_patch_benchmark.py
     launcher:
       - python
-      - examples/plasticity_interface/run_cohesive_delamination_patch_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_delamination_patch_benchmark.py
       - --output-dir
       - outputs/plasticity_interface/cohesive_delamination_patch
     required_artifacts:
@@ -265,10 +265,10 @@ runs:
 
   - id: structural_dcb_cohesive
     family: cohesive_elements
-    script: examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
+    script: examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.py
     launcher:
       - python
-      - examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
+      - examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.py
       - --output-dir
       - outputs/plasticity_interface/structural_dcb_cohesive
     required_artifacts:
@@ -290,10 +290,10 @@ runs:
 
   - id: structural_dcb_refinement
     family: cohesive_elements
-    script: examples/plasticity_interface/run_structural_dcb_refinement_study.py
+    script: examples/plasticity_interface_beta/run_structural_dcb_refinement_study.py
     launcher:
       - python
-      - examples/plasticity_interface/run_structural_dcb_refinement_study.py
+      - examples/plasticity_interface_beta/run_structural_dcb_refinement_study.py
       - --output-dir
       - outputs/plasticity_interface/structural_dcb_refinement
     required_artifacts:
@@ -311,10 +311,10 @@ runs:
 
   - id: coupled_pf_cohesive
     family: coupled_brittle_pf_cohesive
-    script: examples/plasticity_interface/run_coupled_pf_cohesive_benchmark.py
+    script: examples/plasticity_interface_beta/run_coupled_pf_cohesive_benchmark.py
     launcher:
       - python
-      - examples/plasticity_interface/run_coupled_pf_cohesive_benchmark.py
+      - examples/plasticity_interface_beta/run_coupled_pf_cohesive_benchmark.py
       - --output-dir
       - outputs/plasticity_interface/coupled_pf_cohesive
     required_artifacts:
@@ -346,10 +346,10 @@ runs:
 
   - id: pfczm_uniaxial_strength
     family: pfczm
-    script: examples/plasticity_interface/run_pfczm_uniaxial_strength_validation.py
+    script: examples/plasticity_interface_beta/run_pfczm_uniaxial_strength_validation.py
     launcher:
       - python
-      - examples/plasticity_interface/run_pfczm_uniaxial_strength_validation.py
+      - examples/plasticity_interface_beta/run_pfczm_uniaxial_strength_validation.py
       - --output-dir
       - outputs/plasticity_interface/pfczm_uniaxial_strength
     required_artifacts:
@@ -378,10 +378,10 @@ runs:
 
   - id: q4_sparse_at2_smoke
     family: q4_sparse_phase_field
-    script: examples/plasticity_interface/run_q4_sparse_at2_smoke.py
+    script: examples/plasticity_interface_beta/run_q4_sparse_at2_smoke.py
     launcher:
       - python
-      - examples/plasticity_interface/run_q4_sparse_at2_smoke.py
+      - examples/plasticity_interface_beta/run_q4_sparse_at2_smoke.py
       - --output-dir
       - outputs/plasticity_interface/q4_sparse_at2_smoke
       - --nx
@@ -410,10 +410,10 @@ runs:
 
   - id: sparse_j2_backend_promotion
     family: backend_promotion
-    script: examples/plasticity_interface/run_sparse_j2_backend_promotion.py
+    script: examples/plasticity_interface_beta/run_sparse_j2_backend_promotion.py
     launcher:
       - python
-      - examples/plasticity_interface/run_sparse_j2_backend_promotion.py
+      - examples/plasticity_interface_beta/run_sparse_j2_backend_promotion.py
       - --output-dir
       - outputs/plasticity_interface/sparse_j2_backend_promotion
       - --backend
@@ -436,10 +436,10 @@ runs:
 
   - id: ductile_pf_backend_promotion
     family: backend_promotion
-    script: examples/plasticity_interface/run_ductile_pf_backend_promotion.py
+    script: examples/plasticity_interface_beta/run_ductile_pf_backend_promotion.py
     launcher:
       - python
-      - examples/plasticity_interface/run_ductile_pf_backend_promotion.py
+      - examples/plasticity_interface_beta/run_ductile_pf_backend_promotion.py
       - --output-dir
       - outputs/plasticity_interface/ductile_pf_backend_promotion
       - --backend

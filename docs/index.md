@@ -17,7 +17,7 @@
     </p>
     <p>
       Use the fluent <code>phast.Problem</code> API to author new models. Use
-      YAML decks for public examples, reproducibility, batch/HPC runs, and
+      YAML configurations for public examples, reproducibility, batch/HPC runs, and
       sharing exact simulations.
     </p>
     <p class="phast-hero-links">
@@ -44,12 +44,12 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
   <div class="phast-card">
     <h3>Fluent authoring</h3>
     <p>Use the fluent <code>phast.Problem</code> API to author new models with
-    domain nouns before saving or validating an input deck.</p>
+    domain nouns before saving or validating an declarative configuration.</p>
     <p><a href="user_guide/python_api.html">Python API</a></p>
   </div>
   <div class="phast-card">
-    <h3>YAML input decks</h3>
-    <p>Use YAML decks for public examples, reproducibility, sharing, CI, and
+    <h3>YAML input configurations</h3>
+    <p>Use YAML configurations for public examples, reproducibility, sharing, CI, and
     batch/HPC runs with lockfiles, metadata, and standard outputs.</p>
     <p><a href="user_guide/yaml_workflow.html">YAML workflow</a></p>
   </div>

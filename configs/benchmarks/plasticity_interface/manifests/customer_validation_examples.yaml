@@ -20,7 +20,7 @@ cases:
     role: sparse J2 mechanics backend validation
     command:
       - python
-      - examples/plasticity_interface/run_sparse_j2_backend_promotion.py
+      - examples/plasticity_interface_beta/run_sparse_j2_backend_promotion.py
     expected_outputs:
       - backend summary
       - stress-strain or force-displacement plot
@@ -30,7 +30,7 @@ cases:
     role: J2 return-mapping validation
     command:
       - python
-      - examples/plasticity_interface/run_j2_validation.py
+      - examples/plasticity_interface_beta/run_j2_validation.py
     expected_outputs:
       - material-point comparison plots
       - numerical summary
@@ -39,7 +39,7 @@ cases:
     role: guarded ductile phase-field/plasticity coupling validation
     command:
       - python
-      - examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
+      - examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py
     expected_outputs:
       - damage and plastic-work plots
       - energy ledger
@@ -49,7 +49,7 @@ cases:
     role: ductile phase-field/plasticity parameter sensitivity
     command:
       - python
-      - examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
+      - examples/plasticity_interface_beta/run_ductile_pf_sensitivity_study.py
     expected_outputs:
       - sensitivity plots
       - energy ledger
@@ -59,7 +59,7 @@ cases:
     role: cohesive mode-I displacement-jump benchmark
     command:
       - python
-      - examples/plasticity_interface/run_cohesive_displacement_jump_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_displacement_jump_benchmark.py
     expected_outputs:
       - traction-separation plot
       - dissipated-energy check
@@ -68,7 +68,7 @@ cases:
     role: mixed-mode cohesive tangent benchmark
     command:
       - python
-      - examples/plasticity_interface/run_cohesive_mixed_mode_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_mixed_mode_benchmark.py
     expected_outputs:
       - mixed-mode traction plot
       - tangent finite-difference check
@@ -77,7 +77,7 @@ cases:
     role: cohesive contact-compression benchmark
     command:
       - python
-      - examples/plasticity_interface/run_cohesive_contact_compression_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_contact_compression_benchmark.py
     expected_outputs:
       - contact traction plot
       - zero-damage-growth check
@@ -86,7 +86,7 @@ cases:
     role: multi-element delamination patch benchmark
     command:
       - python
-      - examples/plasticity_interface/run_cohesive_delamination_patch_benchmark.py
+      - examples/plasticity_interface_beta/run_cohesive_delamination_patch_benchmark.py
     expected_outputs:
       - delamination-front metrics
       - resultant-force check
@@ -96,7 +96,7 @@ cases:
     role: DCB-style structural cohesive benchmark
     command:
       - python
-      - examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
+      - examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.py
     expected_outputs:
       - load-displacement curve
       - post-peak softening evidence
@@ -106,7 +106,7 @@ cases:
     role: diffuse solid-interface validation
     command:
       - python
-      - examples/plasticity_interface/run_diffuse_interphase_validation.py
+      - examples/plasticity_interface_beta/run_diffuse_interphase_validation.py
     expected_outputs:
       - interphase field plots
       - summary metrics
@@ -115,7 +115,7 @@ cases:
     role: solid-interface fracture examples
     command:
       - python
-      - examples/plasticity_interface/run_solid_interface_fracture_examples.py
+      - examples/plasticity_interface_beta/run_solid_interface_fracture_examples.py
     expected_outputs:
       - damage plots
       - solver summary

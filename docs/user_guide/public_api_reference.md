@@ -1,7 +1,7 @@
 # Public API Reference
 
 PhAST’s public API is organized around **problem-building nouns** and explicit result inspection.
-Use `phast.Problem` for model authoring and YAML/deck runners for public reproducibility.
+Use `phast.Problem` for model authoring and YAML/configuration file runners for public reproducibility.
 
 ## `phast.Problem`
 
@@ -39,7 +39,7 @@ Common methods:
 - `.run(output_dir=..., return_result=True)` for supported promoted/public paths
 
 For durable reproduction and public examples, keep the final run as a YAML
-input deck and execute it with `python -m phast run <config.yaml>`.
+declarative configuration and execute it with `python -m phast run <config.yaml>`.
 
 ## `phast.Region`
 
@@ -188,9 +188,9 @@ It returns a read-only result handle with provenance, history, and discovered ar
 
 ## Result boundaries and execution policy
 
-- For public reproducibility and public examples: YAML decks are the canonical distributed artifact.
+- For public reproducibility and public examples: YAML configurations are the canonical distributed artifact.
 - For authoring and local iteration: fluent `Problem` is preferred.
 - For execution/reproduction: `phast.Problem.run(...)` for supported fluent paths,
-  `python -m phast run <config.yaml>` for public deck workflows.
+  `python -m phast run <config.yaml>` for public configuration file workflows.
 - The API is **not** a universal weak-form FEM compiler; supported paths are bounded by
   [capability matrix](capability_matrix.md) and adapter execution routing.

@@ -10,24 +10,24 @@ inspection.
 |---|---:|---|
 | [Getting started](getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
 | [Build your first model with `phast.Problem`](tutorial/fluent_authoring_guide.md) | 10-15 min | Create, validate, run, and inspect a Python-authored model. |
-| [YAML workflow](user_guide/yaml_workflow.md) | 10 min | Run a public input deck and understand the standard result directory. |
+| [YAML workflow](user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
 | [Example gallery](example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |
 | [Results API](user_guide/results_api.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
 
 ## Recommended Learning Path
 
 1. Install the package and run `python -m phast doctor`.
-2. Validate a public YAML deck with `--validate-only`.
+2. Validate a public YAML configuration with `--validate-only`.
 3. Run one small public example into `runs/<case>`.
 4. Inspect the completed run with `phast.load_result(...)`.
 5. Build a small model with `phast.Problem`.
-6. Move durable studies into a YAML deck when you need reproducibility or HPC
+6. Move durable studies into a YAML configuration when you need reproducibility or HPC
    submission.
 
 Users coming from Abaqus, COMSOL, FEniCS, or deal.II should read
 [Setting up new problems](user_guide/setup_problems.md) first. It maps familiar
 FEM concepts such as parts, mesh sets, materials, loads, steps, jobs, and result
-databases to the PhAST fluent API and YAML deck structure.
+databases to the PhAST fluent API and YAML configuration structure.
 
 ## Runnable Examples
 
@@ -36,7 +36,7 @@ databases to the PhAST fluent API and YAML deck structure.
 | Dynamic fracture | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only` | Dynamic damage fields, histories, metadata, and curated animation assets. |
 | Dynamic crack branching | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only` | Crack-branching comparison package and visual summaries. |
 | Quasi-static fracture | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | Final damage, response histories, comparison artifacts, and result manifests. |
-| Solid mechanics | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate` | Displacement/stress plots, response history, and metadata. |
+| Solid mechanics | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | Displacement/stress plots, response history, and metadata. |
 
 The example gallery lists the current public examples and their expected
 artifacts. Longer or beta validation workflows are summarized in the capability
@@ -61,10 +61,10 @@ result = (
 )
 ```
 
-Use YAML when you want an exact deck:
+Use YAML when you want an exact configuration file:
 
 ```bash
-python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 

@@ -45,42 +45,42 @@ python -m pytest tests/test_plasticity_j2.py tests/test_cohesive_elements.py -v
 ### Verification Tier 2: J2 Plasticity Benchmarks
 Run a uniaxial tension validation run that builds stress-strain curves and checks return-mapping convergence:
 ```bash
-python examples/plasticity_interface/run_j2_validation.py
+python examples/plasticity_interface_beta/run_j2_validation.py
 ```
 
 To run the J2 backend promotion (profiling sparse mechanics solvers):
 ```bash
-python examples/plasticity_interface/run_sparse_j2_backend_promotion.py
+python examples/plasticity_interface_beta/run_sparse_j2_backend_promotion.py
 ```
 
 ### Verification Tier 3: Ductile Fracture & Sensitivity
 Run the coupled ductile phase-field solver and check the energy ledger outputs:
 ```bash
-python examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
-python examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
+python examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py
+python examples/plasticity_interface_beta/run_ductile_pf_sensitivity_study.py
 ```
 
 ### Verification Tier 4: Cohesive Benchmarks
 Run the suite of cohesive interface checks:
 1. **Mode-I Displacement Jump:**
    ```bash
-   python examples/plasticity_interface/run_cohesive_displacement_jump_benchmark.py
+   python examples/plasticity_interface_beta/run_cohesive_displacement_jump_benchmark.py
    ```
 2. **Mixed-Mode Separation Tangent:**
    ```bash
-   python examples/plasticity_interface/run_cohesive_mixed_mode_benchmark.py
+   python examples/plasticity_interface_beta/run_cohesive_mixed_mode_benchmark.py
    ```
 3. **Contact Compression Penalty:**
    ```bash
-   python examples/plasticity_interface/run_cohesive_contact_compression_benchmark.py
+   python examples/plasticity_interface_beta/run_cohesive_contact_compression_benchmark.py
    ```
 4. **Delamination Patch:**
    ```bash
-   python examples/plasticity_interface/run_cohesive_delamination_patch_benchmark.py
+   python examples/plasticity_interface_beta/run_cohesive_delamination_patch_benchmark.py
    ```
 5. **Structural Double Cantilever Beam (DCB):**
    ```bash
-   python examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
+   python examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.py
    ```
 
 ---
