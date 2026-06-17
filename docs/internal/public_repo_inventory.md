@@ -46,7 +46,7 @@ Tracked-file count at the time of this audit: 968 files.
 | `src/phast/` | 116 | Python API, public API reference, YAML workflow, results API, API notes. |
 | `docs/` | 56 | Sphinx toctree and this inventory page. |
 | `configs/` | 32 | YAML workflow, configuration guide, benchmark catalogue. |
-| `assets/` | 11 | README visuals, showcase page, assets README. |
+| `assets/` | 11 | README visuals, showcase page, internal assets provenance note. |
 | `.github/` | 9 | Contribution/community pages and this inventory. |
 | `conda-recipe/` | 3 | Packaging notes and this inventory. |
 | Root metadata/scripts | 15 | README, installation, contribution docs, `llms.txt`, `.cursorrules`, this inventory. |
