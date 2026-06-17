@@ -27,10 +27,11 @@
 
 ---
 
-PhAST is a PyTorch-native finite-element solver for 2D phase-field fracture,
-explicit dynamics, and solid mechanics. It combines phase-field fracture
-workflows with familiar PyTorch execution, so mechanics, damage, and
-postprocessing pipelines can run through inspectable tensor operations.
+PhAST is a state-of-the-art differentiable finite-element framework for 2D
+phase-field fracture mechanics, explicit dynamics, and solid mechanics. It
+combines phase-field fracture workflows with familiar PyTorch execution, so
+mechanics, damage, and postprocessing pipelines can run through inspectable
+tensor operations.
 
 The public release focuses on brittle phase-field fracture and foundational
 solid mechanics, with advanced plasticity, cohesive-interface, and PF-CZM

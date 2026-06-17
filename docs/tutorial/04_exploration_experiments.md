@@ -8,7 +8,7 @@ mesh to debug.
 
 All commands assume you start from the repository root.
 
-## 1. Sweep Poisson's ratio and watch the crack curve
+## 1. Vary Poisson's ratio and watch the crack curve
 
 **Motivation.** `nu` enters every energy split: it controls the
 Lame coefficient `lambda` which, in turn, sets how compressive
@@ -58,7 +58,7 @@ compressive waves -- damage decreases, which violates irreversibility
 unless `H` is enforced. If you see `max(d)` drop step-to-step, switch
 to `amor` or `spectral`.
 
-## 3. Sweep `l0` from `0.5 h` to `2 h`
+## 3. Vary `l0` from `0.5 h` to `2 h`
 
 **Motivation.** The regularisation length `l0` must resolve the
 diffuse damage band, so the rule of thumb is `l0 >= 2 h`. Pushing

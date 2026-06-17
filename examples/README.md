@@ -28,7 +28,7 @@ and rapid crack-growth scenarios.
 | Example | Physics / Scenario | Command |
 | :--- | :--- | :--- |
 | [`B2_kalthoff_winkler`](dynamic/B2_kalthoff_winkler/) | Kalthoff-Winkler impact | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
-| [`B3_dynamic_sent`](dynamic/B3_dynamic_sent/) | Dynamic single-edge-notched tension smoke case | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
+| [`B3_dynamic_sent`](dynamic/B3_dynamic_sent/) | Dynamic single-edge-notched tension baseline verification case | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
 | [`B5_pmma_branching`](dynamic/B5_pmma_branching/) | PMMA dynamic crack branching | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
 | [`B6_perforated_30holes`](dynamic/B6_perforated_30holes/) | Perforated PMMA plate | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
 | [`B7_dynamic_crack_branching_comsol`](dynamic/B7_dynamic_crack_branching_comsol/) | Dynamic branching comparison case | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |

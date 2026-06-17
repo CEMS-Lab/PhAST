@@ -57,8 +57,6 @@
     "plastic_strain_final.png",
     "response_evolution.mp4",
     "field_evolution.mp4",
-    "training_data.zarr",
-    "zarr_manifest.json",
     "thumbnail.png",
     "visual_manifest.json",
     "run_metadata.json",

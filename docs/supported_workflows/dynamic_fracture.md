@@ -27,5 +27,5 @@ reference comparisons should also include `compare.png` and
 
 B1 branching remains a placeholder until the accepted quad rerun is promoted.
 B7 is a public candidate without COMSOL binaries or raw trajectory stores.
-Large Zarr/H5 trajectories belong in private storage or release artifacts, not
+Large Zarr/H5 trajectories belong in external storage or release artifacts, not
 inside lightweight public example folders.

@@ -21,11 +21,11 @@ The retained #708 result bundles live under
 `examples/plasticity_interface/results/` and are indexed by
 `examples/plasticity_interface/results/issue_708_promoted_results.yaml`.
 They include YAML-resolved configs, provenance JSON, CSV histories, setup and
-final PNGs, GIF animations, visual manifests, and `training_data.zarr` stores
-that can be inspected with `phast.load_result(path)`. The matching fluent setup
-surfaces live in `examples/plasticity_interface/fluent_setups/` and are for
-authoring/inspection; the reproducibility path remains the curated YAML
-dispatcher above.
+final PNGs, GIF animations, and visual manifests. Rerunning a validation case
+can regenerate local trajectory stores for field-level inspection with
+`phast.load_result(path)`. The matching fluent setup surfaces live in
+`examples/plasticity_interface/fluent_setups/` and are for authoring/inspection;
+the reproducibility path remains the curated YAML dispatcher above.
 
 ## Boundary
 

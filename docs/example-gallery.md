@@ -74,7 +74,7 @@ The quasi-static family is the production path for many literature comparisons.
 - **SENT / SENS / TPB / L-panel**: shipped benchmark configs under
   `configs/benchmarks/quasistatic/` and compare scripts in matching example
   directories.
-- **Run example**:  
+- **Run example**:
   `python -m phast run configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml --validate-only`
 - **Expected outputs**: `config.yaml`, `run_lockfile.json`, `results.csv`, plots.
   Run `compare.py` in `examples/quasistatic/notched_holed_plate/` for
@@ -88,7 +88,7 @@ The quasi-static family is the production path for many literature comparisons.
 - **B7 dynamic branching**:
   `examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` is the
   public-candidate full-plate COMSOL cross-check. Older half-plate B7
-  diagnostic configs remain private provenance and are not gallery material.
+  diagnostic configs remain unpublished provenance and are not gallery material.
 - **Benchmark workflow**:
   1. Launch via `python -m phast run <cfg>`
   2. Run `compare.py` in the corresponding `examples/dynamic/<case>/` directory.
@@ -105,9 +105,9 @@ The quasi-static family is the production path for many literature comparisons.
 - `python -m phast run examples/solid_mechanics/j2_bar/config.yaml`
   Mesh-level J2 plasticity bar FEA with von Mises and equivalent-plastic-strain
   fields.
-- `examples/solid_mechanics/mixed_precision_cg/run.py`  
+- `examples/solid_mechanics/mixed_precision_cg/run.py`
   Mixed-precision CG stability and residual behavior.
-- `examples/solid_mechanics/generalized_alpha_oscillator/run.py`  
+- `examples/solid_mechanics/generalized_alpha_oscillator/run.py`
   Generalized-alpha exploration for implicit-dynamics prototyping.
 
 ### Beta plasticity, cohesive, and PF-CZM validation
@@ -117,7 +117,7 @@ The quasi-static family is the production path for many literature comparisons.
   `examples/plasticity_interface/run_ductile_pf_plasticity_validation.py`.
 - **Cohesive/interface benchmarks**:
   mode-I jump, mixed-mode, contact-compression, delamination patch, structural
-  DCB, diffuse-interface, and coupled PF-cohesive smoke workflows live under
+  DCB, diffuse-interface, and coupled PF-cohesive validation workflows live under
   `examples/plasticity_interface/`.
 - **Manifested reproduction set**:
   `configs/benchmarks/plasticity_interface/manifests/customer_validation_examples.yaml`.
@@ -143,5 +143,5 @@ proposals, and release notes.
 ## Capability boundaries
 
 For current non-hardened features, review
-[Capability matrix](user_guide/capability_matrix.md).  
+[Capability matrix](user_guide/capability_matrix.md).
 This doc is also the source of truth for what can be promised publicly.

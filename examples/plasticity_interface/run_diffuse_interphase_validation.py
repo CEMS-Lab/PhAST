@@ -67,7 +67,7 @@ def _triangle_areas(nodes: np.ndarray, elements: np.ndarray) -> np.ndarray:
 def _max_rss_kib() -> int:
     raw = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
     # Linux reports KiB; macOS reports bytes. Values above 100 million are
-    # bytes for this smoke-scale example.
+    # bytes for this reduced-size example.
     return raw // 1024 if raw > 100_000_000 else raw
 
 

@@ -31,7 +31,6 @@ acceptance:
   required_outputs:
     - run_lockfile.json
     - config.yaml
-    - training_data.zarr
     - energy.csv
     - crack_tip.csv
     - compare_report.txt

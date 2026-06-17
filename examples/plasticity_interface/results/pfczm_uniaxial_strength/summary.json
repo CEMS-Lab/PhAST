@@ -1,7 +1,7 @@
 {
   "example": "pfczm_uniaxial_strength_validation",
   "validation_passed": true,
-  "capability_boundary": "Forward Wu PF-CZM damage-law strength calibration smoke; not a full structural crack-growth, mixed-mode delamination, or PF-plasticity-cohesive benchmark.",
+  "capability_boundary": "Forward Wu PF-CZM damage-law strength calibration validation; not a full structural crack-growth, mixed-mode delamination, or PF-plasticity-cohesive benchmark.",
   "n_nodes": 126,
   "n_elements": 200,
   "l0_values": [

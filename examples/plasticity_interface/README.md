@@ -12,14 +12,14 @@ interface/interphase fracture work.
 | `run_ductile_pf_sensitivity_study.py` | Elastic-driving reference plus ductile plastic-work length-scale sensitivity table and plots | Customer-facing ductile validation study; not a SENT/TPB calibration |
 | `run_diffuse_interphase_validation.py` | Diffuse interface/interphase fields in a brittle phase-field setting using spatial `E(x)` and `Gc(x)` | Runnable field/path validation |
 | `run_solid_interface_fracture_examples.py` | Two deterministic crack-impinging-on-interface path-energy benchmarks: weak-interface deflection and strong-interface penetration | Diffuse solid-interface field/path screening examples; not solved crack-evolution runs |
-| `run_solver_driven_interface_fracture_validation.py` | Weak-interface deflection and strong-interface penetration classified from solved AT2 phase-field damage with spatial `E(x)`/`Gc(x)` fields | Solver-driven diffuse interface fracture smoke; not a cohesive-zone or ASTM calibration |
-| `run_cohesive_displacement_jump_benchmark.py` | Zero-thickness cohesive displacement-jump response coupled through `QuasiStaticSolver(cohesive_operator=...)` | Production-smoke cohesive operator benchmark |
-| `run_cohesive_mixed_mode_benchmark.py` | Zero-thickness mixed-mode cohesive response with residual/tangent finite-difference evidence | Production-smoke mixed-mode cohesive operator benchmark |
-| `run_cohesive_contact_compression_benchmark.py` | Zero-thickness normal-compression contact penalty response with no damage growth | Production-smoke cohesive contact benchmark |
-| `run_cohesive_delamination_patch_benchmark.py` | Four-segment zero-thickness mixed-mode cohesive patch with localized damage/front metrics and closed-form resultant checks | Production-smoke cohesive delamination patch benchmark |
-| `run_structural_dcb_cohesive_benchmark.py` | DCB-style Mode-I structural cohesive delamination with a precrack, free bulk DOFs, post-peak softening, damage-front metrics, and energy plots | Structural cohesive validation smoke; not ASTM D5528 data reduction |
-| `run_coupled_pf_cohesive_benchmark.py` | AT2 phase-field matrix damage around a notch plus zero-thickness cohesive delamination on an embedded interface in one staggered run | Coupled brittle PF+CE validation smoke; not calibrated PF-CZM |
-| `run_pfczm_uniaxial_strength_validation.py` | Wu PF-CZM cohesive phase-field damage-law strength calibration and length-scale sweep with nonlinear bounded damage solve | Forward PF-CZM validation smoke; not a full structural crack-growth or PF-plasticity-cohesive benchmark |
+| `run_solver_driven_interface_fracture_validation.py` | Weak-interface deflection and strong-interface penetration classified from solved AT2 phase-field damage with spatial `E(x)`/`Gc(x)` fields | Solver-driven diffuse interface fracture validation; not a cohesive-zone or ASTM calibration |
+| `run_cohesive_displacement_jump_benchmark.py` | Zero-thickness cohesive displacement-jump response coupled through `QuasiStaticSolver(cohesive_operator=...)` | Cohesive operator baseline validation |
+| `run_cohesive_mixed_mode_benchmark.py` | Zero-thickness mixed-mode cohesive response with residual/tangent finite-difference evidence | Mixed-mode cohesive operator baseline validation |
+| `run_cohesive_contact_compression_benchmark.py` | Zero-thickness normal-compression contact penalty response with no damage growth | Cohesive contact baseline validation |
+| `run_cohesive_delamination_patch_benchmark.py` | Four-segment zero-thickness mixed-mode cohesive patch with localized damage/front metrics and closed-form resultant checks | Cohesive delamination patch validation |
+| `run_structural_dcb_cohesive_benchmark.py` | DCB-style Mode-I structural cohesive delamination with a precrack, free bulk DOFs, post-peak softening, damage-front metrics, and energy plots | Structural cohesive validation; not ASTM D5528 data reduction |
+| `run_coupled_pf_cohesive_benchmark.py` | AT2 phase-field matrix damage around a notch plus zero-thickness cohesive delamination on an embedded interface in one staggered run | Coupled brittle PF+CE validation; not calibrated PF-CZM |
+| `run_pfczm_uniaxial_strength_validation.py` | Wu PF-CZM cohesive phase-field damage-law strength calibration and length-scale parametric study with nonlinear bounded damage solve | Forward PF-CZM validation; not a full structural crack-growth or PF-plasticity-cohesive benchmark |
 
 These examples do **not** claim a benchmark-matched fully coupled staggered
 ductile phase-field-plasticity solver or ASTM-calibrated cohesive
@@ -49,7 +49,7 @@ dispatcher:
 | `j2_validation` | Standard J2 return-map validation example for the promoted plasticity slice. | `examples/plasticity_interface/results/j2_validation` | `examples/plasticity_interface/fluent_setups/j2_validation.py` |
 | `structural_dcb_cohesive` | DCB-style structural cohesive benchmark for the promoted cohesive/interface slice. | `examples/plasticity_interface/results/structural_dcb_cohesive` | `examples/plasticity_interface/fluent_setups/structural_dcb_cohesive.py` |
 | `structural_dcb_refinement` | Lightweight DCB cohesive mesh/load-step refinement trend for the promoted cohesive/interface slice. | `examples/plasticity_interface/results/structural_dcb_refinement` | Script-contract runner; flat fluent setup pending tutorial promotion. |
-| `pfczm_uniaxial_strength` | One-dimensional PF-CZM strength calibration smoke for the promoted PF-CZM slice. | `examples/plasticity_interface/results/pfczm_uniaxial_strength` | `examples/plasticity_interface/fluent_setups/pfczm_uniaxial_strength.py` |
+| `pfczm_uniaxial_strength` | One-dimensional PF-CZM strength calibration baseline verification for the promoted PF-CZM slice. | `examples/plasticity_interface/results/pfczm_uniaxial_strength` | `examples/plasticity_interface/fluent_setups/pfczm_uniaxial_strength.py` |
 
 ```bash
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation
@@ -82,14 +82,14 @@ The retained #708 result index is
 `examples/plasticity_interface/results/issue_708_promoted_results.yaml`. Each
 retained result folder includes the YAML-resolved `config.yaml`, provenance
 JSON, `run_manifest.json`, `visual_manifest.json`, CSV histories, setup and
-final-state PNGs, a non-empty GIF animation, and `training_data.zarr` for
-read-only `phast.Result` field inspection:
+final-state PNGs, and a non-empty GIF animation. Rerunning a validation case
+can regenerate local trajectory stores for read-only `phast.Result` field
+inspection:
 
 ```python
 import phast
 
 result = phast.load_result("examples/plasticity_interface/results/structural_dcb_cohesive")
-print(result.field_names())
 print(result.history_names())
 print(result.visuals())
 ```
@@ -169,12 +169,12 @@ geometry family, computes a mechanics-derived tensile driving field, and calls
 updates. It writes `setup.png`, `material_fields.png`, `damage_final.png`,
 `load_displacement.png`, `energy_split.png`, `convergence.png`,
 `damage_evolution.mp4` or GIF fallback, standard CSV telemetry, mesh artifacts,
-and provenance files. The smoke gate classifies weak-interface deflection and
+and provenance files. The validation gate classifies weak-interface deflection and
 strong-interface penetration from the solved damage field. The claim remains a
 diffuse interface/interphase validation, not a zero-thickness cohesive element
 or PF-CZM structural crack-growth benchmark.
 
-The native Q4 sparse AT2 smoke runner exercises the guarded Q4 production slice
+The native Q4 sparse AT2 validation runner exercises the guarded Q4 production slice
 without converting cells to T3:
 
 ```bash
@@ -311,11 +311,11 @@ integrated cohesive dissipation, bulk elastic energy, external work, a
 diagnostic trapezoidal reaction-work energy-balance gap with a bounded
 fractional tolerance, visual manifest status, and memory use. The runner cites
 DCB/interlaminar delamination validation standards and analytical cohesive DCB
-references, but keeps the claim scoped to a solver-coupled structural smoke
+references, but keeps the claim scoped to a solver-coupled structural validation
 rather than ASTM D5528 material-property data reduction.
 
 For the coupled PF+cohesive benchmark, `summary.json` reports a staggered
-AT2 matrix damage plus cohesive-interface delamination run. The smoke gate
+AT2 matrix damage plus cohesive-interface delamination run. The validation gate
 excludes pinned phase-field Dirichlet nodes from the free-DOF damage residual
 and requires bounded damage residual and final staggered damage increment. The
 bundle writes
@@ -325,7 +325,7 @@ bundle writes
 `cohesive_damage_front.png`, `load_displacement.png`, `energy_split.png`,
 `convergence.png`, `mesh_deformed.png`, `damage_history.png`,
 `damage_evolution.gif`, and `visual_manifest.json`. The claim is scoped to
-coupled brittle PF+CE smoke validation, not a calibrated PF-CZM, ASTM DCB, or
+coupled brittle PF+CE validation, not a calibrated PF-CZM, ASTM DCB, or
 PF-plasticity-cohesive product workflow.
 
 For the PF-CZM uniaxial strength benchmark, `summary.json` reports the
@@ -341,7 +341,7 @@ The bundle writes `mesh.geo`, `mesh.msh`, `results.csv`, `history.csv`,
 that the degraded stress peak matches the target tensile strength, damage
 onset occurs near `sigma_ts`, nonlinear residuals are finite/bounded, and
 all review visuals pass dimension/media checks. The claim is scoped to a
-forward PF-CZM damage-law calibration smoke, not a full structural
+forward PF-CZM damage-law calibration validation, not a full structural
 crack-growth, mixed-mode delamination, or ductile PF-plasticity-cohesive
 workflow.
 
@@ -379,7 +379,7 @@ and GPU scheduler launchers live outside the public release payload.
 
 ## HPC/Memory Notes
 
-The scripts are CPU-smoke examples and are intentionally small. They report
+The scripts are CPU-scale validation examples and are intentionally small. They report
 `max_rss_kib` in `summary.json` so local and cluster runs can be compared
 without extra profiling tools.
 

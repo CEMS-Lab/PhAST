@@ -1,8 +1,8 @@
 {
   "example": "B5_pmma_branching",
-  "status": "selected_public_sweep",
+  "status": "selected_public_parametric_study",
   "config": "config.yaml",
-  "curated_source": "selected public PMMA sweep retained from reviewed reference evidence",
+  "curated_source": "selected public PMMA parametric-study result retained from reviewed reference evidence",
   "problem": "PMMA Dynamic Crack Branching -- Pre-Strained Plate (Bleyer 2017)",
   "material": {
     "E": 3090.0,
@@ -40,7 +40,6 @@
     "README.md",
     "config.yaml",
     "mesh.geo",
-    "run_metadata.json",
     "run_manifest.json",
     "visual_manifest.json",
     "history.csv",
@@ -69,9 +68,9 @@
     "response_evolution.mp4",
     "damage_evolution.mp4"
   ],
-  "private_exclusions": [
-    "external raw sweep archives",
+  "excluded_artifacts": [
+    "external raw parametric-study archives",
     "heavy trajectory/checkpoint stores"
   ],
-  "notes": "Curated public PMMA visual-evidence bundle. Raw sweep archives are external retained artifacts."
+  "notes": "Curated public PMMA visual-evidence bundle. Raw parametric-study archives are external retained artifacts."
 }

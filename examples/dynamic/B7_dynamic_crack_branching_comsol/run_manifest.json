@@ -2,12 +2,12 @@
   "example": "B7_dynamic_crack_branching_comsol",
   "status": "public_candidate_without_comsol_binary",
   "config": "config.yaml",
-  "private_exclusions": [
+  "excluded_artifacts": [
     "COMSOL binary model files",
     "vendor PDFs",
     "heavy trajectory archives"
   ],
-  "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and heavy artifacts stay private.",
+  "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and large artifacts are not distributed with the public repository.",
   "source_run_id": "b7_branching_47961",
   "trajectory_source": "external retained trajectory; not distributed with the public repository",
   "animation_source": "regenerated from the retained reference trajectory",

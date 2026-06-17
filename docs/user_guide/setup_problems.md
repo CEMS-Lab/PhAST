@@ -106,7 +106,7 @@ example, then change one part at a time:
 5. Change geometry or mesh first, then validate again.
 6. Change material parameters, then validate again.
 7. Change boundary conditions or loading, then validate again.
-8. Run a short smoke solve before launching the full case.
+8. Run a short baseline verification solve before launching the full case.
 9. Inspect the result with `phast.load_result(...)`.
 
 Examples are YAML-first because they are reproducible. When available,
@@ -345,6 +345,6 @@ Each public example should be boringly predictable:
 - `run_manifest.json`, `run_metadata.json`, and lockfile,
 - clear README with the command, runtime expectation, and expected outputs.
 
-Examples that still need large raw trajectories, private HPC archaeology, or
+Examples that still need large raw trajectories, unpublished HPC provenance, or
 custom one-off scripts should stay out of the public examples tree until they
 are promoted.

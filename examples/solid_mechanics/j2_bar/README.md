@@ -18,7 +18,6 @@ Mesh-level displacement-controlled J2/von-Mises plasticity with linear isotropic
 | `deformed_shape.png`, `displacement_magnitude.png`, `displacement_final.png` | Displacement-field visual evidence. |
 | `von_mises.png`, `stress_final.png`, `strain_final.png`, `equivalent_plastic_strain.png`, `plastic_strain_final.png` | Final stress, strain, and plasticity fields. |
 | `response_evolution.mp4`, `field_evolution.mp4` | Lightweight reference animations. |
-| `training_data.zarr`, `zarr_manifest.json` | Compact retained trajectory and manifest. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
 | `run_manifest.json` | Reproducibility metadata for the reference output. |
 

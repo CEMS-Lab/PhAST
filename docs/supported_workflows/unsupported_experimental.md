@@ -1,6 +1,6 @@
 # Unsupported and Experimental Workflows
 
-This page is the public boundary for features that may exist in the private
+This page is the public boundary for features that may exist in the development
 development repository, older branches, or research notes but are not public
 PhAST workflows.
 

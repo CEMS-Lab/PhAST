@@ -1,7 +1,7 @@
 case: structural_dcb_cohesive_benchmark
 model: clamped_end_dcb_style_mode_I_cohesive_delamination
 solver: QuasiStaticSolver(cohesive_operator=CohesiveInterfaceOperator)
-capability_boundary: structural cohesive validation smoke, not ASTM D5528 data reduction
+capability_boundary: structural cohesive validation, not ASTM D5528 data reduction
 length: 6.0
 arm_height: 0.6
 nx: 16

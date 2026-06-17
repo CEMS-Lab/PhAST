@@ -1,6 +1,6 @@
-"""Native Q4 sparse mechanics plus AT2 damage smoke benchmark.
+"""Native Q4 sparse mechanics plus AT2 damage validation benchmark.
 
-This is the customer-facing smoke for issue #675. It exercises native Q4
+This is the customer-facing validation case for issue #675. It exercises native Q4
 mechanics without converting cells to T3, records the sparse backend selected
 by ``QuasiStaticSolver`` (SciPy locally, MUMPS where PETSc/MUMPS is available),
 and advances native Q4 AT2 damage from Gauss-point history.

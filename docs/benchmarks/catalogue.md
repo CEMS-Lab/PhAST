@@ -19,7 +19,7 @@ example contract.
 
 | Config | Material | Reference | Acceptance script | Status |
 |---|---|---|---|---|
-| `QS_lshaped_concrete.yaml` | concrete (Ambati 2015) | Winkler 2001 (path) + Ambati 2015 Fig 19 (load-displacement, ~16 kN peak) | deferred private compare script | reference CSV is retained privately; do not mark quantitative L2 validated until the rerun evidence is promoted into the public example contract. |
+| `QS_lshaped_concrete.yaml` | concrete (Ambati 2015) | Winkler 2001 (path) + Ambati 2015 Fig 19 (load-displacement, ~16 kN peak) | deferred comparison script | reference CSV is retained outside the public repository; do not mark quantitative L2 validated until the rerun evidence is promoted into the public example contract. |
 | `QS_notched_holed_plate.yaml` | cement_mortar_ambati (E=6 GPa, Gc=2.28 N/mm) | COMSOL 6.4 Application Library "Brittle Fracture of a Holed Plate" (Ambati 2015 PF formulation; first peak 0.63 kN at 0.33 mm) | `examples/quasistatic/notched_holed_plate/compare.py` | first-peak load 1% off, displacement 52% off; root-caused to simplified rigid-pin BC, unblocked by full Lagrange MPC (#154/#164) |
 
 ### Quasi-static benchmarks (deferred)

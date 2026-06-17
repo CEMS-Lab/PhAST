@@ -30,7 +30,6 @@
     "mesh.geo",
     "mesh.msh",
     "run_manifest.json",
-    "run_metadata.json",
     "space_time_diagram.png",
     "stress_max_principal_multipanel.png",
     "thumbnail.png",
@@ -41,6 +40,6 @@
   ],
   "notes": [
     "This flat public candidate keeps only lightweight derived artifacts from reviewed reference run 8585; raw trajectories stay external until a public artifact release exists.",
-    "The copied run_metadata.json preserves original provenance and may contain historical source labels; this public folder is the authoritative B6 name."
+    "Historical source labels may appear in upstream provenance; this public folder is the authoritative B6 name."
   ]
 }

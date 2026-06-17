@@ -3,7 +3,7 @@
 This runner exercises the solver-coupled cohesive interface in a small
 double-cantilever-beam-style specimen with a precrack, free internal bulk
 degrees of freedom, and displacement-controlled Mode-I opening. It is a
-structural validation smoke for the cohesive sparse Newton path, not an ASTM
+structural validation for the cohesive sparse Newton path, not an ASTM
 D5528 data-reduction replacement.
 """
 from __future__ import annotations
@@ -329,7 +329,7 @@ def _write_config(output_dir: Path, geom: DCBGeometry,
         "case: structural_dcb_cohesive_benchmark",
         "model: clamped_end_dcb_style_mode_I_cohesive_delamination",
         "solver: QuasiStaticSolver(cohesive_operator=CohesiveInterfaceOperator)",
-        "capability_boundary: structural cohesive validation smoke, not ASTM D5528 data reduction",
+        "capability_boundary: structural cohesive validation, not ASTM D5528 data reduction",
         f"length: {geom.length}",
         f"arm_height: {geom.arm_height}",
         f"nx: {geom.nx}",
@@ -747,7 +747,7 @@ def run_benchmark(
             "bulk DOFs through QuasiStaticSolver cohesive_operator hook"
         ),
         "capability_boundary": (
-            "clamped-end structural validation smoke; not an ASTM D5528 "
+            "clamped-end structural validation; not an ASTM D5528 "
             "fixture/data-reduction or analytical DCB calibration"
         ),
         "references": [

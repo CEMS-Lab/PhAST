@@ -26,7 +26,7 @@ They should not be required for the default CPU confidence suite.
 
 ## Pull Request Checklist
 
-- Keep raw HPC outputs, meeting packs, private notes, and generated heavy media
+- Keep raw HPC outputs, meeting packs, internal notes, and generated heavy media
   out of git.
 - Prefer Zarr for new solver trajectories. H5 is legacy input/conversion
   support only unless a compatibility test explicitly needs it.

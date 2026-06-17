@@ -15,7 +15,6 @@
     "energy.csv",
     "solver_telemetry.csv",
     "timing_per_step.csv",
-    "training_data.zarr",
     "structural_dcb_load_displacement.png",
     "structural_dcb_damage_front.png",
     "structural_dcb_energy.png",

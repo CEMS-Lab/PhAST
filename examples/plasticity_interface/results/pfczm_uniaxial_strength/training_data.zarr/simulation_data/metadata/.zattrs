@@ -1,4 +1,0 @@
-{
-    "field_source": "projected_pfczm_damage_solve",
-    "validation_id": "pfczm_uniaxial_strength"
-}

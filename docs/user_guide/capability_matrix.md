@@ -12,7 +12,7 @@ Status meanings:
 
 | Status | Meaning |
 |---|---|
-| Production | Available through the normal Python/YAML path with tests and at least one benchmark or smoke workflow. |
+| Production | Available through the normal Python/YAML path with tests and at least one benchmark or baseline validation workflow. |
 | Beta | Implemented and useful, but validation coverage or ergonomics still need hardening before customer delivery. |
 | Experimental | Research path. Use for comparisons or development, not for customer commitments. |
 | Optional backend | Code path exists, but depends on external solver libraries or HPC environment validation. |
@@ -28,7 +28,7 @@ Status meanings:
 | Brittle phase-field fracture, AT1 | Beta | Supported with projected damage solve and AT1 threshold fields; benchmark coverage is still being expanded. |
 | Heterogeneous elastic fields `E(x)` | Production | Per-element fields support inclusions, weak/strong bands, and inverse calibration demos. |
 | Heterogeneous fracture fields `Gc(x)` | Production | Per-element fields support weak zones, spatial recovery, and microstructure-style studies. |
-| Diffuse interface fracture validation | Beta smoke | Solver-driven weak-interface deflection and strong-interface penetration examples use spatial `E(x)`/`Gc(x)` fields plus AT2 damage solves with visuals and telemetry; discrete cohesive and PF-CZM structural calibration remain separate capabilities. |
+| Diffuse interface fracture validation | Beta validation | Solver-driven weak-interface deflection and strong-interface penetration examples use spatial `E(x)`/`Gc(x)` fields plus AT2 damage solves with visuals and telemetry; discrete cohesive and PF-CZM structural calibration remain separate capabilities. |
 | Plane strain | Production | Default 2D constitutive setting. |
 | Plane stress | Beta | Available via `material.plane_stress`; benchmark coverage is narrower than plane strain. |
 | Spectral / Amor / isotropic energy splits | Production | Available through `material.energy_split` for brittle phase-field workflows. Plane-stress `spectral` is a reduced 2D in-plane projection, not a fully condensed 3D plane-stress spectral decomposition; prefer plane-strain `spectral` or plane-stress `amor` for mature validated paths. |
@@ -36,9 +36,9 @@ Status meanings:
 | Monolithic `(u,d)` L-BFGS solve | Experimental | Research comparison only until the bound-constrained irreversibility work closes. |
 | Sparse quasi-static J2 elastoplasticity | Beta | Per-element state, return mapping, commit/rollback, internal force, sparse `QuasiStaticSolver` dispatch, and plastic-work accounting are available through the plasticity API and validation example; large-mesh backend promotion remains gated. |
 | Ductile PF-plasticity validation | Beta | Elastic tensile energy plus accumulated plastic-work coupling is implemented, with a bounded AT2 phase-field damage solve, separated elastic/plastic/fracture energy ledger, guarded quasi-static T3 J2+AT2 staggered support, and a retained elastic-reference/`l0` sensitivity study; benchmark-matched ductile fracture remains gated. |
-| Cohesive elements / discrete CZM | Beta | Stateful true-bilinear cohesive residual/tangent assembly, scalar dissipated-energy history, optional normal-contact penalty, sparse quasi-static smoke coverage, metadata-preserving T3/Q4 array and single-block meshio cohesive-layer insertion, mode-I/mixed-mode/contact/delamination/structural smoke benchmarks, and visual manifests are available; ASTM-calibrated structural delamination and mixed-family external mesh import remain gated. |
-| Coupled brittle PF + cohesive elements | Beta | Staggered AT2 matrix damage plus zero-thickness cohesive-interface delamination smoke exists with matrix notch damage, cohesive front metrics, energy split, convergence, animation, CSV telemetry, and visual manifest; calibrated PF-CZM and structural validation studies remain gated. |
-| PF-CZM | Beta smoke | Wu PF-CZM is available as `pf_model: PFCZM` for forward nonlinear damage solves with tensile-strength-calibrated rational degradation, element-wise gamma-corrected calibration, residual/convergence telemetry, and a uniaxial strength/`l0` validation bundle; structural crack-growth, mixed-mode delamination, differentiable adjoints, and PF-plasticity-cohesive coupling remain gated. |
+| Cohesive elements / discrete CZM | Beta | Stateful true-bilinear cohesive residual/tangent assembly, scalar dissipated-energy history, optional normal-contact penalty, sparse quasi-static validation coverage, metadata-preserving T3/Q4 array and single-block meshio cohesive-layer insertion, mode-I/mixed-mode/contact/delamination/structural validation benchmarks, and visual manifests are available; ASTM-calibrated structural delamination and mixed-family external mesh import remain gated. |
+| Coupled brittle PF + cohesive elements | Beta | Staggered AT2 matrix damage plus zero-thickness cohesive-interface delamination validation exists with matrix notch damage, cohesive front metrics, energy split, convergence, animation, CSV telemetry, and visual manifest; calibrated PF-CZM and structural validation studies remain gated. |
+| PF-CZM | Beta validation | Wu PF-CZM is available as `pf_model: PFCZM` for forward nonlinear damage solves with tensile-strength-calibrated rational degradation, element-wise gamma-corrected calibration, residual/convergence telemetry, and a uniaxial strength/`l0` validation bundle; structural crack-growth, mixed-mode delamination, differentiable adjoints, and PF-plasticity-cohesive coupling remain gated. |
 | Coupled PF + plasticity + cohesive interfaces | Unsupported | Not part of the public workflow surface. |
 | 3D fracture | Unsupported | Current production elements are 2D triangles. |
 | P2 / Q8 / Q9 element primitives | Scaffold | Shape functions, quadrature, and single-element stiffness tests exist for higher-order families; global production solver dispatch remains gated. |
@@ -52,8 +52,8 @@ Status meanings:
 | Staggered quasi-static/static solve | Production | Customer-facing implicit brittle-fracture path, with `jacobi` as the conservative damage preconditioner. Matrix-free CG and sparse-direct mechanics backends are available; non-isotropic sparse direct uses a frozen-state secant tangent for validation robustness. |
 | `quasi_static_legacy` secant path | Beta | Retained for compatibility and selected MPC/frozen-secant workflows. |
 | SciPy SuperLU sparse direct baseline | Production | Always-available sparse direct baseline where SciPy is installed. |
-| PETSc/MUMPS | Optional backend | Runtime smoke-guarded; when available, `backend='auto'` chooses this as the CPU sparse-direct mechanics backend before SciPy SuperLU. |
-| cuDSS / nvmath | Optional backend | Runtime smoke-guarded; GPU sparse-direct path requires current nvmath/cuDSS validation on the target GPU stack. |
+| PETSc/MUMPS | Optional backend | Runtime-verification guarded; when available, `backend='auto'` chooses this as the CPU sparse-direct mechanics backend before SciPy SuperLU. |
+| cuDSS / nvmath | Optional backend | Runtime-verification guarded; GPU sparse-direct path requires current nvmath/cuDSS validation on the target GPU stack. |
 | AMG / AmgX / GMG damage preconditioning | Experimental for QS fracture | Useful performance paths, but quasi-static customer runs should default to Jacobi unless validating the preconditioner itself. |
 | Anderson acceleration | Beta | Available for staggered iterations; use with benchmark-specific validation. |
 
@@ -69,7 +69,7 @@ Status meanings:
 | Built-in geometry generators | Production | Supported through `geometry.type` and `geometry.parameters`. |
 | External meshes | Beta | Supported via `geometry.mesh_path`; node-set compatibility is mesh-format dependent. |
 | Declarative primitive geometry DSL | Beta | Parsed and used by current benchmark configs; continue validating new domain/mesh recipes before customer delivery. |
-| Config inheritance/includes/sweeps | Unsupported | Not implemented yet; use copied YAMLs or scripts for parameter sweeps. |
+| Config inheritance/includes/parametric studies | Unsupported | Not implemented yet; use copied YAMLs or scripts for parameter studies. |
 | JSON Schema export / IDE autocomplete | Production | `python -m phast schema` exports the checked-in schema generated from the config model, enum tables, and numeric ranges. |
 
 ## Outputs and validation artifacts

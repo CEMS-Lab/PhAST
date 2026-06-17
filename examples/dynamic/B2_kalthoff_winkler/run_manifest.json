@@ -3,9 +3,9 @@
   "status": "public_candidate",
   "config": "config.yaml",
   "curated_source": "../kalthoff/B2_kalthoff_mesh1",
-  "private_exclusions": [
+  "excluded_artifacts": [
     "../kalthoff/B2_kalthoff_mesh1/training_data.h5",
     "../kalthoff/B2_kalthoff_mesh1/RECOVERY.md"
   ],
-  "notes": "Flat curated package copied from mesh-1 evidence; heavy trajectory store stays private."
+  "notes": "Flat curated package copied from mesh-1 evidence; large trajectory store is not distributed with the public repository."
 }

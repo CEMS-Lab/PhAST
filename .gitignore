@@ -1,0 +1,34 @@
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and build outputs
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+docs/_build/
+
+# Local solver outputs and large trajectory stores
+runs/
+outputs/
+*.h5
+*.hdf5
+*.zarr/
+training_data.zarr/
+qs_hpc_results/
+*.vtu
+*.vtk
+*.xdmf
+*.pvtu
+slurm-*.out
+*.err
+*.log
+
+# Platform/editor files
+.DS_Store
+Thumbs.db

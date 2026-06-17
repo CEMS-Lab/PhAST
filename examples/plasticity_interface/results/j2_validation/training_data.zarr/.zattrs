@@ -1,4 +1,0 @@
-{
-    "format": "phast.trajectory.zarr",
-    "writer": "examples.plasticity_interface._promoted_result_utils"
-}

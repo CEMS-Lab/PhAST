@@ -18,7 +18,6 @@ Compressible neo-Hookean cantilever solved by load-stepped Newton iteration with
 | `deformed_shape.png`, `displacement_magnitude.png`, `displacement_final.png` | Displacement-field visual evidence. |
 | `von_mises.png`, `stress_final.png`, `strain_final.png`, `strain_energy.png`, `jacobian.png` | Final stress, strain, energy, and deformation-gradient diagnostics. |
 | `response_evolution.mp4`, `field_evolution.mp4` | Lightweight reference animations. |
-| `training_data.zarr`, `zarr_manifest.json` | Compact retained trajectory and manifest. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
 | `run_manifest.json` | Reproducibility metadata for the reference output. |
 

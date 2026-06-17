@@ -224,7 +224,7 @@ Useful flags:
 | `--fast` | Skip live plotting for quick checks |
 | `--gif` | Render configured field animations; MP4/raster is the default when ffmpeg is available, and `output.gif_fields` can add `stress` and `displacement` |
 | `--h5_every 50` | Snapshot frequency for trajectory output; Zarr is preferred for new runs |
-| `--num_steps 5` | Smoke test (override step count) |
+| `--num_steps 5` | Baseline verification (override step count) |
 | `--validate-only` | Parse + schema-check, do not run |
 
 The run directory (`runs/<config_name>_<timestamp>/`) contains:

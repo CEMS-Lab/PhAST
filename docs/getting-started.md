@@ -97,7 +97,7 @@ Recommended defaults by workflow:
 |---|---|
 | Dynamic explicit fracture | `solver_type: explicit`, `dt_safety: 0.8`, and `damage_every: 1` for reference validation. Increase `damage_every` only after a subcycling sensitivity check. |
 | Quasi-static fracture | `solver_type: quasi_static`, `backend: auto`, `preconditioner: jacobi`, `stagger_criterion: linf`, `stagger_tol: 1e-6`. |
-| Spectral/Amor implicit QS | Install PETSc/MUMPS where possible; `backend: auto` selects it after a runtime smoke test, with SciPy SuperLU and CG fallbacks. |
+| Spectral/Amor implicit QS | Install PETSc/MUMPS where possible; `backend: auto` selects it after a runtime verification, with SciPy SuperLU and CG fallbacks. |
 | Cohesive contact | Sparse quasi-static backend with `backend: auto`; normal-contact penalty only for contact cases. |
 | J2 plasticity | Guarded sparse quasi-static plasticity path with `backend: auto`; unsupported combinations fail early. |
 | Trajectory datasets | Zarr stores for forward-run trajectories and MP4/raster animations for visualisation. |

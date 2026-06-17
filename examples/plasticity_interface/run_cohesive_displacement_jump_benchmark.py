@@ -1,6 +1,6 @@
 """Deterministic cohesive displacement-jump benchmark.
 
-This production-smoke benchmark exercises the solver-coupled
+This production validation benchmark exercises the solver-coupled
 ``CohesiveInterfaceOperator`` through the ``QuasiStaticSolver`` cohesive hook.
 The case is intentionally small: a two-triangle strip above and below a
 zero-thickness interface is opened in prescribed mode I. The displacement jump

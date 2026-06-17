@@ -113,14 +113,14 @@ geometry:
     W: 100.0                       # plate width (mm)
     H: 40.0                        # plate height (mm)
     a: 50.0                        # notch length (mm)
-    h_crack: 0.25                  # public smoke-scale SENT setup
+    h_crack: 0.25                  # public reduced-size SENT setup
     h_coarse: 4.0                  # coarse mesh size (mm)
     branching: true                # refine full right half for branching
 
 material:
   preset: glass_borden             # from material.py presets
   overrides:
-    l0: 0.5                        # public smoke-scale SENT setup
+    l0: 0.5                        # public reduced-size SENT setup
     energy_split: spectral         # spectral (Miehe) decomposition
 
 boundary_conditions:

@@ -1,7 +1,7 @@
 {
   "example": "structural_dcb_cohesive_benchmark",
   "capability": "DCB-style structural Mode-I cohesive delamination with free bulk DOFs through QuasiStaticSolver cohesive_operator hook",
-  "capability_boundary": "clamped-end structural validation smoke; not an ASTM D5528 fixture/data-reduction or analytical DCB calibration",
+  "capability_boundary": "clamped-end structural validation; not an ASTM D5528 fixture/data-reduction or analytical DCB calibration",
   "references": [
     "ASTM D5528 Mode-I DCB interlaminar fracture toughness standard",
     "Skec et al. 2018 analytical DCB with bilinear cohesive interface",

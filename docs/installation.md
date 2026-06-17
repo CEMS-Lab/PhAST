@@ -136,7 +136,7 @@ You can append extras during installation to enable accelerated preconditioning,
 
 ---
 
-## 6. Verification and Smoke Tests
+## 6. Verification and Baseline Checks
 
 ### Test 1: Doctor Check
 The doctor tool inspects execution backends and validates what solver `backend: auto` will default to:
@@ -172,7 +172,7 @@ Confirm the output directory contains the run metadata, solved parameters, and t
 
 The framework uses an automated backend routing policy (`backend: auto` inside configurations) to select the most efficient linear solver for implicit mechanics and quasi-static damage solves:
 
-1. **`mumps`:** PETSc/MUMPS sparse-direct solver. Chosen if the environment passes the `petsc4py` runtime smoke test. Best for large, highly-unstable quasi-static crack initiation on clusters.
+1. **`mumps`:** PETSc/MUMPS sparse-direct solver. Chosen if the environment passes the `petsc4py` runtime verification. Best for large, highly-unstable quasi-static crack initiation on clusters.
 2. **`scipy`:** SciPy SuperLU sparse-direct solver. Portable CPU fallback used when PETSc is unavailable.
 3. **`cg`:** Matrix-free Conjugate Gradient solver. Best for massive GPU-bound meshes.
 

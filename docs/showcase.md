@@ -7,7 +7,7 @@ included only when their source CSVs and provenance are retained.
 
 ![Dynamic timing comparison](../assets/dynamic_timing_comparison.png)
 
-This figure is regenerated from the current private SENT and Kalthoff-Winkler
+This figure is regenerated from the current retained SENT and Kalthoff-Winkler
 timing CSVs using Akantu, FEniCS, and PhAST final timing traces. Treat it as a
 reproducibility artifact for Paper-1 performance discussion, not as a universal
 hardware-independent claim. The source summary CSV is kept at

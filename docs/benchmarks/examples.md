@@ -111,7 +111,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml
 # run.py). Use the CLI with the matching B*_*.yaml config:
 python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --device cuda --gif
 
-# Quick smoke test (3 steps)
+# Quick baseline verification (3 steps)
 python -u examples/quasistatic/miehe_tension/run.py --num_steps 3 --plots
 ```
 

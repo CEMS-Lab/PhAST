@@ -1,6 +1,6 @@
 """PF-CZM uniaxial strength and length-scale validation example.
 
-This customer-facing smoke example exercises the Wu cohesive phase-field
+This customer-facing validation example exercises the Wu cohesive phase-field
 damage model in a homogeneous uniaxial setting.  The driving force is
 ``H = sigma_trial^2 / (2E)`` and the PF-CZM parameter ``a1`` is calibrated
 from the tensile strength ``sigma_ts``.  The expected onset threshold is
@@ -562,7 +562,7 @@ def run_validation(output_dir: Path, *,
         "example": "pfczm_uniaxial_strength_validation",
         "validation_passed": bool(valid),
         "capability_boundary": (
-            "Forward Wu PF-CZM damage-law strength calibration smoke; not a "
+            "Forward Wu PF-CZM damage-law strength calibration validation; not a "
             "full structural crack-growth, mixed-mode delamination, or "
             "PF-plasticity-cohesive benchmark."
         ),

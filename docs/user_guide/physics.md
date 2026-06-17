@@ -70,8 +70,8 @@ x.sum().backward()  # gradients flow back to `values` and `b`
 
 | Condition | Backend chosen |
 |---|---|
-| CUDA tensor + functional cuDSS/nvmath smoke test | `cudss` |
-| Functional PETSc/MUMPS smoke test | `mumps` |
+| CUDA tensor + functional cuDSS/nvmath runtime verification | `cudss` |
+| Functional PETSc/MUMPS runtime verification | `mumps` |
 | `scipy.sparse.linalg` available (default CPU) | `scipy` (SuperLU) |
 | No sparse-direct backend available | raise a clear install error |
 
@@ -91,7 +91,7 @@ CPU sparse-direct baseline when SciPy is installed.
 When this repository says `mumps`, it means the PETSc/MUMPS path: `petsc4py`
 creates a PETSc `KSP` with `pc_type=lu` and `pc_factor_mat_solver_type=mumps`.
 This is the PhaseFieldX-like CPU sparse-direct path used for quasi-static
-validation jobs when the runtime smoke test passes.
+validation jobs when the runtime verification passes.
 
 PARDISO and SPOOLES are other sparse direct solver libraries exposed by COMSOL.
 PARDISO is a high-performance sparse direct solver from the Intel MKL/PARDISO
@@ -101,7 +101,7 @@ not currently call PARDISO or SPOOLES from `phast`; they are listed in
 COMSOL comparisons only to explain the commercial direct-solver menu.
 
 For SENS/TPB on an environment with working PETSc/MUMPS, `backend='auto'`
-resolves to `mumps`. If PETSc/MUMPS fails its smoke test on another machine,
+resolves to `mumps`. If PETSc/MUMPS fails its runtime verification on another machine,
 the same configuration falls back to `scipy` SuperLU for sparse direct
 mechanics; if the problem is above the configured sparse-DOF threshold or no
 direct backend is available, it falls back to `cg`.

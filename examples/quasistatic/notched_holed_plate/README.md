@@ -71,5 +71,5 @@ crack reorientation toward the hole, where staggered tolerances,
 crack-width-to-mesh ratio, and monolithic/staggered solver details affect the
 response.
 
-The local `training_data.h5` trajectory is intentionally ignored by git because
-it is a heavy post-processing artifact.
+Large trajectory stores are generated on demand for local post-processing and
+are not part of the lightweight public example bundle.

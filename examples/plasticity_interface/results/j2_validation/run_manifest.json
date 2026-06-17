@@ -7,7 +7,6 @@
     "run_metadata.json",
     "run_manifest.json",
     "run.log",
-    "training_data.zarr",
     "j2_stress_strain.csv",
     "j2_stress_strain.png",
     "stress_strain.png",

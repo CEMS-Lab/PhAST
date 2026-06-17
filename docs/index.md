@@ -9,9 +9,9 @@
     <p class="phast-eyebrow">CEMS Lab · PyTorch-native FEM workflows</p>
     <h2>Differentiable phase-field fracture and FEM workflows in PyTorch.</h2>
     <p>
-      PhAST provides Python and YAML workflows for 2D brittle phase-field
-      fracture, explicit dynamics, quasi-static benchmark reproduction, and
-      promoted solid-mechanics examples. The public docs separate production,
+      PhAST is a state-of-the-art differentiable finite-element framework for
+      2D brittle phase-field fracture, explicit dynamics, quasi-static
+      benchmark reproduction, and promoted solid-mechanics examples. The public docs separate production,
       beta, optional-backend, scaffold, and unsupported capabilities so solver
       claims stay reproducible.
     </p>

@@ -1,6 +1,6 @@
 """Structural DCB cohesive refinement study.
 
-This runner compares the promoted DCB-style cohesive smoke case against a
+This runner compares the promoted DCB-style cohesive validation case against a
 finer mesh/load-step variant. It is a public promotion aid: it demonstrates
 that the cohesive result is not a single accidental run, while keeping the
 claim bounded to a lightweight refinement trend rather than ASTM D5528

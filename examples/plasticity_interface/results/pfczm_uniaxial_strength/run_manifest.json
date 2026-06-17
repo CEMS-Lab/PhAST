@@ -9,7 +9,6 @@
     "run.log",
     "mesh.geo",
     "mesh.msh",
-    "training_data.zarr",
     "results.csv",
     "history.csv",
     "energy.csv",

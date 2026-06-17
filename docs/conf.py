@@ -114,6 +114,7 @@ exclude_patterns = [
     "_build",
     "Thumbs.db",
     ".DS_Store",
+    "internal/**",
     # Local/generated build artifacts.
     "qs_hpc_results/**",
 ]

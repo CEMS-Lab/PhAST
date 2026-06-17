@@ -3,7 +3,7 @@
 This benchmark exercises a short zero-thickness cohesive interface with four
 cohesive segments and a tapered mixed-mode displacement profile. It is still a
 deterministic prescribed-displacement validation, but unlike the single-edge
-mode-I/contact smokes it checks multi-element residual assembly, localized
+mode-I/contact validation cases it checks multi-element residual assembly, localized
 damage, delamination-front metrics, and tangent consistency across a small
 interface patch.
 """

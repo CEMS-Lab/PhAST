@@ -16,7 +16,7 @@ promoted_results:
       isotropic hardening; not a coupled phase-field plasticity solve.
     verification:
       result_generated: true
-      trajectory_store: training_data.zarr
+      trajectory_store: generated_on_local_rerun
       animation: field_evolution.gif
   - validation_id: structural_dcb_cohesive
     result_dir: examples/plasticity_interface/results/structural_dcb_cohesive
@@ -28,7 +28,7 @@ promoted_results:
       D5528 data reduction.
     verification:
       result_generated: true
-      trajectory_store: training_data.zarr
+      trajectory_store: generated_on_local_rerun
       animation: damage_evolution.gif
   - validation_id: pfczm_uniaxial_strength
     result_dir: examples/plasticity_interface/results/pfczm_uniaxial_strength
@@ -36,9 +36,9 @@ promoted_results:
     fluent_setup: examples/plasticity_interface/fluent_setups/pfczm_uniaxial_strength.py
     claim_boundary: >
       Forward Wu PF-CZM damage-law strength calibration and length-scale
-      sweep with nonlinear bounded damage solve; not a full structural
+      parametric study with nonlinear bounded damage solve; not a full structural
       mixed-mode crack-growth or PF-plasticity-cohesive benchmark.
     verification:
       result_generated: true
-      trajectory_store: training_data.zarr
+      trajectory_store: generated_on_local_rerun
       animation: damage_evolution.gif

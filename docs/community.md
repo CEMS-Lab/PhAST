@@ -28,4 +28,4 @@ When opening bugs or documentation gaps, include:
 - Changelog: `CHANGELOG.md`
 - API + docs dependencies: `requirements-docs.txt`
 - Release and bug triage runbook: use GitHub Releases and Issues in the public
-  repository; keep private release staging notes in internal logs.
+  repository; keep release staging notes in internal logs.

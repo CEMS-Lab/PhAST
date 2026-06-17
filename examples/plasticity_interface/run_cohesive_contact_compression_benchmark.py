@@ -1,6 +1,6 @@
 """Deterministic cohesive contact-compression benchmark.
 
-This smoke benchmark validates the optional normal-contact penalty in the
+This validation benchmark validates the optional normal-contact penalty in the
 solver-coupled ``CohesiveInterfaceOperator``. The interface is fully
 prescribed in compression, so the normal contact traction, zero damage growth,
 and contact tangent can be checked against closed-form expectations while

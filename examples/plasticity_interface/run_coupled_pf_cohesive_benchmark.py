@@ -1,6 +1,6 @@
 """Coupled phase-field matrix damage plus cohesive-interface benchmark.
 
-This customer-facing smoke example combines two failure mechanisms in one
+This customer-facing validation example combines two failure mechanisms in one
 staggered run:
 
 * matrix cracking represented by an AT2 phase-field damage solve around a
@@ -12,7 +12,7 @@ The mechanics solve uses ``QuasiStaticSolver(cohesive_operator=...)`` so the
 cohesive tangent is assembled into the Newton system.  After each mechanics
 solve the phase-field damage problem is updated with
 ``PhaseFieldDamageSolver`` and the loop repeats until the load-step damage
-increment is small.  This is a production-smoke validation of the coupled
+increment is small.  This is a production validation of the coupled
 workflow boundary, not a calibrated ASTM DCB or full PF-CZM release model.
 """
 from __future__ import annotations
@@ -266,7 +266,7 @@ def _write_config(output_dir: Path, geom: CoupledGeometry,
         "case: coupled_pf_matrix_damage_plus_cohesive_interface",
         "model: AT2_phase_field_matrix_damage + zero_thickness_cohesive_interface",
         "solver: staggered QuasiStaticSolver(cohesive_operator) + PhaseFieldDamageSolver",
-        "capability_boundary: coupled validation smoke, not calibrated PF-CZM",
+        "capability_boundary: coupled validation, not calibrated PF-CZM",
         f"length: {geom.length}",
         f"arm_height: {geom.arm_height}",
         f"nx: {geom.nx}",
@@ -300,7 +300,7 @@ def _write_mesh_files(output_dir: Path, nodes: np.ndarray,
     geo = output_dir / "mesh.geo"
     geo.write_text(
         "\n".join([
-            "// Coupled PF+cohesive validation smoke mesh.",
+            "// Coupled PF+cohesive validation mesh.",
             "// mesh.msh is written directly by the Python runner.",
             "",
         ])
@@ -930,7 +930,7 @@ def run_benchmark(output_dir: Path, *, n_steps: int = 9,
             "zero-thickness cohesive-interface delamination"
         ),
         "capability_boundary": (
-            "coupled validation smoke with a notched matrix and cohesive "
+            "coupled validation with a notched matrix and cohesive "
             "interface; not a calibrated PF-CZM or ASTM DCB product workflow"
         ),
         "n_nodes": int(mesh.n_nodes),
