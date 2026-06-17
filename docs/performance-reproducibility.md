@@ -46,8 +46,8 @@ See `docs/user_guide/example_contract.md` for the artifact contract.
 Performance comparisons are engineering snapshots, not fixed product claims.
 Solver versions, optional backends, hardware, threading, tolerances, mesh
 regeneration, and output settings can all change the result. Rerun the public
-YAML configuration and record the generated manifests before using a timing number in a
-paper, proposal, release note, or external comparison.
+YAML configuration and record the generated manifests before using a timing
+number in a paper, proposal, release note, or external comparison.
 
 For fresh timing work, start from the same public entry points used by the
 examples:
@@ -66,7 +66,7 @@ regenerated with the current public configuration file.
 
 ## Dynamic timing comparison
 
-![Dynamic timing comparison](../../assets/dynamic_timing_comparison.png)
+![Dynamic timing comparison](../assets/dynamic_timing_comparison.png)
 
 This figure is regenerated from the current retained SENT and Kalthoff-Winkler
 timing CSVs using Akantu, FEniCS, and PhAST final timing traces. Treat it as a

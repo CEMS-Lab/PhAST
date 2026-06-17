@@ -139,7 +139,7 @@ api/adaptive
 :maxdepth: 1
 :caption: Performance & Reproducibility
 
-performance_reproducibility/index
+performance-reproducibility
 ```
 
 ```{toctree}

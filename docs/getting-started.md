@@ -138,7 +138,7 @@ does not silently derive missing postprocessed fields.
 | Forward dynamic or static fracture | `docs/user_guide/physics.md`, `docs/user_guide/configuration.md`, and `docs/user_guide/capability_matrix.md` |
 | Quasistatic benchmark reproduction | `docs/example-gallery.md` and benchmark configs under `configs/benchmarks/` |
 | Dataset visualisation | `docs/example-gallery.md`, dynamic benchmark outputs, and standard Zarr-first output conventions |
-| Solver/backend selection | `docs/user_guide/sparse_solve.md`, `docs/user_guide/configuration.md`, and `docs/performance_reproducibility/index.md` |
+| Solver/backend selection | `docs/user_guide/sparse_solve.md`, `docs/user_guide/configuration.md`, and `docs/performance-reproducibility.md` |
 
 ## 7. Advanced Installation And Platform Setup
 

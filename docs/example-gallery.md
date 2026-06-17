@@ -182,5 +182,5 @@ This doc is also the source of truth for what can be promised publicly.
 Driver: [`sparse_solve`](api/sparse_solve.md). Speedup is wall-time of the
 sparse direct path versus the matrix-free CG inner-solve path on the same mesh,
 tolerance, backend stack, and output settings. See
-[`Performance and Reproducibility`](performance_reproducibility/index.md) for
+[`Performance and Reproducibility`](performance-reproducibility.md) for
 the reporting checklist before publishing numbers.
