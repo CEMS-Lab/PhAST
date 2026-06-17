@@ -22,11 +22,6 @@ workflow status. Use the
 [promoted example contract](user_guide/example_contract.md) when adding or
 auditing a gallery entry.
 
-<figure>
-  <img src="../assets/kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler impact crack growth">
-  <figcaption>Dynamic fracture showcase: Kalthoff-Winkler impact crack growth.</figcaption>
-</figure>
-
 <div class="phast-card-grid phast-thumb-grid">
   <div class="phast-card phast-thumb-card">
     <img src="../assets/qs_notched_holed_damage.png" alt="Quasi-static notched holed plate damage field">
@@ -37,13 +32,8 @@ auditing a gallery entry.
   <div class="phast-card phast-thumb-card">
     <img src="../assets/kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler crack growth">
     <h3>Dynamic fracture</h3>
-    <p>Explicit dynamics for impact crack-growth benchmarks.</p>
-  </div>
-  <div class="phast-card phast-thumb-card">
-    <img src="../assets/kalthoff_winkler_crack_growth.png" alt="Kalthoff-Winkler crack-growth sequence">
-    <h3>Kalthoff-Winkler impact</h3>
-    <p>Explicit dynamic fracture with crack-growth snapshots through the
-    full public comparison window.</p>
+    <p>Explicit dynamics for impact, branching, and perforated-plate
+    crack-growth benchmarks.</p>
   </div>
   <div class="phast-card phast-thumb-card">
     <img src="../assets/perforated_microstructure_damage.png" alt="Perforated plate microstructure damage field">
@@ -75,7 +65,7 @@ The quasi-static family is the production path for many literature comparisons.
   `configs/benchmarks/quasistatic/` and compare scripts in matching example
   directories.
 - **Run example**:
-  `python -m phast run configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml --validate-only`
+  `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only`
 - **Expected outputs**: `config.yaml`, `run_lockfile.json`, `results.csv`, plots.
   Run `compare.py` in `examples/quasistatic/notched_holed_plate/` for
   benchmark-level pass/fail summary.
@@ -87,8 +77,7 @@ The quasi-static family is the production path for many literature comparisons.
   `examples/dynamic/*`.
 - **B7 dynamic branching**:
   `examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` is the
-  public-candidate full-plate COMSOL cross-check. Older half-plate B7
-  diagnostic configs remain unpublished provenance and are not gallery material.
+  public-candidate full-plate COMSOL cross-check.
 - **Benchmark workflow**:
   1. Launch via `python -m phast run <cfg>`
   2. Run `compare.py` in the corresponding `examples/dynamic/<case>/` directory.
@@ -120,18 +109,11 @@ The quasi-static family is the production path for many literature comparisons.
   DCB, diffuse-interface, and coupled PF-cohesive validation workflows live under
   `examples/plasticity_interface/`.
 - **Manifested reproduction set**:
-  `configs/benchmarks/plasticity_interface/manifests/customer_validation_examples.yaml`.
+  `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml`.
 - **Generated visual outputs**:
   the scripts write `*.png`, manifest metadata, and summaries into their chosen
   output directories. These are beta validation artifacts until the nonlinear
   production gates in the capability matrix are closed.
-
-## Tutorial map (ordered by onboarding value)
-
-- [Getting started](getting-started.md)
-- [Tutorial 1: Phase-field primer](tutorial/01_phase_field_primer.md)
-- [Tutorial 3: Problem setup](tutorial/03_setting_up_your_problem.md)
-- [Tutorial 4: Exploration experiments](tutorial/04_exploration_experiments.md)
 
 ## Capability boundaries
 
