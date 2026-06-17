@@ -277,8 +277,8 @@ example with a standard result bundle.
 
 Next pages:
 
-- [Fluent authoring tutorial](../tutorial/fluent_authoring_guide.md)
+- [Problem setup notebook](../tutorial/problem_setup_walkthrough.ipynb)
 - [Setting up new problems](setup_problems.md)
 - [YAML workflow](yaml_workflow.md)
-- [Results API](results_api.md)
+- [Public API reference](public_api_reference.md)
 - [Capability matrix](capability_matrix.md)

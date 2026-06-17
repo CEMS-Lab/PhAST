@@ -102,7 +102,7 @@ Read these files before making changes or answering detailed usage questions:
   authoring patterns.
 - [YAML Workflow](docs/user_guide/yaml_workflow.md) - batch execution,
   validation, and reproducible shared runs.
-- [Results API](docs/user_guide/results_api.md) - inspecting completed runs with
+- [Public API Reference](docs/user_guide/public_api_reference.md) - inspecting completed runs with
   `phast.load_result(path)`.
 - [Problem Setup Guide](docs/user_guide/setup_problems.md) - geometry, meshes,
   materials, boundary conditions, and outputs.

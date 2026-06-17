@@ -110,7 +110,7 @@ example, then change one part at a time:
 9. Inspect the result with `phast.load_result(...)`.
 
 Examples are YAML-first because they are reproducible. When available,
-`fluent_setup.py` shows the same model in the Python authoring style.
+`run_fluent.py` shows the same model in the Python authoring style.
 
 ## Geometry and Meshes
 
@@ -119,6 +119,18 @@ Use built-in geometry names for common benchmark shapes:
 ```python
 problem.geometry("rectangular_sent", W=100, H=40, a=50, h_crack=0.5, h_coarse=4.0)
 ```
+
+Common built-in geometry recipes include:
+
+| Geometry name | Use | Typical parameters |
+|---|---|---|
+| `rectangular_sent` | Single-edge-notched plates and branching benchmarks | `W`, `H`, `a`, `h_crack`, `h_coarse`, `branching` |
+| `miehe_tension` | Square SENT benchmark | `L`, `a`, `h_crack`, `h_coarse` |
+| `miehe_shear` | Square SENS benchmark | `L`, `a`, `h_crack`, `h_coarse` |
+| `kalthoff_winkler` | Two-notch impact specimen | `W`, `H`, `theta`, `h_crack` |
+| `three_point_bending` | TPB beam | `L`, `H`, `a`, `h_crack` |
+| `l_shaped_panel` | L-panel re-entrant corner | `L`, `h_crack` |
+| `perforated_sent` | SENT with one or more holes | `W`, `H`, `hole_config` |
 
 The easiest way to discover geometry arguments is to start from a solved YAML
 example and inspect it:
@@ -211,6 +223,18 @@ For phase-field fracture, common parameters are:
 For public benchmark reproduction, start from the checked-in `config.yaml`.
 For a real engineering study, choose material parameters from the relevant
 material data source and document the unit system with the run.
+
+Common material presets include:
+
+| Preset | Typical use |
+|---|---|
+| `glass_borden` | Borden-style dynamic glass benchmarks |
+| `maraging_steel_kw` | Kalthoff-Winkler impact |
+| `pmma_bleyer` | PMMA branching and perforated SENT studies |
+| `miehe_tension` | Miehe quasi-static SENT |
+| `miehe_shear` | Miehe quasi-static shear |
+| `l_shaped_concrete` | Ambati-style L-panel concrete benchmark |
+| `alumina_kumar` | Star-convex nucleation studies |
 
 ## Initial Conditions
 
@@ -332,12 +356,38 @@ print(result.history_names())
 print(result.visuals())
 ```
 
+## Acceptance Targets
+
+For benchmark or researcher-validation runs, include an `acceptance:` block in
+the YAML once the setup is more than a local scratch case. The block records
+what the run is expected to reproduce; it does not change the solve.
+
+```yaml
+acceptance:
+  status: beta
+  reference_result: "Borden et al. (2012), Fig. 10"
+  required_outputs: [run_lockfile.json, config.yaml, damage_final.png]
+  metrics:
+    crack_path:
+      target: "straight crack to right boundary"
+      tolerance: visual
+    peak_force:
+      target: null
+      tolerance: null
+      units: N
+  notes: "Fill numerical targets once the reference extraction is audited."
+```
+
+Keep this block honest: use `scaffold` or `beta` until the benchmark has a
+documented reference extraction, a known reaction/load convention, and a stored
+comparison artifact.
+
 ## What Makes a Good Public Example?
 
 Each public example should be boringly predictable:
 
 - one `config.yaml` declarative configuration,
-- one optional `fluent_setup.py` companion when the fluent path is promoted,
+- one optional `run_fluent.py` companion when the fluent path is promoted,
 - setup visual,
 - final field plots,
 - response or energy histories,

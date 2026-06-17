@@ -99,7 +99,7 @@ Browse the full [example gallery](docs/example-gallery.md) for the complete list
 |---|---|---|
 | Author a forward model | Fluent `phast.Problem` API | [Python API](docs/user_guide/python_api.md) |
 | Execute public benchmarks | Declarative `config.yaml` | [YAML Workflow](docs/user_guide/yaml_workflow.md) |
-| Post-process simulation data | `phast.load_result(path)` | [Results API](docs/user_guide/results_api.md) |
+| Post-process simulation data | `phast.load_result(path)` | [Public API Reference](docs/user_guide/public_api_reference.md) |
 | Review supported physics | Verification Matrix | [Capability Matrix](docs/user_guide/capability_matrix.md) |
 
 ### Programmatic Authoring

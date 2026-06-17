@@ -41,6 +41,6 @@ invented by the Result API.
 ## Related pages
 
 - `docs/user_guide/example_contract.md`
-- `docs/user_guide/results_api.md`
+- `docs/user_guide/public_api_reference.md`
 - `docs/user_guide/yaml_workflow.md`
 - `docs/example-gallery.md`

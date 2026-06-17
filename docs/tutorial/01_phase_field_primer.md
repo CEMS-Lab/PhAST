@@ -132,5 +132,5 @@ the sharp-crack model unless the mesh is fine enough).
   reproduced as `B5`/`B6`.
 
 Once you have the theory in mind, head to
-[setting up your problem](03_setting_up_your_problem.md) to translate
-it into a YAML config.
+[Setting up new problems](../user_guide/setup_problems.md) to translate it
+into a PhAST model and durable YAML configuration.

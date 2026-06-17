@@ -84,6 +84,14 @@ Is the problem pure Mode I tension?
 
 ### Solver Type Selection
 
+| Problem class | Solver | `solver_type` | Status | Use case |
+|---|---|---|---|---|
+| Nonlinear quasi-static | `QuasiStaticSolver` | `quasi_static` | Primary path for new quasi-static fracture runs | Newton-Raphson with sparse-direct or matrix-free mechanics; spectral direct uses a frozen-state secant tangent. |
+| Nonlinear quasi-static | `SecantCGSolver` | `quasi_static_legacy` | Retained compatibility path | Frozen-secant CG for older accepted runs and selected iterative-CG connector support. |
+| Explicit dynamics | `ExplicitDynamics` | `explicit` | Active dynamic-fracture path | Impact, wave-driven fracture, branching, and rapid trajectory generation. |
+| Linear static equilibrium | `StaticSolver` | `static` | Internal/supporting path | Single load step with `d=0`, used by selected mechanics setup paths. |
+| Nonlinear minimisation | `LBFGSSolver` | `lbfgs` | Available but not a promoted benchmark default | Gradient-only minimisation when tangent matvecs are unavailable or expensive. |
+
 | Problem | Solver | Why |
 |---------|--------|-----|
 | Dynamic fracture | `explicit` (ExplicitDynamics) | O(N) per step, CFL-limited |
@@ -92,6 +100,41 @@ Is the problem pure Mode I tension?
 | Frozen-secant CG fallback | `quasi_static_legacy` (SecantCGSolver) | Required for iterative-CG `rigid_connector` MPC |
 | Energy minimisation | `monolithic` (MonolithicSolver) | Joint (u,d), no stagger |
 | Linear elastic equilibrium | `static` (StaticSolver) | Pre-strain, simple problems |
+
+Use `explicit` only when inertia and stress waves are part of the physics
+question, for example Kalthoff-Winkler impact or dynamic branching. Explicit
+dynamics is CFL-limited and is not a shortcut for quasi-static loading.
+
+`quasi_static` is the default for displacement-controlled SENT, SENS, TPB,
+L-shaped panel, and comparable slow-loading fracture problems. Keep
+`quasi_static_legacy` only when reproducing an older accepted run that depends
+on the frozen-secant CG path.
+
+### Explicit-dynamics performance knobs
+
+For explicit dynamics, the damage equation can be solved every N-th time step
+instead of every step. Since damage propagates more slowly than the elastic
+wave speed used by the CFL condition, `damage_every: 2` or `3` can be useful
+after a sensitivity check.
+
+```yaml
+solver:
+  damage_every: 1   # reference validation: solve damage every explicit step
+  # damage_every: 2 # throughput sensitivity run
+  # damage_every: 3 # aggressive throughput run; document as non-reference
+```
+
+The first explicit steps still solve damage every step to capture crack
+nucleation. Treat subcycling as a performance setting, not a change to the
+validated benchmark definition.
+
+Smooth load ramps reduce high-frequency oscillations from instantaneous
+tractions. In YAML, prefer `ramp_type: smooth_step` with an explicit `t_ramp`
+for dynamic traction loads that should approximate a finite rise time.
+
+Residual stiffness `eta_residual` is the numerical floor in the degradation
+function. It prevents fully damaged regions from producing zero-stiffness rows;
+use the benchmark value unless you are deliberately studying sensitivity.
 
 ### Recommended Settings per Benchmark
 

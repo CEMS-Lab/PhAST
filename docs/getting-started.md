@@ -135,11 +135,11 @@ does not silently derive missing postprocessed fields.
 
 | Workflow | What to read next |
 |---|---|
-| Fluent Python authoring | `docs/tutorial/fluent_authoring_guide.md` and `docs/user_guide/python_api.md` |
-| Forward dynamic or static fracture | `docs/user_guide/problem_types.md`, `docs/user_guide/physics.md`, and `docs/user_guide/configuration.md` |
+| Fluent Python authoring | `docs/user_guide/python_api.md` and `docs/tutorial/problem_setup_walkthrough.ipynb` |
+| Forward dynamic or static fracture | `docs/user_guide/physics.md`, `docs/user_guide/configuration.md`, and `docs/user_guide/capability_matrix.md` |
 | Quasistatic benchmark reproduction | `docs/benchmarks/catalogue.md` and benchmark configs under `configs/benchmarks/` |
 | Dataset visualisation | `docs/example-gallery.md`, dynamic benchmark outputs, and standard Zarr-first output conventions |
-| Solver/backend selection | `docs/user_guide/sparse_solve.md`, `docs/user_guide/performance.md`, and API notes under `docs/api/` |
+| Solver/backend selection | `docs/user_guide/sparse_solve.md`, `docs/user_guide/configuration.md`, and `docs/performance_reproducibility/index.md` |
 
 ## 7. Advanced Installation And Platform Setup
 

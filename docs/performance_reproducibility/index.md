@@ -13,10 +13,21 @@ runs.
 | Quasi-static fracture | `backend: auto`, Jacobi-safe defaults unless the configuration file pins another tested backend |
 | Optional sparse-direct backends | Use PETSc/MUMPS, cuDSS, AmgX, or PyVista only where the capability matrix and local doctor output support them |
 
+PhAST's reference public runs use double precision where the mechanics and
+damage kernels require it. CUDA and CPU float64 are the most reliable choices
+for publication runs. Apple MPS can be useful for exploratory float32 work, but
+spectral/eigenvalue-sensitive fracture runs should be verified on CPU or CUDA
+float64 before being used as evidence.
+
 When submitting to HPC, prefer CPU nodes for runs that are memory-safe and
 would otherwise wait behind GPU jobs. Use multiprocessing or array jobs only
 when each case writes to a separate output directory and the manifest records
 the exact command.
+
+Always pass an explicit `--output_dir` for reproducible runs. Timestamped or
+temporary output folders are convenient during local exploration, but paper
+artifacts should live in stable directories with the corresponding config,
+metadata, lockfile, CSV histories, and visuals kept together.
 
 ## Reproducibility checklist
 

@@ -10,10 +10,10 @@ inspection.
 |---|---:|---|
 | [Getting started](../getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
 | [Problem setup notebook](problem_setup_walkthrough.ipynb) | 30-45 min | Create geometry, mesh and inspect named regions, apply initial conditions, supports, loads, solver settings, run a short solve, and post-process artifacts. |
-| [Build your first model with `phast.Problem`](fluent_authoring_guide.md) | 10-15 min | Create, validate, run, and inspect a Python-authored model. |
+| [Python API](../user_guide/python_api.md) | 10-15 min | Author a model with `phast.Problem` and understand the fluent method map. |
 | [YAML workflow](../user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
 | [Example gallery](../example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |
-| [Results API](../user_guide/results_api.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
+| [Public API reference](../user_guide/public_api_reference.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
 
 ## Recommended Learning Path
 

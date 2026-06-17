@@ -74,7 +74,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 | Install and run a first case | [Getting started](getting-started.md) | `python -m phast doctor` |
 | Author new models | [Python API](user_guide/python_api.md) and [Setting up problems](user_guide/setup_problems.md) | `phast.Problem` |
 | Reproduce or batch-run examples | [YAML workflow](user_guide/yaml_workflow.md) | `python -m phast run config.yaml` |
-| Inspect completed runs | [Results API](user_guide/results_api.md) | `phast.load_result(path)` |
+| Inspect completed runs | [Public API reference](user_guide/public_api_reference.md) | `phast.load_result(path)` |
 | Browse runnable examples | [Example gallery](example-gallery.md) | flat public example folders |
 | Check supported physics | [Capability matrix](user_guide/capability_matrix.md) | production / beta / scaffold labels |
 
@@ -85,8 +85,6 @@ getting-started
 user_guide/public_api_reference
 tutorial/index
 tutorial/01_phase_field_primer
-tutorial/fluent_authoring_guide
-tutorial/03_setting_up_your_problem
 tutorial/04_exploration_experiments
 user_guide/capability_matrix
 ```
@@ -99,15 +97,12 @@ user_guide/overview
 user_guide/setup_problems
 user_guide/python_api
 user_guide/yaml_workflow
-user_guide/problem_types
 user_guide/physics
 user_guide/configuration
 user_guide/meshes
 user_guide/example_contract
-user_guide/results_api
 user_guide/capability_matrix
 user_guide/sparse_solve
-user_guide/performance
 ```
 
 ```{toctree}
@@ -147,8 +142,6 @@ api/adaptive
 
 output_standards/index
 user_guide/example_contract
-user_guide/results_api
-user_guide/data_and_devices
 ```
 
 ```{toctree}

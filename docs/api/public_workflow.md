@@ -10,14 +10,14 @@ loads, steps, outputs, and results.
 | `phast.Problem` | Fluent authoring entry point for new models. | [Python API](../user_guide/python_api.md) |
 | `Geometry` / `Mesh` | Define generated geometry or import an existing mesh. | [Setting up problems](../user_guide/setup_problems.md) |
 | `phast.Region` | Name physical groups, mesh sets, and reusable application regions. | [Python API](../user_guide/python_api.md) |
-| `phast.Material` | Low-level material parameter container exported for direct material objects. | [Problem types](../user_guide/problem_types.md) |
+| `phast.Material` | Low-level material parameter container exported for direct material objects. | [Configuration](../user_guide/configuration.md) |
 | `Problem.material(...)` | Fluent material assignment helper for presets, constitutive parameters, and target regions. | [Python API](../user_guide/python_api.md) |
 | `phast.InitialCondition` | Seed fields such as initial damage where supported. | [Python API](../user_guide/python_api.md) |
 | `phast.BoundaryCondition` | Apply fix, prescribe, traction, symmetry, and Neumann-style conditions. | [Capability matrix](../user_guide/capability_matrix.md) |
 | `phast.AnalysisStep` | Select the solution type, loading protocol, and active conditions. | [YAML workflow](../user_guide/yaml_workflow.md) |
 | `phast.Outputs` | Request fields, histories, visuals, trajectories, and manifests. | [Output standards](../output_standards/index.md) |
-| `phast.Result` / `phast.load_result()` | Inspect completed run directories without rerunning solvers. | [Results API](../user_guide/results_api.md) |
-| `phast.ResultLoadError` | Clear error for missing result directories, unknown fields, and reserved postprocess methods. | [Results API](../user_guide/results_api.md) |
+| `phast.Result` / `phast.load_result()` | Inspect completed run directories without rerunning solvers. | [Public API reference](../user_guide/public_api_reference.md) |
+| `phast.ResultLoadError` | Clear error for missing result directories, unknown fields, and reserved postprocess methods. | [Public API reference](../user_guide/public_api_reference.md) |
 
 ## Authoring Boundary
 

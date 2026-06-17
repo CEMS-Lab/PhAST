@@ -57,7 +57,7 @@ runs.
 |---|---|
 | Install and first run | `docs/getting-started.md` |
 | Supported/unsupported status | `docs/user_guide/capability_matrix.md` |
-| Problem and physics setup | `docs/user_guide/problem_types.md`, `docs/user_guide/physics.md`, `docs/user_guide/configuration.md` |
+| Problem and physics setup | `docs/user_guide/setup_problems.md`, `docs/user_guide/physics.md`, `docs/user_guide/configuration.md` |
 | Mesh and geometry notes | `docs/user_guide/meshes.md` |
 | Sparse/direct backend notes | `docs/user_guide/sparse_solve.md` and `docs/api/sparse_solve.md` |
 | Benchmarks | `docs/benchmarks/catalogue.md` and the public example folders |

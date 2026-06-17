@@ -158,19 +158,46 @@ print(result.visuals())
 
 `Result` methods include:
 
-- `metadata()`
-- `manifest()`
-- `mesh()`
-- `history_names()`
-- `history(name)`
-- `visuals()`
-- `field_names()`
-- `has_field(name)`
-- `field(name, step=-1)`
+| Method | Purpose |
+|---|---|
+| `metadata()` | Return `run_metadata.json` content when present. |
+| `manifest()` | Return `run_manifest.json`, falling back to metadata for older runs. |
+| `mesh()` | Return mesh metadata/provenance from metadata, manifest config, or trajectory mesh groups. |
+| `history_names()` | List CSV-backed histories and supported aliases. |
+| `history(name)` | Return rows for a CSV-backed history. |
+| `visuals()` | Return visual manifest rows or discovered media artifacts. |
+| `field_names()` | Discover canonical stored field names from Zarr/H5 trajectory stores. |
+| `has_field(name)` | Check a canonical field name or supported alias. |
+| `field(name, step=-1)` | Load a directly stored raw Zarr/H5 field as a NumPy array. |
 
 `field(name)` returns **stored raw trajectory fields only** (for example `damage` and
 `displacement` when written). Derived quantities (for example von Mises, response transforms)
 are only available after post-processing and are not silently synthesized by `field()`.
+
+Canonical history aliases include `response`, `reaction_force`,
+`load_displacement`, `max_damage`, `energy`, `solver_telemetry`, and
+`timing_per_step` when backed by existing CSV files or columns.
+
+Canonical field aliases include `damage`, `displacement`, `history_field`,
+`history_field_nodal`, `stress`, `strain`, `velocity`, and `acceleration` when
+stored in an existing trajectory store. Field loading returns NumPy arrays
+because Zarr/H5 readers are NumPy-native; training code can use
+`torch.as_tensor(result.field("damage"))` when it needs a tensor view.
+
+### Reserved postprocess methods
+
+These method names are public, but they are explicit boundaries rather than
+automatic artifact generators:
+
+```python
+result.plot("damage")      # raises ResultLoadError until postprocess wiring lands
+result.animate("damage")   # raises ResultLoadError until animation wiring lands
+result.export("vtu")       # raises ResultLoadError until export wiring lands
+```
+
+Use `result.visuals()` to inspect artifacts already written by a run, or call
+`python -m phast postprocess <run_dir>` explicitly when postprocessing
+generation is needed.
 
 ## `phast.load_result(path)`
 
