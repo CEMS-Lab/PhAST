@@ -60,7 +60,7 @@ runs.
 | Problem and physics setup | `docs/user_guide/setup_problems.md`, `docs/user_guide/physics.md`, `docs/user_guide/configuration.md` |
 | Mesh and geometry notes | `docs/user_guide/meshes.md` |
 | Sparse/direct backend notes | `docs/user_guide/sparse_solve.md` and `docs/api/sparse_solve.md` |
-| Benchmarks | `docs/benchmarks/catalogue.md` and the public example folders |
+| Benchmarks | `docs/example-gallery.md` and the public example folders |
 | Examples | `docs/user_guide/example_contract.md`, `examples/README.md`, and `docs/example-gallery.md` |
 
 GitHub workflows are currently manual-only. Run CI, docs, install checks, or

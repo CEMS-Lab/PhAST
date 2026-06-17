@@ -137,7 +137,7 @@ does not silently derive missing postprocessed fields.
 |---|---|
 | Fluent Python authoring | `docs/user_guide/python_api.md` and `docs/tutorial/problem_setup_walkthrough.ipynb` |
 | Forward dynamic or static fracture | `docs/user_guide/physics.md`, `docs/user_guide/configuration.md`, and `docs/user_guide/capability_matrix.md` |
-| Quasistatic benchmark reproduction | `docs/benchmarks/catalogue.md` and benchmark configs under `configs/benchmarks/` |
+| Quasistatic benchmark reproduction | `docs/example-gallery.md` and benchmark configs under `configs/benchmarks/` |
 | Dataset visualisation | `docs/example-gallery.md`, dynamic benchmark outputs, and standard Zarr-first output conventions |
 | Solver/backend selection | `docs/user_guide/sparse_solve.md`, `docs/user_guide/configuration.md`, and `docs/performance_reproducibility/index.md` |
 

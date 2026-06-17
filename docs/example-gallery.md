@@ -111,6 +111,60 @@ The quasi-static family is the production path for many literature comparisons.
   output directories. These are beta validation artifacts until the nonlinear
   production gates in the capability matrix are closed.
 
+## Benchmark Catalogue
+
+YAML-driven benchmark configurations live under `configs/benchmarks/`.
+Runnable public examples carry their promoted `config.yaml` files directly in
+`examples/`. Prefer the example-local command when a case is promoted, because
+the folder also contains the README, setup image, retained result visuals, and
+postprocessing scripts expected by the public example contract.
+
+Use `python -m phast run <config.yaml> --validate-only` to parse and
+schema-check a benchmark without running the solve. The full YAML schema is
+documented in `configs/REFERENCE.yaml`.
+
+### Quasi-static Benchmarks
+
+| Config | Material | Reference | Acceptance evidence | Status |
+|---|---|---|---|---|
+| `QS_lshaped_concrete.yaml` | concrete, Ambati-style | Winkler 2001 path; Ambati 2015 load-displacement comparison | deferred comparison script | Reference CSV is retained outside the public repository. Do not mark as quantitatively validated until rerun evidence is promoted through the public example contract. |
+| `QS_notched_holed_plate.yaml` | cement mortar, Ambati-style | COMSOL 6.4 holed-plate example; Ambati 2015 phase-field formulation | `examples/quasistatic/notched_holed_plate/compare.py` | First-peak load is close; displacement mismatch is attributed to simplified rigid-pin boundary conditions pending full Lagrange-MPC support. |
+
+Miehe tension is already promoted as an example-local YAML workflow under
+`examples/quasistatic/miehe_tension/`. Older Miehe shear and three-point
+bending variants should stay outside the gallery until they satisfy the same
+flat YAML, manifest, and visualization contract.
+
+### Dynamic Benchmarks
+
+| Config | Material | Reference | Notes |
+|---|---|---|---|
+| `B2_kalthoff_winkler.yaml` | maraging steel | Kalthoff 2000; Borden 2012 Fig. 12 | Half-plate symmetry model with spectral split. |
+| `B3_dynamic_sent.yaml` | Borden glass | Borden 2012 SENT | Spectral split, AT2; public folder contains curated runnable configuration and retained visuals. |
+| `B5_pmma_branching.yaml` | PMMA, Bleyer-style | Bleyer 2017 branching | AT1 with Amor/volumetric-deviatoric split; two-step prestrain and dynamic release. |
+| `B6_perforated_*.yaml` | PMMA, Bleyer-style | Bleyer 2017 perforated plate | Dynamic AT1 with Amor split; promoted layouts include one-hole near/far, 10-hole, and 30-hole variants. |
+| `B7_dynamic_crack_branching_comsol.yaml` | glass/PMMA-equivalent override | COMSOL 6.4 dynamic crack-branching example | AT1 with Amor/volumetric-deviatoric split; traction-controlled full-plate comparison. |
+
+### Acceptance Checks
+
+Each promoted benchmark example may ship a local `compare.py`. Run it manually
+after the simulation completes; it loads the run output and reference data, then
+writes comparison artifacts into the run directory. The acceptance metric is
+case-specific: examples include peak load, load-displacement envelope error,
+branching onset time, final crack-path morphology, and required-output checks.
+
+For load-displacement comparisons, configure the reaction writer explicitly:
+
+```yaml
+output:
+  reaction_node_set: <named_node_set>
+  reaction_component: 1  # 0=x, 1=y
+```
+
+The benchmark command should not be the only record of a claim. Keep the
+validated configuration, lockfile, metadata, histories, retained visuals, and
+comparison output together with the example or run artifact.
+
 ## Capability boundaries
 
 For current non-hardened features, review

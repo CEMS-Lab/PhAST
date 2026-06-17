@@ -121,7 +121,6 @@ supported_workflows/unsupported_experimental
 :caption: Example Gallery
 
 example-gallery
-benchmarks/catalogue
 ```
 
 ```{toctree}

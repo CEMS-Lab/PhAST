@@ -104,10 +104,9 @@ html_theme_options = {
 # Be lenient: missing references are warnings, not errors, so -W only catches real issues.
 nitpicky = False
 
-# Wrapper pages in docs/user_guide and docs/benchmarks carry an H1
-# title and {include}-slice DOCUMENTATION.md starting at an H2. Sphinx demotes
-# the included headings, producing harmless H1->H3 jumps. The pages render
-# correctly; silence just this one cosmetic warning class.
+# Wrapper pages may carry an H1 title and include sliced documentation starting
+# at an H2. Sphinx can demote the included headings, producing harmless H1->H3
+# jumps. The pages render correctly; silence just this cosmetic warning class.
 suppress_warnings = ["myst.header"]
 
 exclude_patterns = [
