@@ -39,8 +39,7 @@ metadata, lockfile, CSV histories, and visuals kept together.
    intentionally published as external release artifacts.
 5. Inspect outputs with `phast.load_result(path)`.
 
-See `docs/output_standards/index.md` and
-`docs/user_guide/example_contract.md` for the artifact contract.
+See `docs/user_guide/example_contract.md` for the artifact contract.
 
 ## Benchmark policy
 

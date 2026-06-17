@@ -104,8 +104,7 @@ Recommended defaults by workflow:
 
 Each normal run writes standard outputs plus provenance files such as
 `config.yaml` and `run_lockfile.json`. See
-`docs/user_guide/example_contract.md` for the promoted-example contract and
-the [output standards](output_standards/index.md) page for visualization and
+`docs/user_guide/example_contract.md` for promoted-example, visualization, and
 result artifact conventions.
 
 ## 5. Inspect the Result

@@ -137,14 +137,6 @@ api/adaptive
 
 ```{toctree}
 :maxdepth: 1
-:caption: Output Standards
-
-output_standards/index
-user_guide/example_contract
-```
-
-```{toctree}
-:maxdepth: 1
 :caption: Performance & Reproducibility
 
 performance_reproducibility/index

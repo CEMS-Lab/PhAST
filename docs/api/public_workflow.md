@@ -15,7 +15,7 @@ loads, steps, outputs, and results.
 | `phast.InitialCondition` | Seed fields such as initial damage where supported. | [Python API](../user_guide/python_api.md) |
 | `phast.BoundaryCondition` | Apply fix, prescribe, traction, symmetry, and Neumann-style conditions. | [Capability matrix](../user_guide/capability_matrix.md) |
 | `phast.AnalysisStep` | Select the solution type, loading protocol, and active conditions. | [YAML workflow](../user_guide/yaml_workflow.md) |
-| `phast.Outputs` | Request fields, histories, visuals, trajectories, and manifests. | [Output standards](../output_standards/index.md) |
+| `phast.Outputs` | Request fields, histories, visuals, trajectories, and manifests. | [Promoted example contract](../user_guide/example_contract.md) |
 | `phast.Result` / `phast.load_result()` | Inspect completed run directories without rerunning solvers. | [Public API reference](../user_guide/public_api_reference.md) |
 | `phast.ResultLoadError` | Clear error for missing result directories, unknown fields, and reserved postprocess methods. | [Public API reference](../user_guide/public_api_reference.md) |
 
@@ -68,4 +68,5 @@ Every promoted public example should expose a flat, predictable result bundle:
 `config.yaml`, `run_manifest.json`, `visual_manifest.json`, representative
 PNG/MP4 artifacts, CSV histories where relevant, and Zarr-first trajectory
 outputs when the run stores fields. See
-[Output standards](../output_standards/index.md) for the artifact contract.
+[Promoted example contract](../user_guide/example_contract.md) for the artifact
+contract.

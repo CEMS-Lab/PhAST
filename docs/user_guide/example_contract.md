@@ -64,6 +64,32 @@ The public repository should retain the lightweight YAML, Python runner, CSV,
 metadata, image, and animation artifacts needed to understand and rerun the
 case.
 
+## Output artifact contract
+
+Each promoted run should write artifacts that can be inspected by users and by
+release checks without reverse-engineering a solver scratch directory.
+
+| Artifact | Producer | Primary consumer | Public contract |
+|---|---|---|---|
+| `run_manifest.json` | YAML runner, promoted scripts | `phast.load_result`, release review, example README | Required for promoted examples. |
+| `visual_manifest.json` | plotting/postprocess layer | docs gallery, `result.visuals()` | Required when visuals are present. |
+| `run_metadata.json` | solver runner | provenance audit, `result.metadata()` | Required for full solver runs. |
+| `run_lockfile.json` | runner/environment capture | reproducibility review | Required for full solver runs. |
+| `history.csv` | solver runner | `result.history_names()`, `result.history(name)` | Required when the solver records step histories. |
+| `results.csv` | reaction/load output writer | benchmark comparison, response plots | Required for load-displacement comparisons. |
+| `response.csv` | solid-mechanics runner | solid examples, README snippets | Required when a response curve is presented. |
+| `energy.csv` | fracture/dynamic runners | energy plots, validation review | Required when an energy plot or claim is presented. |
+| `solver_telemetry.csv` | iterative solvers | convergence review | Required when convergence behavior is part of the example. |
+| `timing_per_step.csv` | runner/profiler | performance review | Required when timing claims are made. |
+| `training_data.zarr` | trajectory writer | restart, postprocess, ML consumers | Keep out of git unless published as an external release artifact. |
+| PNG/GIF visuals | plot/postprocess layer | docs gallery, review packets | Governed by `visual_manifest.json` and this contract. |
+
+Inspect completed runs through `phast.load_result(path)`. Stored raw fields are
+loaded with `result.field(name, step=-1)` only when the trajectory store
+contains that field. Derived fields such as von Mises stress or displacement
+magnitude require explicit postprocessing and are not silently invented by the
+Result API.
+
 ## README contract
 
 Every promoted example `README.md` must contain:
@@ -443,8 +469,7 @@ Promotion is not complete until tests or drift checks cover the contract:
 - HPC drift checks when helper scripts are mirrored in `lab-infra`.
 
 At minimum, the canonical contract page must remain linked from
-`examples/README.md`, `docs/output_standards/index.md`, and the public docs
-index.
+`examples/README.md` and the public docs index.
 
 ## Promotion checklist
 
