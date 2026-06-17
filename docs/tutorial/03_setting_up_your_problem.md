@@ -221,9 +221,9 @@ Useful flags:
 | Flag | Effect |
 |------|--------|
 | `--device cpu \| cuda \| mps` | Override the device |
-| `--fast` | Skip live plotting; with `--h5`, write legacy H5 for later post-processing |
+| `--fast` | Skip live plotting for quick checks |
 | `--gif` | Render configured field animations; MP4/raster is the default when ffmpeg is available, and `output.gif_fields` can add `stress` and `displacement` |
-| `--h5_every 50` | Snapshot frequency in legacy H5 |
+| `--h5_every 50` | Snapshot frequency for trajectory output; Zarr is preferred for new runs |
 | `--num_steps 5` | Smoke test (override step count) |
 | `--validate-only` | Parse + schema-check, do not run |
 
@@ -231,8 +231,9 @@ The run directory (`runs/<config_name>_<timestamp>/`) contains:
 
 - `damage_final.png` -- final damage tricontour
 - `sample_*.zarr` or a run-level `.zarr` store -- preferred for new
-  neural-operator, replay-buffer, and large dataset-generation runs
-- `training_data.h5` -- legacy per-step `u`, `d`, `H`, energy, reaction
+  replay-buffer and large dataset-generation runs
+- `training_data.h5` -- legacy trajectory store when explicitly requested by
+  the YAML trajectory format
   trajectory when `output.h5` / `--h5` is requested
 - `results.csv` -- step / displacement / reaction / max(d), if
   `output.reaction_node_set` is set

@@ -99,6 +99,7 @@ user_guide/capability_matrix
 :caption: User Guide
 
 user_guide/overview
+public_repo_inventory
 user_guide/setup_problems
 user_guide/python_api
 user_guide/yaml_workflow
