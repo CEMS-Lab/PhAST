@@ -28,7 +28,6 @@ The YAML deck is the canonical public input for this example. The reference evid
 | `initial_conditions.png` | Mesh-3 initial-condition visual. |
 | `mesh.geo` | Gmsh geometry/provenance file for the half-plate h=0.25 mm mesh. |
 | `mesh.msh` | Exact reference mesh exported from the reference environment H5 trajectory; matches `run_metadata.json` node and element counts. |
-| `response_evolution.mp4` | Energy-response animation generated from `energy.csv`. |
 | `run_fluent.py` | Optional Python/manual setup companion mirroring the public YAML deck. |
 | `run_lockfile.json` | Reproducibility lockfile with resolved public config and reference run metadata. |
 | `run_manifest.json` | Public manifest describing curated source, reference source, files, and omitted large artifacts. |
@@ -136,7 +135,6 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 | --- | --- | --- |
 | Recorded run | reference A100 mesh-3 evidence; 35,487 nodes, 70,447 elements, 11,775 explicit steps | PRESENT |
 | Public field animation | `damage_evolution.gif` and `damage_evolution.mp4` generated from mesh-3 `external trajectory store` in the reference environment | PRESENT |
-| Public response animation | `response_evolution.mp4` generated from mesh-3 `energy.csv` | PRESENT |
 | Excluded large files | `external trajectory store`, full run logs, and temporary result directories stay out of the public bundle | ENFORCED |
 
 To regenerate the reference visuals without transferring the H5 file, post-process in the reference environment in:

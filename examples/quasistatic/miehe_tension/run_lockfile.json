@@ -109,7 +109,6 @@
       "eta_residual": 1e-07
     },
     "output": {
-      "output_dir": null,
       "h5": true,
       "trajectory": true,
       "trajectory_format": "zarr",
@@ -128,10 +127,7 @@
       "device": "cpu",
       "compile": false
     },
-    "initial_conditions": {
-      "preseed_notch_nodesets": null,
-      "preseed_damage": null
-    }
+    "initial_conditions": {}
   },
   "run_metadata": {
     "timestamp": "2026-05-23T19:39:54.227845",

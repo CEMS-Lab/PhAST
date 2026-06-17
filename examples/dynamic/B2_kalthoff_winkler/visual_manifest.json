@@ -44,13 +44,5 @@
     "visual_scope": "dynamic",
     "size_bytes": 263796,
     "media_passed": true
-  },
-  {
-    "file": "response_evolution.mp4",
-    "artifact_type": "animation",
-    "label": "energy response evolution",
-    "visual_scope": "dynamic",
-    "size_bytes": 102365,
-    "media_passed": true
   }
 ]

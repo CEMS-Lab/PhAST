@@ -17,7 +17,7 @@ Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve pat
 | `initial_conditions.png` | Geometry and boundary-condition preview. |
 | `deformed_shape.png`, `displacement_magnitude.png`, `displacement_final.png` | Displacement-field visual evidence. |
 | `von_mises.png`, `stress_final.png`, `strain_final.png`, `strain_energy.png` | Final stress, strain, and energy fields. |
-| `response_evolution.mp4`, `field_evolution.mp4` | Lightweight reference animations. |
+| `field_evolution.mp4` | Lightweight reference animations. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
 | `run_metadata.json`, `run_lockfile.json`, `run_manifest.json` | Reproducibility metadata for the reference output. |
 

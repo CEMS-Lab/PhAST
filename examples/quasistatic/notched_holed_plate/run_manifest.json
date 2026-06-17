@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "example": "quasistatic.notched_holed_plate",
+  "status": "promoted_public_validation",
+  "command": "python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate",
+  "validation": "PASS strict-parity comparison against COMSOL/Ambati reference values",
+  "notes": "Flat public quasi-static fracture bundle; raw trajectories and run logs are generated locally, not distributed.",
+  "config": "config.yaml",
+  "files": [
+    "README.md",
+    "compare.png",
+    "compare.py",
+    "compare_report.txt",
+    "comsol_load_displacement.csv",
+    "config.yaml",
+    "crack_tip.csv",
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
+    "damage_final.png",
+    "damage_multipanel.png",
+    "energy.csv",
+    "energy.png",
+    "history.csv",
+    "initial_conditions.png",
+    "load_displacement.png",
+    "mesh.geo",
+    "mesh.msh",
+    "results.csv",
+    "solver_telemetry.csv",
+    "thumbnail.png",
+    "timing_per_step.csv",
+    "visual_manifest.json"
+  ],
+  "omitted_artifact_categories": [
+    "raw trajectory stores",
+    "run and comparison logs",
+    "scratch run directories"
+  ]
+}

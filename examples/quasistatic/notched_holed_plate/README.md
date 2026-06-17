@@ -40,6 +40,7 @@ The checked-in reference result used 200 load steps on CPU and took about
 | --- | --- |
 | `README.md` | This guide. |
 | `config.yaml` | Canonical simulation input deck. Defines geometry, material, rigid-connector boundary conditions, loading, solver settings, device, and output options. |
+| `run_manifest.json` | Public artifact manifest for the flat example bundle. |
 | `mesh.geo` | Gmsh geometry source for the plate, notch, hole, pins, named groups, and refinement fields. |
 | `mesh.msh` | Generated Gmsh mesh used by the reference example. |
 | `comsol_load_displacement.csv` | Lightweight COMSOL reference curve used by `compare.py`. |

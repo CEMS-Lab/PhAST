@@ -90,13 +90,6 @@
     "review_dimension_passed": true
   },
   {
-    "file": "response_evolution.mp4",
-    "size_bytes": 24080,
-    "visual_scope": "solid_mechanics_fea",
-    "artifact_type": "video",
-    "review_dimension_passed": true
-  },
-  {
     "file": "field_evolution.mp4",
     "size_bytes": 29774,
     "visual_scope": "solid_mechanics_fea",

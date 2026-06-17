@@ -50,7 +50,6 @@ The three reference FEA examples write:
 - `stress_final.png`.
 - `equivalent_plastic_strain.png` for the J2 example, or `strain_energy.png` for elastic/hyperelastic examples.
 - `strain_final.png`.
-- `response_evolution.mp4` and `field_evolution.mp4`.
 - `thumbnail.png` for gallery use.
 - `visual_manifest.json` with image/video dimensions, sizes, and review gate status.
 - `run_manifest.json` with command, config, runtime, metrics, and output list.

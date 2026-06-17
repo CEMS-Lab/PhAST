@@ -36,6 +36,7 @@ The checked-in reference result used 350 load steps on CPU and took about
 | `mesh.geo` | Gmsh geometry source for the notched plate, named physical curves, and refinement fields. |
 | `mesh.msh` | Generated Gmsh mesh used by the reference example. |
 | `README.md` | This guide. |
+| `run_manifest.json` | Public artifact manifest for the flat example bundle. |
 | `run_metadata.json` | Compact run summary: platform, package/runtime versions, material, mesh size, solver settings, runtime, peak reaction, and memory. |
 | `run_lockfile.json` | Reproducibility lockfile containing the command, config hash, resolved config, runtime metadata, and solver/material/mesh metadata. |
 | `results.csv` | Per-step displacement, reaction force, max damage, max history field, stagger iterations, and elapsed time. |
@@ -45,7 +46,6 @@ The checked-in reference result used 350 load steps on CPU and took about
 | `solver_telemetry.csv` | Solver iterations, residuals, time step, and line-search telemetry. |
 | `crack_tip.csv` | Crack-tip tracking output. |
 | `compare_report.txt` | Text validation report against the PhaseFieldX 1711 reference response. |
-| `compare.log` | Log from the comparison/validation step. |
 | `compare.png` | Load-displacement comparison against reference data. |
 | `load_displacement.png` | Simulation load-displacement curve. |
 | `energy.png` | Energy component plot. |
@@ -55,7 +55,6 @@ The checked-in reference result used 350 load steps on CPU and took about
 | `thumbnail.png` | Thumbnail image for catalogs and docs. |
 | `damage_evolution.gif` | Damage evolution animation. |
 | `damage_evolution.mp4` | MP4 damage evolution animation. |
-| `response_evolution.mp4` | Response evolution video. |
 | `visual_manifest.json` | Manifest for reference visual artifacts, dimensions, sizes, and review status. |
 
 ## Run The Canonical YAML Deck

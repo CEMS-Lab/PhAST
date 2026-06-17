@@ -32,8 +32,6 @@
   },
   "branch_detection": {
     "crack_step": 62,
-    "branch_step": null,
-    "branch_time_us": null,
     "note": "The promoted visual result shows the selected PMMA crack path; automatic branch-step detection was not triggered in the archived metadata."
   },
   "files": [

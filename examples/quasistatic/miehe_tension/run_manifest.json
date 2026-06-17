@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "example": "quasistatic.miehe_tension",
+  "status": "promoted_public_validation",
+  "command": "python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension",
+  "validation": "PASS against PhaseFieldX 1711 reference response",
+  "notes": "Flat public quasi-static fracture bundle; raw trajectories and run logs are generated locally, not distributed.",
+  "config": "config.yaml",
+  "files": [
+    "README.md",
+    "compare.png",
+    "compare_report.txt",
+    "config.yaml",
+    "crack_tip.csv",
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
+    "damage_final.png",
+    "energy.csv",
+    "energy.png",
+    "history.csv",
+    "initial_conditions.png",
+    "load_displacement.png",
+    "mesh.geo",
+    "mesh.msh",
+    "results.csv",
+    "run_fluent.py",
+    "run_lockfile.json",
+    "run_metadata.json",
+    "solver_telemetry.csv",
+    "staggered_convergence.png",
+    "thumbnail.png",
+    "timing_per_step.csv",
+    "visual_manifest.json"
+  ],
+  "omitted_artifact_categories": [
+    "raw trajectory stores",
+    "run and comparison logs",
+    "scratch run directories"
+  ]
+}

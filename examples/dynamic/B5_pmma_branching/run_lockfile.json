@@ -209,8 +209,6 @@
     "git_hash": "adfab6b",
     "total_time_s": 4201.89,
     "crack_step": 62,
-    "branch_step": null,
-    "branch_time_us": null,
     "delta_U_mm": 0.05,
     "pre_strain_max_uy": 0.816789
   }
