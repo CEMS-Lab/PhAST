@@ -2,7 +2,7 @@
   "example": "B5_pmma_branching",
   "status": "selected_public_sweep",
   "config": "config.yaml",
-  "curated_source": "selected public PMMA sweep retained from reviewed private development evidence",
+  "curated_source": "selected public PMMA sweep retained from reviewed reference evidence",
   "problem": "PMMA Dynamic Crack Branching -- Pre-Strained Plate (Bleyer 2017)",
   "material": {
     "E": 3090.0,
@@ -70,8 +70,8 @@
     "damage_evolution.mp4"
   ],
   "private_exclusions": [
-    "raw sweep archives",
+    "external raw sweep archives",
     "heavy trajectory/checkpoint stores"
   ],
-  "notes": "Curated public PMMA visual-evidence bundle. Raw sweep archives stay private."
+  "notes": "Curated public PMMA visual-evidence bundle. Raw sweep archives are external retained artifacts."
 }

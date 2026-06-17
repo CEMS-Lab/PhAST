@@ -90,9 +90,9 @@ Each public tutorial should state:
 - how to inspect the result with `phast.load_result(...)`,
 - which capability-matrix row supports the claim.
 
-If an example needs private raw HPC output, unreleased paper assets, or a
-custom diagnostic script to make sense, it should stay out of the public
-tutorial path until it is promoted.
+If an example depends on unavailable raw trajectory output, unreleased paper
+assets, or a custom diagnostic script to make sense, it should stay out of the
+public tutorial path until it is promoted.
 
 ## Related Guides
 

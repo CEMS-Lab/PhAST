@@ -4,7 +4,7 @@
   "config": "config.yaml",
   "curated_source": "../sent",
   "private_exclusions": [
-    "raw HPC dumps",
+    "external raw run dumps",
     "training_data.h5",
     "training_data.zarr"
   ],

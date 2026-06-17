@@ -11,7 +11,7 @@ PhAST workflows.
 - inverse identification workflows beyond the released paper-specific scope;
 - hybrid/deep-learning solver switching workflows;
 - Paper-2 or Paper-4 research lanes;
-- raw HPC trajectory archives or private COMSOL binaries.
+- raw trajectory archives or proprietary COMSOL model binaries.
 
 ## How to read experimental material
 

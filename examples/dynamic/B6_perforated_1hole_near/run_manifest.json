@@ -3,10 +3,10 @@
   "example": "B6_perforated_1hole_near",
   "status": "public_candidate_b6_variant",
   "config": "config.yaml",
-  "hpc_source": {
+  "reference_source": {
     "job": "8585",
     "curated_case": "B6c_perforated_1hole_near",
-    "note": "Only lightweight public artifacts are retained here; raw HPC folders and trajectory stores remain private."
+    "note": "Only lightweight public artifacts are retained here; full run directories and trajectory stores are external retained artifacts."
   },
   "files": [
     "README.md",
@@ -40,7 +40,7 @@
     "damage_evolution.mp4"
   ],
   "notes": [
-    "This flat public candidate keeps only lightweight derived artifacts from HPC job 8585; raw trajectories stay private until a public artifact release exists.",
+    "This flat public candidate keeps only lightweight derived artifacts from reviewed reference run 8585; raw trajectories stay external until a public artifact release exists.",
     "The copied run_metadata.json preserves original provenance and may contain historical source labels; this public folder is the authoritative B6 name."
   ]
 }

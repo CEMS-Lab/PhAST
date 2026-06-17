@@ -114,8 +114,6 @@ Read these files before making changes or answering detailed usage questions:
   for public example folders and visual artifacts.
 - [Example Gallery](docs/example-gallery.md) - representative public examples
   and expected outputs.
-- [Public Repository Inventory](docs/public_repo_inventory.md) - file-tree
-  coverage, audit notes, and release-hygiene follow-ups.
 
 ## Contribution Rules
 

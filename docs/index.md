@@ -99,7 +99,6 @@ user_guide/capability_matrix
 :caption: User Guide
 
 user_guide/overview
-public_repo_inventory
 user_guide/setup_problems
 user_guide/python_api
 user_guide/yaml_workflow
@@ -152,7 +151,6 @@ api/adaptive
 :caption: Output Standards
 
 output_standards/index
-STANDARD_OUTPUTS
 user_guide/example_contract
 user_guide/results_api
 user_guide/data_and_devices
@@ -167,17 +165,8 @@ performance_reproducibility/index
 
 ```{toctree}
 :maxdepth: 1
-:caption: Implementation Notes
-
-COMSOL_COMPARISON
-user_guide/roadmap
-plasticity-onboarding
-plasticity_cohesive_beta_release
-```
-
-```{toctree}
-:maxdepth: 1
 :caption: Community
 
 community
+user_guide/roadmap
 ```

@@ -153,7 +153,7 @@ examples should include:
 - trajectory stores when requested.
 
 See [Example result contract](example_contract.md) and
-the repository visualization-output guide for output conventions.
+the repository output standards page for output conventions.
 
 ## Inspecting a Completed Run
 

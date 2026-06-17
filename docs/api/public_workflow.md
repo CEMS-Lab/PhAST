@@ -67,7 +67,5 @@ are present.
 Every promoted public example should expose a flat, predictable result bundle:
 `config.yaml`, `run_manifest.json`, `visual_manifest.json`, representative
 PNG/MP4 artifacts, CSV histories where relevant, and Zarr-first trajectory
-outputs when the run stores fields. See [Standard outputs](../STANDARD_OUTPUTS.md)
-and [Output standards](../output_standards/index.md) for the artifact contract.
-The compatibility references `docs/visualisation_requirements.md` and
-`docs/visualization-output.md` remain linked from the output overview.
+outputs when the run stores fields. See
+[Output standards](../output_standards/index.md) for the artifact contract.

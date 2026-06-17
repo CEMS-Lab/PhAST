@@ -1,11 +1,8 @@
 # Output Standards
 
-This section is the first stop for understanding what a PhAST run should write
-and how those artifacts are consumed. The promoted-example policy is
-`docs/user_guide/example_contract.md`; the compatibility checklist is
-`docs/STANDARD_OUTPUTS.md`; visual styling lives in
-`docs/visualisation_requirements.md`; backend visualization formats are covered
-by `docs/visualization-output.md`.
+This section summarizes what a PhAST run should write and how those artifacts
+are consumed. The promoted-example policy is
+`docs/user_guide/example_contract.md`.
 
 Each row names the artifact producer, the primary consumer, and the tests that
 keep the contract from drifting.
@@ -44,7 +41,6 @@ invented by the Result API.
 ## Related pages
 
 - `docs/user_guide/example_contract.md`
-- `docs/STANDARD_OUTPUTS.md`
 - `docs/user_guide/results_api.md`
-- `docs/visualisation_requirements.md`
-- `docs/visualization-output.md`
+- `docs/user_guide/yaml_workflow.md`
+- `docs/example-gallery.md`

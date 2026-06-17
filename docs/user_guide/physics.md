@@ -125,10 +125,8 @@ end-to-end on a plate geometry):
   increments, with load-response and convergence outputs.
 
 **Validation benchmarks** (paper-quality forward + L-BFGS inverse): tracked as
-follow-ups under issue #110. The current tree includes the solid-mechanics
-private development benchmark archive; keep the
-per-benchmark README and compare script as the source of truth for which
-subcases are fully validated.
+follow-ups under issue #110. Use the per-benchmark README and compare script as
+the source of truth for which subcases are fully validated.
 
 ## Physics
 

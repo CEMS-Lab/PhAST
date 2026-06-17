@@ -39,10 +39,7 @@ Each run creates a unique timestamped subdirectory to preserve previous results:
 
 ```
 examples/quasistatic/miehe_tension/output/run_110326_143052/
-private development archive for the Miehe shear run
-private development archive for the three-point-bending run
 ```
 
 Format: `run_ddmmyy_HHMMSS`. Use `--output_dir /path` to override.
-
 

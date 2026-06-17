@@ -80,7 +80,7 @@ def _write_config(output_dir: Path, *, seed: int, max_nodes: int) -> str:
         "parameters:",
         f"  seed: {seed}",
         f"  max_nodes: {max_nodes}",
-        "visual_requirements: docs/visualisation_requirements.md",
+        "visual_requirements: docs/output_standards/index.md",
         "outputs:",
         "  - summary.json",
         "  - diffuse_interphase_path_energy.csv",

@@ -184,7 +184,7 @@ def _write_config(output_dir: Path, *, n_load: int, n_unload: int) -> str:
         "parameters:",
         f"  n_load: {n_load}",
         f"  n_unload: {n_unload}",
-        "visual_requirements: docs/visualisation_requirements.md",
+        "visual_requirements: docs/output_standards/index.md",
         "outputs:",
         "  - summary.json",
         "  - j2_stress_strain.csv",

@@ -39,7 +39,7 @@ That YAML lists every validation runner, its exact launcher command, required
 CSV/JSON/mesh/visual artifacts, and the claim boundary for customer-facing
 use. Each promoted run should also retain the generated `config.yaml`,
 `run_manifest.json` when available, and `visual_manifest.json` for plots or
-animations according to `docs/visualisation_requirements.md`.
+animations according to `docs/output_standards/index.md`.
 
 The first promoted #708 validation slice is available through the curated YAML
 dispatcher:
@@ -383,5 +383,5 @@ The scripts are CPU-smoke examples and are intentionally small. They report
 `max_rss_kib` in `summary.json` so local and cluster runs can be compared
 without extra profiling tools.
 
-Figures follow `docs/visualisation_requirements.md`: STIX-style serif fonts,
+Figures follow `docs/output_standards/index.md`: STIX-style serif fonts,
 review-safe dimensions, labelled colorbars, and explicit geometry/path overlays.

@@ -5,7 +5,7 @@ script: examples/plasticity_interface/run_j2_validation.py
 parameters:
   n_load: 48
   n_unload: 18
-visual_requirements: docs/visualisation_requirements.md
+visual_requirements: docs/output_standards/index.md
 outputs:
   - summary.json
   - j2_stress_strain.csv

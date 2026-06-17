@@ -114,14 +114,6 @@ exclude_patterns = [
     "_build",
     "Thumbs.db",
     ".DS_Store",
-    # Existing free-form .md files in docs/ that pre-date the Sphinx site.
-    "adjoint_explicit_dynamics_derivation.md",
-    "implicit_solver_extension.md",
-    "MAC_ENV_SETUP.md",
-    "pfczm_formulation.md",
-    "plasticity_extension.md",
-    "visualization-output.md",
+    # Local/generated build artifacts.
     "qs_hpc_results/**",
-    "dynamics_integrators_and_amr_assessment_2026-05-15.md",
-    "visualisation_requirements.md",
 ]

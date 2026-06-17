@@ -6,7 +6,7 @@ unsupported work so a YAML file or tutorial does not imply more physics than
 the code actually solves.
 
 For the current plasticity/cohesive/PF-CZM technical-preview release boundary,
-see [`../plasticity_cohesive_beta_release.md`](../plasticity_cohesive_beta_release.md).
+see the [plasticity/interface supported-workflow page](../supported_workflows/plasticity_interface_beta.md).
 
 Status meanings:
 
