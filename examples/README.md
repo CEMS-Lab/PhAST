@@ -1,65 +1,49 @@
 # PhAST Examples
 
-This folder is the public-example staging area. The release boundary is
-defined for humans in
-[`docs/user_guide/example_contract.md`](../docs/user_guide/example_contract.md)
-and recorded for tests in `PUBLIC_EXAMPLES_CONTRACT.yaml`. Customer-facing examples live only
-in `dynamic/`, `quasistatic/`, `solid_mechanics/`, and
-`plasticity_interface/`. Non-promoted tracked example folders are classified in
-`EXAMPLES_SCOPE.yaml` and stored in a private development archive so private, legacy,
-inverse, diagnostic, raw-HPC, and paper-specific material is not confused with
-customer-runnable examples. Both files are checked by
-`tests/test_public_examples_contract.py`.
+This directory contains runnable PhAST examples for phase-field fracture,
+solid mechanics, and beta plasticity/interface workflows. Each public example
+keeps its inputs, lightweight reference outputs, and README in a flat folder so
+the case can be inspected directly on GitHub and rerun from the repository
+root.
 
-Use the fluent `phast.Problem` API to author new models. Use YAML decks for public examples, reproducibility, batch/HPC runs, and sharing exact simulations.
+Use YAML decks for reproducible examples:
 
-The important rule is simple: public examples must be runnable, flat, and
-auditable. Dynamic, quasi-static, and promoted solid-mechanics FEA examples
-are YAML-first because `config.yaml` is the exact input deck users can
-validate, run locally, submit on HPC, and compare in CI. Plasticity/interface
-examples remain script-contract beta where the current capability is not yet
-expressible through the generic YAML runner.
+```bash
+python -m phast run examples/<family>/<case>/config.yaml --validate-only
+python -m phast run examples/<family>/<case>/config.yaml --output_dir runs/<case>
+```
 
-The canonical tier definitions live in
+Use the fluent `phast.Problem` API when authoring new models. Where a public
+example includes `run_fluent.py`, that script shows the equivalent manual
+Python setup while `config.yaml` remains the canonical reproducibility deck.
+
+For the full artifact contract, see
 [`docs/user_guide/example_contract.md`](../docs/user_guide/example_contract.md).
-This page lists the promoted folders and their user-facing commands without
-duplicating the contract table.
-
-Heavy trajectory stores (`training_data.zarr`, legacy `training_data.h5`), raw
-HPC folders, private COMSOL binaries, old diagnostic sweeps, and inverse/hybrid
-paper work do not belong in public PhAST examples. In this private development
-repository they may be retained in the private archive for provenance; the
-public CEMS-Lab/PhAST export must exclude that archive.
 
 ## Dynamic Fracture
 
-Dynamic examples are flat YAML packages. Run them from the repository root.
-They remain YAML-first until explicit-dynamics fluent/schema-v2 lowering is
-validated for the public examples.
+Dynamic examples are YAML-first phase-field fracture cases with lightweight
+visual and numerical evidence checked into each example folder.
 
-| Example | Physics | Status | Command |
-| --- | --- | --- | --- |
-| `dynamic/B2_kalthoff_winkler` | Kalthoff-Winkler impact | Public candidate, private H5 retained outside release | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
-| `dynamic/B3_dynamic_sent` | Dynamic SENT smoke/example | Qualitative smoke until finer result is promoted | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
-| `dynamic/B5_pmma_branching` | PMMA branching selected sweep | Public candidate | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
-| `dynamic/B6_perforated_30holes` | Perforated PMMA plate | Public B6 name; old B4 source names stay private | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
-| `dynamic/B7_dynamic_crack_branching_comsol` | Dynamic branching cross-check | Public candidate without COMSOL binary or 98 GB Zarr | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
+| Example | Physics | Command |
+| --- | --- | --- |
+| [`dynamic/B2_kalthoff_winkler`](dynamic/B2_kalthoff_winkler/) | Kalthoff-Winkler impact | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
+| [`dynamic/B3_dynamic_sent`](dynamic/B3_dynamic_sent/) | Dynamic single-edge-notched tension smoke case | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
+| [`dynamic/B5_pmma_branching`](dynamic/B5_pmma_branching/) | PMMA dynamic crack branching | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
+| [`dynamic/B6_perforated_30holes`](dynamic/B6_perforated_30holes/) | Perforated PMMA plate | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
+| [`dynamic/B7_dynamic_crack_branching_comsol`](dynamic/B7_dynamic_crack_branching_comsol/) | Dynamic branching comparison case | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
 
 ## Quasi-Static Fracture
 
-Only the promoted quasi-static examples are public release examples right now.
-Additional Miehe shear, three-point-bending, and L-shaped-panel work remains
-private/deferred until it has the same flat contract.
-Where the fluent surface is already promoted, the example README shows an
-authoring snippet; the checked-in `config.yaml` remains the canonical public
-input deck.
+These examples provide validated quasi-static fracture workflows with
+comparison plots and CSV histories.
 
 | Example | Physics | Validation | Command |
 | --- | --- | --- | --- |
-| [quasistatic/miehe_tension](quasistatic/miehe_tension/) | Miehe SENT tension | PASS against PhaseFieldX-style reference | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` |
-| [quasistatic/notched_holed_plate](quasistatic/notched_holed_plate/) | COMSOL notched-holed plate | PASS strict-parity comparison | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` |
+| [`quasistatic/miehe_tension`](quasistatic/miehe_tension/) | Miehe single-edge-notched tension | PASS against PhaseFieldX-style reference | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` |
+| [`quasistatic/notched_holed_plate`](quasistatic/notched_holed_plate/) | Notched plate with holes | PASS strict-parity comparison | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` |
 
-Validate a YAML deck before launching a full run:
+Validate before running a full solve:
 
 ```bash
 python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-only
@@ -68,75 +52,72 @@ python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --valid
 
 ## Solid Mechanics
 
-The first three solid mechanics examples are real mesh-level FEA simulations
-and run through the common YAML runner. Fluent snippets are authoring examples
-only; the checked-in YAML deck and flat promoted result bundle remain the public
-reproducibility contract. The remaining two are retained as numerical-method
-diagnostics.
+The first three examples are mesh-level finite-element simulations through the
+common YAML runner. The final two are compact numerical-method diagnostics.
 
 | Example | Physics | Command |
 | --- | --- | --- |
-| `solid_mechanics/linear_plate` | Linear elastic cantilever, sparse autograd solve | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` |
-| `solid_mechanics/neohookean_plate` | Nonlinear neo-Hookean cantilever | `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml` |
-| `solid_mechanics/j2_bar` | Mesh-level J2 plasticity bar | `python -m phast run examples/solid_mechanics/j2_bar/config.yaml` |
-| `solid_mechanics/mixed_precision_cg` | Krylov precision diagnostic | `python examples/solid_mechanics/mixed_precision_cg/run.py` |
-| `solid_mechanics/generalized_alpha_oscillator` | Generalized-alpha time-integration diagnostic | `python examples/solid_mechanics/generalized_alpha_oscillator/run.py` |
+| [`solid_mechanics/linear_plate`](solid_mechanics/linear_plate/) | Linear elastic cantilever with sparse autograd solve | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` |
+| [`solid_mechanics/neohookean_plate`](solid_mechanics/neohookean_plate/) | Nonlinear neo-Hookean cantilever | `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml` |
+| [`solid_mechanics/j2_bar`](solid_mechanics/j2_bar/) | Mesh-level J2 plasticity bar | `python -m phast run examples/solid_mechanics/j2_bar/config.yaml` |
+| [`solid_mechanics/mixed_precision_cg`](solid_mechanics/mixed_precision_cg/) | Krylov precision diagnostic | `python examples/solid_mechanics/mixed_precision_cg/run.py` |
+| [`solid_mechanics/generalized_alpha_oscillator`](solid_mechanics/generalized_alpha_oscillator/) | Generalized-alpha time-integration diagnostic | `python examples/solid_mechanics/generalized_alpha_oscillator/run.py` |
 
-The legacy solid FEA script entrypoints remain as compatibility wrappers:
-`python examples/solid_mechanics/linear_plate/run.py --config examples/solid_mechanics/linear_plate/config.yaml`,
-`python examples/solid_mechanics/neohookean_plate/run.py --config examples/solid_mechanics/neohookean_plate/config.yaml`,
-and `python examples/solid_mechanics/j2_bar/run.py --config examples/solid_mechanics/j2_bar/config.yaml`.
+For the YAML-first solid examples, `run_fluent.py` provides the equivalent
+manual Python setup:
+
+```bash
+python examples/solid_mechanics/linear_plate/run_fluent.py
+python examples/solid_mechanics/neohookean_plate/run_fluent.py
+python examples/solid_mechanics/j2_bar/run_fluent.py
+```
 
 ## Plasticity And Interface Beta
 
-The plasticity/interface folder is a beta script-contract family, not a
-YAML-first public gallery. Its canonical reproducibility manifest is:
+The plasticity/interface examples are beta validation workflows for J2
+plasticity, cohesive/interface operators, PF-CZM calibration, and diffuse
+interphase screening. Their reproducibility manifest is:
 
 ```text
 configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
 ```
 
-That manifest lists every runner, launcher command, required artifacts, and
-claim boundary. This is deliberate: J2 material validation, ductile
-phase-field evidence, cohesive operator smoke tests, PF-CZM validation, and
-diffuse-interface screening exercise capabilities that are not all available
-through the generic `phast run` YAML path yet.
+Run a retained validation through the dispatcher:
 
-When one of these workflows becomes customer-standard, promote it by updating
-`PUBLIC_EXAMPLES_CONTRACT.yaml`, adding a flat leaf folder if needed, and
-adding a regression test for the expected artifacts.
+```bash
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_cohesive
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_refinement
+python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id pfczm_uniaxial_strength
+```
+
+See [`plasticity_interface/README.md`](plasticity_interface/) for the full beta
+capability boundary and direct script commands.
 
 ## Common CLI Flags
 
 | Flag | Output |
 | --- | --- |
-| `--plots` | PNG figures when supported by the YAML runner |
-| `--vtu` | VTU snapshots for ParaView |
-| `--gif` | Animated GIF of damage evolution |
-| `--trajectory --trajectory-format zarr` | Zarr trajectory store for reusable solver outputs |
-| `--h5` | Legacy compatibility trajectory output; prefer Zarr for new work |
-| `--all_outputs` | VTU + GIF + plots + profiler; does not imply legacy H5 |
-| `--device cpu/cuda` | Compute device; use CPU on Mac for float64 fracture solves |
-| `--output_dir DIR` | Custom output directory |
+| `--validate-only` | Check the YAML deck without launching the solve. |
+| `--output_dir DIR` | Write results to a custom directory. |
+| `--plots` | Generate PNG figures when supported. |
+| `--gif` | Generate an animated GIF when supported. |
+| `--vtu` | Write VTU snapshots for ParaView. |
+| `--trajectory --trajectory-format zarr` | Write a Zarr trajectory store for inspection or reuse. |
+| `--device cpu/cuda` | Select the compute device. |
 
-YAML runs should produce provenance and reusable trajectory outputs in the run
-directory, including `config.yaml`, `run_lockfile.json`, `run_metadata.json`,
-mesh provenance, scalar CSVs, plots, and `training_data.zarr/` when trajectory
-output is requested. The heavy `training_data.zarr/` directory is retained for
-private regeneration/HPC evidence in the private archive and is
-not part of the lightweight public example payload. See
-`docs/user_guide/example_contract.md` for the full promoted-example contract.
-The older `docs/STANDARD_OUTPUTS.md`, `docs/visualisation_requirements.md`,
-and `docs/visualization-output.md` pages are compatibility/narrow-backend
-references linked from that canonical page.
+## Expected Folder Contents
 
-## Adding Or Promoting An Example
+Public example folders are intentionally compact. Typical files include:
 
-1. Put the example in a flat leaf folder with `README.md`, `config.yaml` or
-   `run.py`, and lightweight outputs.
-2. Include `run_manifest.json`; include `visual_manifest.json` when plots or
-   animations are generated.
-3. Update `PUBLIC_EXAMPLES_CONTRACT.yaml`.
-4. Add or update tests so the contract fails if the example drifts.
-5. Keep raw HPC data, large Zarr/H5 stores, diagnostics, and paper-specific
-   scratch work private unless they are promoted as named benchmark artifacts.
+- `README.md` with the physics, commands, and result summary.
+- `config.yaml` for YAML-first examples.
+- `run_fluent.py` when an equivalent Python setup is provided.
+- `mesh.geo` for mesh-based examples when a Gmsh recipe is available.
+- `initial_conditions.png`, final field plots, response plots, and lightweight animations.
+- `response.csv`, `results.csv`, `history.csv`, or other small numerical evidence.
+- `run_manifest.json` and `visual_manifest.json` when generated by the runner.
+
+Large raw trajectories, scratch run directories, and machine-specific logs are
+not part of the lightweight example folders. Generate fresh results with
+`--output_dir runs/<case>` when you need full local output for inspection.
