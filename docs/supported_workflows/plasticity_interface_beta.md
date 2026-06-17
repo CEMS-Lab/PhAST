@@ -15,7 +15,7 @@ python -m phast run configs/benchmarks/plasticity_interface/reproducibility_cont
 ```
 
 Those validation IDs are mirrored in `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`
-and checked by `tests/test_public_examples_contract.py`.
+and documented in the retained result folders.
 
 The retained #708 result bundles live under
 `examples/plasticity_interface_beta/results/` and are indexed by

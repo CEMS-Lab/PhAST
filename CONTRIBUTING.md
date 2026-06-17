@@ -1,6 +1,9 @@
 # Contributing to PhAST
 
-Welcome! PhAST is designed as a State-of-the-Art (SOTA) differentiable finite element framework. Contributions are welcome to improve performance, broaden physics coverage, and refine documentation. Please follow the rigorous academic and engineering standards outlined below.
+Welcome! PhAST is a PyTorch-native differentiable finite element framework for
+phase-field fracture mechanics. Contributions are welcome to improve
+performance, broaden physics coverage, and refine documentation. Please follow
+the rigorous academic and engineering standards outlined below.
 
 ## 1. Development Setup
 
@@ -30,25 +33,29 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
 
 ## 3. Pull Request Lifecycle
 
-- Ensure all regression tests and validation tiers pass locally.
+- Run the relevant validation commands locally.
 - Keep high-fidelity volumetric datasets (Zarr/H5), internal logs, and generated heavy media out of git.
 - Provide parity checks against established analytical or commercial benchmarks when modifying physics kernels.
-- Update `CHANGELOG.md` and relevant documentation (e.g., `README.md`, YAML schemas) with your changes.
+- Update relevant documentation, such as `README.md`, YAML schemas, example
+  READMEs, and capability pages, with user-facing changes.
 
-## 4. Validation Tiers
+## 4. Validation
 
-Run the fastest relevant tier before opening a Pull Request:
-
-```bash
-pytest -q
-```
-
-For benchmark or HPC changes, use explicit tiers:
+Run the fastest relevant checks before opening a pull request:
 
 ```bash
-pytest -q -m benchmark
-pytest -q -m hpc
+PYTHONPATH=src python -m phast doctor
+sphinx-build -W -b html docs docs/_build/html
 ```
+
+For changed YAML examples or benchmark configs, also run:
+
+```bash
+PYTHONPATH=src python -m phast run <config.yaml> --validate-only
+```
+
+For generated visuals or retained example artifacts, inspect the output folder
+and update the relevant README or public contract file.
 
 ## 5. Adding Examples
 

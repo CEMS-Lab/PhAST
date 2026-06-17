@@ -53,3 +53,13 @@ version, mesh size, time step or load-step count, enabled output writers,
 `run_lockfile.json`, and `run_metadata.json`. Avoid reusing older timing tables
 unless the external solvers were rebuilt in release mode and the PhAST run was
 regenerated with the current public configuration file.
+
+## Dynamic timing comparison
+
+![Dynamic timing comparison](../../assets/dynamic_timing_comparison.png)
+
+This figure is regenerated from the current retained SENT and Kalthoff-Winkler
+timing CSVs using Akantu, FEniCS, and PhAST final timing traces. Treat it as a
+reproducibility artifact for Paper-1 performance discussion, not as a universal
+hardware-independent claim. The source summary CSV is kept at
+`assets/dynamic_timing_comparison.csv`.

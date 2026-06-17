@@ -81,12 +81,9 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 ```{toctree}
 :maxdepth: 2
 :caption: Get Started
-
-installation
 getting-started
 user_guide/public_api_reference
-showcase
-tutorials
+tutorial/index
 tutorial/01_phase_field_primer
 tutorial/fluent_authoring_guide
 tutorial/03_setting_up_your_problem

@@ -6,12 +6,12 @@
 
 <p align="center">
   <strong>Phase-field Autograd Solver in Torch</strong><br>
-  A State-of-the-Art (SOTA) differentiable finite element framework for phase-field fracture mechanics built natively on PyTorch.
+  A PyTorch-native differentiable finite element framework for phase-field fracture mechanics.
 </p>
 
 <p align="center">
   <a href="https://cems-lab.github.io/PhAST/">Documentation</a> |
-  <a href="docs/installation.md">Installation</a> |
+  <a href="docs/getting-started.md">Getting Started</a> |
   <a href="#quickstart">Quickstart</a> |
   <a href="docs/example-gallery.md">Examples</a> |
   <a href="CITATION.cff">Citation</a>

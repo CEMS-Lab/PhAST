@@ -8,11 +8,11 @@ inspection.
 
 | Tutorial | Time | What you learn |
 |---|---:|---|
-| [Getting started](getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
-| [Build your first model with `phast.Problem`](tutorial/fluent_authoring_guide.md) | 10-15 min | Create, validate, run, and inspect a Python-authored model. |
-| [YAML workflow](user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
-| [Example gallery](example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |
-| [Results API](user_guide/results_api.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
+| [Getting started](../getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
+| [Build your first model with `phast.Problem`](fluent_authoring_guide.md) | 10-15 min | Create, validate, run, and inspect a Python-authored model. |
+| [YAML workflow](../user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
+| [Example gallery](../example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |
+| [Results API](../user_guide/results_api.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
 
 ## Recommended Learning Path
 
@@ -25,7 +25,7 @@ inspection.
    submission.
 
 Users coming from Abaqus, COMSOL, FEniCS, or deal.II should read
-[Setting up new problems](user_guide/setup_problems.md) first. It maps familiar
+[Setting up new problems](../user_guide/setup_problems.md) first. It maps familiar
 FEM concepts such as parts, mesh sets, materials, loads, steps, jobs, and result
 databases to the PhAST fluent API and YAML configuration structure.
 
@@ -96,8 +96,8 @@ public tutorial path until it is promoted.
 
 ## Related Guides
 
-- [Python API](user_guide/python_api.md)
-- [Setting up new problems](user_guide/setup_problems.md)
-- [YAML workflow](user_guide/yaml_workflow.md)
-- [Example result contract](user_guide/example_contract.md)
-- [Capability matrix](user_guide/capability_matrix.md)
+- [Python API](../user_guide/python_api.md)
+- [Setting up new problems](../user_guide/setup_problems.md)
+- [YAML workflow](../user_guide/yaml_workflow.md)
+- [Example result contract](../user_guide/example_contract.md)
+- [Capability matrix](../user_guide/capability_matrix.md)

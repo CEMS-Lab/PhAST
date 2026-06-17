@@ -110,8 +110,8 @@ Timing comparisons must be regenerated with the current YAML configuration, back
 versions, hardware, and output settings before citation. See
 `docs/performance_reproducibility/index.md` for the public reporting checklist.
 See `examples/solid_mechanics_beta/` for the linear elastic plate demo and the
-neo-Hookean extension; `tests/test_sparse_solve_autograd.py` exercises the
-gradient via finite differences in the development test suite.
+neo-Hookean extension. Use `phast doctor` and the example `--validate-only`
+commands as the public verification path.
 
 #### Worked examples
 

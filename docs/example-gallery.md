@@ -10,12 +10,12 @@ archives. They point to the same workflows listed in the sections that follow.
 
 ## Start With These
 
-| Example | Status | Modality | Command | Expected outputs | Inspect with | Enforced by |
-|---|---|---|---|---|---|---|
-| Miehe tension | Production | YAML-first | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` | CSV histories, run metadata/lockfile, and checked-in gallery visuals/comparison artifacts; run explicit postprocessing if you need regenerated animations from a fresh solve | `phast.load_result("runs/miehe_tension")` | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, `tests/test_public_examples_contract.py` |
-| Notched-holed plate | Production | YAML-first | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | final damage, response CSVs, comparison report, visual manifest | `phast.load_result("runs/notched_holed_plate")` | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, `tests/test_public_examples_contract.py` |
-| Linear plate | Production | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` | `tests/test_solid_mechanics_yaml_runner.py` |
-| Kalthoff-Winkler | Public candidate | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`, `tests/test_public_examples_contract.py` |
+| Example | Status | Modality | Command | Expected outputs | Inspect with |
+|---|---|---|---|---|---|
+| Miehe tension | Production | YAML-first | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` | CSV histories, run metadata/lockfile, and checked-in gallery visuals/comparison artifacts; run explicit postprocessing if you need regenerated animations from a fresh solve | `phast.load_result("runs/miehe_tension")` |
+| Notched-holed plate | Production | YAML-first | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | final damage, response CSVs, comparison report, visual manifest | `phast.load_result("runs/notched_holed_plate")` |
+| Linear plate | Production | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` |
+| Kalthoff-Winkler | Public candidate | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` |
 
 Use the [capability matrix](user_guide/capability_matrix.md) before assuming a
 workflow status. Use the
@@ -116,3 +116,17 @@ The quasi-static family is the production path for many literature comparisons.
 For current non-hardened features, review
 [Capability matrix](user_guide/capability_matrix.md).
 This doc is also the source of truth for what can be promised publicly.
+
+## Sparse direct vs CG inner solve
+
+
+| Workflow | Public route | Evidence to keep |
+| -------- | ------------ | ---------------- |
+| Miehe tension | `python -m phast run examples/quasistatic/miehe_tension/config.yaml` | run manifests, CSV histories, damage animation |
+| Notched-holed plate | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml` | setup preview, response plot, final damage |
+
+Driver: [`sparse_solve`](api/sparse_solve.md). Speedup is wall-time of the
+sparse direct path versus the matrix-free CG inner-solve path on the same mesh,
+tolerance, backend stack, and output settings. See
+[`Performance and Reproducibility`](performance_reproducibility/index.md) for
+the reporting checklist before publishing numbers.

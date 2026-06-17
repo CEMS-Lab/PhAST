@@ -141,7 +141,106 @@ does not silently derive missing postprocessed fields.
 | Dataset visualisation | `docs/example-gallery.md`, dynamic benchmark outputs, and standard Zarr-first output conventions |
 | Solver/backend selection | `docs/user_guide/sparse_solve.md`, `docs/user_guide/performance.md`, and API notes under `docs/api/` |
 
-## 7. Build the Docs
+## 7. Advanced Installation And Platform Setup
+
+### macOS (Apple Silicon or Intel)
+* **Execution Device:** Prefer `--device cpu`.
+* **Hardware note:** While Apple Silicon GPU (MPS) is supported, MPS currently lacks native `float64` operations, forcing the damage solver to CPU. High-precision mechanics and eigenvalue/spectral-sensitive operations are more stable and faster running directly on the CPU.
+* Run with `--no-compile` as PyTorch JIT warmup overhead dominates typical 2D meshes on Mac.
+
+### Linux & WSL2 (CUDA)
+* **Execution Device:** Use `--device cuda`.
+* Ensure you install PyTorch matching your system CUDA version:
+  ```bash
+  pip install torch --index-url https://download.pytorch.org/whl/cu121  # Adjust cuXXX for your driver
+  pip install -e .
+  ```
+* `torch.compile` is supported and recommended for long-horizon or large-batch runs.
+
+### HPC Clusters (SLURM)
+```bash
+module load python/3.11 cuda/12.1
+git clone https://github.com/CEMS-Lab/PhAST.git
+cd phast
+pip install --user -e ".[hpc]"
+```
+
+For high-resolution quasi-static validation where direct factorization is needed, configure and validate the optional **PETSc/MUMPS** stack.
+
+#### Clean PETSc/MUMPS validation
+The most reproducible route is a fresh environment with PETSc, petsc4py, and MUMPS from the same conda-forge solve:
+
+```bash
+mamba create -n phast-petsc -c conda-forge \
+  python=3.11 numpy scipy pytorch petsc petsc4py mumps-mpi
+mamba activate phast-petsc
+
+pip install -e .
+python -m phast doctor
+python - <<'PY'
+from phast.sparse_solve import available_sparse_backends
+print(available_sparse_backends())
+PY
+python -m phast run configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml --validate-only
+```
+
+On clusters with a site PETSc module, build petsc4py against the loaded PETSc instead of mixing unrelated binaries:
+
+```bash
+module load petsc/<site-petsc-with-mumps>
+export PETSC_DIR=/path/to/site/petsc
+export PETSC_ARCH=<site-arch-if-required>
+
+python -m pip install --no-binary=:all: petsc4py
+python -m phast doctor
+```
+
+Use a direct backend check before claiming PETSc/MUMPS support for a machine:
+
+```bash
+python - <<'PY'
+from phast.sparse_solve import available_sparse_backends
+backends = available_sparse_backends()
+print(backends)
+raise SystemExit(0 if backends.petsc else 1)
+PY
+```
+
+If a stale `libpetsc` inside an environment shadows the intended PETSc module,
+remove the conflicting package or rebuild the environment cleanly.
+
+For issue and pull-request validation, run:
+
+```bash
+python -m phast doctor
+sphinx-build -W -b html docs docs/_build/html
+python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --validate-only
+```
+
+### Optional Extras And Packages
+
+You can append extras during installation to enable accelerated preconditioning, fast export, or cluster support:
+
+| Extra Group | Install Command | Purpose / Target |
+|---|---|---|
+| `[dev]` | `pip install -e ".[dev]"` | Development and Sphinx documentation tools. |
+| `[amg]` | `pip install -e ".[amg]"` | `pyamg` hierarchy setup for multi-grid preconditioning on CPU/GPU. |
+| `[amgx]` | `pip install pyamgx` | NVIDIA AmgX wrapper (requires `module load amgx` on CUDA clusters). |
+| `[metis]` | `pip install -e ".[metis]"` | `pymetis` for domain-decomposition/multi-GPU execution. |
+| `[petsc]` | `pip install -e ".[petsc]"` | Compiled PETSc/petsc4py stack for MUMPS direct solver on CPU/HPC. |
+| `[viz-fast]` | `pip install -e ".[viz-fast]"` | PyVista + zstd compression for fast `.pv` time-series files. |
+| `[dataset]` | `pip install -e ".[dataset]"` | Zarr + numcodecs trajectory data extraction support. |
+| `[hpc]` | `pip install -e ".[hpc]"` | Bundle package including `pyamg` + `pymetis` + `cupy`. |
+
+### Workflow Backend Policy
+
+The framework uses an automated backend routing policy (`backend: auto` inside configurations) to select the most efficient linear solver for implicit mechanics and quasi-static damage solves:
+
+1. **`mumps`:** PETSc/MUMPS sparse-direct solver. Chosen if the environment passes the `petsc4py` runtime verification. Best for large, highly-unstable quasi-static crack initiation on clusters.
+2. **`scipy`:** SciPy SuperLU sparse-direct solver. Portable CPU fallback used when PETSc is unavailable.
+3. **`cg`:** Matrix-free Conjugate Gradient solver. Best for massive GPU-bound meshes.
+
+## 8. Build The Docs
 
 ```bash
 sphinx-build -b html docs docs/_build/html

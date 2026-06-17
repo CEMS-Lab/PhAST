@@ -4,22 +4,22 @@ This section summarizes what a PhAST run should write and how those artifacts
 are consumed. The promoted-example policy is
 `docs/user_guide/example_contract.md`.
 
-Each row names the artifact producer, the primary consumer, and the tests that
-keep the contract from drifting.
+Each row names the artifact producer, the primary consumer, and the public
+contract surface that keeps the artifact convention reviewable.
 
-| Artifact | Producer | Consumer | Enforced by |
+| Artifact | Producer | Consumer | Contract surface |
 |---|---|---|---|
-| `run_manifest.json` | YAML runner, promoted scripts | `phast.load_result`, release review, example README | `tests/test_public_examples_contract.py`, `tests/test_result_api.py` |
-| `visual_manifest.json` | plotting/postprocess layer | docs gallery, `result.visuals()` | `tests/test_public_examples_contract.py`, `tests/test_result_api.py` |
-| `run_metadata.json` | solver runner | provenance audit, `result.metadata()` | `tests/test_result_api.py` |
-| `history.csv` | solver runner | `result.history_names()`, `result.history(name)` | `tests/test_result_api.py` |
-| `results.csv` | reaction/load output writer | benchmark comparison, response plots | `tests/test_public_examples_contract.py` |
-| `response.csv` | solid mechanics runner | solid examples, README snippets | `tests/test_solid_mechanics_yaml_runner.py` |
-| `energy.csv` | fracture/dynamic runners | energy plots, validation review | `tests/test_public_examples_contract.py` |
-| `solver_telemetry.csv` | iterative solvers | convergence review | `tests/test_public_examples_contract.py` |
-| `timing_per_step.csv` | runner/profiler | performance review | `tests/test_public_examples_contract.py` |
-| `training_data.zarr` | trajectory writer | restart/postprocess/ML consumers | `tests/test_result_api.py` |
-| PNG/GIF/MP4 visuals | plot/postprocess layer | docs gallery, review packets | `visual_manifest.json` and example contract tests |
+| `run_manifest.json` | YAML runner, promoted scripts | `phast.load_result`, release review, example README | `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` |
+| `visual_manifest.json` | plotting/postprocess layer | docs gallery, `result.visuals()` | example README and `docs/user_guide/example_contract.md` |
+| `run_metadata.json` | solver runner | provenance audit, `result.metadata()` | example README and result API docs |
+| `history.csv` | solver runner | `result.history_names()`, `result.history(name)` | example README |
+| `results.csv` | reaction/load output writer | benchmark comparison, response plots | example README and comparison notes |
+| `response.csv` | solid mechanics runner | solid examples, README snippets | example README |
+| `energy.csv` | fracture/dynamic runners | energy plots, validation review | example README |
+| `solver_telemetry.csv` | iterative solvers | convergence review | example README |
+| `timing_per_step.csv` | runner/profiler | performance review | performance and reproducibility docs |
+| `training_data.zarr` | trajectory writer | restart/postprocess/ML consumers | external artifact policy |
+| PNG/GIF visuals | plot/postprocess layer | docs gallery, review packets | `visual_manifest.json` and example contract |
 
 ## Inspection path
 
