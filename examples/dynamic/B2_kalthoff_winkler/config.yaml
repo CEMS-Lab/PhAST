@@ -3,54 +3,50 @@ example: phast.examples.dynamic_kalthoff_shear.run
 problem:
   name: Kalthoff-Winkler Impact
   reference: Borden et al. (2012), CMAME
-# Geometry: kept on the kalthoff_winkler generator. The angled notch
-# at theta=45deg isn't expressible cleanly with the
-# rectangle/circle primitive vocabulary (issue #147 scope note).
+
+# Canonical public deck for the half-plate Kalthoff-Winkler benchmark.
+# Mesh 3 uses h_crack=0.25 mm and is the promoted public evidence bundle.
 geometry:
   type: kalthoff_winkler
   parameters:
     W: 100.0
-    H: 200.0
+    H: 100.0
     a: 50.0
     h_crack: 0.25
     h_coarse: 5.0
-# Inline material — Borden (2012) maraging steel, Kalthoff-Winkler.
+
 material:
   E: 190000.0           # 190 GPa
   nu: 0.30
-  Gc: 22.13             # N/mm = 22.13 kJ/m^2
-  l0: 0.5               # mm (mesh-scale; preset baseline is 0.195 mm)
+  Gc: 22.13             # N/mm
+  l0: 0.195             # mm
   rho: 8.0e-9           # tonne/mm^3 = 8000 kg/m^3
   energy_split: spectral
   pf_model: AT2
   eta_residual: 1.0e-7
+  plane_stress: false
+
 boundary_conditions:
 - nodes: left_impact
   type: prescribe
   component: 0
   value: 1.0
-# Bottom edge is the symmetry plane in Borden (2012) Sec 4.3 — the
-# half-plate Kalthoff setup mirrors about y=0. ``symmetry axis=y`` is
-# the canonical shorthand for ``fix component=1`` on a horizontal
-# edge: it suppresses u_y while leaving u_x free. Bit-exact with
-# the legacy form (see tests/test_bc_vocab.py).
 - {nodes: bottom, type: symmetry, axis: y}
+
 loading:
   protocol: simple
-  t_total: 9.0e-05
+  t_total: 1.0e-04
   ramp_type: velocity_impact
   v0: 16.5
   t_ramp: 1.0e-06
+
 solver:
   solver_type: explicit
   dt_safety: 0.8
-  # COMSOL N=2 damage subcycling (see B1 config comment + §3.5).
-  # Validated against damage_every=1 run (<1% max|d| difference);
-  # ~2x speedup on the damage solve, ~40% speedup on total step time.
-  damage_every: 2
+  damage_every: 1
+
 output:
-  trajectory: true
-  trajectory_format: zarr
-  h5_every: 20
+  h5: true
+  h5_every: 50
   fast: true
   print_every: 100

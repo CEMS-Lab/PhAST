@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "example": "solid_mechanics.linear_plate",
+  "config_path": "examples/solid_mechanics/linear_plate/config.yaml",
+  "git_commit": "0218c6d306399580f126b5e8bc5a41179a469e76",
+  "generated_at_unix": 1781564213.793844,
+  "dtype": "float64",
+  "device": "cpu",
+  "config_summary": {
+    "mesh": {
+      "nx": 20,
+      "ny": 10,
+      "length": 1.0,
+      "height": 0.2
+    },
+    "material": {
+      "E": "2.1e11",
+      "nu": 0.3
+    },
+    "loading": {
+      "tip_force_y": "-1.0e3"
+    },
+    "solver": {}
+  }
+}

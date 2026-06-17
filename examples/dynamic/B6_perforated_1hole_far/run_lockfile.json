@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/dynamic/B6_perforated_1hole_far/config.yaml",
+  "config_sha256": "f8affd47a0d0cdb54a42470911cda20d8e70982165d9a8bc4f5e6bde623787f1",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "phast.examples.dynamic_perforated_plate.run",
+    "problem": {
+      "name": "Perforated Plate \u2014 1 hole far",
+      "reference": "Bleyer et al. (2017), Sec 4.3"
+    },
+    "geometry": {
+      "type": "perforated_sent",
+      "parameters": {
+        "W": 32.0,
+        "H": 16.0,
+        "a": 4.0,
+        "h_crack": 0.05,
+        "h_coarse": 1.0,
+        "n_holes": 1,
+        "hole_offset_y": 0.6,
+        "hole_start_x": 10.0
+      }
+    },
+    "material": {
+      "E": 3090.0,
+      "nu": 0.35,
+      "Gc": 0.3,
+      "l0": 0.1,
+      "rho": 1.18e-09,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "plane_stress": true,
+      "eta_residual": 1e-06
+    },
+    "loading": {
+      "protocol": "two_step_prestrain",
+      "prestrain_displacement": 0.04,
+      "t_total": 7.5e-05,
+      "ramp_type": "constant"
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "dt_safety": 0.8
+    },
+    "output": {
+      "h5": true,
+      "h5_every": 20,
+      "fast": true,
+      "print_every": 100
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "left",
+        "type": "fix",
+        "component": 0
+      },
+      {
+        "nodes": "top",
+        "type": "prescribe",
+        "component": 1,
+        "value": 1.0
+      },
+      {
+        "nodes": "bottom",
+        "type": "prescribe",
+        "component": 1,
+        "value": -1.0
+      }
+    ]
+  },
+  "run_metadata": {
+    "timestamp": "2026-04-01T13:07:21.450143",
+    "platform": {
+      "system": "Linux",
+      "release": "5.14.0-611.11.1.el9_7.x86_64",
+      "machine": "x86_64",
+      "python": "3.11.15",
+      "pytorch": "2.8.0+cu128"
+    },
+    "problem": "B6: Perforated Plate - 1 hole far from crack path (Bleyer 2017)",
+    "device": {
+      "device": "cuda:0",
+      "dtype_default": "float64",
+      "gpu_name": "NVIDIA A100 80GB PCIe",
+      "vram_gb": 79.3
+    },
+    "material": {
+      "E": 3090.0,
+      "nu": 0.35,
+      "Gc": 0.3,
+      "l0": 0.1,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "eta_residual": 1e-06,
+      "rho": 1.18e-09
+    },
+    "mesh": {
+      "n_nodes": 53395,
+      "n_elements": 106199,
+      "h_min": 0.0015988283903438606
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "protocol": "pre-strain + dynamic release (Dirichlet held constant)",
+      "num_steps": 101295,
+      "dt": 7.404183354272756e-10,
+      "dt_us": "0.0007",
+      "t_total_us": "75.00",
+      "delta_U_mm": 0.04,
+      "c_R_mm_s": 919893.8,
+      "c_R_m_s": 919.9
+    },
+    "git_hash": "adfab6b",
+    "total_time_s": 1074.16,
+    "crack_step": 419,
+    "delta_U_mm": 0.04,
+    "n_holes": 1,
+    "hole_diameter_mm": 0.4,
+    "hole_spacing_mm": 0.9,
+    "hole_range_x": "[10.0, 10.0]",
+    "n_hole_events": 0,
+    "pre_strain_max_uy": 0.722653,
+    "provenance_original_problem_label": "B7: Perforated Plate \u2014 Crack-Hole Interaction (Bleyer 2017)"
+  }
+}

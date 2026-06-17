@@ -59,6 +59,8 @@
     "field_evolution.mp4",
     "thumbnail.png",
     "visual_manifest.json",
+    "run_metadata.json",
+    "run_lockfile.json",
     "run_manifest.json",
     "fluent_setup.py"
   ]

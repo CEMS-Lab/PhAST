@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/dynamic/B5_pmma_branching/config.yaml",
+  "config_sha256": "6b8d44fccc98ebf7028b4977f585d8d8277e88239f13ecfea1c64cfce8bdc353",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "phast.examples.dynamic_branching_pmma.run",
+    "problem": {
+      "name": "PMMA Dynamic Crack Branching",
+      "reference": "Bleyer, Roux-Langlois & Molinari (2017), Comput. Mech."
+    },
+    "geometry": {
+      "units": "mm",
+      "primitives": {
+        "plate": {
+          "type": "rectangle",
+          "origin": [
+            0,
+            0
+          ],
+          "size": [
+            32.0,
+            16.0
+          ]
+        },
+        "notch": {
+          "type": "polygon",
+          "vertices": [
+            [
+              0.0,
+              8.01
+            ],
+            [
+              4.0,
+              8.0
+            ],
+            [
+              0.0,
+              7.99
+            ]
+          ]
+        }
+      },
+      "domain": {
+        "base": "plate",
+        "subtract": []
+      },
+      "named_groups": {
+        "left": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              -0.005,
+              0.0
+            ],
+            "size": [
+              0.01,
+              16.0
+            ]
+          }
+        },
+        "top": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              0.0,
+              15.995
+            ],
+            "size": [
+              32.0,
+              0.01
+            ]
+          }
+        },
+        "bottom": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              0.0,
+              -0.005
+            ],
+            "size": [
+              32.0,
+              0.01
+            ]
+          }
+        }
+      },
+      "mesh": {
+        "element_size": {
+          "default": 1.0,
+          "refined": [
+            {
+              "primitive": "notch",
+              "size": 0.02,
+              "margin": 0.5
+            },
+            {
+              "region": {
+                "type": "box",
+                "x": [
+                  -1.0,
+                  32.0
+                ],
+                "y": [
+                  0.0,
+                  16.0
+                ]
+              },
+              "size": 0.02,
+              "thickness": 1.0
+            }
+          ]
+        }
+      }
+    },
+    "material": {
+      "E": 3090.0,
+      "nu": 0.35,
+      "Gc": 0.3,
+      "l0": 0.1,
+      "rho": 1.18e-09,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "plane_stress": true,
+      "eta_residual": 1e-07
+    },
+    "loading": {
+      "protocol": "two_step_prestrain",
+      "prestrain_displacement": 0.05,
+      "coupled_prestrain": true,
+      "t_total": 7.5e-05,
+      "ramp_type": "constant"
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "dt_safety": 0.8,
+      "damage_every": 1
+    },
+    "output": {
+      "trajectory": true,
+      "trajectory_format": "zarr",
+      "h5_every": 20,
+      "fast": true,
+      "print_every": 100
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "left",
+        "type": "fix",
+        "component": 0
+      },
+      {
+        "nodes": "top",
+        "type": "prescribe",
+        "component": 1,
+        "value": 1.0
+      },
+      {
+        "nodes": "bottom",
+        "type": "prescribe",
+        "component": 1,
+        "value": -1.0
+      }
+    ]
+  },
+  "run_metadata": {
+    "timestamp": "2026-04-01T11:54:29.772882",
+    "platform": {
+      "system": "Linux",
+      "release": "5.14.0-611.11.1.el9_7.x86_64",
+      "machine": "x86_64",
+      "python": "3.11.15",
+      "pytorch": "2.8.0+cu128"
+    },
+    "problem": "PMMA Dynamic Crack Branching -- Pre-Strained Plate (Bleyer 2017)",
+    "device": {
+      "device": "cuda:0",
+      "dtype_default": "float64",
+      "gpu_name": "NVIDIA A100 80GB PCIe",
+      "vram_gb": 79.3
+    },
+    "material": {
+      "E": 3090.0,
+      "nu": 0.35,
+      "Gc": 0.3,
+      "l0": 0.1,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "eta_residual": 1e-06,
+      "rho": 1.18e-09
+    },
+    "mesh": {
+      "n_nodes": 949210,
+      "n_elements": 1894256,
+      "h_min": 0.008523610623398334
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "protocol": "two-step: pre-strain + dynamic release",
+      "num_steps": 19001,
+      "dt": 3.947288919637911e-09,
+      "dt_us": "0.0039",
+      "t_total_us": "75.00",
+      "delta_U_mm": 0.05,
+      "c_R_mm_s": 919893.8,
+      "c_R_m_s": 919.9
+    },
+    "git_hash": "adfab6b",
+    "total_time_s": 4201.89,
+    "crack_step": 62,
+    "branch_step": null,
+    "branch_time_us": null,
+    "delta_U_mm": 0.05,
+    "pre_strain_max_uy": 0.816789
+  }
+}

@@ -6,7 +6,6 @@
     "run_lockfile.json",
     "run_metadata.json",
     "run_manifest.json",
-    "run.log",
     "j2_stress_strain.csv",
     "j2_stress_strain.png",
     "stress_strain.png",

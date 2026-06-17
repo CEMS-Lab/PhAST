@@ -2,19 +2,22 @@
   "example": "B7_dynamic_crack_branching_comsol",
   "status": "public_candidate_without_comsol_binary",
   "config": "config.yaml",
-  "excluded_artifacts": [
-    "COMSOL binary model files",
-    "vendor PDFs",
-    "heavy trajectory archives"
+  "files": [
+    "README.md",
+    "borden_glass_dynamic_branching_evolution_styled.png",
+    "compare.png",
+    "compare_report.txt",
+    "comsol_branching_times.txt",
+    "comsol_energy_curve.csv",
+    "config.yaml",
+    "damage_final.png",
+    "energy.png",
+    "initial_conditions.png",
+    "mesh.geo",
+    "run_fluent.py",
+    "run_manifest.json",
+    "thumbnail.png",
+    "visual_manifest.json"
   ],
-  "notes": "Curated visual package for the dynamic crack-branching comparison; proprietary and large artifacts are not distributed with the public repository.",
-  "source_run_id": "b7_branching_47961",
-  "trajectory_source": "external retained trajectory; not distributed with the public repository",
-  "animation_source": "regenerated from the retained reference trajectory",
-  "animation_manifest": "animation_manifest.json",
-  "artifacts": [
-    "damage_evolution.gif",
-    "damage_evolution.mp4",
-    "animation_manifest.json"
-  ]
+  "notes": "Curated visual package is public-candidate evidence; raw COMSOL and trajectory artifacts stay external."
 }

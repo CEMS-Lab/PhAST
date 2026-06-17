@@ -14,5 +14,5 @@
   "visual_manifest": "examples/plasticity_interface/results/j2_validation/visual_manifest.json",
   "visual_manifest_passed": true,
   "validation_passed": true,
-  "max_rss_kib": 324320
+  "max_rss_kib": 324512
 }

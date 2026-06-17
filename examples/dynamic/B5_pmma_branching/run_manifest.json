@@ -1,8 +1,8 @@
 {
   "example": "B5_pmma_branching",
-  "status": "selected_public_parametric_study",
+  "status": "selected_public_sweep",
   "config": "config.yaml",
-  "curated_source": "selected public PMMA parametric-study result retained from reviewed reference evidence",
+  "source_job": "job8585",
   "problem": "PMMA Dynamic Crack Branching -- Pre-Strained Plate (Bleyer 2017)",
   "material": {
     "E": 3090.0,
@@ -39,7 +39,9 @@
   "files": [
     "README.md",
     "config.yaml",
+    "run_fluent.py",
     "mesh.geo",
+    "run_metadata.json",
     "run_manifest.json",
     "visual_manifest.json",
     "history.csv",
@@ -64,12 +66,7 @@
     "max_damage_vs_time.png",
     "mesh_convergence.png",
     "velocity_with_holes.png",
-    "velocity_parametric.png",
-    "damage_evolution.mp4"
+    "velocity_parametric.png"
   ],
-  "excluded_artifacts": [
-    "external raw parametric-study archives",
-    "heavy trajectory/checkpoint stores"
-  ],
-  "notes": "Curated public PMMA visual-evidence bundle. Raw parametric-study archives are external retained artifacts."
+  "notes": "Promoted from the specific B5a PMMA dU=0.05 reference environment archive requested for public B5 visual evidence. Raw job clutter stays external."
 }

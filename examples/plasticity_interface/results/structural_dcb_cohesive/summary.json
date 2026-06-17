@@ -1,7 +1,7 @@
 {
   "example": "structural_dcb_cohesive_benchmark",
   "capability": "DCB-style structural Mode-I cohesive delamination with free bulk DOFs through QuasiStaticSolver cohesive_operator hook",
-  "capability_boundary": "clamped-end structural validation; not an ASTM D5528 fixture/data-reduction or analytical DCB calibration",
+  "capability_boundary": "clamped-end structural baseline validation; not an ASTM D5528 fixture/data-reduction or analytical DCB calibration",
   "references": [
     "ASTM D5528 Mode-I DCB interlaminar fracture toughness standard",
     "Skec et al. 2018 analytical DCB with bilinear cohesive interface",
@@ -75,7 +75,7 @@
       "path": "structural_dcb_deformed_mesh.png",
       "width_px": 1280,
       "height_px": 672,
-      "size_bytes": 133227,
+      "size_bytes": 133441,
       "review_dimension_passed": true
     },
     {
@@ -91,15 +91,15 @@
       "path": "cohesive_damage_final.png",
       "width_px": 1360,
       "height_px": 714,
-      "size_bytes": 67908,
+      "size_bytes": 67741,
       "review_dimension_passed": true
     },
     {
       "artifact_type": "animation",
       "path": "damage_evolution.gif",
-      "size_bytes": 93622,
+      "size_bytes": 114481,
       "media_passed": true
     }
   ],
-  "max_rss_kib": 336640
+  "max_rss_kib": 342720
 }

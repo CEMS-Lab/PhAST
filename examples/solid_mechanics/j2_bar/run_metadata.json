@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "example": "solid_mechanics.j2_bar",
+  "config_path": "examples/solid_mechanics/j2_bar/config.yaml",
+  "git_commit": "0218c6d306399580f126b5e8bc5a41179a469e76",
+  "generated_at_unix": 1781564215.11112,
+  "dtype": "float64",
+  "device": "cpu",
+  "config_summary": {
+    "mesh": {
+      "nx": 18,
+      "ny": 6,
+      "length": 1.0,
+      "height": 0.25,
+      "waist_depth": 0.35,
+      "waist_width_fraction": 0.18
+    },
+    "material": {
+      "E": 210000.0,
+      "nu": 0.3,
+      "sigma_y0": 250.0,
+      "hardening_modulus": 5000.0
+    },
+    "loading": {
+      "n_steps": 30,
+      "max_strain_xx": 0.0045
+    },
+    "solver": {
+      "tol": 1e-07,
+      "tol_rel": 1e-06,
+      "max_iter": 20,
+      "backend": "auto"
+    }
+  }
+}

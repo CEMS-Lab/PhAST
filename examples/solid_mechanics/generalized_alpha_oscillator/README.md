@@ -14,7 +14,7 @@ Two-degree-of-freedom oscillator integrated with the Hulbert-Chung generalized-a
 | `response.csv`, `response.png` | Energy-history comparison. |
 | `initial_conditions.png` | Diagnostic setup preview. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
-| `run_manifest.json` | Reproducibility metadata for the reference output. |
+| `run_lockfile.json`, `run_manifest.json` | Reproducibility metadata for the reference output. |
 
 ## Run Through The Reproducibility Contract
 

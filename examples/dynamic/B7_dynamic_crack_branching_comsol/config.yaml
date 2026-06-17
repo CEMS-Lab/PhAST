@@ -9,7 +9,7 @@ schema_version: 1
 # with smooth-step ramp), versus B1/B5 which are displacement-controlled.
 #
 # Run:
-#   python -m phast run configs/B7_dynamic_crack_branching_comsol.yaml
+#   python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml
 #
 # Acceptance (issue #135 + #299 reframing):
 #   - Initiation t ~ 10 us
@@ -23,13 +23,12 @@ schema_version: 1
 
 problem:
   name: COMSOL Dynamic Crack Branching (PMMA-equiv.)
-  reference: "COMSOL Application Gallery: Phase-Field Modeling of Dynamic Crack Branching, https://www.comsol.com/model/phase-field-modeling-of-dynamic-crack-branching-131361"
+  reference: "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (vendor documentation is not distributed)"
 
 acceptance:
   status: beta
   reference_result: "Ren 2019 dynamic branching onset near 68.2 us; COMSOL Application Library 33 us retained as secondary vendor context"
   required_outputs:
-    - run_lockfile.json
     - config.yaml
     - energy.csv
     - crack_tip.csv

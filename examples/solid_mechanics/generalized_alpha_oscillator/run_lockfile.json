@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/solid_mechanics/generalized_alpha_oscillator/config.yaml",
+  "config_sha256": "be8bc583bcaf58be7bfbbdf6450ac9208a91085920b8e9136f8417e64884b553",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "solid_mechanics.generalized_alpha_oscillator",
+    "time": {
+      "n_steps": 100,
+      "dt": 0.001
+    },
+    "integrator": {
+      "rho_inf_values": [
+        1.0,
+        0.5
+      ]
+    },
+    "output": {
+      "directory": "."
+    }
+  }
+}

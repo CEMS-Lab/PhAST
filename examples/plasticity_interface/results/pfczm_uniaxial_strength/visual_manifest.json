@@ -12,7 +12,7 @@
     "path": "damage_final.png",
     "width_px": 1224,
     "height_px": 680,
-    "size_bytes": 38629,
+    "size_bytes": 39309,
     "review_dimension_passed": true
   },
   {
@@ -58,7 +58,7 @@
   {
     "artifact_type": "animation",
     "path": "damage_evolution.gif",
-    "size_bytes": 80781,
+    "size_bytes": 72386,
     "media_passed": true
   }
 ]

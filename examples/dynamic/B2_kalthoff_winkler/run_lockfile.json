@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml",
+  "config_sha256": "da91bd705c9f0835678b0b48ccec0662eec4bbb47a13197d344a9311827bbb27",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "phast.examples.dynamic_kalthoff_shear.run",
+    "problem": {
+      "name": "Kalthoff-Winkler Impact",
+      "reference": "Borden et al. (2012), CMAME"
+    },
+    "geometry": {
+      "type": "kalthoff_winkler",
+      "parameters": {
+        "W": 100.0,
+        "H": 100.0,
+        "a": 50.0,
+        "h_crack": 0.25,
+        "h_coarse": 5.0
+      }
+    },
+    "material": {
+      "E": 190000.0,
+      "nu": 0.3,
+      "Gc": 22.13,
+      "l0": 0.195,
+      "rho": 8e-09,
+      "energy_split": "spectral",
+      "pf_model": "AT2",
+      "eta_residual": 1e-07,
+      "plane_stress": false
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "left_impact",
+        "type": "prescribe",
+        "component": 0,
+        "value": 1.0
+      },
+      {
+        "nodes": "bottom",
+        "type": "symmetry",
+        "axis": "y"
+      }
+    ],
+    "loading": {
+      "protocol": "simple",
+      "t_total": 0.0001,
+      "ramp_type": "velocity_impact",
+      "v0": 16.5,
+      "t_ramp": 1e-06
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "dt_safety": 0.8,
+      "damage_every": 1
+    },
+    "output": {
+      "h5": true,
+      "h5_every": 50,
+      "fast": true,
+      "print_every": 100
+    }
+  },
+  "promoted_run_metadata": {
+    "timestamp": "2026-04-22T00:49:54.535592",
+    "platform": {
+      "system": "Linux",
+      "release": "5.14.0-611.11.1.el9_7.x86_64",
+      "machine": "x86_64",
+      "python": "3.11.15",
+      "pytorch": "2.8.0+cu128"
+    },
+    "problem": "Kalthoff-Winkler two-way (torch + FEniCS, spectral)",
+    "device": {
+      "device": "cuda:0",
+      "dtype_default": "float64",
+      "gpu_name": "NVIDIA A100 80GB PCIe",
+      "vram_gb": 79.3
+    },
+    "material": {
+      "E": 190000.0,
+      "nu": 0.3,
+      "Gc": 22.13,
+      "l0": 0.195,
+      "energy_split": "spectral",
+      "pf_model": "AT2",
+      "eta_residual": 1e-07,
+      "plane_stress": false,
+      "rho": 8e-09
+    },
+    "mesh": {
+      "n_nodes": 35487,
+      "n_elements": 70447,
+      "h_min": 0.06002678608109165
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "num_steps": 11775,
+      "dt": 8.492898290124968e-09
+    },
+    "git_hash": "8d93350",
+    "total_time_s": 79.22,
+    "crack_step": 3033,
+    "memory": {
+      "cpu_rss_peak_MiB": 1525.4,
+      "gpu_allocated_peak_MiB": 407.3,
+      "gpu_reserved_peak_MiB": 452.0
+    }
+  },
+  "public_artifacts": [
+    "README.md",
+    "config.yaml",
+    "run_fluent.py",
+    "crack_tip.csv",
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
+    "damage_final.png",
+    "energy.csv",
+    "history.csv",
+    "initial_conditions.png",
+    "mesh.geo",
+    "mesh.msh",
+    "response_evolution.mp4",
+    "run_lockfile.json",
+    "run_manifest.json",
+    "run_metadata.json",
+    "thumbnail.png",
+    "timing_per_step.csv",
+    "visual_manifest.json"
+  ]
+}

@@ -150,7 +150,6 @@ The solid-interface benchmark runner writes the fuller standard-output bundle
 used for review of the diffuse-field/path-energy validation boundary:
 
 - `config.yaml`, `run_lockfile.json`, `run_metadata.json`, `run_manifest.json`,
-  `run.log`, `mesh.geo`, and `mesh.msh`.
 - `initial_conditions.png`, `material_fields.png`, `damage_final.png`,
   `crack_path.png`, `energy.png`, `load_displacement.png`,
   `staggered_convergence.png`, `compare.png`, `compare_report.txt`, and
@@ -197,7 +196,6 @@ gated.
 The cohesive displacement-jump benchmark writes a compact standard bundle:
 
 - `summary.json`, `config.yaml`, `run_lockfile.json`, `run_metadata.json`,
-  `run_manifest.json`, and `run.log`.
 - `cohesive_response.csv` with load-step opening, solver convergence,
   committed damage, traction, scalar dissipated energy, and closed-form
   bilinear-law error checks.
@@ -256,7 +254,6 @@ For ductile PF-plasticity, `summary.json` reports solver-level J2 yielding,
 Newton residual telemetry, ductile driving-force growth, the requested and
 resolved sparse backend, and the bounded AT2 phase-field damage solve
 residual. The runner writes `config.yaml`, `run_lockfile.json`,
-`run_metadata.json`, `run_manifest.json`, `run.log`, `mesh.geo`, `mesh.msh`,
 standard CSVs, setup/load/energy/damage figures, and `visual_manifest.json`.
 This is the validated operator-coupled mechanics/damage layer used by the
 guarded quasi-static T3 J2+AT2 staggered path. `energy.csv` is an integrated
@@ -356,7 +353,6 @@ python examples/plasticity_interface/run_sparse_j2_backend_promotion.py \
 ```
 
 It writes `config.yaml`, `run_lockfile.json`, `run_metadata.json`,
-`run_manifest.json`, `run.log`, `backend_promotion.csv`, and `summary.json`.
 Retained backend-promotion evidence shows PETSc/MUMPS can resolve
 `auto -> mumps` and explicit `mumps -> mumps`, matching the SciPy baseline on
 the tested patch. A `cudss` request must either resolve on a configured

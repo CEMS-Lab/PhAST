@@ -2,10 +2,33 @@
   "example": "B2_kalthoff_winkler",
   "status": "public_candidate",
   "config": "config.yaml",
-  "curated_source": "../kalthoff/B2_kalthoff_mesh1",
-  "excluded_artifacts": [
-    "../kalthoff/B2_kalthoff_mesh1/training_data.h5",
-    "../kalthoff/B2_kalthoff_mesh1/RECOVERY.md"
+  "mesh": {
+    "label": "mesh3_h0.25",
+    "h_crack_mm": 0.25,
+    "nodes": 35487,
+    "elements": 70447
+  },
+  "files": [
+    "README.md",
+    "config.yaml",
+    "run_fluent.py",
+    "crack_tip.csv",
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
+    "damage_final.png",
+    "energy.csv",
+    "history.csv",
+    "initial_conditions.png",
+    "mesh.geo",
+    "mesh.msh",
+    "response_evolution.mp4",
+    "run_lockfile.json",
+    "run_manifest.json",
+    "run_metadata.json",
+    "thumbnail.png",
+    "timing_per_step.csv",
+    "visual_manifest.json"
   ],
-  "notes": "Flat curated package copied from mesh-1 evidence; large trajectory store is not distributed with the public repository."
+  "notes": "Flat public package generated from the mesh-3 Kalthoff-Winkler half-plate reference run. Lightweight CSV, PNG, GIF, MP4, mesh, and metadata artifacts are distributed here.",
+  "reference_source": "external reference environment; heavy trajectory store is not distributed"
 }

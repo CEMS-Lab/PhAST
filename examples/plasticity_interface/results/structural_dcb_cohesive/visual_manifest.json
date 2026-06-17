@@ -28,7 +28,7 @@
     "path": "structural_dcb_deformed_mesh.png",
     "width_px": 1280,
     "height_px": 672,
-    "size_bytes": 133227,
+    "size_bytes": 133441,
     "review_dimension_passed": true
   },
   {
@@ -44,13 +44,13 @@
     "path": "cohesive_damage_final.png",
     "width_px": 1360,
     "height_px": 714,
-    "size_bytes": 67908,
+    "size_bytes": 67741,
     "review_dimension_passed": true
   },
   {
     "artifact_type": "animation",
     "path": "damage_evolution.gif",
-    "size_bytes": 93622,
+    "size_bytes": 114481,
     "media_passed": true
   }
 ]

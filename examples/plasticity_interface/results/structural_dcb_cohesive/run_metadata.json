@@ -1,11 +1,11 @@
 {
   "benchmark": "structural_dcb_cohesive_benchmark",
-  "timestamp_utc": "2026-06-16T20:18:11.041440+00:00",
-  "git_sha": "89f0d830a091977865e530f9d320bbeae65c1f85",
+  "timestamp_utc": "2026-06-16T10:27:51.127544+00:00",
+  "git_sha": "6260e8e3fb090a718d476cb3e33c743b8f78f332",
   "platform": "macOS-26.6-arm64-arm-64bit",
   "python": "3.10.18",
   "torch": "2.8.0",
   "device": "cpu",
-  "elapsed_ms": 1516.3878750172444,
-  "max_rss_kib": 336640
+  "elapsed_ms": 1422.7255419827998,
+  "max_rss_kib": 342720
 }

@@ -19,7 +19,7 @@ Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve pat
 | `von_mises.png`, `stress_final.png`, `strain_final.png`, `strain_energy.png` | Final stress, strain, and energy fields. |
 | `response_evolution.mp4`, `field_evolution.mp4` | Lightweight reference animations. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
-| `run_manifest.json` | Reproducibility metadata for the reference output. |
+| `run_metadata.json`, `run_lockfile.json`, `run_manifest.json` | Reproducibility metadata for the reference output. |
 
 ## Run The Canonical YAML Deck
 
@@ -44,14 +44,6 @@ python examples/solid_mechanics/linear_plate/run_fluent.py --run --output-dir ru
 ```
 
 `run_fluent.py` builds the same problem manually with `phast.Problem`: geometry, region, material, load step, solver selection, and requested outputs are all declared in Python before the workflow contract is validated.
-
-The manual setup starts from the fluent problem object:
-
-```python
-import phast
-
-problem = phast.Problem("Linear elastic plate")
-```
 
 ## How Manual Setup Works
 

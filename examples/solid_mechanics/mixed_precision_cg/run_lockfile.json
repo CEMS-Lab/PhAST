@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/solid_mechanics/mixed_precision_cg/config.yaml",
+  "config_sha256": "59710b7c33ed27edf95914043f07446b97f6f32f13923dfb79091b63a391ca05",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "solid_mechanics.mixed_precision_cg",
+    "problem": {
+      "n": 5000,
+      "seed": 0
+    },
+    "solver": {
+      "float64_tol": 1e-10,
+      "float32_tol": 1e-06,
+      "mixed_tol": 1e-10,
+      "max_iter": 20000,
+      "max_refine": 5
+    },
+    "output": {
+      "directory": "."
+    }
+  }
+}

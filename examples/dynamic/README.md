@@ -22,7 +22,7 @@ supporting extension.
 
 | Public example | Source status | Public release action |
 |---|---|---|
-| `B2_kalthoff_winkler` | Mesh-1 curated outputs exist; local H5 trajectory is not distributed. | Publish flat curated CSV/PNG/metadata outputs, not `training_data.h5`. |
+| `B2_kalthoff_winkler` | Mesh-1 curated outputs exist; local H5 trajectory is not distributed. | Publish flat curated CSV/PNG/metadata outputs, not `external trajectory store`. |
 | `B3_dynamic_sent` | Curated outputs exist; config validates with an `h/l0 = 1` warning. | Publish as a runnable dynamic baseline verification example unless finer evidence is promoted. |
 | `B5_pmma_branching` | Representative PMMA parametric-study result retained as a flat public folder. | Publish the selected deck and curated visuals only. Keep other parametric studies outside the public repository. |
 | `B6_perforated_*` | Perforated-plate variants retained as flat public folders. | Publish only the B6 public folders; do not expose old naming or raw run dumps. |
@@ -51,7 +51,6 @@ examples/dynamic/<example_name>/
 
 Do not leave curated public files under `figures/`, `outputs/`,
 `reference_runs/`, raw job dump folders, or dated run folders. Trajectory
-stores such as `training_data.zarr/` are generated on demand or distributed
 through a separate artifact release, not committed to the public repository.
 
 ## Timing material

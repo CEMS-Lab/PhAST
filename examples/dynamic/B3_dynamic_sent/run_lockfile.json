@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml",
+  "config_sha256": "c6e497f0bd5419e8c0b65ca3084ce5ebc914fffd0a63b54080660a6ae68b7a3f",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "phast.examples.dynamic_sent_tension.run",
+    "problem": {
+      "name": "Dynamic SENT",
+      "reference": "Borden et al. (2012), CMAME"
+    },
+    "geometry": {
+      "units": "mm",
+      "primitives": {
+        "plate": {
+          "type": "rectangle",
+          "origin": [
+            0,
+            0
+          ],
+          "size": [
+            100.0,
+            40.0
+          ]
+        },
+        "notch": {
+          "type": "polygon",
+          "vertices": [
+            [
+              0.0,
+              20.01
+            ],
+            [
+              50.0,
+              20.0
+            ],
+            [
+              0.0,
+              19.99
+            ]
+          ]
+        }
+      },
+      "domain": {
+        "base": "plate",
+        "subtract": []
+      },
+      "named_groups": {
+        "left": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              -0.01,
+              0.0
+            ],
+            "size": [
+              0.02,
+              40.0
+            ]
+          }
+        },
+        "top": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              0.0,
+              39.99
+            ],
+            "size": [
+              100.0,
+              0.02
+            ]
+          }
+        },
+        "bottom": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              0.0,
+              -0.01
+            ],
+            "size": [
+              100.0,
+              0.02
+            ]
+          }
+        }
+      },
+      "mesh": {
+        "element_size": {
+          "default": 4.0,
+          "refined": [
+            {
+              "primitive": "notch",
+              "size": 0.5,
+              "margin": 2.5
+            }
+          ]
+        }
+      }
+    },
+    "material": {
+      "E": 32000.0,
+      "nu": 0.2,
+      "Gc": 0.003,
+      "l0": 0.5,
+      "rho": 2.45e-09,
+      "energy_split": "spectral",
+      "pf_model": "AT2",
+      "eta_residual": 1e-07
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "left",
+        "type": "fix",
+        "component": 0
+      },
+      {
+        "nodes": "top",
+        "type": "traction",
+        "component": 1,
+        "value": 1.0,
+        "ramp_type": "constant"
+      },
+      {
+        "nodes": "bottom",
+        "type": "traction",
+        "component": 1,
+        "value": -1.0,
+        "ramp_type": "constant"
+      }
+    ],
+    "loading": {
+      "protocol": "simple",
+      "t_total": 5e-05,
+      "ramp_type": "constant"
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "dt_safety": 0.8
+    },
+    "output": {
+      "trajectory": true,
+      "trajectory_format": "zarr",
+      "h5_every": 20,
+      "fast": true,
+      "print_every": 100
+    }
+  }
+}

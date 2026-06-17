@@ -19,7 +19,7 @@ Compressible neo-Hookean cantilever solved by load-stepped Newton iteration with
 | `von_mises.png`, `stress_final.png`, `strain_final.png`, `strain_energy.png`, `jacobian.png` | Final stress, strain, energy, and deformation-gradient diagnostics. |
 | `response_evolution.mp4`, `field_evolution.mp4` | Lightweight reference animations. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
-| `run_manifest.json` | Reproducibility metadata for the reference output. |
+| `run_metadata.json`, `run_lockfile.json`, `run_manifest.json` | Reproducibility metadata for the reference output. |
 
 ## Run The Canonical YAML Deck
 

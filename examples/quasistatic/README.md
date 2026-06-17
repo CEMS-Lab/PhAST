@@ -45,7 +45,6 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml \
 Each public example should keep:
 
 - `README.md`
-- `PROMOTION.md`
 - `config.yaml`
 - `mesh.geo` and `mesh.msh`
 - lightweight CSV, JSON, log, and comparison files

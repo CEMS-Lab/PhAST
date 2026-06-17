@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/quasistatic/miehe_tension/config.yaml",
+  "config_sha256": "a4ee654fb57f7ceb4a704aaa0f67fb4b4f5238e28b4ec14e156581d7ee31e620",
+  "resolved_config": {
+    "schema_version": 1,
+    "problem": {
+      "name": "Miehe SENT 37992",
+      "reference": "Miehe et al. (2010), PhaseFieldX Example 1711"
+    },
+    "acceptance": {
+      "status": "validated",
+      "reference_result": "PhaseFieldX 1711 / promoted reference environment job 37992",
+      "required_outputs": [
+        "mesh.geo",
+        "mesh.msh",
+        "run_metadata.json",
+        "history.csv",
+        "energy.csv",
+        "timing_per_step.csv",
+        "solver_telemetry.csv",
+        "load_displacement.png",
+        "staggered_convergence.png",
+        "damage_final.png",
+        "damage_evolution.mp4",
+        "compare.png",
+        "compare_report.txt"
+      ],
+      "metrics": {
+        "peak_reaction": {
+          "target": 0.7012,
+          "observed": 0.6936,
+          "tolerance_percent": 5.0,
+          "units": "kN"
+        },
+        "pre_peak_l2": {
+          "observed_percent": 1.7,
+          "tolerance_percent": 10.0
+        },
+        "dissipated_energy": {
+          "observed_error_percent": 5.38,
+          "tolerance_percent": 15.0
+        }
+      },
+      "notes": "Reproduces the promoted script-driven reference environment reference run 37992. The original runner used a two-rate displacement schedule: 50 steps to 0.005 mm, then 300 steps to 0.008 mm. This YAML encodes that schedule with cyclic_phases.\n"
+    },
+    "geometry": {
+      "type": "miehe_tension",
+      "parameters": {
+        "L": 1.0,
+        "a": 0.5,
+        "l0": 0.015,
+        "h_crack": 0.001875,
+        "h_coarse": 0.05
+      }
+    },
+    "material": {
+      "E": 210000.0,
+      "nu": 0.3,
+      "Gc": 2.7,
+      "l0": 0.015,
+      "rho": 7.8e-09,
+      "eta_residual": 1e-07,
+      "energy_split": "isotropic",
+      "pf_model": "AT2",
+      "plane_stress": false
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "bottom",
+        "type": "fix",
+        "component": 0
+      },
+      {
+        "nodes": "bottom",
+        "type": "fix",
+        "component": 1
+      },
+      {
+        "nodes": "top",
+        "type": "prescribe",
+        "component": 1,
+        "value": 1.0
+      }
+    ],
+    "loading": {
+      "protocol": "cyclic",
+      "cyclic_phases": "0.005:50,0.008:300",
+      "num_steps": 350,
+      "dt": 1.0
+    },
+    "solver": {
+      "solver_type": "quasi_static",
+      "stagger_tol": 1e-08,
+      "max_stagger": 500,
+      "stagger_criterion": "relative",
+      "anderson_depth": 0,
+      "adaptive_stagger_tol": false,
+      "use_multigrid": true,
+      "preconditioner": "jacobi",
+      "damage_tol": 1e-06,
+      "static_tol": 1e-08,
+      "bounds_method": "post_clamp",
+      "damage_max_iter": 5000,
+      "static_max_iter": 5000,
+      "H_cap_factor": 0.0,
+      "backend": "auto",
+      "fail_on_mechanics_nonconvergence": false,
+      "eta_residual": 1e-07
+    },
+    "output": {
+      "output_dir": null,
+      "h5": true,
+      "trajectory": true,
+      "trajectory_format": "zarr",
+      "h5_every": 1,
+      "plots": true,
+      "profile": true,
+      "gif": true,
+      "gif_frames": 150,
+      "gif_fields": "damage",
+      "animation_format": "mp4",
+      "print_every": 1,
+      "reaction_node_set": "bottom",
+      "reaction_component": 1
+    },
+    "device": {
+      "device": "cpu",
+      "compile": false
+    },
+    "initial_conditions": {
+      "preseed_notch_nodesets": null,
+      "preseed_damage": null
+    }
+  },
+  "run_metadata": {
+    "timestamp": "2026-05-23T19:39:54.227845",
+    "platform": {
+      "system": "Linux",
+      "release": "5.14.0-611.11.1.el9_7.x86_64",
+      "machine": "x86_64",
+      "python": "3.11.15",
+      "pytorch": "2.8.0+cu128"
+    },
+    "problem": "Miehe SENT (Single-Edge-Notch Tension)",
+    "device": {
+      "device": "cpu",
+      "dtype_default": "float64"
+    },
+    "material": {
+      "E": 210000.0,
+      "nu": 0.3,
+      "Gc": 2.7,
+      "l0": 0.015,
+      "energy_split": "isotropic",
+      "pf_model": "AT2",
+      "eta_residual": 1e-07,
+      "plane_stress": false,
+      "rho": 7.8e-09
+    },
+    "mesh": {
+      "n_nodes": 2423,
+      "n_elements": 4308,
+      "h_min": 0.0006412057226662074
+    },
+    "solver": {
+      "solver_type": "quasi_static",
+      "num_steps": 350,
+      "stagger_tol": 1e-08,
+      "stagger_criterion": "relative",
+      "anderson_depth": 0
+    },
+    "git_hash": "0ecb5bb",
+    "total_time_s": 905.46,
+    "peak_reaction_kN": 0.6936,
+    "memory": {
+      "cpu_rss_peak_MiB": 1111.0
+    }
+  }
+}

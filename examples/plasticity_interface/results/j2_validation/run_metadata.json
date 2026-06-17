@@ -1,8 +1,8 @@
 {
   "example": "plasticity_interface.j2_validation",
   "validation_id": "j2_validation",
-  "timestamp_utc": "2026-06-16T20:18:10.035975+00:00",
-  "git_sha": "89f0d830a091977865e530f9d320bbeae65c1f85",
+  "timestamp_utc": "2026-06-16T10:27:50.652833+00:00",
+  "git_sha": "6260e8e3fb090a718d476cb3e33c743b8f78f332",
   "platform": "macOS-26.6-arm64-arm-64bit",
   "python": "3.10.18",
   "torch": "2.8.0",
@@ -10,6 +10,6 @@
     "n_nodes": 175,
     "n_elements": 288
   },
-  "elapsed_ms": 920.6558750011027,
-  "max_rss_kib": 324320
+  "elapsed_ms": 981.8349169800058,
+  "max_rss_kib": 324512
 }

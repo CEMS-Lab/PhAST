@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml",
+  "config_sha256": "43f3691b04d9d1bd349540ab9de5aa8919cfc14c137a030f4d97c84623a4d2b9",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "phast.examples.dynamic_perforated_plate.run",
+    "problem": {
+      "name": "Perforated Plate \u2014 30 holes",
+      "reference": "Bleyer et al. (2017), Sec 4.2"
+    },
+    "geometry": {
+      "type": "perforated_sent",
+      "parameters": {
+        "W": 32.0,
+        "H": 16.0,
+        "a": 4.0,
+        "h_crack": 0.05,
+        "h_coarse": 1.0,
+        "n_holes": 30,
+        "hole_spacing": 0.9
+      }
+    },
+    "material": {
+      "E": 3090.0,
+      "nu": 0.35,
+      "Gc": 0.3,
+      "l0": 0.1,
+      "rho": 1.18e-09,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "plane_stress": true,
+      "eta_residual": 1e-07
+    },
+    "loading": {
+      "protocol": "two_step_prestrain",
+      "prestrain_displacement": 0.05,
+      "t_total": 7.5e-05,
+      "ramp_type": "constant"
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "dt_safety": 0.8
+    },
+    "output": {
+      "trajectory": true,
+      "trajectory_format": "zarr",
+      "h5_every": 20,
+      "fast": true,
+      "print_every": 100
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "left",
+        "type": "fix",
+        "component": 0
+      },
+      {
+        "nodes": "top",
+        "type": "prescribe",
+        "component": 1,
+        "value": 1.0
+      },
+      {
+        "nodes": "bottom",
+        "type": "prescribe",
+        "component": 1,
+        "value": -1.0
+      }
+    ]
+  }
+}

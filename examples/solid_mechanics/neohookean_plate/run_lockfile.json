@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "command": "python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml --output_dir examples/solid_mechanics/neohookean_plate",
+  "resolved_config": {
+    "schema_version": 1,
+    "example": "solid_mechanics.neohookean_plate",
+    "mesh": {
+      "nx": 20,
+      "ny": 10,
+      "length": 1.0,
+      "height": 0.2
+    },
+    "material": {
+      "E": "2.1e11",
+      "nu": 0.3
+    },
+    "loading": {
+      "load_steps": 5,
+      "target_linear_tip_displacement_fraction": 0.05,
+      "load_scale": 0.5
+    },
+    "output": {
+      "directory": "."
+    }
+  },
+  "trajectory_format": "zarr"
+}

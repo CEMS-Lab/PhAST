@@ -1,6 +1,6 @@
 schema_version: 1
-name: COMSOL Notched Holed Plate strict parity (volDev + eta=1e-5)
-reference: COMSOL 6.4 Application Library Damage settings; Ambati et al.
+name: COMSOL Notched Holed Plate strict .mph parity (volDev + eta=1e-5)
+reference: COMSOL 6.4 holed_plate_fracture.mph exact Damage settings; Ambati et al.
   (2015), Comput. Mech. 55, 383-405.
 acceptance:
   status: validated

@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
 
-from phast.solid_mechanics_runners.j2_bar import run
+from phast.solid_mechanics_examples.j2_bar import run
 
 
 def main() -> None:

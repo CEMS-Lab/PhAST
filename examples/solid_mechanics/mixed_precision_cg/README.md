@@ -14,7 +14,7 @@ Conjugate-gradient numerics diagnostic on a sparse one-dimensional Laplacian. Th
 | `response.csv`, `response.png` | Timing, residual, and error comparison. |
 | `initial_conditions.png` | Diagnostic setup preview. |
 | `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
-| `run_manifest.json` | Reproducibility metadata for the reference output. |
+| `run_lockfile.json`, `run_manifest.json` | Reproducibility metadata for the reference output. |
 
 ## Run Through The Reproducibility Contract
 
