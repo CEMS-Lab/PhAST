@@ -75,10 +75,26 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 - [`examples/`](examples/) - curated public YAML examples and retained visual
   result bundles.
 - [`examples/README.md`](examples/README.md) - public example overview.
+- [`configs/`](configs/) - benchmark decks, schemas, reference templates, and
+  reusable configuration material.
 - [`docs/`](docs/) - Sphinx/user documentation source.
 - [`assets/`](assets/) - public README and documentation media.
+- [`tools/`](tools/) - small public utilities for regenerating curated media.
+- [`.github/`](.github/) - public issue templates, PR template, code ownership,
+  and GitHub Actions workflows.
+- [`conda-recipe/`](conda-recipe/) - experimental conda packaging recipe and
+  submission notes.
+- [`notebooks/`](notebooks/) - lightweight notebook entry points.
+- [`install.sh`](install.sh) and [`validate_configs.sh`](validate_configs.sh) -
+  convenience scripts; normal users should start from the documented CLI
+  commands.
+- [`pyproject.toml`](pyproject.toml), [`requirements.txt`](requirements.txt),
+  and [`requirements-docs.txt`](requirements-docs.txt) - packaging and
+  dependency metadata.
 - [`ROADMAP.md`](ROADMAP.md) - public roadmap and planned extensions.
 - [`CITATION.cff`](CITATION.cff) - citation metadata.
+- [`LICENSE`](LICENSE) and [`CONTRIBUTING.md`](CONTRIBUTING.md) - license and
+  contribution guidance.
 
 ## Documentation Links
 
@@ -98,6 +114,8 @@ Read these files before making changes or answering detailed usage questions:
   for public example folders and visual artifacts.
 - [Example Gallery](docs/example-gallery.md) - representative public examples
   and expected outputs.
+- [Public Repository Inventory](docs/public_repo_inventory.md) - file-tree
+  coverage, audit notes, and release-hygiene follow-ups.
 
 ## Contribution Rules
 

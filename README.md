@@ -129,16 +129,17 @@ problem = (
     .geometry("structured_grid", nx=40, ny=12, length=1.0, height=0.2)
     .region("body", kind="domain")
     .material("steel", model="solid_mechanics", region="body", E=2.1e11, nu=0.3)
-    .analysis_step("load", kind="solid_mechanics", tip_force_y=-1.0e3)
+    .analysis_step("load", kind="solid_mechanics", controls={"tip_force_y": -1.0e3})
+    .solver("solid_mechanics", example="solid_mechanics.linear_plate")
     .outputs(fields=["displacement", "von_mises"], histories=["response"], plots=True)
 )
 
 spec = problem.to_spec()
 ```
 
-For migration tooling that needs a schema-v2 YAML payload, serialize the
-compiled `ProblemSpec` with `problem_spec_to_schema_v2_dict`; YAML examples
-remain the canonical public run decks.
+Use Python when designing a new model interactively. Use YAML when you want an
+exact input deck for sharing, CI, or cluster runs. Both paths write standard
+result directories that can be inspected with `phast.load_result(...)`.
 
 Result inspection:
 
@@ -159,6 +160,11 @@ print(result.history_names())
 | `docs/` | Sphinx documentation, gallery, user guide, and capability matrix. |
 | `assets/` | Lightweight README and documentation visuals. |
 | `tools/` | Small public maintenance utilities for regenerating curated visuals. |
+| `.github/` | Public issue templates, PR template, code ownership, and GitHub Actions workflows. |
+| `conda-recipe/` | Experimental conda packaging recipe and submission notes. |
+| `notebooks/` | Lightweight notebook entry points for hosted or browser-based quickstarts. |
+| `llms.txt`, `.cursorrules` | Agent-facing repository orientation and coding constraints. |
+| `install.sh`, `validate_configs.sh` | Convenience scripts; prefer documented `pip install -e .` and `python -m phast ...` commands for normal use. |
 
 ## Build The Docs
 

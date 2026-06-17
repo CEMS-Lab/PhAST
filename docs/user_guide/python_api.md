@@ -1,171 +1,157 @@
 # Python API
 
-Use the fluent `phast.Problem` API to author new models. Use YAML decks for public examples, reproducibility, batch/HPC runs, and sharing exact simulations.
+Use the fluent `phast.Problem` API when you are designing a new model in
+Python. Use YAML when the setup needs to become a reproducible input deck for
+public examples, CI, shared runs, or HPC submission.
 
-The public Python API uses domain names: `Problem`, `Geometry`, `Mesh`,
-`Region`, `Material`, `InitialCondition`, `BoundaryCondition`, `AnalysisStep`,
-`SolverSettings`, `Outputs`, and `Result`. Internal validated objects still
-use `*Spec` names where that makes adapter and validation code clearer.
+## Fluent API Mental Model
 
-The normal forward path is: author with `Problem`, compile or inspect the
-`ProblemSpec`, save/validate a YAML deck when exact reproduction is needed,
-then run through the supported runner and inspect the standard result
-directory.
+A `phast.Problem` is a forward-simulation recipe. You describe:
 
-The existing fluent `Problem` API remains backward-compatible:
+1. the geometry or imported mesh,
+2. named regions,
+3. materials assigned to regions,
+4. initial and boundary conditions,
+5. one or more analysis steps,
+6. solver settings,
+7. requested outputs,
+8. where the run should write its result directory.
+
+The usual workflow is:
 
 ```python
-from phast import Problem
+import phast
 
 problem = (
-    Problem("SENT")
-    .geometry("rectangular_sent", W=100, H=40, a=50, h_crack=0.5)
-    .material("glass_borden", l0=0.5, energy_split="spectral")
-    .fix("left", dof="x")
-    .neumann("top", dof="y", value=1.0)
-    .loading(protocol="simple", t_total=80e-6)
-    .solver(dt_safety=0.8)
-    .output(trajectory=True, h5_every=5)
+    phast.Problem("linear plate")
+    .geometry("structured_grid", nx=40, ny=12, length=1.0, height=0.2)
+    .region("body", kind="domain")
+    .material("steel", model="solid_mechanics", region="body", E=2.1e11, nu=0.3)
+    .analysis_step("load", kind="solid_mechanics", controls={"tip_force_y": -1.0e3})
+    .solver("solid_mechanics", example="solid_mechanics.linear_plate")
+    .outputs(fields=["displacement", "von_mises"], histories=["response"], plots=True)
 )
 
-spec = problem.to_spec()
+problem.validate_setup()
+result = problem.run(output_dir="runs/linear_plate", return_result=True)
+
+print(result.metadata())
+print(result.history_names())
+print(result.visuals())
 ```
 
-Use an imported mesh with the same fluent API:
+`Problem.run(...)` routes only to supported solver paths. PhAST is not an
+arbitrary weak-form compiler: if a workflow is outside the supported capability
+matrix, validation should fail early rather than silently translating it into
+an unsupported solve.
+
+For users coming from conventional FEM tools, the closest analogy is:
+`Problem` is the model, `.geometry()`/`.mesh()` define the part and mesh,
+`.region()` names sets or selections, `.material()` assigns properties,
+`.boundary_condition()` defines constraints and loads, `.analysis_step()` is
+the study step, `.solver()` controls the numerical method, `.outputs()` defines
+field/history requests, and `.run()` submits the job.
+
+PhAST is unit-agnostic. Use one consistent unit system across geometry,
+material properties, loads, density, fracture energy, and time controls.
+
+## Python or YAML?
+
+| Task | Recommended surface |
+|---|---|
+| Explore a new setup interactively | Fluent `phast.Problem` |
+| Write a script that builds several related models | Fluent `phast.Problem` |
+| Share an exact example with another user | YAML `config.yaml` |
+| Submit the same run to a cluster queue | YAML `config.yaml` |
+| Keep a public benchmark reproducible over time | YAML `config.yaml` plus result manifests |
+| Inspect a completed run | `phast.load_result(path)` |
+
+Both paths write standard result directories that can be inspected with
+`phast.load_result(...)`.
+
+## Common Method Map
+
+| Method | Purpose |
+|---|---|
+| `.geometry(...)` | Create a built-in geometry or mesh recipe. |
+| `.mesh(...)` | Use an external Gmsh mesh. |
+| `.region(...)` | Name a domain, boundary, or imported mesh group. |
+| `.material(...)` | Assign material parameters to a region. |
+| `.initial_condition(...)` | Seed supported initial fields such as damage. |
+| `.boundary_condition(...)` | Apply named fixed, prescribed, traction, or force-style conditions. |
+| `.fix(...)` | Convenience helper for fixed displacement components. |
+| `.prescribe(...)` | Convenience helper for prescribed displacement components. |
+| `.neumann(...)` | Convenience helper for force/traction-style loading. |
+| `.analysis_step(...)` | Define the loading or solve step. |
+| `.solver(...)` | Select solver family and numerical controls. |
+| `.outputs(...)` | Request fields, histories, plots, and trajectories. |
+| `.device(...)` | Select CPU/CUDA/MPS execution where supported. |
+| `.validate_setup()` | Check regions and setup consistency before running. |
+| `.preview(...)` / `.plot_setup(...)` | Write a setup preview image when supported. |
+| `.run(...)` | Execute a supported forward workflow. |
+| `.to_spec()` | Build the validated representation used by advanced checks and tooling. |
+
+Most users only need the fluent methods above. Public examples keep YAML as
+the canonical run artifact.
+
+## Built-in Geometry Example
 
 ```python
+import phast
+
 problem = (
-    Problem("Imported mesh SENT")
-    .mesh("meshes/notched_plate.msh")
-    .material("glass_borden", l0=0.5)
+    phast.Problem("SENT plate")
+    .geometry("rectangular_sent", W=100, H=40, a=50, h_crack=0.5, h_coarse=4.0)
+    .material("glass_borden", l0=0.5, energy_split="spectral")
     .initial_condition("damage", region="notch", value=1.0)
-    .boundary_condition("prescribe", region="right", dof="x", value=0.01)
+    .boundary_condition("fix", region="left", dof="x", name="left_x")
+    .boundary_condition("prescribe", region="right", dof="x", value=0.01, name="pull")
     .analysis_step(
         "load",
         kind="quasi_static",
         controls={"protocol": "simple", "num_steps": 4},
+        active_boundary_conditions=["left_x", "pull"],
     )
-    .outputs(trajectory=True, h5_every=5, plots=True)
+    .solver("quasi_static", preconditioner="jacobi", backend="auto")
+    .outputs(fields=["damage", "displacement"], histories=["reaction_force"], plots=True)
 )
 
-assert problem.to_spec().mesh.path == "meshes/notched_plate.msh"
-assert problem.to_spec().initial_conditions[0].field == "damage"
-assert problem.to_spec().boundary_conditions[0].kind == "prescribe"
-assert problem.to_spec().analysis_steps[0].name == "load"
-assert problem.to_spec().outputs.fields[0].name == "trajectory"
+problem.validate_setup()
 ```
 
-The fluent `Problem.initial_condition()` path currently supports damage
-preseeding through the existing YAML-compatible `initial_conditions` config.
-Other initial-state fields remain validation/design work until the solver paths
-consume them directly.
+For published examples and benchmark reruns, prefer the checked-in YAML deck in
+`examples/` so that every user starts from the same input file.
 
-`Problem.boundary_condition(kind, region=..., dof=..., value=...)` is the
-domain-named equivalent of the existing `fix()`, `prescribe()`, and
-`neumann()` convenience methods. The shorthand methods remain supported.
-`Problem.analysis_step(name, kind=..., controls=...)` sets the primary step
-through the existing loading and solver configuration path.
-`Problem.outputs(...)` is the domain-named alias for the existing
-`Problem.output(...)` method.
+To discover supported geometry arguments, inspect the closest public YAML deck:
 
-Workflow helper objects and the existing public `Material` object provide
-clean names and convert to the internal contract with `to_spec()`:
-
-```python
-from phast import (
-    AnalysisStep,
-    BoundaryCondition,
-    FieldOutput,
-    Geometry,
-    HistoryOutput,
-    InitialCondition,
-    Material,
-    Mesh,
-    Outputs,
-    Postprocess,
-    Region,
-    SolverSettings,
-)
-
-plate = Geometry.rectangle(width=1.0, height=0.5, units="mm")
-mesh = Mesh("meshes/notched_plate.msh", kind="gmsh", element_order=1)
-left = Region("left", from_mesh="left")
-glass = Material(E=210000.0, nu=0.3, Gc=2.7, l0=0.5)
-notch_seed = InitialCondition.damage(region="notch", value=1.0)
-pull = BoundaryCondition.displacement(
-    name="pull_right",
-    region="right",
-    dof="x",
-    value="0.01 mm",
-)
-step = AnalysisStep(
-    "load",
-    kind="quasi_static",
-    controls={"increments": 100},
-    active_boundary_conditions=["pull_right"],
-)
-solver = SolverSettings("quasi_static", nonlinear_tolerance=1e-8)
-outputs = Outputs(
-    fields=[
-        FieldOutput("damage"),
-        {"name": "displacement", "every": 5},
-    ],
-    history=[
-        HistoryOutput("reaction_force", region="right", dof="x"),
-    ],
-    visuals={
-        "thumbnail": True,
-        "damage_final": Postprocess("damage_final", step=-1),
-    },
-)
-
-geometry_spec = plate.to_spec()
-mesh_spec = mesh.to_spec()
-region_spec = left.to_spec()
-material_spec = glass.to_spec(name="glass", region="body")
-bc_spec = pull.to_spec()
-solver_spec = solver.to_spec()
-output_spec = outputs.to_spec()
+```bash
+python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
 ```
 
-`Material` remains the core public solver material class. Its `to_spec()`
-method is an additive workflow-contract bridge; it does not replace material
-construction in existing solvers.
+## Imported Mesh Example
 
-`Problem.run()` remains backward-compatible and returns the solver object by
-default. When a run directory is requested, use `return_result=True` to receive
-the same read-only `Result` object exposed by `phast.load_result(path)`:
+External meshes should use named Gmsh physical groups. Inspect those names
+before assigning materials and boundary conditions:
 
 ```python
-result = problem.run(
-    output_dir="runs/sent",
-    verbose=False,
-    return_result=True,
-)
-metadata = result.metadata()
-fields = result.field_names()
+import phast
+
+summary = phast.inspect_mesh("meshes/notched_plate.msh")
+print(summary["named_groups"])
 ```
 
-The #700 production workflow layer supports the domain-named fluent surface for
-promoted runner paths. The calls compile to `ProblemSpec` first; execution still
-uses the existing supported runners rather than a universal weak-form compiler:
+Then bind those groups to workflow regions:
 
 ```python
-result = (
-    phast.Problem("notched plate")
-    .mesh("mesh.msh")
+problem = (
+    phast.Problem("imported notched plate")
+    .mesh("meshes/notched_plate.msh")
     .region("body", from_mesh="Domain")
     .region("left", from_mesh="Left")
     .region("right", from_mesh="Right")
     .material("glass", region="body", E=210000.0, nu=0.3, Gc=2.7, l0=0.25)
-    .boundary_condition("fix", region="left", dof="x", name="clamp")
-    .boundary_condition(
-        "displacement",
-        region="right",
-        dof="y",
-        value=0.001,
-        name="pull",
-    )
+    .boundary_condition("fix", region="left", dof="xy", name="clamp")
+    .boundary_condition("displacement", region="right", dof="y", value=0.001, name="pull")
     .analysis_step(
         "load",
         kind="quasi_static",
@@ -177,34 +163,122 @@ result = (
         histories=[{"name": "reaction_force", "region": "right", "dof": "y"}],
         plots=True,
     )
-    .run(output_dir="runs/notched_plate", return_result=True)
+)
+
+problem.validate_setup()
+problem.preview(output="runs/imported_notched_plate/setup.png")
+```
+
+`validate_setup()` checks declared regions against mesh groups when enough mesh
+metadata is available. `preview()` writes a static setup image for review before
+launching a longer solve.
+
+For Gmsh input, the mapping is direct:
+
+```text
+Physical Surface("Domain") = {1};
+Physical Curve("Left") = {2};
+```
+
+```python
+problem.region("body", from_mesh="Domain")
+problem.region("left", from_mesh="Left")
+```
+
+## Boundary Conditions
+
+Use explicit named boundary conditions when a load step activates several
+conditions:
+
+```python
+problem = (
+    phast.Problem("plate")
+    .boundary_condition("fix", region="left", dof="xy", name="clamp")
+    .boundary_condition("displacement", region="right", dof="x", value=0.01, name="pull")
+    .boundary_condition("traction", region="top", dof="y", value=1.0, name="top_load")
+    .analysis_step(
+        "load",
+        kind="quasi_static",
+        controls={"num_steps": 10},
+        active_boundary_conditions=["clamp", "pull", "top_load"],
+    )
 )
 ```
 
-`Result.postprocess(...)` is available when users explicitly want to invoke the
-existing postprocess CLI from Python:
+Use shorthand helpers for compact examples:
 
 ```python
-result.postprocess(fields=["damage", "energy"], skip_gif=True)
+problem.fix("left", dof="xy")
+problem.prescribe("right", dof="x", value=0.01)
+problem.neumann("top", dof="y", value=1.0)
 ```
 
-Direct `ProblemSpec.run()` is a guarded YAML compatibility bridge, not a new
-Python solver API. Specs compiled from existing v1 fracture YAML or promoted
-solid-mechanics YAML retain their original source path and can delegate to
-`python -m phast run <config>`. Schema-v2 fracture specs can use
-`ProblemSpec.run(validate_only=True)` for contract validation; supported
-quasi-static phase-field fracture specs can execute through the v1 `run_config`
-lowering adapter. Promoted schema-v2 solid-mechanics specs can execute when
-they declare a supported `solver.example`. Specs created from the fluent Python
-API do not have a YAML source path, so Python users should continue to run them
-with `Problem.run()`.
+For displacement-style conditions, specify the degree of freedom explicitly
+with `dof="x"`, `dof="y"`, or `dof="xy"`.
 
-Internal validation is available through `validate_problem_spec()`, which
-collects unsupported capability names, missing region references, and missing
-execution routes without constructing meshes or solvers.
+## Analysis Step Controls
 
-For reproducible public examples and cluster runs, keep the checked-in
-`config.yaml` as the canonical input deck and use the canonical contract in
-`docs/user_guide/example_contract.md`. The compatibility references remain
-`docs/STANDARD_OUTPUTS.md`, `docs/visualisation_requirements.md`, and
-`docs/visualization-output.md`.
+Current public fluent workflows use one primary analysis step. For complex
+sequential loading, use the workflow's loading protocol or a canonical YAML
+deck that documents the staged schedule.
+
+The valid `controls` keys depend on the step kind:
+
+| Step kind | Typical controls | Use |
+|---|---|---|
+| `solid_mechanics` | `tip_force_y`, example-specific load controls | Promoted solid-mechanics examples. |
+| `quasi_static` | `protocol`, `num_steps`, `dt`, active boundary conditions | Staggered quasi-static phase-field fracture. |
+| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture decks; use YAML for full reproducibility. |
+
+When in doubt, start from a public `config.yaml`, run `python -m phast
+explain-config <config.yaml>`, and transfer only the controls used by that
+workflow.
+
+## Outputs and Result Inspection
+
+Request outputs in the model:
+
+```python
+problem.outputs(
+    fields=["damage", "displacement"],
+    histories=[{"name": "reaction_force", "region": "right", "dof": "y"}],
+    plots=True,
+    trajectory=True,
+)
+```
+
+Inspect a completed run without rerunning it:
+
+```python
+import phast
+
+result = phast.load_result("runs/notched_plate")
+print(result.metadata())
+print(result.manifest())
+print(result.history_names())
+print(result.visuals())
+print(result.field_names())
+
+if result.has_field("damage"):
+    damage = result.field("damage", step=-1)
+```
+
+`Result` is read-only. It exposes manifests, metadata, CSV histories, visual
+artifacts, mesh metadata, and stored trajectory fields. It does not silently
+derive missing fields.
+
+## Capability Boundaries
+
+The fluent API is the recommended Python authoring surface, but execution is
+bounded by the supported workflows in the capability matrix. Current public
+examples keep YAML as the reproducible run surface. If you need a durable input
+deck, author with Python if convenient, then record the final setup as a YAML
+example with a standard result bundle.
+
+Next pages:
+
+- [Fluent authoring tutorial](../tutorial/fluent_authoring_guide.md)
+- [Setting up new problems](setup_problems.md)
+- [YAML workflow](yaml_workflow.md)
+- [Results API](results_api.md)
+- [Capability matrix](capability_matrix.md)

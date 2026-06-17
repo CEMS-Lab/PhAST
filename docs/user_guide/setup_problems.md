@@ -1,249 +1,350 @@
-# Setting up new problems
+# Setting Up New Problems
 
-Use the fluent `phast.Problem` API to author new models. Use YAML decks for public examples, reproducibility, batch/HPC runs, and sharing exact simulations.
+This page explains the pieces of a PhAST forward model: geometry or mesh,
+regions, materials, initial conditions, boundary conditions, analysis steps,
+solver controls, outputs, validation, and result inspection.
 
-This guide covers the forward setup flow: geometry or mesh, material, Gc,
-boundary conditions, loading protocol, solver settings, outputs, validation,
-and result inspection. The public result bundle follows
-`docs/user_guide/example_contract.md`, with compatibility run-file details in
-`docs/STANDARD_OUTPUTS.md`, promoted visual rules in
-`docs/visualisation_requirements.md`, and VTU/PV visualization format guidance
-in `docs/visualization-output.md`.
+Use the fluent `phast.Problem` API while designing a new setup. Use YAML decks
+for reproducible public examples, shared runs, CI, and HPC submission.
 
-Installation and backend selection are covered in `docs/installation.md`,
-`docs/getting-started.md`, and
-`docs/performance_reproducibility/index.md`. This page stays focused on the
-problem definition itself.
+## FEM Workflow Map
 
-## Quick Start
+If you are coming from Abaqus, COMSOL, FEniCS, deal.II, or another FEM code,
+the PhAST workflow is the same sequence with different names:
 
-**Fluent `phast.Problem` authoring** (preferred for new models):
+| FEM concept | Abaqus/COMSOL-style term | PhAST fluent API | YAML deck location |
+|---|---|---|---|
+| Model or study | Model database / component / study | `phast.Problem("name")` | `problem:` |
+| Part geometry | Part / geometry sequence | `.geometry(...)` | `geometry:` |
+| Imported mesh | Mesh file / imported mesh | `.mesh("mesh.msh")` | `geometry.mesh_path` |
+| Named selections | Sets / physical groups / boundaries | `.region(...)` | geometry groups and node sets |
+| Material definition | Material card | `.material(...)` | `material:` |
+| Material assignment | Section assignment / domain material | `.material(..., region="body")` | material plus region/node-set references |
+| Initial crack/notch state | Initial field / predefined field | `.initial_condition("damage", ...)` | `initial_conditions:` |
+| Supports | Dirichlet BC / fixed constraint | `.fix(...)` or `.boundary_condition("fix", ...)` | `boundary_conditions:` |
+| Prescribed displacement | Displacement BC | `.prescribe(...)` or `.boundary_condition("displacement", ...)` | `boundary_conditions:` |
+| Loads/tractions | Neumann load / boundary load | `.neumann(...)` or `.boundary_condition("traction", ...)` | `boundary_conditions:` |
+| Step/study | Static, transient, or dynamic step | `.analysis_step(...)` | `loading:` and `solver:` |
+| Solver controls | Time step, tolerances, backend | `.solver(...)` | `solver:` |
+| Field/history output | Output requests / probes | `.outputs(...)` | `output:` |
+| Job submission | Run study / submit job | `.run(...)` or `python -m phast run ...` | CLI command |
+| Results | ODB/MED/XDMF/result database | `phast.load_result(path)` | result directory |
+
+PhAST is intentionally narrower than a general-purpose commercial FEM GUI: the
+public API routes to supported phase-field fracture and solid-mechanics
+workflows. It does not compile arbitrary weak forms from user text.
+
+## Units
+
+PhAST is unit-agnostic, like Abaqus. It does not convert units for you. Choose
+one consistent unit system and use it everywhere:
+
+| Quantity | SI example | mm-N-MPa style example |
+|---|---|---|
+| Length | m | mm |
+| Force | N | N |
+| Stress/modulus | Pa | MPa = N/mm^2 |
+| Fracture energy `Gc` | J/m^2 | N/mm |
+| Density | kg/m^3 | tonne/mm^3 when using mm-N-s |
+| Time | s | s |
+
+Before running a new case, check that geometry dimensions, material properties,
+loads, density, fracture energy, and time-step controls are all expressed in
+the same system. The result manifests record the inputs; they do not infer or
+repair inconsistent units.
+
+## Setup Checklist
+
+| Step | Question to answer | PhAST surface |
+|---|---|---|
+| Geometry or mesh | Is this a built-in geometry or an imported Gmsh mesh? | `.geometry(...)` or `.mesh(...)` |
+| Regions | What parts of the mesh receive materials, loads, supports, or outputs? | `.region(...)` |
+| Materials | Which material model and parameters apply to each region? | `.material(...)` |
+| Initial conditions | Does the run start with seeded damage or another supported field? | `.initial_condition(...)` |
+| Boundary conditions | Which supports and loads are active? | `.boundary_condition(...)`, `.fix(...)`, `.prescribe(...)`, `.neumann(...)` |
+| Analysis step | Is this explicit dynamics, quasi-static fracture, or solid mechanics? | `.analysis_step(...)` |
+| Solver | Which backend, tolerance, and solver family should be used? | `.solver(...)` |
+| Outputs | Which fields, histories, plots, and trajectory stores are needed? | `.outputs(...)` |
+| Preflight | Are region names and requested outputs valid? | `.validate_setup()`, `--validate-only` |
+| Inspection | How will the completed run be read? | `phast.load_result(path)` |
+
+## Minimal Fluent Setup
 
 ```python
 import phast
 
 problem = (
-    phast.Problem("PMMA Branching")
-    .geometry("rectangular_sent", W=32, H=16, a=16,
-              h_crack=0.15, h_coarse=2.0, branching=True)
-    .material("pmma_bleyer", l0=0.25, energy_split="amor", pf_model="AT1")
-    .fix("bottom", dof="xy")
-    .prescribe("top", dof="y", value=0.04)
-    .loading(protocol="two_step_prestrain", t_total=40e-6,
-             prestrain_displacement=0.04)
-    .solver(dt_safety=0.8, use_multigrid=True, damage_every=1,
-            bounds_method="projected_cg")
-    .outputs(trajectory=True, h5_every=50, plots=True)
-    .device("cuda")
+    phast.Problem("linear plate")
+    .geometry("structured_grid", nx=40, ny=12, length=1.0, height=0.2)
+    .region("body", kind="domain")
+    .material("steel", model="solid_mechanics", region="body", E=2.1e11, nu=0.3)
+    .analysis_step("load", kind="solid_mechanics", controls={"tip_force_y": -1.0e3})
+    .solver("solid_mechanics", example="solid_mechanics.linear_plate")
+    .outputs(fields=["displacement", "von_mises"], histories=["response"], plots=True)
+)
+
+problem.validate_setup()
+result = problem.run(output_dir="runs/linear_plate", return_result=True)
+```
+
+For the same workflow as a durable input deck:
+
+```bash
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
+  --output_dir runs/linear_plate
+```
+
+## Start From a Solved Example
+
+The fastest way to build a trustworthy model is to clone a solved public
+example, then change one part at a time:
+
+1. Choose the closest example from `examples/`.
+2. Run `python -m phast run <example>/config.yaml --validate-only`.
+3. Read the example `README.md` and inspect its checked-in visuals.
+4. Copy `config.yaml` into a new working directory.
+5. Change geometry or mesh first, then validate again.
+6. Change material parameters, then validate again.
+7. Change boundary conditions or loading, then validate again.
+8. Run a short smoke solve before launching the full case.
+9. Inspect the result with `phast.load_result(...)`.
+
+Examples are YAML-first because they are reproducible. When available,
+`fluent_setup.py` shows the same model in the Python authoring style.
+
+## Geometry and Meshes
+
+Use built-in geometry names for common benchmark shapes:
+
+```python
+problem.geometry("rectangular_sent", W=100, H=40, a=50, h_crack=0.5, h_coarse=4.0)
+```
+
+The easiest way to discover geometry arguments is to start from a solved YAML
+example and inspect it:
+
+```bash
+python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
+python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
+```
+
+The example `config.yaml` files are the supported reference for each public
+geometry recipe.
+
+Use an imported Gmsh mesh when the geometry comes from CAD, Gmsh, or another
+meshing workflow:
+
+```python
+summary = phast.inspect_mesh("meshes/notched_plate.msh")
+print(summary["named_groups"])
+
+problem = (
+    phast.Problem("imported plate")
+    .mesh("meshes/notched_plate.msh")
+    .region("body", from_mesh="Domain")
+    .region("left", from_mesh="Left")
+    .region("right", from_mesh="Right")
 )
 ```
 
-**YAML input deck** (public reproducibility, examples, CI, and HPC):
+External meshes should preserve named physical groups for all boundaries used
+by materials, boundary conditions, initial conditions, and history outputs.
+In Gmsh, those names usually come from `Physical Surface` and `Physical Curve`
+declarations:
 
-```bash
-python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml \
-  --device cpu --fast --output_dir output/b3_dynamic_sent
+```text
+Physical Surface("Domain") = {1};
+Physical Curve("Left") = {2};
+Physical Curve("Right") = {3};
 ```
 
-Validate before running:
-
-```bash
-python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml \
-  --validate-only
-python -m phast explain-config configs/benchmarks/dynamic/B3_dynamic_sent.yaml
-```
-
-For public examples and batch runs, the YAML file is the solver input deck: it selects geometry or an imported `.msh`,
-material parameters, boundary conditions, loading, solver options, Zarr-first
-trajectory output, plots, and acceptance metadata. A run writes the resolved
-`config.yaml`, `run_lockfile.json`, metadata, mesh provenance, CSV telemetry,
-trajectory stores, and standard figures into the output directory.
-
-**Python API** (for execution, custom automation, and solver extensions):
+Bind them to PhAST regions by name:
 
 ```python
-from phast import Problem
-
-solver = (Problem('My First Crack')
-    .geometry('rectangular_sent', W=100, H=40, a=50,
-              h_crack=0.125, h_coarse=4.0, branching=True)
-    .material('glass_borden', l0=0.25, energy_split='spectral')
-    .fix('left', dof='x')
-    .neumann('top', dof='y', value=1.0)
-    .neumann('bottom', dof='y', value=-1.0)
-    .loading(protocol='simple', t_total=80e-6)
-    .solver(dt_safety=0.8, use_multigrid=True, damage_every=1)
-    .device('cpu')
-    .run(output_dir='output/'))
+problem = (
+    phast.Problem("imported plate")
+    .mesh("meshes/notched_plate.msh")
+    .region("body", from_mesh="Domain")
+    .region("left", from_mesh="Left")
+    .region("right", from_mesh="Right")
+)
 ```
 
-**YAML + CLI**:
+Abaqus `NSET`/`ELSET`, COMSOL selections, and FEniCS boundary markers should be
+exported or converted into equivalent Gmsh physical groups before use in PhAST.
 
-```bash
-python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --device cpu --fast
-```
+## Regions
 
-**Existing example scripts** (for benchmarks with custom post-processing):
-
-```bash
-python -u examples/quasistatic/miehe_tension/run.py --num_steps 5 --plots
-```
-
-## Setting Up New Problems
-
-### Option A: Python Problem Builder
-
-The `Problem` class is the forward authoring API. It chains configuration in
-one expression and can run supported promoted paths directly. Every method
-returns `self`, so calls can be chained.
+Regions give stable names to domains and boundaries:
 
 ```python
-from phast import Problem
-
-solver = (Problem('PMMA Branching')
-    .geometry('rectangular_sent', W=32, H=16, a=16,
-              h_crack=0.15, h_coarse=2.0, branching=True)
-    .material('pmma_bleyer', l0=0.25, energy_split='amor', pf_model='AT1')
-    .fix('bottom', dof='xy')
-    .prescribe('top', dof='y', value=0.04)
-    .loading(protocol='two_step_prestrain', t_total=40e-6,
-             prestrain_displacement=0.04)
-    .solver(dt_safety=0.8, use_multigrid=True, damage_every=1,
-            bounds_method='projected_cg')
-    .outputs(trajectory=True, h5_every=50, plots=True)
-    .device('cuda')
-    .run(output_dir='output/pmma_branching'))
+problem.region("body", kind="domain")
+problem.region("left", from_mesh="Left")
+problem.region("right", from_mesh="Right")
+problem.region("notch", from_mesh="Notch")
 ```
 
-**Saving and loading**: any `Problem` can be serialised to YAML and
-loaded back:
+Use short domain names in your model (`left`, `right`, `notch`) even if the
+mesh group names are verbose. That keeps materials, loads, and histories easy
+to read.
+
+## Materials
+
+Assign materials to regions:
 
 ```python
-prob = Problem('test').geometry('miehe_tension', L=1, a=0.5, h_crack=0.01, h_coarse=0.1)
-prob.save('my_problem.yaml')
-
-prob2 = Problem.from_yaml('my_problem.yaml')
-prob2.run()
+problem.material("glass", region="body", E=210000.0, nu=0.3, Gc=2.7, l0=0.25)
 ```
 
-### Option B: YAML Input Deck (No Python Driver Required)
+For phase-field fracture, common parameters are:
 
-Create or save a `.yaml` file and run it directly. This is the public
-reproducibility path for examples, sharing, CI, and HPC:
+| Parameter | Meaning |
+|---|---|
+| `E` | Young's modulus |
+| `nu` | Poisson ratio |
+| `Gc` | Critical fracture energy |
+| `l0` | Phase-field length scale |
+| `pf_model` | Damage model, for example `AT1` or `AT2` |
+| `energy_split` | Tensile/compressive split, for example `spectral` or `amor` |
+| `eta_residual` | Residual stiffness used after high damage |
 
-```yaml
-# my_problem.yaml
-problem:
-  name: Shear Plate with Holes
-geometry:
-  type: perforated_sent
-  parameters:
-    W: 100
-    H: 50
-    h_crack: 0.3
-    h_coarse: 3.0
-    hole_config: 1hole_near
-material:
-  preset: pmma_bleyer
-  overrides:
-    l0: 0.5
-    energy_split: amor
-    pf_model: AT1
-boundary_conditions:
-- {nodes: bottom, type: fix, component: 0}
-- {nodes: bottom, type: fix, component: 1}
-- {nodes: top, type: prescribe, component: 0, value: 0.01}
-loading:
-  protocol: simple
-  t_total: 40.0e-6
-solver:
-  solver_type: explicit
-  dt_safety: 0.8
-  damage_every: 1
-  use_multigrid: true
-output:
-  fast: true
-  print_every: 200
+For public benchmark reproduction, start from the checked-in `config.yaml`.
+For a real engineering study, choose material parameters from the relevant
+material data source and document the unit system with the run.
+
+## Initial Conditions
+
+Seed an initial notch or damaged region when the workflow supports damage
+initialization:
+
+```python
+problem.initial_condition("damage", region="notch", value=1.0)
 ```
+
+The public fracture examples use this path to mark a pre-existing notch before
+the load step begins.
+
+## Boundary Conditions
+
+Use explicit named boundary conditions for clarity:
+
+```python
+problem.boundary_condition("fix", region="left", dof="xy", name="clamp")
+problem.boundary_condition("displacement", region="right", dof="x", value=0.01, name="pull")
+problem.boundary_condition("traction", region="top", dof="y", value=1.0, name="top_load")
+```
+
+Use shorthand helpers in compact examples:
+
+```python
+problem.fix("left", dof="xy")
+problem.prescribe("right", dof="x", value=0.01)
+problem.neumann("top", dof="y", value=1.0)
+```
+
+Always specify a degree of freedom for displacement-style conditions:
+`dof="x"`, `dof="y"`, or `dof="xy"`.
+
+## Analysis Steps and Solver Settings
+
+The analysis step describes the physical solve:
+
+```python
+problem.analysis_step(
+    "load",
+    kind="quasi_static",
+    controls={"protocol": "simple", "num_steps": 10},
+    active_boundary_conditions=["clamp", "pull"],
+)
+```
+
+Current public fluent workflows use one primary analysis step. For staged
+loading, use the loading protocol supported by that workflow, or encode the
+staged run in the canonical YAML deck for that example. Do not assume chained
+`.analysis_step(...)` calls create a full Abaqus-style step sequence unless the
+specific workflow documents that behavior.
+
+Common controls:
+
+| Workflow kind | Typical controls | Meaning |
+|---|---|---|
+| `solid_mechanics` | `tip_force_y`, load magnitude or displacement controls used by the promoted solid runner | Small solid-mechanics examples and material-kernel demonstrations. |
+| `quasi_static` | `protocol`, `num_steps`, `dt`, active boundary conditions | Staggered phase-field fracture loading. |
+| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture examples; public YAML decks expose the full control set. |
+
+The solver settings select numerical controls:
+
+```python
+problem.solver("quasi_static", backend="auto", preconditioner="jacobi", max_stagger=500)
+```
+
+For explicit dynamics, the YAML examples expose the full time-step and output
+cadence controls and are the recommended starting point for reproducible runs.
+
+## Outputs
+
+Request fields, histories, plots, and trajectory stores:
+
+```python
+problem.outputs(
+    fields=["damage", "displacement"],
+    histories=[{"name": "reaction_force", "region": "right", "dof": "y"}],
+    plots=True,
+    trajectory=True,
+)
+```
+
+A promoted example result directory should include the input deck, lockfile,
+metadata, history CSVs, standard figures, and a visual manifest. See
+[Example result contract](example_contract.md) for output conventions.
+
+## Validate, Run, Inspect
+
+Validate a Python-authored setup:
+
+```python
+problem.validate_setup()
+problem.preview(output="runs/my_case/setup.png")
+```
+
+Validate a YAML deck:
 
 ```bash
-python -m phast run my_problem.yaml --device cuda
+python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
+python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
 ```
 
-CLI flags override YAML values, so `--device cuda` overrides whatever
-is in the file.
+Run a YAML deck:
 
-### Available Geometries
+```bash
+python -m phast run examples/quasistatic/notched_holed_plate/config.yaml \
+  --output_dir runs/notched_holed_plate
+```
 
-| Name | Description | Key Parameters |
-|------|-------------|----------------|
-| `miehe_tension` | Unit square, horizontal notch (Miehe SENT) | `L`, `a`, `h_crack`, `h_coarse` |
-| `miehe_shear` | Unit square, horizontal notch (Miehe shear) | `L`, `a`, `h_crack`, `h_coarse` |
-| `rectangular_sent` | Rectangular plate, edge notch | `W`, `H`, `a`, `h_crack`, `h_coarse`, `branching` |
-| `kalthoff_winkler` | Impact specimen with angled notch | `W`, `H`, `theta`, `h_crack`, `h_coarse` |
-| `perforated_sent` | Notched plate with holes | `W`, `H`, `h_crack`, `h_coarse`, `hole_config` |
-| `three_point_bending` | Three-point bending beam | `L`, `H`, `a`, `h_crack`, `h_coarse` |
-| `l_shaped_panel` | L-shaped domain with re-entrant corner | `L`, `h_crack`, `h_coarse` |
-| `square_plate` | Plain square plate (no notch) | `L`, `h` |
-| `plate_with_holes` | Plate with circular holes | `W`, `H`, `holes`, `h_crack`, `h_coarse` |
-| `glass_impact_vnotch` | V-notch impact specimen | `W`, `H`, `h_crack`, `h_coarse` |
-| `bazant_gap_test` | Gap test specimen | `W`, `H`, `gap`, `h_crack`, `h_coarse` |
+Inspect the result:
 
-### Available Material Presets
+```python
+import phast
 
-Material overrides: any property can be overridden in `.material()` or
-YAML `overrides:` — `E`, `nu`, `Gc`, `l0`, `rho`, `energy_split`
-(`spectral`, `amor`, `isotropic`), `pf_model` (`AT1`, `AT2`),
-`eta_residual`, etc.
+result = phast.load_result("runs/notched_holed_plate")
+print(result.metadata())
+print(result.history_names())
+print(result.visuals())
+```
 
-### Fracture Energy Gc: values and provenance
+## What Makes a Good Public Example?
 
-**Unit system (code).** All presets use `mm-tonne-s-MPa`, so `Gc` is in
-`N/mm`. Conversion: `1 N/mm = 1000 J/m^2 = 1 kJ/m^2`. For reference, real
-engineering Gc values are typically in `kJ/m^2`; benchmark-paper values
-are often quoted in `J/m^2`.
+Each public example should be boringly predictable:
 
-**Key distinction.** Phase-field benchmark papers almost always use Gc
-values *below* the engineering Gc of the named material. The reduction
-is deliberate: it shortens the characteristic length `l* = E Gc / sigma_c^2`
-so that crack initiation and propagation complete within a tractable
-simulation window at a resolvable mesh. Using real engineering Gc would
-require 10-100x more compute and is rarely done. The table below lists
-both the preset value (matching the cited source) and, where available,
-the real material Gc from the fracture-mechanics literature.
+- one `config.yaml` input deck,
+- one optional `fluent_setup.py` companion when the fluent path is promoted,
+- setup visual,
+- final field plots,
+- response or energy histories,
+- animation when the response is meaningful,
+- `run_manifest.json`, `run_metadata.json`, and lockfile,
+- clear README with the command, runtime expectation, and expected outputs.
 
-| Preset | Preset Gc (N/mm) | Preset Gc (J/m^2) | Source (verified) | Real material Gc (J/m^2) | Notes |
-|---|---|---|---|---|---|
-| `glass_borden` | 3.0e-3 | 3 | Borden et al. 2012, Table at §4.1 (PDF verified 2026-04-21) | Soda-lime 7-10 (Lawn 1993; Wiederhorn 1969) | Benchmark value; ~3x below real glass to keep branching in window |
-| `maraging_steel_kw` | 22.13 | 22,130 | Borden 2012, §4.3 Kalthoff-Winkler (PDF verified) | C300 maraging ~48,000 (from Kc=100 MPa-sqrt(m) via Gc = Kc^2(1-nu^2)/E) | ~2x below real steel; standard Kalthoff-benchmark value |
-| `pmma_bleyer` | 0.3 | 300 | Bleyer et al. 2017, §3.1 (PDF verified) | PMMA 350-550 (Kinloch & Young 1983) | Within engineering range; closest to real of the benchmark presets |
-| `pmma` (generic) | 0.3 | 300 | — (same as `pmma_bleyer` without plane_stress flag) | same | Generic PMMA; prefer `pmma_bleyer` for branching benchmarks |
-| `miehe_tension` | 2.7 | 2,700 | Miehe, Hofacker & Welschinger 2010, §5.1 SENT tension (PDF verified — "λ=121.15, μ=80.77, gc=2.7e-3 kN/mm") | Structural steel 10,000-60,000 | ~4-20x below real steel; numerical benchmark for SENT |
-| `miehe_shear` | 2.7 | 2,700 | Miehe et al. 2010, §5.2 SENS shear (same parameter set as §5.1) | same as `miehe_tension` | Same material, shear loading test |
-| `alumina_kumar` | 0.0268 | 26.8 | Kumar & Lopez-Pamies 2020, JMPS (source citation pending re-verification from the PDF) | Real alumina 30-60 (Wiederhorn 1969) | In correct order of magnitude for brittle ceramic |
-| `brittle_ceramic` | 0.042 | 42 | Generic example (no specific source) | Brittle ceramic 20-100 | Generic; within range for various technical ceramics |
-| `soda_lime_glass` | 9.0 | 9,000 | Liu-Lopez-Pamies-Dolbow arXiv:2411.16393, §5.2 Table 6 (PDF verified — E=72 GPa, Gc=9 N/mm) | Soda-lime 7-10 | **Not a typo.** Paper uses an effective Gc ~1000x above classical soda-lime. Likely reflects an effective-toughness from Hopkinson-bar data, not Griffith surface energy. Check the source before using for a different application. |
-| `l_shaped_concrete` | 0.089 | 89 | Ambati et al. 2015 / Winkler 2001 (source citation pending re-verification from the Ambati PDF) | Concrete 50-200 | In engineering range |
-| `l_shaped_glass` | 0.008 | 8 | Rudshaug et al. 2024, Int. J. Fract. (source citation pending re-verification) | Soda-lime 7-10 | Matches real glass Gc — engineering-faithful value |
-
-**Practical rules for choosing Gc:**
-
-- For *reproducing* a published benchmark, use the preset unchanged
-  (matches the cited paper exactly).
-- For *production* simulations of a real part, use the engineering Gc
-  from the fracture-mechanics literature — not the benchmark value. Pass
-  via `overrides: {Gc: ...}` in YAML or `create_material(..., Gc=...)`.
-- If the simulation is too slow at engineering Gc, either (a) accept
-  that benchmark Gc is an admissible simplification, or (b) use a
-  coarser mesh with a larger `l0`, or (c) subcycle the mechanics
-  (`damage_every > 1`) — but note that `damage_every > 1` suppresses
-  branching in AT1/Amor runs (task #131, verified 2026-04-21).
-- Three entries flagged above ("pending re-verification") have the
-  code value believed correct but the cited source has not been
-  re-read from the PDF by the maintainer since the preset was added.
-  Do not cite them as validated literature values in a publication
-  without a fresh source check.
-
-### Boundary Condition DSL
-
-**Python API** — string dof names, automatic component expansion:
+Examples that still need large raw trajectories, private HPC archaeology, or
+custom one-off scripts should stay out of the public examples tree until they
+are promoted.

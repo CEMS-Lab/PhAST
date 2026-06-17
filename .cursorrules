@@ -39,8 +39,10 @@ mechanics fidelity, differentiability boundaries, and reproducible examples.
   Python path:
 
 ```bash
-PYTHONPATH=src:. python examples/plasticity_interface/run_j2_validation.py --output-dir /tmp/phast_j2_check
-PYTHONPATH=src:. python -m pytest -q tests/test_public_examples_contract.py --tb=short
+PYTHONPATH=src:. python -m phast doctor
+PYTHONPATH=src:. python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
+PYTHONPATH=src:. python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
+PYTHONPATH=src:. python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
 ```
 
 Only curated, lightweight result artifacts that are part of the public examples

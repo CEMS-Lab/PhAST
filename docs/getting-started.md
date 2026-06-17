@@ -10,15 +10,13 @@ Use the fluent `phast.Problem` API to author new models. Use YAML decks for publ
 
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
-cd phast
+cd PhAST
 pip install -e .
 ```
 
 Core dependencies are PyTorch, NumPy, SciPy, matplotlib, h5py, meshio, gmsh,
 Pillow, and PyYAML. Optional solver/backend packages include `pyamg`,
 `pymetis`, AmgX, PETSc/MUMPS, cuDSS, Zarr, and PyVista fast visualisation.
-PARDISO and SPOOLES are not called by this repository; they are mentioned only
-when comparing with commercial solver menus.
 
 For documentation builds:
 
@@ -63,6 +61,10 @@ problem = (
     .solver("solid_mechanics", example="solid_mechanics.linear_plate")
     .outputs(fields=["displacement", "von_mises"], histories=["response"])
 )
+
+problem.validate_setup()
+result = problem.run(output_dir="runs/linear_plate", return_result=True)
+print(result.metadata())
 ```
 
 For public examples, reproducible sharing, CI, and HPC queues, validate the
@@ -102,9 +104,8 @@ Recommended defaults by workflow:
 
 Each normal run writes standard outputs plus provenance files such as
 `config.yaml` and `run_lockfile.json`. See
-`docs/user_guide/example_contract.md` for the promoted-example contract.
-`docs/STANDARD_OUTPUTS.md`, `docs/visualisation_requirements.md`, and
-`docs/visualization-output.md` remain compatibility/narrow-backend references.
+`docs/user_guide/example_contract.md` for the promoted-example contract and
+`docs/visualization-output.md` for visualization formats.
 
 ## 5. Inspect the Result
 
@@ -133,6 +134,7 @@ does not silently derive missing postprocessed fields.
 
 | Workflow | What to read next |
 |---|---|
+| Fluent Python authoring | `docs/tutorial/fluent_authoring_guide.md` and `docs/user_guide/python_api.md` |
 | Forward dynamic or static fracture | `docs/user_guide/problem_types.md`, `docs/user_guide/physics.md`, and `docs/user_guide/configuration.md` |
 | Quasistatic benchmark reproduction | `docs/benchmarks/catalogue.md`, `docs/benchmarks/examples.md`, and benchmark configs under `configs/benchmarks/` |
 | Dataset visualisation | `docs/example-gallery.md`, dynamic benchmark outputs, and standard Zarr-first output conventions |
@@ -148,6 +150,3 @@ open docs/_build/html/index.html
 The hosted site is published at:
 
 https://cems-lab.github.io/PhAST/
-
-GitHub workflows are manual-only. Start CI, docs, install, or wheel jobs from
-the GitHub Actions tab when you explicitly want them to run.

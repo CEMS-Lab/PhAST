@@ -121,12 +121,10 @@ All six examples share the same interface:
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--h5` | off | Deprecated compatibility alias for Zarr trajectory snapshots (`training_data.zarr`) |
-| `--vtu` | off | VTU snapshots for ParaView |
+| `--h5` | off | Deprecated compatibility alias for trajectory snapshots; new runs should use Zarr settings in YAML |
 | `--gif` | off | Animation request; QS drivers write MP4 by default and fall back to GIF when needed |
 | `--plots` | off | PNGs: initial conditions, final damage, load-displacement, energy, staggered convergence |
 | `--profile` | off | Profiler timing CSV |
-| `--all_outputs` | off | Enable VTU, GIF, plots, and profiler; request legacy H5 explicitly with `--h5` when existing postprocessors need it |
 | `--num_steps` | varies | Total steps (150/300 quasi-static, 1500 explicit) |
 | `--h_crack` | varies | Element size in crack zone |
 | `--h_coarse` | varies | Element size far from crack |
@@ -144,7 +142,6 @@ All six examples share the same interface:
 | `--disp` | 0.006 | Applied displacement in mm (explicit only) |
 | `--dt_safety` | 1.0 | CFL safety factor (explicit only) |
 | `--output_dir` | auto (timestamped) | Override output directory |
-| `--vtu_every` | 1 | Write VTU every N steps |
 | `--gif_frames` | 150 | Max GIF frames (skip interval computed automatically) |
 | `--anderson_depth` | 0 | Anderson Acceleration depth (0=off, 3-5 typical) |
 | `--multigrid` | **on** | 2-level GMG preconditioner (default, use `--no-multigrid` to disable) |
