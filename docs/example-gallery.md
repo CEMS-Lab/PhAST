@@ -133,13 +133,6 @@ The quasi-static family is the production path for many literature comparisons.
 - [Tutorial 3: Problem setup](tutorial/03_setting_up_your_problem.md)
 - [Tutorial 4: Exploration experiments](tutorial/04_exploration_experiments.md)
 
-## Showcase assets
-
-A compact media index is curated under
-[`assets/README.md`](https://github.com/CEMS-Lab/PhAST/blob/main/assets/README.md).
-These images are documentation-ready and can be reused for capability pages,
-proposals, and release notes.
-
 ## Capability boundaries
 
 For current non-hardened features, review

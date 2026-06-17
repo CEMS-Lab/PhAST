@@ -10,7 +10,8 @@ conda install -c conda-forge phast
 ## Files
 
 - `recipe.yaml` — the v1-format conda-forge recipe (schema_version: 1)
-- `SUBMISSION.md` — step-by-step guide to submit to `conda-forge/staged-recipes`
+- Maintainer submission notes are retained with the internal release
+  documentation.
 
 ## Layout decision
 

@@ -107,7 +107,6 @@ user_guide/physics
 user_guide/configuration
 user_guide/meshes
 user_guide/example_contract
-user_guide/schema_v2_migration
 user_guide/results_api
 user_guide/capability_matrix
 user_guide/sparse_solve
@@ -131,7 +130,6 @@ supported_workflows/unsupported_experimental
 
 example-gallery
 benchmarks/catalogue
-benchmarks/examples
 ```
 
 ```{toctree}
@@ -168,5 +166,4 @@ performance_reproducibility/index
 :caption: Community
 
 community
-user_guide/roadmap
 ```
