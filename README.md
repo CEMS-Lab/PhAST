@@ -142,7 +142,6 @@ print(result.history_names())
 | `assets/` | Lightweight visual assets for repository documentation. |
 | `tools/` | Maintenance utilities for regenerating documentation artifacts. |
 | `.github/` | Issue templates, Pull Request guidelines, and CI/CD Action workflows. |
-| `notebooks/` | Interactive Colab/Jupyter entry points for zero-installation onboarding. |
 | `llms.txt`, `.cursorrules` | Agent-facing repository orientation and rigorous coding constraints. |
 
 ## Build The Docs

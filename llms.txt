@@ -82,10 +82,8 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 - [`tools/`](tools/) - small public utilities for regenerating curated media.
 - [`.github/`](.github/) - public issue templates, PR template, code ownership,
   and GitHub Actions workflows.
-- [`notebooks/`](notebooks/) - lightweight notebook entry points.
-- [`install.sh`](install.sh) and [`validate_configs.sh`](validate_configs.sh) -
-  convenience scripts; normal users should start from the documented CLI
-  commands.
+- [`install.sh`](install.sh) - convenience source-install script; normal users
+  should start from the documented CLI commands.
 - [`pyproject.toml`](pyproject.toml), [`requirements.txt`](requirements.txt),
   and [`requirements-docs.txt`](requirements-docs.txt) - packaging and
   dependency metadata.
