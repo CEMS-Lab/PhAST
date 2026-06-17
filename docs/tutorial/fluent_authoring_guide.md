@@ -4,6 +4,14 @@ This tutorial shows the fluent Python workflow from model definition to result
 inspection. It uses a small solid-mechanics example because it is fast enough
 for a first local run.
 
+If you have used Abaqus, COMSOL, FEniCS, or a similar FEM package, read
+`phast.Problem` as the model builder. You define the mesh, named regions,
+materials, boundary conditions, analysis step, solver controls, and output
+requests, then submit the run.
+
+PhAST is unit-agnostic. This tutorial uses one consistent set of units inside
+the example; your own models must do the same.
+
 ## 1. Create the Model
 
 ```python
@@ -40,6 +48,12 @@ problem.validate_setup()
 Validation checks the setup without launching the full solve. For imported
 meshes, this is where you catch missing or misspelled region names before
 submitting a longer job.
+
+For YAML decks, the equivalent preflight is:
+
+```bash
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
+```
 
 ## 3. Run the Solve
 
@@ -116,6 +130,22 @@ problem.preview(output="runs/imported_notched_plate/setup.png")
 
 Use `inspect_mesh(...)` first, bind mesh groups to clean region names, then use
 those region names everywhere else.
+
+## 7. From Tutorial to Your Own Case
+
+For a new engineering or research case:
+
+1. Start from the closest solved example in `examples/`.
+2. Confirm the example validates with `--validate-only`.
+3. Recreate the setup with `phast.Problem` if you want interactive Python
+   authoring.
+4. Keep the final reproducible run as `config.yaml`.
+5. Request the outputs you need before launching the full solve.
+6. Keep the whole result directory; it is the equivalent of the solver result
+   database and is what `phast.load_result(...)` reads.
+
+Do not treat the fluent API as an unrestricted symbolic weak-form system. It is
+an authoring interface for supported PhAST workflows.
 
 ## Next Steps
 

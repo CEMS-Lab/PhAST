@@ -24,6 +24,11 @@ inspection.
 6. Move durable studies into a YAML deck when you need reproducibility or HPC
    submission.
 
+Users coming from Abaqus, COMSOL, FEniCS, or deal.II should read
+[Setting up new problems](user_guide/setup_problems.md) first. It maps familiar
+FEM concepts such as parts, mesh sets, materials, loads, steps, jobs, and result
+databases to the PhAST fluent API and YAML deck structure.
+
 ## Runnable Examples
 
 | Workflow | Entry point | Typical output |

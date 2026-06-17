@@ -45,6 +45,16 @@ arbitrary weak-form compiler: if a workflow is outside the supported capability
 matrix, validation should fail early rather than silently translating it into
 an unsupported solve.
 
+For users coming from conventional FEM tools, the closest analogy is:
+`Problem` is the model, `.geometry()`/`.mesh()` define the part and mesh,
+`.region()` names sets or selections, `.material()` assigns properties,
+`.boundary_condition()` defines constraints and loads, `.analysis_step()` is
+the study step, `.solver()` controls the numerical method, `.outputs()` defines
+field/history requests, and `.run()` submits the job.
+
+PhAST is unit-agnostic. Use one consistent unit system across geometry,
+material properties, loads, density, fracture energy, and time controls.
+
 ## Python or YAML?
 
 | Task | Recommended surface |
@@ -112,6 +122,12 @@ problem.validate_setup()
 For published examples and benchmark reruns, prefer the checked-in YAML deck in
 `examples/` so that every user starts from the same input file.
 
+To discover supported geometry arguments, inspect the closest public YAML deck:
+
+```bash
+python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
+```
+
 ## Imported Mesh Example
 
 External meshes should use named Gmsh physical groups. Inspect those names
@@ -157,6 +173,18 @@ problem.preview(output="runs/imported_notched_plate/setup.png")
 metadata is available. `preview()` writes a static setup image for review before
 launching a longer solve.
 
+For Gmsh input, the mapping is direct:
+
+```text
+Physical Surface("Domain") = {1};
+Physical Curve("Left") = {2};
+```
+
+```python
+problem.region("body", from_mesh="Domain")
+problem.region("left", from_mesh="Left")
+```
+
 ## Boundary Conditions
 
 Use explicit named boundary conditions when a load step activates several
@@ -187,6 +215,24 @@ problem.neumann("top", dof="y", value=1.0)
 
 For displacement-style conditions, specify the degree of freedom explicitly
 with `dof="x"`, `dof="y"`, or `dof="xy"`.
+
+## Analysis Step Controls
+
+Current public fluent workflows use one primary analysis step. For complex
+sequential loading, use the workflow's loading protocol or a canonical YAML
+deck that documents the staged schedule.
+
+The valid `controls` keys depend on the step kind:
+
+| Step kind | Typical controls | Use |
+|---|---|---|
+| `solid_mechanics` | `tip_force_y`, example-specific load controls | Promoted solid-mechanics examples. |
+| `quasi_static` | `protocol`, `num_steps`, `dt`, active boundary conditions | Staggered quasi-static phase-field fracture. |
+| `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture decks; use YAML for full reproducibility. |
+
+When in doubt, start from a public `config.yaml`, run `python -m phast
+explain-config <config.yaml>`, and transfer only the controls used by that
+workflow.
 
 ## Outputs and Result Inspection
 
