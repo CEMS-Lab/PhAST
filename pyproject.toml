@@ -90,6 +90,7 @@ dev = [
     "pytest-timeout>=2.3",
     "sphinx<8.0",
     "sphinx-immaterial",
+    "sphinx-autodoc-typehints<2.0",
     "myst-parser<4.0",
     "sphinx-copybutton>=0.5",
 ]
@@ -136,18 +137,3 @@ archs = ["arm64"]
 
 [tool.cibuildwheel.windows]
 archs = ["AMD64"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-addopts = "-m 'not slow and not hpc and not benchmark' --import-mode=importlib --confcutdir=tests -ra --tb=short --durations=20"
-markers = [
-    "fast: laptop-safe smoke/regression tests intended to finish quickly",
-    "solver: core mechanics, damage, autograd, sparse-solve, and config behavior",
-    "docs: documentation, schema, citation, packaging, and drift checks",
-    "benchmark: benchmark-style validation or mesh-heavy tests",
-    "hpc: requires or emulates HPC/GPU/cluster-only behavior",
-    "artifact: validates generated files, figures, datasets, or stored outputs",
-    "slow: long-running tests (deselected by default; run via 'pytest -m slow')",
-    "timeout(seconds): per-test wall-clock limit, enforced when pytest-timeout is installed",
-]

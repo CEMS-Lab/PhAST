@@ -57,7 +57,7 @@ python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --out
 python - <<'PY'
 import phast
 result = phast.load_result('runs/linear_plate')
-print(result.artifacts())
+print(result.visuals())
 print(result.history_names())
 PY
 ```
@@ -87,7 +87,6 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 - [`pyproject.toml`](pyproject.toml), [`requirements.txt`](requirements.txt),
   and [`requirements-docs.txt`](requirements-docs.txt) - packaging and
   dependency metadata.
-- [`ROADMAP.md`](ROADMAP.md) - public roadmap and planned extensions.
 - [`CITATION.cff`](CITATION.cff) - citation metadata.
 - [`LICENSE`](LICENSE) and [`CONTRIBUTING.md`](CONTRIBUTING.md) - license and
   contribution guidance.

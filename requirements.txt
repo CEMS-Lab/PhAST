@@ -1,9 +1,10 @@
-# PhAST — Dependencies
-# =====================
-# PyTorch + PyG are installed by install.sh (platform-specific wheels).
-# This file covers everything else.
+# PhAST core runtime dependencies.
+#
+# Prefer `pip install -e .` for normal source installs. This file is kept for
+# environments that install dependencies separately from the package metadata.
 
 # Numerics
+torch>=2.0.0
 numpy>=1.24
 scipy>=1.10
 
@@ -25,9 +26,13 @@ Pillow>=9.0
 # HDF5 output (GNO training data)
 h5py>=3.7
 
-# Zstd-compressed Zarr for the PF-Hetero-Bench dataset (issue #298)
-zarr>=2.18
+# Zarr trajectory stores. Keep pinned to the v2 API until the reader/writer
+# stack is migrated to Zarr v3.
+zarr>=2.18,<3
 numcodecs>=0.13
+
+# YAML configuration decks
+pyyaml>=6.0
 
 # --- Optional: AMG preconditioner (pip install phast[amg]) ---
 # pyamg>=5.0

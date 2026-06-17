@@ -61,7 +61,7 @@ SOLVER_DEFAULTS = {
     # Legacy alias: same staggered loop dispatched to ``SecantCGSolver``
     # (iterative-CG path) instead of the default quasi-static solver.
     # See staggered_solver.py L297/L357. Kept for backwards compatibility
-    # and exercised by tests/test_rigid_connector_iterative_cg.py.
+    # with older accepted quasi-static decks.
     'quasi_static_legacy': {
         'solver_block': (
             "solver:\n"

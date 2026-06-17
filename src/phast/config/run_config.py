@@ -528,8 +528,9 @@ def main():
     energy_rows = []
 
     # Optional reaction-force CSV (load-displacement curve for QS
-    # benchmarks). Columns follow docs/output_standards/index.md and include
-    # convergence fields so compare scripts and audits can share one file.
+    # benchmarks). Columns follow the artifact contract in
+    # docs/user_guide/example_contract.md and include convergence fields so
+    # compare scripts and audits can share one file.
     # Activated by setting output.reaction_node_set in YAML.
     # Streamed (line-buffered) so a killed run still has usable data.
     react_set_name = getattr(cfg.output, 'reaction_node_set', None)

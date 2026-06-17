@@ -823,8 +823,8 @@ class QuasiStaticSolver:
     (Miehe et al. 2010 CMAME 199). SecantCGSolver remains the recommended
     path for very large problems thanks to its multigrid/L-BFGS preconditioning;
     QuasiStaticSolver is the simpler default and is preferred when explicit
-    Newton convergence monitoring is needed. Spectral support added in PR #170
-    (issue #114); see tests/test_quasi_static_spectral.py.
+    Newton convergence monitoring is needed. Spectral support was added in
+    PR #170 / issue #114 and is covered by the internal regression suite.
 
     For implicit quasi-static analysis: finds u such that
         f_int(u, d) = f_ext
