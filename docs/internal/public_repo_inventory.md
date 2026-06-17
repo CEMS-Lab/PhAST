@@ -24,7 +24,6 @@ The public repository is organized as:
 ├── pyproject.toml           package metadata and CLI entry points
 ├── requirements*.txt        dependency lists
 ├── install.sh               convenience installer
-├── validate_configs.sh      config validation helper
 ├── README.md                public landing page
 ├── LICENSE                  license
 ├── CITATION.cff             citation metadata

@@ -165,7 +165,7 @@ print(result.history_names())
 | `conda-recipe/` | Experimental conda packaging recipe and submission notes. |
 | `notebooks/` | Lightweight notebook entry points for hosted or browser-based quickstarts. |
 | `llms.txt`, `.cursorrules` | Agent-facing repository orientation and coding constraints. |
-| `install.sh`, `validate_configs.sh` | Convenience scripts; prefer documented `pip install -e .` and `python -m phast ...` commands for normal use. |
+| `install.sh` | Convenience installer; prefer documented `pip install -e .` and `python -m phast ...` commands for normal use. |
 
 ## Build The Docs
 
