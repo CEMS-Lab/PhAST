@@ -65,7 +65,6 @@
     "mesh_convergence.png",
     "velocity_with_holes.png",
     "velocity_parametric.png",
-    "response_evolution.mp4",
     "damage_evolution.mp4"
   ],
   "excluded_artifacts": [

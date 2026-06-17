@@ -37,7 +37,6 @@
     "stress_max_principal_multipanel.png",
     "thumbnail.png",
     "visual_manifest.json",
-    "response_evolution.mp4",
     "damage_evolution.mp4"
   ],
   "notes": "Public release name is B6; old B4 naming is retained only as source provenance."

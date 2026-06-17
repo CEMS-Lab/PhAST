@@ -34,9 +34,7 @@
     "stress_max_principal_multipanel.png",
     "thumbnail.png",
     "velocity_with_holes.png",
-    "visual_manifest.json",
-    "response_evolution.mp4",
-    "damage_evolution.mp4"
+    "visual_manifest.json"
   ],
   "notes": [
     "This flat public candidate keeps only lightweight derived artifacts from reviewed reference run 8585; raw trajectories stay external until a public artifact release exists.",
