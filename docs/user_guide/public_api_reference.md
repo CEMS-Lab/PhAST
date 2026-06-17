@@ -33,11 +33,13 @@ result = problem.run(output_dir="runs/pmma_branching", return_result=True)
 
 Common methods:
 
-- `.to_spec()`: convert to internal contract for validation/adapters
-- `.save(path)` / `Problem.from_yaml(path)`
+- `.to_spec()`: build the validated representation used by advanced checks
 - `.validate_setup()`: optional preflight checks for mesh-bound regions
 - `.preview(output="...")` / `.plot_setup(...)`: setup visuals for geometry/BC setup review
 - `.run(output_dir=..., return_result=True)` for supported promoted/public paths
+
+For durable reproduction and public examples, keep the final run as a YAML
+input deck and execute it with `python -m phast run <config.yaml>`.
 
 ## `phast.Region`
 
@@ -57,7 +59,7 @@ declarative reusable recipes.
 ## `phast.Material`
 
 `Material` carries solver-accepted material properties and presets.
-For fracture runs, preset models remain available through `Problem.material(...)` and schema-v2 adapters.
+For fracture runs, preset models remain available through `Problem.material(...)`.
 
 ```python
 from phast import Material

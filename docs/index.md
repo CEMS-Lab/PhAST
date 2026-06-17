@@ -88,6 +88,7 @@ user_guide/public_api_reference
 showcase
 tutorials
 tutorial/01_phase_field_primer
+tutorial/fluent_authoring_guide
 tutorial/03_setting_up_your_problem
 tutorial/04_exploration_experiments
 user_guide/capability_matrix
