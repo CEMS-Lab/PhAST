@@ -12,7 +12,6 @@ The public repository is organized as:
 .
 ├── .github/                 issue templates, PR template, workflows, CODEOWNERS
 ├── assets/                  lightweight README/docs media
-├── conda-recipe/            experimental conda packaging recipe
 ├── configs/                 schemas, reference YAML, benchmark configurations
 ├── docs/                    Sphinx documentation source
 ├── examples/                runnable public examples and retained visuals
@@ -31,23 +30,22 @@ The public repository is organized as:
 └── docs/internal/ROADMAP.md internal roadmap
 ```
 
-Tracked-file count at the time of this audit: 968 files.
+Tracked-file count at the time of this audit: 581 files.
 
 ## File Category Coverage
 
 | Category | Files | Public explanation |
 |---|---:|---|
-| `examples/dynamic/` | 188 | README, example gallery, YAML workflow, dynamic supported-workflow page. |
-| `examples/quasistatic/` | 50 | README, example gallery, quasi-static supported-workflow page. |
-| `examples/solid_mechanics_beta/` | 188 | README, example gallery, solid-mechanics supported-workflow page. |
-| `examples/plasticity_interface_beta/` | 298 | Beta supported-workflow page and capability matrix. |
+| `examples/dynamic/` | 131 | README, example gallery, YAML workflow, dynamic supported-workflow page. |
+| `examples/quasistatic/` | 51 | README, example gallery, quasi-static supported-workflow page. |
+| `examples/solid_mechanics_beta/` | 73 | README, example gallery, solid-mechanics supported-workflow page. |
+| `examples/plasticity_interface_beta/` | 88 | Beta supported-workflow page and capability matrix. |
 | `examples/` root | 3 | Public examples overview and contract. |
 | `src/phast/` | 116 | Python API, public API reference, YAML workflow, results API, API notes. |
-| `docs/` | 56 | Sphinx toctree and this inventory page. |
-| `configs/` | 32 | YAML workflow, configuration guide, benchmark catalogue. |
-| `assets/` | 11 | README visuals, showcase page, internal assets provenance note. |
-| `.github/` | 9 | Contribution/community pages and this inventory. |
-| `conda-recipe/` | 3 | Packaging notes and this inventory. |
+| `docs/` | 69 | Sphinx toctree and internal release-audit material. |
+| `configs/` | 20 | YAML workflow, configuration guide, benchmark catalogue. |
+| `assets/` | 9 | README visuals, showcase page, internal assets provenance note. |
+| `.github/` | 7 | Contribution/community pages and this inventory. |
 | Root metadata/scripts | 15 | README, installation, contribution docs, `llms.txt`, `.cursorrules`, this inventory. |
 
 ## Source Package Map

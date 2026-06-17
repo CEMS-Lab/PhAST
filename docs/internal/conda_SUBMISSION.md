@@ -11,9 +11,9 @@
 - [x] `requires-python` in pyproject.toml (`>=3.10`) matches recipe
       `python >=3.10`
 - [x] No `editable=True` install hooks in pyproject (pip install . works)
-- [x] Recipe points at `https://github.com/CEMS-Lab/PhAST` and
-      `rev: v${{ version }}`; replace with `url`/`sha256` if requested by
-      the staged-recipes review.
+- [ ] Prepare the conda-forge recipe in a separate staged-recipes working
+      tree after the public tag exists. Prefer a release tarball URL plus
+      sha256.
 - [ ] Compute sha256: `curl -L https://github.com/CEMS-Lab/PhAST/archive/v0.16.2.tar.gz | sha256sum`
 - [ ] Run the release preflight after the public tag exists:
       `python -m phast doctor`
@@ -25,10 +25,10 @@
    ```bash
    git checkout -b add-phast
    ```
-3. Copy the recipe into place:
+3. Create the recipe in place:
    ```bash
    mkdir -p recipes/phast
-   cp /path/to/phast/conda-recipe/recipe.yaml recipes/phast/
+   # Draft recipes/phast/recipe.yaml from pyproject.toml and the tagged release.
    ```
 4. Commit and push:
    ```bash
