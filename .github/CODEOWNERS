@@ -1,17 +1,10 @@
-# GitHub CODEOWNERS File
-# Ref: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
-
-# By default, Allamaprabhu Ani is the owner of all files in the repository.
+# Default owner for the public PhAST repository.
 * @allamaprabhuani
 
-# Core solver package and physics algorithms
+# Core solver package, public examples, and documentation.
 /src/ @allamaprabhuani
-
-# Testing suite and validation scripts
-/tests/ @allamaprabhuani
-/tools/ @allamaprabhuani
-
-# GitHub Action CI/CD workflows and settings
+/configs/ @allamaprabhuani
+/docs/ @allamaprabhuani
+/examples/ @allamaprabhuani
 /.github/ @allamaprabhuani
 /pyproject.toml @allamaprabhuani
-/setup.py @allamaprabhuani

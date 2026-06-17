@@ -12,9 +12,10 @@
 
 ## Validation
 
-- [ ] `pytest -q`
-- [ ] Targeted tests:
-- [ ] Benchmark/HPC job:
+- [ ] `PYTHONPATH=src python -m phast doctor`
+- [ ] `sphinx-build -W -b html docs docs/_build/html`
+- [ ] Relevant configs passed `python -m phast run <config> --validate-only`
+- [ ] Targeted solver/example check:
 - [ ] Visual/output artifacts checked:
 
 ## Physics and Benchmark Notes
@@ -29,5 +30,5 @@ the implementation.
       media were added to git.
 - [ ] New trajectory output is Zarr-first, or legacy H5 use is explicitly
       compatibility-only.
-- [ ] New/changed benchmark configs pass `python -m phast run <config> --validate-only`, or are documented as command manifests/contracts.
-- [ ] `CHANGELOG.md` and relevant docs were updated.
+- [ ] New/changed benchmark configs are documented in the relevant README or
+      contract.
