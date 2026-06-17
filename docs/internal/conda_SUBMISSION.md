@@ -55,9 +55,8 @@
 ## Naming note
 
 The public conda-forge package and feedstock should be `phast` /
-`phast-feedstock`. The older private development repository name
-`torch_pf_solver` must not be used in staged-recipes paths, package names,
-or validation imports.
+`phast-feedstock`. Older development repository names must not be used in
+staged-recipes paths, package names, or validation imports.
 
 ## NOT to be done from this repo
 

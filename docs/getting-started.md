@@ -100,7 +100,7 @@ Recommended defaults by workflow:
 | Spectral/Amor implicit QS | Install PETSc/MUMPS where possible; `backend: auto` selects it after a runtime verification, with SciPy SuperLU and CG fallbacks. |
 | Cohesive contact | Sparse quasi-static backend with `backend: auto`; normal-contact penalty only for contact cases. |
 | J2 plasticity | Guarded sparse quasi-static plasticity path with `backend: auto`; unsupported combinations fail early. |
-| Trajectory datasets | Zarr stores for forward-run trajectories and MP4/raster animations for visualisation. |
+| Trajectory datasets | Zarr stores for forward-run trajectories and lightweight GIF/raster animations for visualisation. |
 
 Each normal run writes standard outputs plus provenance files such as
 `config.yaml` and `run_lockfile.json`. See
@@ -114,7 +114,7 @@ Run a promoted example into an explicit directory, then inspect it without
 rerunning the solver:
 
 ```bash
-python -m phast run configs/benchmarks/solid_mechanics/linear_plate.yaml --output_dir runs/linear_plate
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate
 ```
 
 ```python

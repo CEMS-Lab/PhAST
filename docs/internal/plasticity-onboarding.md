@@ -36,10 +36,10 @@ The solver contains three core layers under validation for nonlinear mechanics a
 
 To verify your environment is correctly set up, run the validation scripts in the repository. These script files output CSV datasets and post-processing plots.
 
-### Verification Tier 1: Unit Tests
-Before launching run scripts, verify the core mathematical logic using `pytest`:
+### Verification Tier 1: Environment Check
+Before launching run scripts, verify the public environment:
 ```bash
-python -m pytest tests/test_plasticity_j2.py tests/test_cohesive_elements.py -v
+python -m phast doctor
 ```
 
 ### Verification Tier 2: J2 Plasticity Benchmarks
@@ -105,6 +105,6 @@ When designing your research or client models, keep these boundaries in mind:
 
 ## 4. Contributing Your Code & Benchmarks
 When adding new features or validating parameters:
-1. Ensure you run the fast test suite: `pytest tests/`
-2. Run the repository artifact-hygiene checks before committing heavy results or cached meshes.
-3. Ensure code conforms to Ruff/Black styling guidelines.
+1. Run `python -m phast doctor`.
+2. Run the relevant validation script and inspect its retained artifacts.
+3. Run the repository artifact-hygiene checks before committing heavy results or cached meshes.

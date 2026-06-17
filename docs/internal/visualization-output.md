@@ -1,7 +1,7 @@
 # Visualisation output: VTU vs `.pv`
 
 The canonical promoted-example contract is
-[`docs/user_guide/example_contract.md`](user_guide/example_contract.md). Use
+[`docs/user_guide/example_contract.md`](../user_guide/example_contract.md). Use
 that page for the public example output contract. This page is only the
 backend-specific note for VTU/PVD versus optional PyVista-zstd `.pv` snapshots.
 

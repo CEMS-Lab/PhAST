@@ -166,10 +166,9 @@ are stored in the repo or linked from the issue.
   non-descent directions for reaction-dominated systems, (3) AMG hierarchy
   rebuilt every step (100ms waste). Fix: relative tolerance, AMG quality
   detection with Jacobi fallback, cached AMG hierarchy. Result: CG=5-18
-  iterations instead of 5000, a 2800× per-step speedup on CUDA
-  (before vs. after v0.11.2 on the same hardware — internal bugfix
-  gain, not a cross-code speedup claim; for the latter see the CMAME
-  paper's FEniCS/Akantu comparison).
+  iterations instead of 5000 on the same CUDA hardware. Treat this as a
+  version-to-version solver robustness improvement, not as a cross-code
+  performance claim.
 
 **`[AMG] pyAMG failed (array must not contain infs or NaNs), skipping
 hierarchy rebuild` warnings during crack transition:**
@@ -182,4 +181,3 @@ crack nucleation. The reaction coefficient `reaction_coeff = (2H + Gc/l0)
 reaction_coeff entries, clamping` message if it weren't). The inf/NaN
 appears *inside* `pyamg.smoothed_aggregation_solver(A_csr)` setup, where
 operations like Jacobi relaxation-weight estimation (`1/diag`), Lanczos
-

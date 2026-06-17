@@ -54,7 +54,7 @@ cases:
       - crack_path_stages.png
       - compare.png
       - compare_report.txt
-      - damage_evolution.mp4
+      - damage_evolution.gif
       - training_data.zarr
       - history.csv
       - load_step_control.csv
@@ -107,7 +107,7 @@ cases:
       - crack_path_stages.png
       - compare.png
       - compare_report.txt
-      - damage_evolution.mp4
+      - damage_evolution.gif
       - training_data.zarr
       - history.csv
       - load_step_control.csv

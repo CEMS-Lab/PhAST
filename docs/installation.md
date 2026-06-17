@@ -4,12 +4,16 @@ This guide outlines the standard paths for installing, configuring, and verifyin
 
 ---
 
-## 1. Quick Install
+## 1. Quick Source Install
 
-The package is pure Python. Standard dependencies (PyTorch, NumPy, SciPy, Matplotlib, h5py, meshio, Gmsh, Pillow, and PyYAML) are installed automatically.
+The public repository is distributed as a source checkout. Standard
+dependencies (PyTorch, NumPy, SciPy, Matplotlib, h5py, meshio, Gmsh, Pillow,
+PyYAML, Zarr, and numcodecs) are installed from `pyproject.toml`.
 
 ```bash
-pip install phast
+git clone https://github.com/CEMS-Lab/PhAST.git
+cd PhAST
+pip install -e .
 python -m phast doctor
 ```
 
@@ -82,7 +86,7 @@ python - <<'PY'
 from phast.sparse_solve import available_sparse_backends
 print(available_sparse_backends())
 PY
-pytest tests -q
+python -m phast run configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml --validate-only
 ```
 
 On clusters with a site PETSc module, build petsc4py against the loaded PETSc instead of mixing unrelated binaries:
@@ -114,7 +118,8 @@ For issue and pull-request validation, run:
 
 ```bash
 python -m phast doctor
-pytest tests -q
+sphinx-build -W -b html docs docs/_build/html
+python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --validate-only
 ```
 
 ---

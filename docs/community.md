@@ -25,7 +25,7 @@ When opening bugs or documentation gaps, include:
 
 ## Standards and references
 
-- Changelog: `CHANGELOG.md`
+- Release notes: https://github.com/CEMS-Lab/PhAST/releases
 - API + docs dependencies: `requirements-docs.txt`
 - Release and bug triage runbook: use GitHub Releases and Issues in the public
-  repository; keep release staging notes in internal logs.
+  repository.

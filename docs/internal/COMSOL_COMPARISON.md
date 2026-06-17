@@ -171,7 +171,8 @@ are not wired into this repository.
 
 ## Feature Roadmap vs COMSOL
 
-*Last verified against v0.15.2 (2026-04-16). See CHANGELOG.md for version history.*
+*Last verified against v0.15.2 (2026-04-16). Use GitHub Releases for public
+version history.*
 
 ### Implemented (v0.13+)
 - [x] **Phase field subcycling** — `SolverConfig(damage_every=3)` (v0.13.0, ~45% speedup)

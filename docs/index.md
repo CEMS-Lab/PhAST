@@ -9,11 +9,11 @@
     <p class="phast-eyebrow">CEMS Lab · PyTorch-native FEM workflows</p>
     <h2>Differentiable phase-field fracture and FEM workflows in PyTorch.</h2>
     <p>
-      PhAST is a state-of-the-art differentiable finite-element framework for
-      2D brittle phase-field fracture, explicit dynamics, quasi-static
-      benchmark reproduction, and promoted solid-mechanics examples. The public docs separate production,
-      beta, optional-backend, scaffold, and unsupported capabilities so solver
-      claims stay reproducible.
+      PhAST is a differentiable finite-element framework for 2D brittle
+      phase-field fracture, explicit dynamics, quasi-static benchmark
+      reproduction, and promoted solid-mechanics examples. The public docs
+      separate production, beta, optional-backend, scaffold, and unsupported
+      capabilities so solver claims stay reproducible.
     </p>
     <p>
       Use the fluent <code>phast.Problem</code> API to author new models. Use
@@ -44,7 +44,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
   <div class="phast-card">
     <h3>Fluent authoring</h3>
     <p>Use the fluent <code>phast.Problem</code> API to author new models with
-    domain nouns before saving or validating an declarative configuration.</p>
+    domain nouns before saving or validating a declarative configuration.</p>
     <p><a href="user_guide/python_api.html">Python API</a></p>
   </div>
   <div class="phast-card">

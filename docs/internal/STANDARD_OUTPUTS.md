@@ -1,10 +1,10 @@
 # Standard outputs for a fracture-FEM run
 
 The canonical promoted-example contract is
-[`docs/user_guide/example_contract.md`](user_guide/example_contract.md). Use
+[`docs/user_guide/example_contract.md`](../user_guide/example_contract.md). Use
 that page first when deciding what a public PhAST example folder must contain.
 The first-class output overview is
-[`docs/output_standards/index.md`](output_standards/index.md). This file is
+[`docs/output_standards/index.md`](../output_standards/index.md). This file is
 retained as the compatibility checklist for solver-run output families and
 historical benchmark audits.
 
@@ -18,9 +18,9 @@ shear/tension) plus consensus from the PF-fracture literature
 from open phase-field fracture examples such as PhaseFieldX, PhaFiDyn,
 FEniCS-Explicit-PF, and COMET.
 
-Publication sizing, font, GIF, particle-overlay, and review-dimension rules
-are tracked in `docs/visualisation_requirements.md`. A run is not paper-ready
-until both this artifact checklist and the visualisation checklist pass.
+Publication sizing, font, GIF, and review-dimension rules are tracked in the
+public [example contract](../user_guide/example_contract.md). A run is not
+paper-ready until both this artifact checklist and the visual contract pass.
 
 ## Pattern (consensus across the field)
 
@@ -103,9 +103,9 @@ quantity exists in the reference setup:
 
 | File | Required | What |
 |---|---|---|
-| `damage_evolution.mp4` | ✅ | d(x, t) over time, default fast raster MP4; GIF/APNG available by explicit animation format |
-| `displacement_evolution.mp4` | ✅ if requested | \|u\|(x, t) coloured by magnitude; GIF/APNG available by explicit animation format |
-| `stress_evolution.mp4` | ✅ if requested | von Mises stress; GIF/APNG available by explicit animation format |
+| `damage_evolution.gif` | ✅ | d(x, t) over time, lightweight public animation |
+| `deformation_evolution.gif` | ✅ if requested | \|u\|(x, t) coloured by magnitude |
+| `stress_evolution.gif` | ✅ if requested | von Mises stress |
 | `strain_evolution.gif` | optional | strain trace |
 | `psi_plus_evolution.gif` | optional | tensile elastic energy density (driving force) |
 

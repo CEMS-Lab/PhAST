@@ -51,7 +51,7 @@ examples/<family>/<case>/
   energy.csv
   solver_telemetry.csv
   timing_per_step.csv
-  field_evolution.mp4          # or damage/plastic-strain evolution equivalent
+  damage_evolution.gif         # or deformation/plastic-strain equivalent
   compare.png                  # when a reference exists
   compare_report.txt           # when a reference exists
 ```
@@ -249,15 +249,12 @@ or the comparison. It should not be decoration.
 
 ### Evolution visuals
 
-- Prefer `damage_evolution.mp4` for dense time histories.
-- Every tutorial-ready example must include an animation that shows the
-  physical response evolving. Use `damage_evolution.mp4` for fracture,
-  `field_evolution.mp4` for solid mechanics, and a family-specific name such
-  as `plastic_strain_evolution.mp4` when that is clearer.
-  when the response is a load-displacement, stress-strain, residual, or
-  oscillator history rather than a crack path.
-- GIFs are acceptable for lightweight docs/review; cap them at roughly 60 to
-  100 frames and about 1 to 5 MB when practical.
+- Tutorial-ready examples should include a lightweight animation that shows
+  the physical response evolving. Use `damage_evolution.gif` for fracture,
+  `deformation_evolution.gif` for solid mechanics, and a family-specific name
+  such as `plastic_strain_evolution.gif` when that is clearer.
+- Do not add response-history MP4s to the public example folders. Prefer GIFs
+  capped at roughly 60 to 100 frames and about 1 to 5 MB when practical.
 - Include enough frames to show setup, crack initiation, crack interaction,
   and final state.
 
@@ -362,7 +359,7 @@ Before submitting a batch:
 
 1. run `--validate-only` on each YAML configuration;
 2. run your site scheduler wrapper in dry-run or plan-only mode for GPU jobs;
-3. confirm output roots and log paths are public-safe or internal-only;
+3. confirm output roots and log paths are suitable for public release;
 4. record the issue number or review target in the job manifest.
 
 ### Logs and output roots

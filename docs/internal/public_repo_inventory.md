@@ -17,7 +17,6 @@ The public repository is organized as:
 ├── examples/                runnable public examples and retained visuals
 ├── notebooks/               lightweight notebook quickstarts
 ├── src/phast/               solver package
-├── tools/                   small public media/maintenance utilities
 ├── .cursorrules             agent coding constraints
 ├── llms.txt                 agent repository orientation
 ├── pyproject.toml           package metadata and CLI entry points
@@ -46,7 +45,7 @@ Tracked-file count at the time of this audit: 581 files.
 | `configs/` | 20 | YAML workflow, configuration guide, benchmark catalogue. |
 | `assets/` | 9 | README visuals, showcase page, internal assets provenance note. |
 | `.github/` | 7 | Contribution/community pages and this inventory. |
-| Root metadata/scripts | 15 | README, installation, contribution docs, `llms.txt`, `.cursorrules`, this inventory. |
+| Root metadata/scripts | 13 | README, installation script, contribution docs, `llms.txt`, `.cursorrules`, citation, license, requirements, and package metadata. |
 
 ## Source Package Map
 
@@ -87,13 +86,11 @@ examples/
 ├── quasistatic/
 │   ├── miehe_tension/
 │   └── notched_holed_plate/
-├── solid_mechanics/
-│   ├── generalized_alpha_oscillator/
+├── solid_mechanics_beta/
 │   ├── j2_bar/
 │   ├── linear_plate/
-│   ├── mixed_precision_cg/
 │   └── neohookean_plate/
-└── plasticity_interface/
+└── plasticity_interface_beta/
     ├── fluent_setups/
     └── results/
 ```
@@ -112,12 +109,12 @@ findings to track are:
 |---|---|---|
 | Fixed | `examples/dynamic/B7_dynamic_crack_branching_comsol/` | Public manifests now use a retained-run identifier instead of absolute machine paths. |
 | Fixed | `configs/` | Top-level aliases and diagnostic-only configs were removed; public docs now use canonical `configs/benchmarks/...` paths. |
-| High | Examples | Several public manifests reference missing `run_metadata.json`, `run_lockfile.json`, or MP4 artifacts. Regenerate or update manifests. |
-| High | Root/CI | Public docs and CI mention `tests/`, but this snapshot has no top-level `tests/` directory. Either restore public tests or remove those commands from public workflows. |
-| Fixed | Root/CI | The contribution template no longer references absent `configs/status/`. |
+| Fixed | Examples | Public example manifests were trimmed to retained artifacts and lightweight GIF outputs. |
+| Fixed | Root/CI | Public docs and CI no longer require an absent top-level `tests/` directory. |
+| Fixed | Root/CI | The contribution template now uses the current public validation checks. |
 | Fixed | Packaging | `pyproject.toml` discovers only the public `phast*` package namespace. |
 | Medium | Docs | Some excluded scoping documents remain in the repo and should stay out of the public build or be rewritten as public notes. |
-| Medium | Docs/API | Some older docs mention unsupported CLI flags or old H5 behavior. Update before publication. |
+| Fixed | Docs/API | Public docs use current validation commands and avoid old packaging/test promises. |
 | Fixed | Assets | Public asset inventory now uses public-safe provenance wording, and unused assets were removed. |
 | Low | API boundary | `src/phast/__init__.py` exports more low-level helpers than the main docs present as stable researcher API. Clarify stability or reduce exports later. |
 
