@@ -81,7 +81,6 @@ mesh/material/solver/device summaries for reproducibility audits.
 | `benchmarks/quasistatic/QS_lshaped_concrete.yaml` | quasi-static | L-shaped concrete panel, Ambati 2015 |
 | `benchmarks/quasistatic/QS_notched_holed_plate.yaml` | quasi-static | COMSOL notched-holed plate, Ambati 2015 |
 | `benchmarks/quasistatic/QS_notched_holed_plate_comsol_strict.yaml` | quasi-static | COMSOL holed-plate strict parity setup |
-| `benchmarks/plasticity_interface/manifests/customer_validation_examples.yaml` | command manifest | Beta J2 plasticity, cohesive contact, and structural cohesive validation examples |
 
 Some historical configs retain an `example:` field for provenance or older
 demo wrappers. It is accepted by the schema, but it is not required for the
