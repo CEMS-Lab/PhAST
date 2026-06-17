@@ -9,6 +9,7 @@ inspection.
 | Tutorial | Time | What you learn |
 |---|---:|---|
 | [Getting started](../getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
+| [Problem setup notebook](problem_setup_walkthrough.ipynb) | 30-45 min | Create geometry, mesh and inspect named regions, apply initial conditions, supports, loads, solver settings, run a short solve, and post-process artifacts. |
 | [Build your first model with `phast.Problem`](fluent_authoring_guide.md) | 10-15 min | Create, validate, run, and inspect a Python-authored model. |
 | [YAML workflow](../user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
 | [Example gallery](../example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |

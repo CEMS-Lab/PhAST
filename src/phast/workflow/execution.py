@@ -280,6 +280,9 @@ def _legacy_fracture_geometry(spec: ProblemSpec) -> dict:
     if spec.mesh is not None:
         payload = {"mesh_path": spec.mesh.path}
         payload.update(spec.mesh.parameters)
+        payload.pop("mesh_type", None)
+        payload.pop("kind", None)
+        payload.pop("type", None)
         return _coerce_legacy_values({key: value for key, value in payload.items() if value is not None})
     if spec.geometry is None:
         return {}
@@ -426,7 +429,14 @@ def _legacy_fracture_output(spec: ProblemSpec) -> dict:
             output["plots"] = True
         elif postprocess.kind == "animation":
             output["gif"] = True
-            output.update(postprocess.parameters)
+            parameters = dict(postprocess.parameters)
+            if "format" in parameters:
+                output["animation_format"] = parameters.pop("format")
+            if "frames" in parameters:
+                output["gif_frames"] = parameters.pop("frames")
+            if "fields" in parameters:
+                output["gif_fields"] = parameters.pop("fields")
+            output.update(parameters)
     return _coerce_legacy_values(
         {key: value for key, value in output.items() if value is not None}
     )
