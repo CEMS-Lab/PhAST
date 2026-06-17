@@ -56,8 +56,8 @@ Top-level compatibility aliases such as `configs/B2_kalthoff_winkler.yaml` and
 Use the canonical `configs/benchmarks/...` paths in examples, documentation,
 CI, and papers.
 
-Internal command manifests that are not directly runnable by
-`python -m phast run` are kept under `docs/internal/config_manifests/`.
+Command manifests that are not directly runnable by `python -m phast run` are
+not part of the public config tree.
 
 Each run writes both `config.yaml` and `run_lockfile.json` into the output
 directory. `config.yaml` is the post-CLI resolved problem definition;
