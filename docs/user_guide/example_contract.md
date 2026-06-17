@@ -39,7 +39,8 @@ examples/<family>/<case>/
   run_metadata.json            # required for full solver runs
   visual_manifest.json         # required when visuals are present
   visual_manifest.md           # optional human-readable visual index
-  fluent_setup.py              # required for tutorial-ready YAML examples
+  run_fluent.py                # public Python/fluent companion for tutorial-ready YAML examples
+  fluent_setup.py              # optional legacy alias when retained for compatibility
   initial_conditions.png
   thumbnail.png
   training_data.zarr/          # required when small enough to ship in dev repo
@@ -124,7 +125,7 @@ the promoted example is reproduced through the saved YAML deck.
 Script-contract examples must be explicit about why they are not YAML-first.
 They must include:
 
-- `run.py` or a named script path;
+- `run.py`, `run_fluent.py`, or a named script path;
 - command-line help;
 - an `--output-dir` argument;
 - deterministic defaults;
@@ -143,7 +144,7 @@ test for the expected artifacts.
 gallery list. Every listed example must declare one of two states:
 
 - `tutorial_ready: true`: the leaf folder has the complete tutorial bundle:
-  canonical YAML, fluent authoring companion, setup visual, final field plots,
+  canonical YAML, `run_fluent.py` or equivalent fluent authoring companion, setup visual, final field plots,
   response/evolution animations, run manifests, visual manifest, and a compact
   `training_data.zarr/` that can be inspected with `phast.load_result(path)`.
 - `tutorial_ready: false`: the entry is useful but incomplete as a full

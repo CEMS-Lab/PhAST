@@ -1,66 +1,72 @@
 # Linear Elastic Plate
 
-Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against the Euler-Bernoulli beam estimate, differentiates the tip displacement with respect to Young's modulus, and writes standard FEA field visualisations.
+## What This Example Solves
 
-Run from the repository root:
+Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against an Euler-Bernoulli estimate, differentiates the tip displacement with respect to Young's modulus, and writes standard displacement, stress, strain, and energy visualisations.
 
-Recommended journey: inspect the fluent authoring shape when useful -> run the
-checked-in YAML deck with
-`python -m phast run examples/solid_mechanics/linear_plate/config.yaml` ->
-standard result directory. The checked-in `config.yaml` is the canonical public
-input deck for exact reproduction.
+## Files
+
+| File | Purpose |
+| --- | --- |
+| `config.yaml` | Canonical YAML deck for the public run. |
+| `run_fluent.py` | Equivalent Python/manual authoring setup using `phast.Problem`. |
+| `mesh.geo` | Public Gmsh geometry recipe for the rectangular cantilever mesh. |
+| `run.py` | Compatibility wrapper used by the YAML runner. |
+| `fluent_setup.py` | Legacy name retained for compatibility with earlier drafts. |
+| `response.csv`, `response.png` | Tip response and comparison summary. |
+| `initial_conditions.png` | Geometry and boundary-condition preview. |
+| `deformed_shape.png`, `displacement_magnitude.png`, `displacement_final.png` | Displacement-field visual evidence. |
+| `von_mises.png`, `stress_final.png`, `strain_final.png`, `strain_energy.png` | Final stress, strain, and energy fields. |
+| `response_evolution.mp4`, `field_evolution.mp4` | Lightweight reference animations. |
+| `training_data.zarr`, `zarr_manifest.json` | Compact retained trajectory and manifest. |
+| `thumbnail.png`, `visual_manifest.json` | Gallery thumbnail and visual QA metadata. |
+| `run_manifest.json` | Reproducibility metadata for the reference output. |
+
+## Run The Canonical YAML Deck
+
+Run commands from the repository root:
 
 ```bash
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml --validate-only
 python -m phast run examples/solid_mechanics/linear_plate/config.yaml
+python examples/solid_mechanics/linear_plate/run_fluent.py
 ```
 
-The direct script wrapper is still supported:
-`python examples/solid_mechanics/linear_plate/run.py --config examples/solid_mechanics/linear_plate/config.yaml`.
+Use `--output_dir <path>` with `python -m phast run` for local reruns that should not overwrite the reference outputs.
 
-## Equivalent Fluent API
+## How The YAML Is Used
+
+`mesh` defines the structured rectangular grid, `material` defines the linear elastic constants, and `loading.tip_force_y` defines the applied tip load. The workflow lowers those blocks to the solid-mechanics example runner, which assembles the CST system, solves the sparse linear problem, writes field plots, and records the response history.
+
+## Run Without YAML
+
+```bash
+python examples/solid_mechanics/linear_plate/run_fluent.py --run --output-dir runs/linear_plate
+```
+
+`run_fluent.py` builds the same problem manually with `phast.Problem`: geometry, region, material, load step, solver selection, and requested outputs are all declared in Python before the workflow contract is validated.
+
+The manual setup starts from the fluent problem object:
 
 ```python
 import phast
 
-result = (
-    phast.Problem("Linear elastic plate")
-    .geometry("structured_grid", nx=20, ny=10, length=1.0, height=0.2)
-    .region("body", kind="domain")
-    .material("steel", region="body", E=2.1e11, nu=0.3)
-    .analysis_step("load", kind="solid_mechanics",
-                   controls={"tip_force_y": -1.0e3})
-    .solver("solid_mechanics", example="solid_mechanics.linear_plate")
-    .outputs(fields=["displacement", "von_mises", "strain_energy"],
-             histories=["response"], plots=True)
-    .run(output_dir="runs/linear_plate", return_result=True)
-)
+problem = phast.Problem("Linear elastic plate")
 ```
 
-The config.yaml is the canonical public input deck; the snippet documents
-the equivalent fluent authoring surface and output intent.
-The same authoring shape is available as `fluent_setup.py`.
+## How Manual Setup Works
 
-Promoted outputs are checked in flat beside the config. Use `--output_dir` for
-scratch reruns when you do not want to overwrite the promoted bundle:
+The manual setup mirrors the YAML fields directly: `.geometry(...)` maps to `mesh`, `.material(...)` maps to `material`, `.analysis_step(...)` maps to `loading`, `.solver(...)` selects `solid_mechanics.linear_plate`, and `.outputs(...)` requests the response and field artifacts.
 
-- `config.yaml`
-- `fluent_setup.py`
-- `response.csv`
-- `response.png`
-- `initial_conditions.png`
-- `deformed_shape.png`
-- `displacement_magnitude.png`
-- `displacement_final.png`
-- `von_mises.png`
-- `stress_final.png`
-- `strain_energy.png`
-- `strain_final.png`
-- `response_evolution.mp4`
-- `field_evolution.mp4`
-- `training_data.zarr`
-- `zarr_manifest.json`
-- `thumbnail.png`
-- `visual_manifest.json`
-- `run_metadata.json`
-- `run_lockfile.json`
-- `run_manifest.json`
+## Reference Result
+
+| Initial conditions | Response and deformed field |
+| --- | --- |
+| <img src="initial_conditions.png" width="360"> | <img src="deformed_shape.png" width="360"> |
+
+| Metric | Reference value |
+| --- | ---: |
+| Tip displacement FE | `-2.024e-06 m` |
+| Euler-Bernoulli estimate | `-2.381e-06 m` |
+| Relative error | `-14.98 %` |
+| Maximum von Mises stress | `1.141e+05 Pa` |
