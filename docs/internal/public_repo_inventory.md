@@ -120,7 +120,7 @@ findings to track are:
 | Fixed | Packaging | `pyproject.toml` discovers only the public `phast*` package namespace. |
 | Medium | Docs | Some excluded scoping documents remain in the repo and should stay out of the public build or be rewritten as public notes. |
 | Medium | Docs/API | Some older docs mention unsupported CLI flags or old H5 behavior. Update before publication. |
-| Medium | Assets | Some asset provenance text mentions private job/source context. Replace with public-safe provenance. |
+| Fixed | Assets | Public asset inventory now uses public-safe provenance wording, and unused assets were removed. |
 | Low | API boundary | `src/phast/__init__.py` exports more low-level helpers than the main docs present as stable researcher API. Clarify stability or reduce exports later. |
 
 ## Verification Commands
