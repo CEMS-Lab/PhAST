@@ -1,6 +1,6 @@
 """PF-CZM uniaxial strength and length-scale validation example.
 
-This customer-facing validation example exercises the Wu cohesive phase-field
+This public beta validation example exercises the Wu cohesive phase-field
 damage model in a homogeneous uniaxial setting.  The driving force is
 ``H = sigma_trial^2 / (2E)`` and the PF-CZM parameter ``a1`` is calibrated
 from the tensile strength ``sigma_ts``.  The expected onset threshold is

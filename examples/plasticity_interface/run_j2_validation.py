@@ -1,6 +1,6 @@
 """Standalone J2 plasticity validation example.
 
-This is a customer-facing validation of the current supported plasticity
+This is a public beta validation of the current supported plasticity
 boundary: the material-point return-mapping kernel. It is not a coupled
 phase-field plasticity solve.
 """

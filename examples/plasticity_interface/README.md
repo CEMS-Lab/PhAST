@@ -1,7 +1,8 @@
-# Plasticity and Diffuse-Interface Validation Examples
+# Beta Plasticity and Diffuse-Interface Validation Examples
 
-These examples package the current customer-safe boundary for plasticity and
-interface/interphase fracture work.
+These examples package the current beta boundary for plasticity and
+interface/interphase fracture work. They are retained as validation material,
+not as Paper-1 production fracture examples.
 
 ## Current Capability Boundary
 
@@ -9,7 +10,7 @@ interface/interphase fracture work.
 | --- | --- | --- |
 | `run_j2_validation.py` | Standalone J2/von-Mises material-point return mapping with linear isotropic hardening | Runnable kernel validation |
 | `run_ductile_pf_plasticity_validation.py` | Sparse quasi-static J2 mechanics plus bounded AT2 phase-field damage solved on a ductile plastic-work history | Gate 1 solver validation plus Gate 2 operator-coupled damage validation; backend-selectable for promotion runs; guarded staggered T3 J2+AT2 path exists, benchmark matching pending |
-| `run_ductile_pf_sensitivity_study.py` | Elastic-driving reference plus ductile plastic-work length-scale sensitivity table and plots | Customer-facing ductile validation study; not a SENT/TPB calibration |
+| `run_ductile_pf_sensitivity_study.py` | Elastic-driving reference plus ductile plastic-work length-scale sensitivity table and plots | Public ductile validation study; not a SENT/TPB calibration |
 | `run_diffuse_interphase_validation.py` | Diffuse interface/interphase fields in a brittle phase-field setting using spatial `E(x)` and `Gc(x)` | Runnable field/path validation |
 | `run_solid_interface_fracture_examples.py` | Two deterministic crack-impinging-on-interface path-energy benchmarks: weak-interface deflection and strong-interface penetration | Diffuse solid-interface field/path screening examples; not solved crack-evolution runs |
 | `run_solver_driven_interface_fracture_validation.py` | Weak-interface deflection and strong-interface penetration classified from solved AT2 phase-field damage with spatial `E(x)`/`Gc(x)` fields | Solver-driven diffuse interface fracture validation; not a cohesive-zone or ASTM calibration |
@@ -36,8 +37,8 @@ configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
 ```
 
 That YAML lists every validation runner, its exact launcher command, required
-CSV/JSON/mesh/visual artifacts, and the claim boundary for customer-facing
-use. Each promoted run should also retain the generated `config.yaml`,
+CSV/JSON/mesh/visual artifacts, and the public claim boundary. Each promoted
+run should also retain the generated `config.yaml`,
 `run_manifest.json` when available, and `visual_manifest.json` for plots or
 animations according to `docs/output_standards/index.md`.
 
@@ -143,10 +144,10 @@ The compact script-contract examples write:
 
 - `summary.json` with validation metrics and memory use.
 - One CSV table with the numerical evidence.
-- PNG figures suitable for a customer-facing validation note.
+- PNG figures suitable for a public validation note.
 
 The solid-interface benchmark runner writes the fuller standard-output bundle
-used for customer review of the diffuse-field/path-energy validation boundary:
+used for review of the diffuse-field/path-energy validation boundary:
 
 - `config.yaml`, `run_lockfile.json`, `run_metadata.json`, `run_manifest.json`,
   `run.log`, `mesh.geo`, and `mesh.msh`.

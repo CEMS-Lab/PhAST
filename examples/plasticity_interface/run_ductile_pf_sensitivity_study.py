@@ -1,6 +1,6 @@
 """Ductile PF-plasticity length-scale and plastic-work sensitivity study.
 
-This runner packages a small, deterministic customer-facing validation study
+This runner packages a small, deterministic public beta validation study
 for the current ductile phase-field plasticity slice. It compares an
 elastic-driving reference against ductile plastic-work driving at several
 regularization lengths, writes tabular acceptance evidence, and produces

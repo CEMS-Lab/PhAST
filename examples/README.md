@@ -5,6 +5,11 @@ quasi-static fracture, solid mechanics, and beta plasticity/interface
 workflows. The examples are designed to be reproducible, self-contained, and
 easy to inspect on GitHub.
 
+For Paper-1 reproduction, start with the dynamic and quasi-static fracture
+examples. Solid-mechanics folders provide supporting solver checks, while
+plasticity/interface folders are beta validation material with a narrower
+capability claim.
+
 Most public examples use declarative YAML input decks. Validate and run them
 from the repository root:
 
@@ -25,13 +30,13 @@ For detailed artifact and promotion rules, see the
 Dynamic examples use the explicit-dynamics YAML runner for impact, branching,
 and rapid crack-growth scenarios.
 
-| Example | Physics / Scenario | Command |
-| :--- | :--- | :--- |
-| [`B2_kalthoff_winkler`](dynamic/B2_kalthoff_winkler/) | Kalthoff-Winkler impact | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
-| [`B3_dynamic_sent`](dynamic/B3_dynamic_sent/) | Dynamic single-edge-notched tension baseline verification case | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
-| [`B5_pmma_branching`](dynamic/B5_pmma_branching/) | PMMA dynamic crack branching | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
-| [`B6_perforated_30holes`](dynamic/B6_perforated_30holes/) | Perforated PMMA plate | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
-| [`B7_dynamic_crack_branching_comsol`](dynamic/B7_dynamic_crack_branching_comsol/) | Dynamic branching comparison case | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
+| Example | Status | Physics / Scenario | Command |
+| :--- | :--- | :--- | :--- |
+| [`B2_kalthoff_winkler`](dynamic/B2_kalthoff_winkler/) | Paper-1 public fracture example | Kalthoff-Winkler impact | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
+| [`B3_dynamic_sent`](dynamic/B3_dynamic_sent/) | Paper-1 baseline verification | Dynamic single-edge-notched tension baseline verification case | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
+| [`B5_pmma_branching`](dynamic/B5_pmma_branching/) | Paper-1 public fracture example | PMMA dynamic crack branching | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
+| [`B6_perforated_30holes`](dynamic/B6_perforated_30holes/) | Public fracture extension | Perforated PMMA plate | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
+| [`B7_dynamic_crack_branching_comsol`](dynamic/B7_dynamic_crack_branching_comsol/) | External comparison example | Dynamic branching comparison case | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
 
 ## Quasi-Static Fracture
 
@@ -48,13 +53,13 @@ comparison plots plus CSV histories.
 The first three examples are mesh-level finite-element simulations through the
 common YAML runner. The final two are compact numerical-method diagnostics.
 
-| Example | Physics / Scenario | Command |
-| :--- | :--- | :--- |
-| [`linear_plate`](solid_mechanics/linear_plate/) | Linear elastic cantilever with sparse autograd solve | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` |
-| [`neohookean_plate`](solid_mechanics/neohookean_plate/) | Nonlinear neo-Hookean cantilever | `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml` |
-| [`j2_bar`](solid_mechanics/j2_bar/) | Mesh-level J2 plasticity bar | `python -m phast run examples/solid_mechanics/j2_bar/config.yaml` |
-| [`mixed_precision_cg`](solid_mechanics/mixed_precision_cg/) | Krylov precision diagnostic | `python examples/solid_mechanics/mixed_precision_cg/run.py` |
-| [`generalized_alpha_oscillator`](solid_mechanics/generalized_alpha_oscillator/) | Generalized-alpha time-integration diagnostic | `python examples/solid_mechanics/generalized_alpha_oscillator/run.py` |
+| Example | Status | Physics / Scenario | Command |
+| :--- | :--- | :--- | :--- |
+| [`linear_plate`](solid_mechanics/linear_plate/) | Supporting solver example | Linear elastic cantilever with sparse autograd solve | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` |
+| [`neohookean_plate`](solid_mechanics/neohookean_plate/) | Supporting solver example | Nonlinear neo-Hookean cantilever | `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml` |
+| [`j2_bar`](solid_mechanics/j2_bar/) | Beta material-model example | Mesh-level J2 plasticity bar | `python -m phast run examples/solid_mechanics/j2_bar/config.yaml` |
+| [`mixed_precision_cg`](solid_mechanics/mixed_precision_cg/) | Numerical diagnostic | Krylov precision diagnostic | `python examples/solid_mechanics/mixed_precision_cg/run.py` |
+| [`generalized_alpha_oscillator`](solid_mechanics/generalized_alpha_oscillator/) | Numerical diagnostic | Generalized-alpha time-integration diagnostic | `python examples/solid_mechanics/generalized_alpha_oscillator/run.py` |
 
 For the YAML-first solid examples, `run_fluent.py` provides the equivalent
 manual Python setup:
@@ -65,11 +70,12 @@ python examples/solid_mechanics/neohookean_plate/run_fluent.py
 python examples/solid_mechanics/j2_bar/run_fluent.py
 ```
 
-## Plasticity And Interface Beta
+## Beta Plasticity And Interface
 
-The plasticity/interface examples are beta validation workflows for J2
-plasticity, cohesive/interface operators, PF-CZM calibration, and diffuse
-interphase screening. Their reproducibility manifest is:
+All folders and retained results under `examples/plasticity_interface/` are
+beta validation workflows for J2 plasticity, cohesive/interface operators,
+PF-CZM calibration, and diffuse interphase screening. They are not Paper-1
+production fracture examples. Their reproducibility manifest is:
 
 ```text
 configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml

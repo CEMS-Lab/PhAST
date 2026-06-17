@@ -1,7 +1,7 @@
 # Quasi-static Examples
 
 Curated quasi-static examples that can be run directly from YAML. Each folder
-contains a customer-facing `config.yaml`, promoted validation artifacts, and a
+contains a public `config.yaml`, promoted validation artifacts, and a
 short README with the exact command.
 
 | Folder | Benchmark | Run command | Validation |

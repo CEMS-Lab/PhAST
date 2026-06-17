@@ -1,6 +1,6 @@
 """Coupled phase-field matrix damage plus cohesive-interface benchmark.
 
-This customer-facing validation example combines two failure mechanisms in one
+This public beta validation example combines two failure mechanisms in one
 staggered run:
 
 * matrix cracking represented by an AT2 phase-field damage solve around a

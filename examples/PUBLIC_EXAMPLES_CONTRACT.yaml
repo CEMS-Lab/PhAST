@@ -27,7 +27,7 @@ tiers:
   - id: diagnostic
     status: developer_only
     command: case_specific
-    contract: Developer evidence only; do not promote as a customer example without a manifest update.
+    contract: Developer evidence only; do not promote as a public example without a manifest update.
     public_gallery: false
 
 families:
@@ -378,7 +378,7 @@ families:
         kind: sensitivity_study
         tutorial_ready: false
         tutorial_blockers:
-          - Sensitivity study is not a first-run customer tutorial.
+          - Sensitivity study is not a first-run public tutorial.
           - Needs curated reduced tutorial case before promotion.
       - id: diffuse_interphase
         path: examples/plasticity_interface/run_diffuse_interphase_validation.py

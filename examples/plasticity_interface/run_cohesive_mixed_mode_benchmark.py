@@ -1,6 +1,6 @@
 """Deterministic mixed-mode cohesive benchmark.
 
-This customer-facing validation benchmark exercises the solver-coupled
+This public beta validation benchmark exercises the solver-coupled
 ``CohesiveInterfaceOperator`` in combined mode-I/mode-II opening. The
 zero-thickness interface is fully prescribed, so the resultant normal and shear
 tractions can be checked against the bilinear mixed-mode law while the solver

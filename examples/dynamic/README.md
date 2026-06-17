@@ -3,20 +3,22 @@
 This folder holds the curated public dynamic fracture examples. Keep each
 example flat, YAML-first, and free of raw cluster dumps or vendor binaries.
 
-## Public release candidates
+## Public Candidate Dynamic Fracture Examples
 
-The clean public-candidate folders are:
+These folders are public dynamic-fracture examples. They are the primary
+Paper-1 example family unless a row states that it is an external comparison or
+supporting extension.
 
-| Example | Role | Command |
-|---|---|---|
-| `B2_kalthoff_winkler/` | Kalthoff-Winkler dynamic impact evidence. | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
-| `B3_dynamic_sent/` | Lightweight dynamic SENT baseline verification example. | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
-| `B5_pmma_branching/` | Selected PMMA branching parametric-study result. | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
-| `B6_perforated_30holes/` | Selected perforated PMMA plate; public B6 name replaces old source B4 naming. | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
-| `B6_perforated_10holes/` | Curated perforated PMMA variant with ten holes. | `python -m phast run examples/dynamic/B6_perforated_10holes/config.yaml` |
-| `B6_perforated_1hole_near/` | Curated single-hole PMMA variant with the hole near the crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_near/config.yaml` |
-| `B6_perforated_1hole_far/` | Curated single-hole PMMA variant with the hole farther from the crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_far/config.yaml` |
-| `B7_dynamic_crack_branching_comsol/` | Accepted dynamic branching comparison package from job 47961. | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
+| Example | Status | Role | Command |
+|---|---|---|---|
+| `B2_kalthoff_winkler/` | Paper-1 public fracture example | Kalthoff-Winkler dynamic impact evidence. | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
+| `B3_dynamic_sent/` | Paper-1 baseline verification | Lightweight dynamic SENT baseline verification example. | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
+| `B5_pmma_branching/` | Paper-1 public fracture example | Selected PMMA branching parametric-study result. | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
+| `B6_perforated_30holes/` | Public fracture extension | Selected perforated PMMA plate; public B6 name replaces old source B4 naming. | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
+| `B6_perforated_10holes/` | Public fracture extension | Curated perforated PMMA variant with ten holes. | `python -m phast run examples/dynamic/B6_perforated_10holes/config.yaml` |
+| `B6_perforated_1hole_near/` | Public fracture extension | Curated single-hole PMMA variant with the hole near the crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_near/config.yaml` |
+| `B6_perforated_1hole_far/` | Public fracture extension | Curated single-hole PMMA variant with the hole farther from the crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_far/config.yaml` |
+| `B7_dynamic_crack_branching_comsol/` | External comparison example | Accepted dynamic branching comparison package from job 47961. | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
 
 | Public example | Source status | Public release action |
 |---|---|---|
