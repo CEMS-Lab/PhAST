@@ -4,6 +4,11 @@ YAML is the primary configuration format for reproducible simulations in PhAST. 
 
 While the fluent `phast.Problem` API is ideal for interactive model design, the final implementation should be serialized to YAML to ensure durability.
 
+YAML is the public reproduction format because it is explicit, machine-readable,
+and stable across reruns. A validated configuration makes it possible to
+recreate the same geometry, material parameters, loading history, and output
+contract without reinterpreting interactive Python state.
+
 ## Configuration Scope
 
 A declarative YAML configuration explicitly defines:
@@ -29,6 +34,10 @@ python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --outpu
 ```
 
 For batch processing and HPC environments, this identical sequence ensures configurations are mathematically valid on the head node before consuming cluster compute resources.
+
+This matters because the same configuration file can be shared across local
+development, continuous integration, and HPC submission workflows without
+changing the physics definition.
 
 ## Schema Structure
 

@@ -1,12 +1,12 @@
 # Beta Plasticity and Diffuse-Interface Validation Examples
 
 **Status: beta validation suite.** These workflows are public for inspection
-and reproducibility, but they are not promoted Paper-1 production fracture
+and reproducibility, but they are not promoted as full production fracture
 examples.
 
 These examples package the current beta boundary for plasticity and
-interface/interphase fracture work. They are retained as validation material,
-not as Paper-1 production fracture examples.
+interface/interphase fracture work. They are provided as validation material,
+not as full production fracture examples.
 
 ## Current Capability Boundary
 
@@ -28,7 +28,8 @@ not as Paper-1 production fracture examples.
 
 These examples do **not** claim a benchmark-matched fully coupled staggered
 ductile phase-field-plasticity solver or ASTM-calibrated cohesive
-delamination workflow. Those remain tracked under GitHub issues #553 and #554.
+delamination workflow. Those capabilities remain outside the current public
+validation boundary.
 
 ## Run
 
@@ -46,7 +47,7 @@ run should also retain the generated `config.yaml`,
 `run_manifest.json` when available, and `visual_manifest.json` for plots or
 animations according to `docs/user_guide/example_contract.md`.
 
-The first promoted #708 validation slice is available through the curated YAML
+The first promoted validation slice is available through the curated YAML
 dispatcher:
 
 | Validation id | Role | Retained result | Fluent setup |
@@ -77,9 +78,8 @@ python -m phast run configs/benchmarks/plasticity_interface/reproducibility_cont
   --output_dir examples/plasticity_interface_beta/results/pfczm_uniaxial_strength
 ```
 
-The retained #708 result index is
-`examples/plasticity_interface_beta/results/issue_708_promoted_results.yaml`. Each
-retained result folder includes the YAML-resolved `config.yaml`, provenance
+The result index lives under `examples/plasticity_interface_beta/results/`. Each
+result folder includes the YAML-resolved `config.yaml`, provenance
 JSON, `run_manifest.json`, `visual_manifest.json`, CSV histories, setup and
 final-state PNGs, and a non-empty GIF animation. Rerunning a validation case
 can regenerate local trajectory stores for read-only `phast.Result` field

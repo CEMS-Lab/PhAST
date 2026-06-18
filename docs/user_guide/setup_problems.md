@@ -68,6 +68,25 @@ repair inconsistent units.
 | Preflight | Are region names and requested outputs valid? | `.validate_setup()`, `--validate-only` |
 | Inspection | How will the completed run be read? | `phast.load_result(path)` |
 
+## Why this sequence matters
+
+The ordering above is deliberate. Geometry and regions define the available
+boundaries, materials attach physics to those boundaries, initial conditions
+seed the state, boundary conditions and analysis steps define the loading
+history, and outputs decide what information is preserved after the solve.
+Validation is most useful when it runs before the expensive solve, because many
+configuration errors are purely geometric or semantic and do not require a
+full simulation to detect.
+
+If you are new to PhAST, think of the workflow as:
+
+1. define the domain;
+2. name the parts of the domain that matter;
+3. assign physics to those parts;
+4. prescribe how the model is loaded;
+5. choose what to record;
+6. validate the deck before the first solve.
+
 ## Minimal Fluent Setup
 
 ```python

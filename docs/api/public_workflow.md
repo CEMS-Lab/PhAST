@@ -1,16 +1,15 @@
 # Public Workflow API
 
-PhAST exposes a user-facing workflow API around domain nouns. The internal
-validated contract still uses `*Spec` names in adapter and validation modules,
-but users should normally think in terms of problems, regions, materials,
-loads, steps, outputs, and results.
+PhAST exposes a user-facing workflow API around domain nouns. The validation
+and adapter layers use `*Spec` names internally, but users should think in
+terms of problems, regions, materials, loads, steps, outputs, and results.
 
 | Public noun | Purpose | Primary docs |
 |---|---|---|
 | `phast.Problem` | Fluent authoring entry point for new models. | [Python API](../user_guide/python_api.md) |
 | `Geometry` / `Mesh` | Define generated geometry or import an existing mesh. | [Setting up problems](../user_guide/setup_problems.md) |
 | `phast.Region` | Name physical groups, mesh sets, and reusable application regions. | [Python API](../user_guide/python_api.md) |
-| `phast.Material` | Low-level material parameter container exported for direct material objects. | [Configuration](../user_guide/configuration.md) |
+| `phast.Material` | Material parameter container used by the public API and declarative adapters. | [Configuration](../user_guide/configuration.md) |
 | `Problem.material(...)` | Fluent material assignment helper for presets, constitutive parameters, and target regions. | [Python API](../user_guide/python_api.md) |
 | `phast.InitialCondition` | Seed fields such as initial damage where supported. | [Python API](../user_guide/python_api.md) |
 | `phast.BoundaryCondition` | Apply fix, prescribe, traction, symmetry, and Neumann-style conditions. | [Capability matrix](../user_guide/capability_matrix.md) |
@@ -47,19 +46,20 @@ problem = (
 spec = problem.to_spec()
 ```
 
-The `ProblemSpec` contract is intentionally internal-facing. It lets PhAST
-validate YAML, fluent Python, promoted solid-mechanics examples, and result
-inspection through one common representation while not turning the project into an arbitrary weak-form compiler.
-Use the [capability matrix](../user_guide/capability_matrix.md) as the public
-boundary before documenting internal `*Spec` types on user-facing pages.
+The `ProblemSpec` contract is an implementation detail of the workflow layer.
+It lets PhAST validate YAML, fluent Python, promoted solid-mechanics
+examples, and result inspection through one common representation while
+keeping the public surface centered on domain nouns rather than internal data
+structures. Use the [capability matrix](../user_guide/capability_matrix.md) as
+the public boundary for supported workflows.
 
 ## Execution Boundary
 
-Supported execution still routes through the curated solver paths documented in
-the [capability matrix](../user_guide/capability_matrix.md). Schema-v2 and
-fluent helpers validate and lower only where a supported runner exists. If a
-workflow is marked beta, scaffold, optional-backend, or unsupported, keep it out
-of public examples unless the corresponding contract tests and visual manifests
+Supported execution routes through the curated solver paths documented in the
+[capability matrix](../user_guide/capability_matrix.md). Schema-v2 and fluent
+helpers validate and lower only where a supported runner exists. If a workflow
+is marked beta, scaffold, optional-backend, or unsupported, keep it out of
+public examples unless the corresponding contract tests and visual manifests
 are present.
 
 ## Output Boundary

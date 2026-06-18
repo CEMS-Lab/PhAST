@@ -3,13 +3,13 @@ example: phast.examples.dynamic_branching_pmma.run
 problem:
   name: PMMA Dynamic Crack Branching
   reference: Bleyer, Roux-Langlois & Molinari (2017), Comput. Mech.
-# Geometry: inline-primitive DSL (issue #192). Plate (W=32, H=16, a=4)
+# Geometry uses the inline-primitive DSL. Plate (W=32, H=16, a=4)
 # minus a triangular wedge notch (3-vertex polygon, edge-flush at x=0).
-# `branching: true` reproduced via mode='box' refinement over the right-
-# half band x in [a-5, W], y in [0, H] (PR #200, was Field[Box] in
-# legacy .geo). Boundary node sets via thin RegionGroup strips along
-# each base edge (PR #201). l0 = 0.1, h_crack = 0.02, h_coarse = 1.0,
-# crack_band = 5*l0 = 0.5 — matches mesh_generator.rectangular_sent.
+# `branching: true` is reproduced via a box refinement over the right-
+# half band x in [a-5, W], y in [0, H]. Boundary node sets are defined
+# with thin RegionGroup strips along each base edge. l0 = 0.1,
+# h_crack = 0.02, h_coarse = 1.0, crack_band = 5*l0 = 0.5 — matches
+# mesh_generator.rectangular_sent.
 geometry:
   units: mm
   primitives:
@@ -66,7 +66,7 @@ solver:
   dt_safety: 0.8
   # Bleyer (2017) reproduction: damage solved every step. Subcycling
   # (damage_every=3) suppresses second-lobe nucleation at branching
-  # threshold (issue #149).
+  # threshold.
   damage_every: 1
 output:
   trajectory: true

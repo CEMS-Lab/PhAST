@@ -28,8 +28,9 @@ python -m phast run my_B7_nu040.yaml --device cpu
 compressive locking on the inside of the curve) and branching onset
 arrives a few microseconds earlier.
 
-**Too far.** `nu >= 0.49` makes the bulk modulus blow up and the
-explicit timestep collapse; `nu < 0` is unphysical and CG will stall.
+**If pushed further.** `nu >= 0.49` makes the bulk modulus grow very
+large and the explicit timestep collapse; `nu < 0` is unphysical and CG
+will stall.
 
 ## 2. Compare energy splits on the same SENT
 
@@ -53,7 +54,7 @@ lock-out), `amor` and `spectral` produce qualitatively similar crack
 fronts, `star_convex` converges with fewer staggers per step at the
 cost of slightly different nucleation timing.
 
-**Too far.** `isotropic` will close cracks under reflected
+**If pushed further.** `isotropic` may close cracks under reflected
 compressive waves -- damage decreases, which violates irreversibility
 unless `H` is enforced. If you see `max(d)` drop step-to-step, switch
 to `amor` or `spectral`.
@@ -80,8 +81,8 @@ damage is jagged, CG iterations spike, and you may see
 `max(d) < 1` at the crack tip. At `l0 = 4 h` the crack is too thick
 and visually different from the reference but cheap.
 
-**Too far.** `l0 < h` means fewer than one element in the band; the
-crack pattern becomes mesh-dependent.
+**If pushed further.** `l0 < h` means fewer than one element in the
+band; the crack pattern becomes mesh-dependent.
 
 ## 4. Compare output cadence
 
@@ -99,8 +100,8 @@ python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml \
 **Expected outcome.** The dense run writes more snapshots and is easier to
 animate. The sparse run is smaller and faster to move between machines.
 
-**Too far.** Very sparse output can miss crack-initiation frames. Keep enough
-snapshots to explain the response you plan to show.
+**If pushed further.** Very sparse output can miss crack-initiation
+frames. Keep enough snapshots to explain the response you plan to show.
 
 ## 5. Inspect result artifacts
 
@@ -144,9 +145,9 @@ python -m phast run B1_de5.yaml --device cpu     # damage_every: 5 (aggressive)
 visually and on energy budgets. `damage_every: 5` is faster still but
 the branching onset shifts a few hundred nanoseconds late.
 
-**Too far.** With AT1 + Amor splits, `damage_every > 1` can suppress
-branching entirely (issue #131). Stick to `damage_every: 1` whenever
-you are comparing against a reference figure.
+**If pushed further.** With AT1 + Amor splits, `damage_every > 1` can
+delay or suppress branching. Use `damage_every: 1` whenever the run is
+being compared against a reference figure.
 
 ## 7. Anderson acceleration for stagger convergence
 
@@ -164,9 +165,9 @@ solver:
 50%. Above 7 the linear-least-squares cost dominates and you see
 diminishing returns.
 
-**Too far.** On highly nonlinear steps Anderson can over-shoot and
-produce non-monotone damage. If you see CG counts spike right after
-an Anderson restart, drop the depth.
+**If pushed further.** On highly nonlinear steps Anderson can overshoot
+and produce non-monotone damage. If CG counts spike right after an
+Anderson restart, reduce the depth.
 
 ## Where to next
 

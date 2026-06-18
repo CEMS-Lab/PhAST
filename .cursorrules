@@ -47,3 +47,9 @@ PYTHONPATH=src:. python -m phast run examples/solid_mechanics_beta/linear_plate/
 
 Only curated, lightweight result artifacts that are part of the public examples
 contract should be committed.
+
+## Tone and Language
+- **Academic and Formal**: All documentation, comments, and public-facing text must use a formal, academic tone suitable for a State-Of-The-Art (SOTA) FEM solver.
+- **No Internal Slang**: Do NOT use software-development slang (e.g., "ships with", "hack", "we need to fix this later", "epic").
+- **No Internal References**: Do NOT reference internal GitHub issues (e.g., "#107", "PR #146"), Jira tickets, or private workflow phases. Refer to features generically (e.g. "The framework supports...").
+- **No Emoticons**: Do not use emojis or emoticons in the documentation or source code.

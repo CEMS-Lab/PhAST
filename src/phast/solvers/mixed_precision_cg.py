@@ -1,4 +1,4 @@
-"""Mixed-precision conjugate-gradient solver (issue #118).
+"""Mixed-precision conjugate-gradient solver.
 
 Provides ``cg_mixed_precision`` with three modes:
 

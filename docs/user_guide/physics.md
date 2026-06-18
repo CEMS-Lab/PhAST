@@ -175,6 +175,9 @@ gallery includes crack curvature and branching examples such as
 `examples/dynamic/B2_kalthoff_winkler/` and
 `examples/dynamic/B7_dynamic_crack_branching_comsol/`.
 
+For a picture-first explanation of these terms, see the
+[visual glossary](../tutorial/02_visual_glossary.md).
+
 <table>
   <tr>
     <td align="center" width="50%">

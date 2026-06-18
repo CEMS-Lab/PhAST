@@ -1,6 +1,6 @@
 # Unsupported and Experimental Workflows
 
-This page is the public boundary for features that may exist in the development
+This page is the public boundary for features that may exist in the
 development repository, older branches, or research notes but are not public
 PhAST workflows.
 
@@ -10,7 +10,6 @@ PhAST workflows.
 - general-purpose coupled elastoplastic cohesive phase-field fracture;
 - inverse identification workflows beyond the released paper-specific scope;
 - hybrid/deep-learning solver switching workflows;
-- Paper-2 or Paper-4 research lanes;
 - raw trajectory archives or proprietary COMSOL model binaries.
 
 ## How to read experimental material

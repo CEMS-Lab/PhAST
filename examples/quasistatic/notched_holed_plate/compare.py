@@ -1,30 +1,21 @@
 #!/usr/bin/env python3
-"""Compare quasi-static notched-holed-plate run against the COMSOL 6.4
-Application Library reference (`comsol_load_displacement.csv`).
+"""Compare a quasi-static notched-holed-plate run against the COMSOL 6.4
+application-library reference (`comsol_load_displacement.csv`).
 
-Displacement convention (issue #223 fix):
-  The COMSOL Application Library report plots reaction force against
-  **total elongation** of the specimen (top_pin_y - bottom_pin_y =
-  2 x per-pin displacement). The YAML-driven simulator's `results.csv`
-  `displacement` column reports the **per-pin** value configured in
-  `configs/benchmarks/quasistatic/QS_notched_holed_plate.yaml`.
-  To compare on a common axis we keep the sim in per-pin units (cleaner
-  internal convention, matches `bcs.add` semantics) and reframe the
-  reference into per-pin units by dividing by 2 in `load_reference()`.
-  The acceptance constants below (`REF_FIRST_DISP_MM`,
-  `REF_SECOND_DISP_MM`) are stated in per-pin units accordingly.
+The COMSOL report plots reaction force against total elongation, whereas the
+PhAST result file records per-pin displacement. For a like-for-like
+comparison, the script converts the reference curve to per-pin units before
+evaluating the acceptance criteria.
 
-Acceptance criteria (issue #119, benchmark #1):
-  * first  peak load:        within +/-10% of 0.63 kN
-  * first  peak displacement: within +/-15% of 0.165 mm (per-pin;
-                              0.33 mm total elongation in the PDF)
-  * second peak load:        within +/-20% of 0.15 kN
+Acceptance criteria:
+  * first peak load: within +/-10% of 0.63 kN
+  * first peak displacement: within +/-15% of 0.165 mm per pin
+  * second peak load: within +/-20% of 0.15 kN
 
-The script picks the two highest distinct local maxima of the simulated
-load--displacement curve (separated by at least the dip in between).
-Crack-path morphology is qualitative: `damage_final.png` from the run is
-saved alongside `compare.png` for visual side-by-side check against
-Figure 4 of the COMSOL PDF.
+The script identifies the two highest distinct local maxima in the simulated
+load-displacement curve. Crack-path morphology is assessed qualitatively by
+placing `damage_final.png` beside `compare.png` for visual comparison with the
+reference figure.
 """
 from __future__ import annotations
 
@@ -51,13 +42,12 @@ plt.rcParams.update({
 
 HERE = Path(__file__).resolve().parent
 REF = HERE / "comsol_load_displacement.csv"
-# The public example root carries the promoted strict-parity reference package.
 REFERENCE_RUNS: list[Path] = [HERE]
 
 # Reference values from the COMSOL PDF text.
 REF_FIRST_LOAD_KN = 0.63
 # Per-pin units: PDF reports 0.33 mm total elongation -> 0.165 mm per-pin
-# (see displacement-convention note in module docstring; issue #223).
+# (see displacement-convention note in module docstring).
 REF_FIRST_DISP_MM = 0.165
 REF_SECOND_LOAD_KN = 0.15
 # Per-pin units: PDF reports 1.7 mm total elongation -> 0.85 mm per-pin.

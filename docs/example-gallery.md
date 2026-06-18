@@ -1,7 +1,8 @@
 # Example gallery
 
 This section maps core solver capabilities to runnable workflows in the
-repository, so users can quickly check the project’s practical envelope.
+repository, so users can quickly see the public examples that are supported
+today.
 
 ## Representative results
 
@@ -12,10 +13,10 @@ archives. They point to the same workflows listed in the sections that follow.
 
 | Example | Status | Modality | Command | Expected outputs | Inspect with |
 |---|---|---|---|---|---|
-| Miehe tension | Production | YAML-first | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` | CSV histories, run metadata/lockfile, and checked-in gallery visuals/comparison artifacts; run explicit postprocessing if you need regenerated animations from a fresh solve | `phast.load_result("runs/miehe_tension")` |
+| Miehe tension | Production | YAML-first | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` | CSV histories, run metadata/lockfile, and gallery visuals; run explicit postprocessing if you need regenerated animations from a fresh solve | `phast.load_result("runs/miehe_tension")` |
 | Notched-holed plate | Production | YAML-first | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | final damage, response CSVs, comparison report, visual manifest | `phast.load_result("runs/notched_holed_plate")` |
 | Linear plate | Production | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` |
-| Kalthoff-Winkler | Public candidate | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` |
+| Kalthoff-Winkler | Production | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` |
 
 Use the [capability matrix](user_guide/capability_matrix.md) before assuming a
 workflow status. Use the
@@ -61,8 +62,8 @@ auditing a gallery entry.
 
 The quasi-static family is the production path for many literature comparisons.
 
-- **SENT / SENS / TPB / L-panel**: shipped benchmark configs under
-  `configs/benchmarks/quasistatic/` and compare scripts in matching example
+- **SENT / SENS / TPB / L-panel**: benchmark configs under
+  `configs/benchmarks/quasistatic/` and comparison scripts in matching example
   directories.
 - **Run example**:
   `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only`
@@ -77,7 +78,7 @@ The quasi-static family is the production path for many literature comparisons.
   `examples/dynamic/*`.
 - **B7 dynamic branching**:
   `examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` is the
-  public-candidate full-plate COMSOL cross-check.
+  full-plate COMSOL cross-check.
 - **Benchmark workflow**:
   1. Launch via `python -m phast run <cfg>`
   2. Run `compare.py` in the corresponding `examples/dynamic/<case>/` directory.
@@ -114,9 +115,9 @@ The quasi-static family is the production path for many literature comparisons.
 ## Benchmark Catalogue
 
 YAML-driven benchmark configurations live under `configs/benchmarks/`.
-Runnable public examples carry their promoted `config.yaml` files directly in
+Runnable public examples carry their `config.yaml` files directly in
 `examples/`. Prefer the example-local command when a case is promoted, because
-the folder also contains the README, setup image, retained result visuals, and
+the folder also contains the README, setup image, result visuals, and
 postprocessing scripts expected by the public example contract.
 
 Use `python -m phast run <config.yaml> --validate-only` to parse and
@@ -127,7 +128,7 @@ documented in `configs/REFERENCE.yaml`.
 
 | Config | Material | Reference | Acceptance evidence | Status |
 |---|---|---|---|---|
-| `QS_lshaped_concrete.yaml` | concrete, Ambati-style | Winkler 2001 path; Ambati 2015 load-displacement comparison | deferred comparison script | Reference CSV is retained outside the public repository. Do not mark as quantitatively validated until rerun evidence is promoted through the public example contract. |
+| `QS_lshaped_concrete.yaml` | concrete, Ambati-style | Winkler 2001 path; Ambati 2015 load-displacement comparison | comparison script available | Reference CSV is stored outside the public repository. Do not mark as quantitatively validated until rerun evidence is promoted through the public example contract. |
 | `QS_notched_holed_plate.yaml` | cement mortar, Ambati-style | COMSOL 6.4 holed-plate example; Ambati 2015 phase-field formulation | `examples/quasistatic/notched_holed_plate/compare.py` | First-peak load is close; displacement mismatch is attributed to simplified rigid-pin boundary conditions pending full Lagrange-MPC support. |
 
 Miehe tension is already promoted as an example-local YAML workflow under
@@ -140,9 +141,9 @@ flat YAML, manifest, and visualization contract.
 | Config | Material | Reference | Notes |
 |---|---|---|---|
 | `B2_kalthoff_winkler.yaml` | maraging steel | Kalthoff 2000; Borden 2012 Fig. 12 | Half-plate symmetry model with spectral split. |
-| `B3_dynamic_sent.yaml` | Borden glass | Borden 2012 SENT | Spectral split, AT2; public folder contains curated runnable configuration and retained visuals. |
+| `B3_dynamic_sent.yaml` | Borden glass | Borden 2012 SENT | Spectral split, AT2; public folder contains a curated runnable configuration and visuals. |
 | `B5_pmma_branching.yaml` | PMMA, Bleyer-style | Bleyer 2017 branching | AT1 with Amor/volumetric-deviatoric split; two-step prestrain and dynamic release. |
-| `B6_perforated_*.yaml` | PMMA, Bleyer-style | Bleyer 2017 perforated plate | Dynamic AT1 with Amor split; promoted layouts include one-hole near/far, 10-hole, and 30-hole variants. |
+| `B6_perforated_*.yaml` | PMMA, Bleyer-style | Bleyer 2017 perforated plate | Dynamic AT1 with Amor split; public layouts include one-hole near/far, 10-hole, and 30-hole variants. |
 | `B7_dynamic_crack_branching_comsol.yaml` | glass/PMMA-equivalent override | COMSOL 6.4 dynamic crack-branching example | AT1 with Amor/volumetric-deviatoric split; traction-controlled full-plate comparison. |
 
 ### Acceptance Checks

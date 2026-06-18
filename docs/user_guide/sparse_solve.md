@@ -1,69 +1,83 @@
-# Sparse linear solver (autograd-enabled)
+# Sparse linear solver
 
-Backend selection, worked examples, and how the autograd-aware sparse solve
-fits into the implicit-solver path.
+PhAST is organized around a matrix-free primary solve path, but several public
+workflows benefit from an explicit sparse operator during preconditioner setup,
+validation, or small auxiliary solves. This page explains when that route is
+used, what it provides, and how to choose the backend.
 
+## Purpose
 
-This makes the code:
-- **Readable**: Any PyTorch user can follow the FEM assembly
-- **Debuggable**: Standard PyTorch profiling and debugging tools work
-- **Portable**: Runs on CUDA, MPS, and CPU without platform-specific sparse libraries
-- **Testable**: Easy to verify against analytical solutions
+The sparse pathway exists for three reasons:
 
-### Where Matrix-Free Hurts Us
+- to build stronger preconditioners for the damage and mechanics solves;
+- to support direct inspection of assembled operators when debugging a run;
+- to provide a conventional sparse representation for workflows that need it.
 
-We are honest about the trade-offs. Matrix-free has real disadvantages:
+The main forward solve still follows the matrix-free path. Sparse assembly is a
+supporting capability rather than the default execution model.
 
-#### 1. Preconditioner Quality
+## When to use the sparse path
 
-Historically our biggest gap vs reference codes. The best preconditioners (AMG,
-ILU, Cholesky) require an assembled sparse matrix.
+Use a sparse representation when one of the following is true:
 
-**What we have now (v0.9.0):**
+- convergence is poor with a purely diagonal preconditioner;
+- a run must be compared against a direct or assembled reference solver;
+- a workflow needs a conventional matrix for analysis or external tooling;
+- a small problem is better served by a direct solve than by a Krylov method.
 
-- **Jacobi** (diagonal): 3-10x iteration reduction. Always available.
-- **2-level Geometric Multigrid** (v0.9.0, `multigrid.py`): 5-10x iteration
-  reduction on top of Jacobi. Uses our scatter infrastructure for the fine level
-  and assembles a dense coarse operator via node aggregation — **no global sparse
-  matrix required.** See the **Multigrid Preconditioner** section below for
-  details.
+For large production fracture runs, the sparse matrix is typically most useful as
+an internal preconditioning aid. For small verification problems, a direct
+sparse solve may be acceptable.
 
-**What the reference codes have:**
-- **MUMPS** (direct LU): Zero iterations — one factorization, exact solve. But
-  O(N^1.5) memory and not GPU-friendly.
-- **AMG** (algebraic multigrid): 50-100x iteration reduction. Requires sparse K.
-- **hypre**: GPU-accelerated AMG. Requires sparse K.
+## Backend selection
 
-**Current state:** With 2-level GMG, our damage CG converges in ~5-10 iterations
-(vs ~50 with Jacobi alone). This is competitive with AMG on moderately-sized
-meshes (<50K nodes). For very large meshes (>100K nodes), AMG's ability to build
-deeper hierarchies gives it an edge.
+Backend choice depends on the hardware and on whether the solve is direct or
+iterative.
 
-**Remaining plan (see issue #67):**
-- Medium-term: Assemble sparse K only for the preconditioner setup, keep the
-  matvec matrix-free. Feed K to PyAMG for a proper AMG hierarchy. Best of both
-  worlds.
-- The method `mesh.assemble_sparse_matrix()` already exists for this purpose.
+| Platform | Preferred option | Notes |
+|---|---|---|
+| CUDA GPU | `amg` or `gmg` | `amg` is appropriate when a sparse setup is worthwhile; `gmg` is the portable fallback. |
+| CPU | `amg` or direct sparse solve | Use a direct solver for small problems and AMG for larger ones. |
+| Apple MPS | `gmg` | Portable and numerically robust for the current PhAST workflows. |
 
-#### 2. Direct Solvers
+The exact solver selection is controlled through the public configuration
+surface and the corresponding example deck.
 
-For small problems (<10K DOFs), direct solvers (MUMPS, SuperLU) are faster than
-CG — one factorisation, no iteration. We can't use direct solvers without a
-sparse matrix. For our target use case (training data generation on GPU with
-10K-1M DOFs), iterative solvers are appropriate.
+## Preconditioner quality
 
-#### 3. Condition Number Estimation
+The main practical benefit of sparse assembly is improved preconditioning. A
+simple diagonal preconditioner is often sufficient for small verification
+problems, but fracture simulations with sharp stiffness contrasts usually
+benefit from a multilevel preconditioner.
 
-AMG setup automatically estimates the condition number and adapts the hierarchy.
-Our Jacobi preconditioner is blind to conditioning. We compensate with:
-- Convergence checks every 50 iterations (not every iteration)
-- CG divergence detection (`||r|| > 1e6 * ||r_0||`)
-- H-capping to prevent condition number explosion near d→1
+Common options are:
 
-### The Middle Ground: Selective Sparse Assembly
+- **Jacobi**: the simplest and most portable choice.
+- **Geometric multigrid**: suitable when a coarse hierarchy can be built from
+  the mesh and the physics remain well conditioned.
+- **Algebraic multigrid**: useful when an assembled sparse matrix is available
+  and a stronger hierarchy is needed.
 
-We are moving toward a hybrid approach where the **matvec stays matrix-free** but
-we **assemble K once** for preconditioner construction:
+## Practical guidance
 
-```python
+1. Prefer the matrix-free forward path for the main nonlinear solve.
+2. Assemble a sparse operator only when it is needed for preconditioning or
+   debugging.
+3. Use the smallest backend that still converges reliably for the target
+   problem.
+4. Verify a new configuration on a small mesh before scaling to a larger run.
+5. If a sparse path is used for a public example, record the exact backend and
+   solver settings in the run manifest.
 
+## Relation to the rest of PhAST
+
+Sparse solving is one component of the broader workflow:
+
+1. define the geometry and regions;
+2. assign materials and boundary conditions;
+3. choose the analysis step and solver settings;
+4. execute the run;
+5. inspect the stored histories and visual artifacts.
+
+The sparse solver supports step 3, but it does not replace the workflow
+definitions or the result-inspection APIs.

@@ -1,9 +1,9 @@
 schema_version: 1
 # =====================================================================
 # B7 -- Dynamic crack branching, COMSOL 6.4 reference cross-check
-# Issue #135. Third independent reference for the PMMA-style dynamic
-# Y-branching benchmark already validated in Paper 1 against
-# Borden 2012 (B1) and Bleyer 2017 (B5).
+# Third independent reference for the PMMA-style dynamic Y-branching
+# benchmark, already validated against Borden 2012 (B1) and Bleyer
+# 2017 (B5).
 #
 # Distinguishing feature: traction-controlled (Neumann sigma_n = 1 MPa
 # with smooth-step ramp), versus B1/B5 which are displacement-controlled.
@@ -11,7 +11,7 @@ schema_version: 1
 # Run:
 #   python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml
 #
-# Acceptance (issue #135 + #299 reframing):
+# Acceptance:
 #   - Initiation t ~ 10 us
 #   - Branching onset t ~ 68.2 us (Ren 2019 mesh-2 value, within +/-20%)
 #     COMSOL's 33 us Application Library event is tracked as secondary
@@ -46,12 +46,11 @@ acceptance:
       target: "COMSOL half-plate value doubled for full-plate convention"
       tolerance: "same domain convention must be stated in compare report"
   notes: >
-    Root config is the stable public B7 entry point and now matches COMSOL's
-    AT1 plus Amor/volumetric-deviatoric split. Issue #299 is resolved by using
-    the published Ren/Borden-style timing window as the default validation
-    target and treating the COMSOL 33 us event as secondary vendor context.
-    Exact COMSOL timing parity remains diagnostic provenance, not the release
-    acceptance gate.
+    Root config is the stable public B7 entry point and matches COMSOL's
+    AT1 plus Amor/volumetric-deviatoric split. The published Ren/Borden-style
+    timing window is the default validation target, while the COMSOL 33 us
+    event remains secondary vendor context. Exact COMSOL timing parity remains
+    diagnostic provenance, not the release acceptance gate.
 
 # Geometry: full-plate equivalent of COMSOL's half-plate setup.
 # COMSOL: full sample is 100 x 40 mm, but the model uses symmetry
@@ -61,13 +60,13 @@ acceptance:
 # full plate with central pre-crack from x=0 to x=50 at y=H/2,
 # tractions on both top and bottom.
 # This matches COMSOL's *full-plate equivalent* energy budget
-# (half-plate energy x 2). Diverges from B1/B5/Borden Paper 1
-# convention (100 x 40 mid-notch); kept distinct on purpose so the
+# (half-plate energy x 2). This is distinct from the standard
+# 100 x 40 mm mid-notch branching convention; kept separate so the
 # B7 elastic-energy ledger is comparable to COMSOL Fig 4 directly.
 #
-# Inline-primitive DSL (issue #192). Plate (W=100, H=40, a=50) minus
-# a triangular wedge notch polygon (edge-flush at x=0). Right-half
-# branching band reproduced via mode='box' refinement (PR #200).
+# Inline-primitive DSL. Plate (W=100, H=40, a=50) minus a triangular
+# wedge notch polygon (edge-flush at x=0). Right-half branching band is
+# reproduced via mode='box' refinement.
 # `notch.boundary` (auto-exposed by the polygon subtract) replaces
 # the legacy `notch_upper`/`notch_lower` split: both BCs were applied
 # identically (pf_dirichlet=1.0, preseed) so collapsing them to a
@@ -140,8 +139,8 @@ boundary_conditions:
 # Pin the bottom-left corner in x to remove rigid-body translation in x.
 # (Single point; doesn't perturb the global response.)
 - {nodes: left,   type: fix,       component: 0}
-# Phase-field Dirichlet (issue #213): lock damage phi=1 at the
-# pre-existing crack notch nodes for the entire simulation. This is
+# Phase-field Dirichlet: lock damage phi=1 at the pre-existing crack
+# notch nodes for the entire simulation. This is
 # the COMSOL pre-crack convention — pf_dirichlet *constrains* the
 # damage solve at every step, while ``preseed_notch_nodesets`` below
 # only sets the initial elastic state at t=0. Both coexist cleanly:
@@ -154,14 +153,14 @@ initial_conditions:
   # Pre-existing crack: pre-seed the notch nodes (auto-exposed by the
   # polygon subtract) so AT1 is initialised with d=1 there at t=0.
   # Coexists with the ``pf_dirichlet`` BC above: preseed handles t=0,
-  # pf_dirichlet handles t > 0 (issue #213).
+  # pf_dirichlet handles t > 0.
   preseed_notch_nodesets: [notch.boundary]
 
 loading:
   protocol: simple
   ramp_type: smooth          # 0.5*(1 - cos(pi*t/t_ramp)) traction ramp
   t_ramp: 5.0e-8             # smooth-step over first 0.05 us
-  # Tuning history (#213 branching-onset diagnostic, 2026-05-06):
+  # Tuning history (branching-onset diagnostic, 2026-05-06):
   # was 5.0e-6 (5 us). HPC job 28652 reported branching at 78 us.
   # COMSOL Geomechanics PDF p. 10 specifies smooth-
   # step transition zone of 0.05 us; PhaFiDyn (Barki 2025) loads
@@ -177,7 +176,7 @@ solver:
   use_multigrid: false       # AT1 + projected_cg uses Jacobi (see B5)
   bounds_method: projected_cg
   damage_every: 2            # phase-field every 2nd step (per task spec)
-  eta_residual: 1.0e-7  # was 1.0e-6 (legacy default); aligned with Material (#272/#276)
+  eta_residual: 1.0e-7  # aligned with Material
 
 output:
   trajectory: true

@@ -9,16 +9,14 @@
     <p class="phast-eyebrow">CEMS Lab · PyTorch-native FEM workflows</p>
     <h2>Matrix-free, differentiable phase-field fracture and FEM benchmarks in PyTorch.</h2>
     <p>
-      PhAST is a matrix-free, differentiable finite-element framework for 2D brittle
-      phase-field fracture, explicit dynamics, quasi-static benchmark
-      reproduction, and promoted solid-mechanics examples. The public docs
-      separate production, beta, optional-backend, scaffold, and unsupported
-      capabilities so solver claims stay reproducible.
+      <b>What is PhAST?</b> PhAST is a Python library built on PyTorch that allows you to solve phase-field fracture problems without assembling large global matrices. It is designed to be differentiable, making it easier to combine with machine learning techniques.
+      <br><br>
+      <i>(New to phase-field modeling? Read our <a href="tutorial/01_phase_field_primer.html">Phase-Field Primer</a> and the <a href="tutorial/02_visual_glossary.html">Visual Glossary</a> to learn the basics).</i>
     </p>
     <p>
-      Use the fluent <code>phast.Problem</code> API to author new models. Use
-      YAML configurations for public examples, reproducibility, batch/HPC runs, and
-      sharing exact simulations.
+      Use the fluent <code>phast.Problem</code> API to author new models. Use YAML
+      configurations for public examples, reproducibility, batch runs, and exact
+      reruns of published simulations.
     </p>
     <p class="phast-hero-links">
       <a class="phast-button" href="getting-started.html">Get started</a>
@@ -45,20 +43,20 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 <div class="phast-card-grid">
   <div class="phast-card">
     <h3>Matrix-free operators</h3>
-    <p>Explicit fracture mechanics and damage updates use tensorized PyTorch
-    kernels without persistent global stiffness assembly on the main dynamic path.</p>
+    <p>Fracture and damage updates use operations on PyTorch tensors without
+    persistent global stiffness assembly on the main dynamic path.</p>
     <p><a href="user_guide/physics.html">Formulation</a></p>
   </div>
   <div class="phast-card">
     <h3>Differentiable mechanics</h3>
-    <p>Supported tensor operations stay close to PyTorch autograd, making forward
-    runs inspectable and extensible for sensitivity studies.</p>
+    <p>Supported tensor operations remain compatible with PyTorch autograd,
+    making forward runs inspectable and extensible for sensitivity studies.</p>
     <p><a href="user_guide/public_api_reference.html">API reference</a></p>
   </div>
   <div class="phast-card">
     <h3>Public benchmark bundles</h3>
-    <p>Promoted examples include YAML inputs, setup figures, final fields,
-    response histories, manifests, and compact animations.</p>
+    <p>Public examples include YAML inputs, setup figures, final fields, response
+    histories, manifests, and compact animations.</p>
     <p><a href="example-gallery.html">Example gallery</a></p>
   </div>
   <div class="phast-card">
@@ -79,6 +77,15 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 | [Example gallery](example-gallery.md) | Runnable fracture, solid-mechanics, and beta validation examples with visual outputs. |
 | [Performance and reproducibility](performance-reproducibility.md) | Device choice, backend policy, timing evidence, and `torch.compile` reporting. |
 | [Community](community.md) | Issues, discussions, maintainer review, and contribution route. |
+
+## For New Users: Your First 15 Minutes
+
+If you are new to PhAST, we recommend following this path:
+1. **Learn the Basics:** Read the "What is PhAST?" summary above, then follow the [Phase-Field Primer](tutorial/01_phase_field_primer.md) and [Visual Glossary](tutorial/02_visual_glossary.md).
+2. **Install:** Follow the [Getting Started](getting-started.md) guide.
+3. **Run a Simple Example:** Run `python -m phast run examples/quasistatic/miehe_tension/config.yaml` to see a result quickly.
+4. **Understand the API:** Read the [Python API](user_guide/python_api.md) to understand how the models are defined.
+5. **Check Capabilities:** Review the [Capability Matrix](user_guide/capability_matrix.md) to ensure your target problem is supported.
 
 ## Which Path Should I Use?
 
@@ -107,6 +114,7 @@ citing
 troubleshooting
 tutorial/index
 tutorial/01_phase_field_primer
+tutorial/02_visual_glossary
 tutorial/04_exploration_experiments
 user_guide/capability_matrix
 ```

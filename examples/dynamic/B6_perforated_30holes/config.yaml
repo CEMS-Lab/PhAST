@@ -13,10 +13,10 @@ geometry:
     h_coarse: 1.0
     n_holes: 30
     hole_spacing: 0.9
-# Geometry: kept on the perforated_sent generator. Multi-hole
+# Geometry is kept on the perforated_sent generator. Multi-hole
 # layouts (1/10/30 holes with internal slit) exceed the
 # rectangle/circle base+subtract scope of the current inline
-# compiler (issue #147 scope note).
+# compiler.
 # Inline material — Bleyer et al. (2017) PMMA, plane stress.
 material:
   E: 3090.0             # 3.09 GPa

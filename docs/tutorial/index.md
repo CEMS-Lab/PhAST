@@ -15,6 +15,7 @@ Launch the step-by-step problem setup notebook in Colab:
 | [Getting started](../getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
 | [Problem setup notebook](problem_setup_walkthrough.ipynb) | 30-45 min | Create geometry, mesh and inspect named regions, apply initial conditions, supports, loads, solver settings, run a short solve, and post-process artifacts. |
 | [Python API](../user_guide/python_api.md) | 10-15 min | Author a model with `phast.Problem` and understand the fluent method map. |
+| [Visual glossary](02_visual_glossary.md) | 10 min | Read the picture-first guide to AT1/AT2, energy splits, and `l0`. |
 | [YAML workflow](../user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
 | [Example gallery](../example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |
 | [Public API reference](../user_guide/public_api_reference.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
@@ -26,7 +27,8 @@ Launch the step-by-step problem setup notebook in Colab:
 3. Run one small public example into `runs/<case>`.
 4. Inspect the completed run with `phast.load_result(...)`.
 5. Build a small model with `phast.Problem`.
-6. Move durable studies into a YAML configuration when you need reproducibility or HPC
+6. Read the [visual glossary](02_visual_glossary.md) if the terminology feels abstract.
+7. Move durable studies into a YAML configuration when you need reproducibility or HPC
    submission.
 
 Users coming from Abaqus, COMSOL, FEniCS, or deal.II should read

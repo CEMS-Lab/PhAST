@@ -68,10 +68,10 @@ regenerated with the current public configuration file.
 
 ![Dynamic timing comparison](../assets/dynamic_timing_comparison.png)
 
-This figure is regenerated from the current retained SENT and Kalthoff-Winkler
-timing CSVs using Akantu, FEniCS, and PhAST final timing traces. Treat it as a
-reproducibility artifact for Paper-1 performance discussion, not as a universal
-hardware-independent claim. The source summary CSV is kept at
+This figure is regenerated from the current SENT and Kalthoff-Winkler timing
+CSVs using Akantu, FEniCS, and PhAST final timing traces. Treat it as a
+reproducibility artifact for the public performance discussion, not as a
+universal hardware-independent claim. The source summary CSV is kept at
 `assets/dynamic_timing_comparison.csv`.
 
 ## Hardware optimization and `torch.compile`
