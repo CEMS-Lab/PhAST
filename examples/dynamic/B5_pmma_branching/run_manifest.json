@@ -37,17 +37,20 @@
   "files": [
     "README.md",
     "config.yaml",
-    "run_fluent.py",
-    "mesh.geo",
-    "run_metadata.json",
-    "run_manifest.json",
-    "visual_manifest.json",
-    "history.csv",
-    "energy.csv",
     "crack_tip.csv",
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
+    "damage_final.png",
+    "energy.csv",
+    "history.csv",
     "initial_conditions.png",
+    "mesh.geo",
+    "run_fluent.py",
+    "run_lockfile.json",
+    "run_manifest.json",
+    "run_metadata.json",
     "thumbnail.png",
-    "damage_final.png"
+    "visual_manifest.json"
   ],
-  "notes": "Promoted from the specific B5a PMMA dU=0.05 reference environment archive requested for public B5 visual evidence. Raw job clutter stays external."
+  "notes": "Promoted from the specific B5a PMMA dU=0.05 reference archive requested for public B5 visual evidence. Raw trajectory stores, full run folders, and generated mesh.msh remain external because of size."
 }

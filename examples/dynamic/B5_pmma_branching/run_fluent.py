@@ -1,4 +1,4 @@
-"""Run the B5 PMMA branching example without a YAML deck."""
+"""Run the B5 PMMA branching example without a YAML configuration."""
 
 from __future__ import annotations
 

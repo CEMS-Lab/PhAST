@@ -1,20 +1,20 @@
 # B5 PMMA Branching
 
-Selected PMMA dynamic crack branching sweep based on Bleyer, Roux-Langlois, and Molinari (2017). The reference bundle uses one representative accelerated compute visual-evidence subset and keeps only lightweight public artifacts in the flat example folder.
+Selected PMMA dynamic crack-branching case based on Bleyer, Roux-Langlois, and Molinari (2017). The reference bundle uses the `dU = 0.05 mm` accelerated-compute run and keeps only lightweight public artifacts in this flat example folder.
 
-All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic diagnostics are intentionally excluded.
+All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, generated `mesh.msh`, external COMSOL model files, and diagnostic outputs are intentionally excluded.
 
 ## 1. Problem Description
 
 - 32 mm x 16 mm PMMA plate with a 4 mm wedge notch and fine right-half branching band.
 - Material model: PMMA, AT1 phase field, Amor split, plane stress, explicit dynamics.
 - Loading: two-step prestrain followed by dynamic release with symmetric vertical displacement prescription.
-- Claim boundary: visual PMMA crack-path evidence; data recordd metadata did not detect an automatic branch step.
+- Claim boundary: visual PMMA crack-path evidence from the selected public run; the archived metadata does not report an automatic branch step.
 
-The YAML configuration is the canonical public input for this example. Expected runtime depends strongly on mesh size, device, and output cadence; the checked-in outputs are curated evidence and should not be regenerated during lightweight contract checks.
+The YAML configuration is the canonical public input for this example. The retained reference run used 949,210 nodes, 1,894,256 elements, 19,001 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
 
 
-## Run The Canonical YAML configuration
+## Run The Canonical YAML Configuration
 
 From the repository root:
 
@@ -40,6 +40,16 @@ python -m phast run examples/dynamic/B5_pmma_branching/config.yaml \
 ```
 
 Do not treat the short check as benchmark evidence; it is only a quick check for the declarative configuration and runner plumbing.
+
+To regenerate a mesh from the public geometry recipe:
+
+```bash
+gmsh examples/dynamic/B5_pmma_branching/mesh.geo \
+  -2 -format msh2 \
+  -o examples/dynamic/B5_pmma_branching/mesh.msh
+```
+
+The public folder keeps `mesh.geo` but not `mesh.msh`; the generated mesh is large and the YAML path can compile the declarative geometry when a full rerun is required. Gmsh version and import/export settings can produce small node/element-count differences from the retained reference metadata.
 
 ## How The YAML Is Used
 
@@ -100,11 +110,12 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 
 | Initial conditions | Damage evolution |
 |---|---|
+| <img src="initial_conditions.png" alt="B5 PMMA branching initial conditions" width="360"> | <img src="damage_evolution.gif" alt="B5 PMMA branching damage evolution" width="360"> |
 
 | Quantity | Reference evidence | Status |
 | --- | --- | --- |
-| Recorded run | Selected PMMA branching reference run | PRESENT |
-| Branch metadata | branch_step and branch_time_us are null in data recordd metadata | DOCUMENTED |
-| Public evidence | Damage, stress/displacement, space-time, energy, velocity, and comparison PNG/CSV files | PRESENT |
+| Recorded run | Selected `dU = 0.05 mm` PMMA branching reference run | PRESENT |
+| Branch metadata | Automatic branch-step detection was not triggered in the archived metadata | DOCUMENTED |
+| Public evidence | Setup image, final damage image, damage animation, history, energy, crack-tip CSV, manifests, and run metadata | PRESENT |
 
 The public result bundle is lightweight by design. It is suitable for documentation, review, and drift checks, while large full trajectories and source datasets remain outside the public example folder.
