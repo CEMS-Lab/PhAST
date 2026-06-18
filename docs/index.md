@@ -76,6 +76,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 | Reproduce or batch-run examples | [YAML workflow](user_guide/yaml_workflow.md) | `python -m phast run config.yaml` |
 | Inspect completed runs | [Public API reference](user_guide/public_api_reference.md) | `phast.load_result(path)` |
 | Browse runnable examples | [Example gallery](example-gallery.md) | flat public example folders |
+| Diagnose failed runs | [Troubleshooting](troubleshooting.md) | units, mesh, backend, and output checks |
 | Check supported physics | [Capability matrix](user_guide/capability_matrix.md) | production / beta / scaffold labels |
 
 ```{toctree}
@@ -84,6 +85,8 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 getting-started
 user_guide/public_api_reference
 agent-contribution-guide
+citing
+troubleshooting
 tutorial/index
 tutorial/01_phase_field_primer
 tutorial/04_exploration_experiments

@@ -6,6 +6,10 @@ inspection.
 
 ## Start Here
 
+Launch the step-by-step problem setup notebook in Colab:
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CEMS-Lab/PhAST/blob/main/docs/tutorial/problem_setup_walkthrough.ipynb)
+
 | Tutorial | Time | What you learn |
 |---|---:|---|
 | [Getting started](../getting-started.md) | 5 min | Install PhAST, run `doctor`, validate a shipped example, and inspect a result. |
@@ -102,3 +106,4 @@ public tutorial path until it is promoted.
 - [YAML workflow](../user_guide/yaml_workflow.md)
 - [Example result contract](../user_guide/example_contract.md)
 - [Capability matrix](../user_guide/capability_matrix.md)
+- [Troubleshooting](../troubleshooting.md)

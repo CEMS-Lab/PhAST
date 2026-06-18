@@ -104,6 +104,7 @@ Browse the full [example gallery](docs/example-gallery.md) for the complete list
 | Post-process simulation data | `phast.load_result(path)` | [Public API Reference](docs/user_guide/public_api_reference.md) |
 | Review supported physics | Capability matrix | [Capability Matrix](docs/user_guide/capability_matrix.md) |
 | Learn step-by-step setup | Tutorial notebook | [Problem Setup Walkthrough](docs/tutorial/problem_setup_walkthrough.ipynb) |
+| Diagnose failed runs | Troubleshooting guide | [Troubleshooting](docs/troubleshooting.md) |
 
 ### Programmatic Authoring
 
@@ -177,6 +178,9 @@ Use [`CITATION.cff`](CITATION.cff) when referencing the PhAST solver framework.
 A manuscript describing the formulation, benchmarks, and inverse-analysis
 examples is in preparation; paper citation details will be added after public
 preprint or publication.
+
+The Sphinx documentation includes a short [how-to-cite page](docs/citing.md)
+with a repository BibTeX entry and reproducibility notes.
 
 ## Acknowledgments
 
