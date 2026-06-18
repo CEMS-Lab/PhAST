@@ -23,11 +23,14 @@ where only the tensile part of the strain energy is degraded and the crack
 follows the tensile notch tip.
 
 ```{figure} ../_static/visual_glossary_energy_split.png
-:alt: Schematic comparison of isotropic and spectral energy splits
+:alt: Schematic comparison of isotropic and spectral energy splits under bending
 :width: 100%
 
-Energy-split schematic used to distinguish isotropic degradation from a
-spectral split. The figure is illustrative rather than a simulation output.
+Conceptual comparison of phase-field damage under bending for two elastic
+energy formulations. Isotropic degradation lets the total strain energy drive
+damage and can therefore accumulate damage in a compressive zone. A spectral
+split restricts the driving force to the tensile strain contribution. This
+diagram is an idealized explanation and is not a direct PhAST simulation result.
 ```
 
 ## AT1 and AT2 at a glance
