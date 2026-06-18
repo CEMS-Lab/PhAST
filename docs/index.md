@@ -2,7 +2,7 @@
 
 **Phase-field Autograd Solver in Torch**
 
-<img class="phast-hero-brand" src="../assets/phast-banner.png" alt="PhAST logo">
+<img class="phast-hero-brand" src="phast-banner.png" alt="PhAST logo">
 
 <div class="phast-hero-panel">
   <div>
@@ -36,7 +36,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 </div>
 
 <figure class="phast-wide-figure">
-  <img src="../assets/kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler impact crack growth">
+  <img src="kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler impact crack growth">
   <figcaption>Dynamic fracture showcase: Kalthoff-Winkler impact crack growth.</figcaption>
 </figure>
 

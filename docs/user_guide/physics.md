@@ -178,10 +178,10 @@ gallery includes crack curvature and branching examples such as
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="../../examples/dynamic/B2_kalthoff_winkler/damage_final.png" alt="Kalthoff-Winkler final damage" width="95%">
+      <img src="../kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler crack growth" width="95%">
     </td>
     <td align="center" width="50%">
-      <img src="../../examples/dynamic/B7_dynamic_crack_branching_comsol/damage_evolution.gif" alt="Dynamic crack branching damage evolution" width="95%">
+      <img src="../b7_crack_branching_evolution.gif" alt="Dynamic crack branching damage evolution" width="95%">
     </td>
   </tr>
   <tr>

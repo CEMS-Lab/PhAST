@@ -24,31 +24,31 @@ auditing a gallery entry.
 
 <div class="phast-card-grid phast-thumb-grid">
   <div class="phast-card phast-thumb-card">
-    <img src="../assets/qs_notched_holed_damage.png" alt="Quasi-static notched holed plate damage field">
+    <img src="qs_notched_holed_damage.png" alt="Quasi-static notched holed plate damage field">
     <h3>Quasi-static fracture</h3>
     <p>Implicit AT1/AT2 crack-path workflows with comparison reports and
     standard run metadata.</p>
   </div>
   <div class="phast-card phast-thumb-card">
-    <img src="../assets/kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler crack growth">
+    <img src="kalthoff_winkler_long_crack.gif" alt="Kalthoff-Winkler crack growth">
     <h3>Dynamic fracture</h3>
     <p>Explicit dynamics for impact, branching, and perforated-plate
     crack-growth benchmarks.</p>
   </div>
   <div class="phast-card phast-thumb-card">
-    <img src="../assets/perforated_microstructure_damage.png" alt="Perforated plate microstructure damage field">
+    <img src="perforated_microstructure_damage.png" alt="Perforated plate microstructure damage field">
     <h3>Microstructured media</h3>
     <p>Perforated-plate and heterogeneous fracture cases used for dataset and
     morphology studies.</p>
   </div>
   <div class="phast-card phast-thumb-card">
-    <img src="../assets/qs_force_displacement.png" alt="Force displacement curve">
+    <img src="qs_force_displacement.png" alt="Force displacement curve">
     <h3>Engineering outputs</h3>
     <p>Force-displacement, energy, convergence, lockfile, and visualization
     artifacts from reproducible runs.</p>
   </div>
   <div class="phast-card phast-thumb-card">
-    <img src="../assets/solid_mechanics_materials.png" alt="Solid mechanics material models">
+    <img src="solid_mechanics_materials.png" alt="Solid mechanics material models">
     <h3>Solid mechanics</h3>
     <p>Linear elastic, hyperelastic, and J2 mechanics examples backed by the
     same sparse-solve and material-update paths used by the solver.</p>
