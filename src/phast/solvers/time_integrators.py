@@ -1,8 +1,7 @@
-"""Hulbert-Chung generalized-alpha time integrator (issue #102).
+"""Hulbert-Chung generalized-alpha time integrator.
 
 Function-style API kept independent of FEMOperators/ExplicitDynamics so the
-existing velocity-Verlet path stays bit-exact for current benchmarks. Wiring
-into B1/B5 dynamic benchmarks is a separate follow-up.
+existing velocity-Verlet path stays bit-exact for current benchmarks.
 
 Reference: Chung & Hulbert, J. Appl. Mech. 60 (1993) 371-375
 (https://doi.org/10.1115/1.2900803); Borden 2012 §3.2.

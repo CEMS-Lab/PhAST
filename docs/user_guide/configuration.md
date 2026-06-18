@@ -1,11 +1,10 @@
 # Configuration guide
 
-Preconditioner auto-selection, Anderson acceleration, energy-split decision
-tree, convergence criteria, recommended per-benchmark settings, and the YAML
-configuration system.
+This guide summarizes the configuration choices that most strongly affect
+stability, convergence, and reproducibility in PhAST.
 
 ```python
-mat = create_material('glass_borden', eta_residual=1e-6)  # old value
+mat = create_material('glass_borden', eta_residual=1e-6)
 ```
 
 ---
@@ -87,10 +86,10 @@ Is the problem pure Mode I tension?
 | Problem class | Solver | `solver_type` | Status | Use case |
 |---|---|---|---|---|
 | Nonlinear quasi-static | `QuasiStaticSolver` | `quasi_static` | Primary path for new quasi-static fracture runs | Newton-Raphson with sparse-direct or matrix-free mechanics; spectral direct uses a frozen-state secant tangent. |
-| Nonlinear quasi-static | `SecantCGSolver` | `quasi_static_legacy` | Retained compatibility path | Frozen-secant CG for older accepted runs and selected iterative-CG connector support. |
+| Nonlinear quasi-static | `SecantCGSolver` | `quasi_static_legacy` | Compatibility path for older validated runs | Frozen-secant CG for older accepted runs and selected iterative-CG connector support. |
 | Explicit dynamics | `ExplicitDynamics` | `explicit` | Active dynamic-fracture path | Impact, wave-driven fracture, branching, and rapid trajectory generation. |
-| Linear static equilibrium | `StaticSolver` | `static` | Internal/supporting path | Single load step with `d=0`, used by selected mechanics setup paths. |
-| Nonlinear minimisation | `LBFGSSolver` | `lbfgs` | Available but not a promoted benchmark default | Gradient-only minimisation when tangent matvecs are unavailable or expensive. |
+| Linear static equilibrium | `StaticSolver` | `static` | Supporting path | Single load step with `d=0`, used by selected mechanics setup paths. |
+| Nonlinear minimisation | `LBFGSSolver` | `lbfgs` | Available for specialized studies | Gradient-only minimisation when tangent matvecs are unavailable or expensive. |
 
 | Problem | Solver | Why |
 |---------|--------|-----|
@@ -125,8 +124,8 @@ solver:
 ```
 
 The first explicit steps still solve damage every step to capture crack
-nucleation. Treat subcycling as a performance setting, not a change to the
-validated benchmark definition.
+nucleation. Treat subcycling as a performance setting, not as a change to the
+benchmark definition.
 
 Smooth load ramps reduce high-frequency oscillations from instantaneous
 tractions. In YAML, prefer `ramp_type: smooth_step` with an explicit `t_ramp`
@@ -174,10 +173,10 @@ acceptance:
   notes: "Reaction convention and extraction script must be cited here."
 ```
 
-`python -m phast explain-config <config.yaml>` prints this block,
-and YAML runs preserve it in the resolved config and run lockfile. Keep the
-status below `validated` until the reference extraction and output artifacts
-are stored in the repo or linked from the issue.
+`python -m phast explain-config <config.yaml>` prints this block, and YAML runs
+preserve it in the resolved config and run lockfile. Keep the status below
+`validated` until the reference extraction and output artifacts are stored in
+the repository or linked from the public record.
 
 ### Material Presets Quick Reference
 
@@ -200,18 +199,15 @@ are stored in the repo or linked from the issue.
   only when validating that preconditioner path explicitly
 - Increase `--damage_cg_tol` from 1e-5 to 1e-4 if convergence is too slow
 - For spectral/amor splits, both `QuasiStaticSolver` (`quasi_static`, default
-  since PR #170) and `SecantCGSolver` (`quasi_static_legacy`) are supported;
+  ) and `SecantCGSolver` (`quasi_static_legacy`) are supported;
   fall back to `quasi_static_legacy` if the new spectral-split tangent
   exhibits stalls on a particular configuration
-- **v0.11.2 fix:** If CG reports 5000 iterations every step, update to v0.11.2.
-  Three bugs caused the damage CG to spin at max_iter: (1) absolute tolerance
-  unreachable for small RHS at low damage, (2) AMG preconditioner returning
-  non-descent directions for reaction-dominated systems, (3) AMG hierarchy
-  rebuilt every step (100ms waste). Fix: relative tolerance, AMG quality
-  detection with Jacobi fallback, cached AMG hierarchy. Result: CG=5-18
-  iterations instead of 5000 on the same CUDA hardware. Treat this as a
-  version-to-version solver robustness improvement, not as a cross-code
-  performance claim.
+- **Version note:** If CG reports 5000 iterations every step, update to a
+  release that includes the corresponding convergence fix. Earlier revisions
+  could stall because of an overly strict absolute tolerance, unstable AMG
+  directions in reaction-dominated regimes, and unnecessary hierarchy
+  rebuilds. The corrected path uses a relative tolerance, quality checks with
+  Jacobi fallback, and cached hierarchy data.
 
 **`[AMG] pyAMG failed (array must not contain infs or NaNs), skipping
 hierarchy rebuild` warnings during crack transition:**

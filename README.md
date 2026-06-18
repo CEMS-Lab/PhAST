@@ -27,24 +27,35 @@
 
 ---
 
-PhAST is a matrix-free, differentiable PyTorch solver for 2D phase-field fracture, explicit dynamics, and supporting solid-mechanics workflows. It keeps mechanics, damage evolution, and post-processing close to PyTorch tensors, so simulations can be inspected, differentiated, and reproduced using standard Python tooling.
+## What is PhAST?
 
-The repository foregrounds brittle phase-field fracture benchmarks prepared for the associated solver paper. Solid mechanics, plasticity, cohesive-interface, and PF-CZM examples are included with explicit status labels in the [capability matrix](docs/user_guide/capability_matrix.md).
+PhAST is a Python library built on PyTorch that allows you to solve phase-field fracture problems without assembling large global matrices. It is designed to be differentiable, making it easier to combine with machine learning techniques.
+
+*(New to phase-field modeling? Read our [Phase-Field Primer](docs/tutorial/01_phase_field_primer.md) to learn the basics).*
 
 Models can be authored programmatically via the fluent `phast.Problem` Python API, or executed declaratively via YAML configurations for batch processing, HPC submission, and exact reproducibility.
 
 ## Core Strengths
 
-- **Matrix-Free Operators:** Explicit fracture mechanics and damage updates use tensorized PyTorch kernels without persistent global stiffness assembly on the main dynamic path.
+- **Matrix-Free Operators:** Explicit fracture mechanics and damage updates use operations on PyTorch tensors without persistent global stiffness assembly on the main dynamic path.
 - **Differentiable Mechanics:** Supported tensor operations stay close to PyTorch autograd, making forward runs inspectable and extensible for sensitivity studies.
 - **Phase-Field Fracture Focus:** Dynamic impact, crack branching, and quasi-static fracture workflows share a consistent mechanics/damage formulation and output schema.
-- **Public Benchmark Bundles:** Promoted examples include `config.yaml`, setup figures, final fields, response histories, manifests, and compact animations.
+- **Public Benchmark Bundles:** Public examples provide `config.yaml`, setup figures, final fields, response histories, manifests, and compact animations.
 - **YAML Plus Fluent API:** Use declarative YAML for reproducible runs and `phast.Problem` for programmatic model authoring.
 - **Standardized Post-Processing:** `phast.load_result` handles stored manifests, CSV histories, visuals, and retained trajectory fields.
 
 ## Architecture At A Glance
 
 `YAML / phast.Problem` -> `Mesh` -> `Operators` -> `Solver` -> `Result bundle`
+
+## For New Users: Your First 15 Minutes
+
+If you are new to PhAST, follow this sequence:
+1. **Learn the Basics:** Read the "What is PhAST?" summary above and our [Phase-Field Primer](docs/tutorial/01_phase_field_primer.md).
+2. **Install:** Follow the [Quickstart](#quickstart) guide below to install the solver.
+3. **Run a Simple Example:** Run the `miehe_tension` example using the YAML workflow to see a result quickly: `python -m phast run examples/quasistatic/miehe_tension/config.yaml`.
+4. **Understand the API:** Review the [Python API](docs/user_guide/python_api.md) to understand the `phast.Problem` syntax used in that example.
+5. **Check Capabilities:** Review the [Capability Matrix](docs/user_guide/capability_matrix.md) to see if PhAST supports your specific research problem.
 
 ## Quickstart
 
@@ -104,7 +115,7 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 | **Quasi-Static Fracture** | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml` | Load-displacement response curves, final phase-field damage, and comparison artifacts. |
 | **Solid Mechanics Beta** | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml` | Mesh-level FEA fields, nodal displacements, visual manifests, and structured metadata. |
 
-Browse the full [example gallery](docs/example-gallery.md) for the complete list of runnable examples. Beta folders are public for inspection and reproducibility, but their claims remain narrower than the promoted fracture benchmarks.
+Browse the full [example gallery](docs/example-gallery.md) for the complete list of runnable examples. Beta examples are provided for inspection, but they have not yet been validated as extensively as the included fracture benchmarks.
 
 ## Documentation & API
 

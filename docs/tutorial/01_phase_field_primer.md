@@ -190,3 +190,6 @@ $$
 Once you have the theory in mind, head to
 [Setting up new problems](../user_guide/setup_problems.md) to translate it
 into a PhAST model and durable YAML configuration.
+
+
+For a picture-first companion, see the [visual glossary](02_visual_glossary.md).

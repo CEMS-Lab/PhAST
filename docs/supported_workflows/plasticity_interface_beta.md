@@ -1,8 +1,8 @@
 # Plasticity and Interface Beta Workflows
 
-Plasticity, cohesive, PF-CZM, and interface examples are beta validation slices
-unless the capability matrix says otherwise. They remain useful and tested, but
-they are not presented as a fully coupled production product.
+Plasticity, cohesive, PF-CZM, and interface examples are beta validation
+workflows unless the capability matrix says otherwise. They remain useful and
+tested, but they are not presented as a fully coupled production product.
 
 ## Public beta path
 
@@ -17,7 +17,7 @@ python -m phast run configs/benchmarks/plasticity_interface/reproducibility_cont
 Those validation IDs are mirrored in `examples/PUBLIC_EXAMPLES_CONTRACT.yaml`
 and documented in the retained result folders.
 
-The retained #708 result bundles live under
+The curated validation result bundles live under
 `examples/plasticity_interface_beta/results/` and are indexed by
 `examples/plasticity_interface_beta/results/issue_708_promoted_results.yaml`.
 They include YAML-resolved configs, provenance JSON, CSV histories, setup and
@@ -29,6 +29,6 @@ the reproducibility path remains the curated YAML dispatcher above.
 
 ## Boundary
 
-Do not generalize a passing beta script contract to arbitrary coupled
+Do not generalize a passing beta workflow to arbitrary coupled
 plasticity/cohesive fracture. Public docs should state the exact validation ID,
 script, output artifacts, and claim boundary for each beta example.

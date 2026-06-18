@@ -119,3 +119,9 @@ General agent contribution rules live in [`AGENTS.md`](AGENTS.md). Use
 [`docs/agent-contribution-guide.md`](docs/agent-contribution-guide.md) for
 agent-assisted code, example, validation, and documentation work. Keep
 `llms.txt` focused on repository orientation and usage.
+
+## Tone and Language
+- **Academic and Formal**: All documentation, comments, and public-facing text must use a formal, academic tone suitable for a State-Of-The-Art (SOTA) FEM solver.
+- **No Internal Slang**: Do NOT use software-development slang (e.g., "ships with", "hack", "we need to fix this later", "epic").
+- **No Internal References**: Do NOT reference internal GitHub issues (e.g., "#107", "PR #146"), Jira tickets, or private workflow phases. Refer to features generically (e.g. "The framework supports...").
+- **No Emoticons**: Do not use emojis or emoticons in the documentation or source code.

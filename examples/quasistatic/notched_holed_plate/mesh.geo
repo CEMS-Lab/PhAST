@@ -90,7 +90,7 @@ Physical Curve("upper_pin")  = {110, 111, 112, 113};
 Physical Curve("lower_pin")  = {120, 121, 122, 123};
 Physical Surface("plate")    = {1};
 
-// ---- Pin centres (issue #158) ------------------------------------------
+// ---- Pin centres ------------------------------------------
 // Isolated Physical Points at each pin-hole centre. They are *not*
 // embedded in Plane Surface(1) (they fall inside the excluded hole loops),
 // but gmsh still emits them as `vertex` cells which meshio reads and

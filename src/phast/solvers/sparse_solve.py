@@ -1,6 +1,6 @@
 """Sparse-direct linear solve with autograd support.
 
-Phase 1 of the implicit-solver epic (#105, issue #106). The SciPy SuperLU
+The SciPy SuperLU
 backend ships with the project's existing dependencies and serves as the
 always-available baseline. Optional PETSc/MUMPS and cuDSS paths are selected
 only after runtime smoke tests, so broken optional installs fall back cleanly.

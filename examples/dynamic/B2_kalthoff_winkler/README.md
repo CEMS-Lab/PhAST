@@ -84,7 +84,7 @@ python examples/dynamic/B2_kalthoff_winkler/run_fluent.py \
   --output-dir examples/dynamic/B2_kalthoff_winkler/run_fluent_quick
 ```
 
-The YAML configuration remains the reference public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the reference public reproduction input because it is recorded in the retained provenance metadata.
 
 ## How Manual Setup Works
 

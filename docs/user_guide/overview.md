@@ -110,6 +110,7 @@ runs.
 | Install and first run | `docs/getting-started.md` |
 | Supported/unsupported status | `docs/user_guide/capability_matrix.md` |
 | Problem and physics setup | `docs/user_guide/setup_problems.md`, `docs/user_guide/physics.md`, `docs/user_guide/configuration.md` |
+| Theory-first visual guide | [Visual glossary](../tutorial/02_visual_glossary.md) | Read AT1/AT2, energy-split, and length-scale summaries before the equations. |
 | Mesh and geometry notes | `docs/user_guide/meshes.md` |
 | Sparse/direct backend notes | `docs/user_guide/sparse_solve.md` and `docs/api/sparse_solve.md` |
 | Benchmarks | `docs/example-gallery.md` and the public example folders |

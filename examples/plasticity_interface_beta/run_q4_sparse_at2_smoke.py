@@ -1,8 +1,8 @@
 """Native Q4 sparse mechanics plus AT2 damage validation benchmark.
 
-This is a public beta validation case for issue #675. It exercises native Q4
-mechanics without converting cells to T3, records the sparse backend selected
-by ``QuasiStaticSolver`` (SciPy locally, MUMPS where PETSc/MUMPS is available),
+This public beta validation case exercises native Q4 mechanics without
+converting cells to T3, records the sparse backend selected by
+``QuasiStaticSolver`` (SciPy locally, MUMPS where PETSc/MUMPS is available),
 and advances native Q4 AT2 damage from Gauss-point history.
 """
 from __future__ import annotations
