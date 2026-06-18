@@ -78,6 +78,8 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 - [`configs/`](configs/) - benchmark decks, schemas, reference templates, and
   reusable configuration material.
 - [`docs/`](docs/) - Sphinx/user documentation source.
+- [`docs/agent-contribution-guide.md`](docs/agent-contribution-guide.md) -
+  guidance for AI agents improving code, examples, validation, and docs.
 - [`assets/`](assets/) - public README and documentation media.
 - [`tools/`](tools/) - small public utilities for regenerating curated media.
 - [`.github/`](.github/) - public issue templates, PR template, code ownership,
@@ -113,6 +115,7 @@ Read these files before making changes or answering detailed usage questions:
 ## Contribution Rules
 
 Implementation rules for agents that write code live in [`.cursorrules`](.cursorrules).
-Use that file for PyTorch Autograd constraints, precision expectations,
-visualization standards, and validation commands. Keep `llms.txt` focused on
-repository orientation and usage.
+General agent contribution rules live in [`AGENTS.md`](AGENTS.md). Use
+[`docs/agent-contribution-guide.md`](docs/agent-contribution-guide.md) for
+agent-assisted code, example, validation, and documentation work. Keep
+`llms.txt` focused on repository orientation and usage.

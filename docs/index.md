@@ -83,6 +83,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 :caption: Get Started
 getting-started
 user_guide/public_api_reference
+agent-contribution-guide
 tutorial/index
 tutorial/01_phase_field_primer
 tutorial/04_exploration_experiments

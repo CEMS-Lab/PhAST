@@ -142,7 +142,7 @@ print(result.history_names())
 | `assets/` | Lightweight visual assets for repository documentation. |
 | `tools/` | Maintenance utilities for regenerating documentation artifacts. |
 | `.github/` | Issue templates, Pull Request guidelines, and CI/CD Action workflows. |
-| `llms.txt`, `.cursorrules` | Agent-facing repository orientation and rigorous coding constraints. |
+| `AGENTS.md`, `llms.txt`, `.cursorrules` | Agent-facing contribution guidance, repository orientation, and rigorous coding constraints. |
 
 ## Build The Docs
 

@@ -93,6 +93,11 @@ When editing promoted examples, use `docs/user_guide/example_contract.md` as
 the source of truth for required files, README content, visuals, and artifact
 conventions.
 
+AI-assisted contributions are welcome when they follow `AGENTS.md`, `llms.txt`,
+`.cursorrules`, and `docs/agent-contribution-guide.md`. Agents should verify
+commands where possible and must not invent solver capabilities, benchmark
+results, paper metadata, or local/HPC provenance.
+
 ## 6. Adding Examples
 
 To promote a local simulation to the public `examples/` gallery, follow
