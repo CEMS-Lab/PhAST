@@ -18,6 +18,15 @@
 - [ ] Targeted solver/example check:
 - [ ] Visual/output artifacts checked:
 
+## Documentation Checklist
+
+- [ ] User-facing behavior changes are reflected in `README.md`, `docs/`, or
+      the relevant example `README.md`.
+- [ ] New or changed commands in documentation were run, or the reason for not
+      running them is stated in this PR.
+- [ ] Example documentation follows `docs/user_guide/example_contract.md` when
+      promoted example files or visuals changed.
+
 ## Physics and Benchmark Notes
 
 For solver, material, element, benchmark, or post-processing changes, describe

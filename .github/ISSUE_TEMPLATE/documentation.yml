@@ -1,0 +1,54 @@
+name: Documentation
+description: Report unclear docs, broken commands, missing examples, or wording issues.
+title: "[docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Documentation area
+      description: Which part of the documentation needs attention?
+      options:
+        - Getting started or installation
+        - YAML workflow
+        - Python/fluent API
+        - Example README
+        - Example gallery
+        - Capability matrix or supported workflows
+        - API reference
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Page or file
+      description: Link to the page, or provide the repository path.
+      placeholder: docs/user_guide/yaml_workflow.md
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is unclear, missing, or incorrect?
+      description: Be specific. Include the command, paragraph, figure, or section if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: Suggested fix
+      description: Optional wording, command, figure, or example that would improve the page.
+    validations:
+      required: false
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: If this is about a command or example, include what you ran and what happened.
+      value: |
+        ```bash
+        # command here
+        ```
+    validations:
+      required: false

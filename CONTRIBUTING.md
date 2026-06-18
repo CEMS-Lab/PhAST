@@ -59,7 +59,41 @@ and update the relevant README or public contract file. The public repository
 does not ship the full internal regression suite; run any project-specific test
 commands documented in the pull request or issue that motivated the change.
 
-## 5. Adding Examples
+## 5. Documentation Contributions
+
+Documentation source lives in `docs/` and is built with Sphinx/MyST. Example
+folders also contain public-facing `README.md` files, so changes to example
+commands, inputs, outputs, or visuals usually require both docs and example
+README updates.
+
+Install the documentation dependencies:
+
+```bash
+pip install -r requirements-docs.txt
+```
+
+Build the documentation locally:
+
+```bash
+sphinx-build -W -b html docs docs/_build/html
+```
+
+Open the local build:
+
+```bash
+open docs/_build/html/index.html
+```
+
+Good documentation pull requests are small and verifiable. Prefer one topic
+per PR: a broken command, a clearer explanation, a missing example note, a
+fixed figure reference, or a capability-boundary correction. If a page documents
+a runnable command, validate the command or state why it was not run.
+
+When editing promoted examples, use `docs/user_guide/example_contract.md` as
+the source of truth for required files, README content, visuals, and artifact
+conventions.
+
+## 6. Adding Examples
 
 To promote a local simulation to the public `examples/` gallery, follow
 `docs/user_guide/example_contract.md`. In short, promoted examples need a flat
