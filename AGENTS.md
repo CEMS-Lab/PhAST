@@ -10,12 +10,15 @@ checked-in code, examples, capability matrix, and citation metadata.
 - Read `llms.txt` for repository orientation.
 - Read `.cursorrules` before editing solver code or generated visuals.
 - Read `CONTRIBUTING.md` before opening a pull request.
-- For contribution guidance, follow `docs/agent-contribution-guide.md`.
+- For contribution lanes, prompt templates, and validation commands, follow
+  `docs/agent-contribution-guide.md`.
 - For promoted examples, follow `docs/user_guide/example_contract.md`.
 
 ## Good Agent Tasks
 
 - Fix broken commands, stale imports, dead links, and renamed files.
+- Expand theory documentation with clear equations, symbol tables, and links
+  from mathematical notation to YAML keys and fluent API calls.
 - Improve examples by adding clearer YAML, fluent API companions, README
   explanations, lightweight visuals, or validation commands.
 - Improve post-processing and result-inspection ergonomics without changing
