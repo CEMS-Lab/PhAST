@@ -40,32 +40,45 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
   <figcaption>Dynamic fracture showcase: Kalthoff-Winkler impact crack growth.</figcaption>
 </figure>
 
+## Core Strengths
+
 <div class="phast-card-grid">
   <div class="phast-card">
-    <h3>Fluent authoring</h3>
-    <p>Use the fluent <code>phast.Problem</code> API to author new models with
-    domain nouns before saving or validating a declarative configuration.</p>
-    <p><a href="user_guide/python_api.html">Python API</a></p>
+    <h3>Matrix-free operators</h3>
+    <p>Explicit fracture mechanics and damage updates use tensorized PyTorch
+    kernels without persistent global stiffness assembly on the main dynamic path.</p>
+    <p><a href="user_guide/physics.html">Formulation</a></p>
   </div>
   <div class="phast-card">
-    <h3>YAML input configurations</h3>
-    <p>Use YAML configurations for public examples, reproducibility, sharing, CI, and
-    batch/HPC runs with lockfiles, metadata, and standard outputs.</p>
-    <p><a href="user_guide/yaml_workflow.html">YAML workflow</a></p>
+    <h3>Differentiable mechanics</h3>
+    <p>Supported tensor operations stay close to PyTorch autograd, making forward
+    runs inspectable and extensible for sensitivity studies.</p>
+    <p><a href="user_guide/public_api_reference.html">API reference</a></p>
   </div>
   <div class="phast-card">
-    <h3>Visual examples</h3>
-    <p>Browse damage fields, response curves, solid-mechanics outputs, and
-    curated result panels linked to reproducible examples.</p>
+    <h3>Public benchmark bundles</h3>
+    <p>Promoted examples include YAML inputs, setup figures, final fields,
+    response histories, manifests, and compact animations.</p>
     <p><a href="example-gallery.html">Example gallery</a></p>
   </div>
   <div class="phast-card">
-    <h3>Clear claim boundaries</h3>
-    <p>Brittle fracture and promoted solid mechanics are the public core.
-    Plasticity, cohesive interfaces, and PF-CZM remain beta validation slices.</p>
-    <p><a href="user_guide/capability_matrix.html">Capability matrix</a></p>
+    <h3>YAML plus fluent API</h3>
+    <p>Use declarative YAML for reproducible runs and <code>phast.Problem</code>
+    for programmatic model authoring.</p>
+    <p><a href="user_guide/python_api.html">Python API</a></p>
   </div>
 </div>
+
+## Documentation
+
+| Section | What it covers |
+|---|---|
+| [Getting started](getting-started.md) | Installation, `phast doctor`, validation, first run, and result inspection. |
+| [Verify install](verify-install.md) | Backend visibility, expected doctor output, and a schema-validation smoke test. |
+| [User guide](user_guide/overview.md) | Problem setup, YAML, Python API, physics, meshes, sparse solves, and result APIs. |
+| [Example gallery](example-gallery.md) | Runnable fracture, solid-mechanics, and beta validation examples with visual outputs. |
+| [Performance and reproducibility](performance-reproducibility.md) | Device choice, backend policy, timing evidence, and `torch.compile` reporting. |
+| [Community](community.md) | Issues, discussions, maintainer review, and contribution route. |
 
 ## Which Path Should I Use?
 
@@ -87,6 +100,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 :maxdepth: 2
 :caption: Get Started
 getting-started
+verify-install
 user_guide/public_api_reference
 agent-contribution-guide
 citing

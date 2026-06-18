@@ -9,6 +9,53 @@ The core workflow is:
 
 `YAML / phast.Problem` -> `Mesh` -> `Operators` -> `Solver` -> `Result bundle`
 
+## Module Map
+
+The public package is organized around the same workflow. The arrows show the
+data path a typical public run follows, not Python import direction:
+
+```text
+YAML / phast.Problem
+        |
+        v
+config + workflow adapters
+        |
+        v
+mesh + geometry
+        |
+        v
+physics operators
+        |
+        v
+mechanics / damage / sparse solvers
+        |
+        v
+result API + visualization + provenance
+```
+
+| Area | Main modules | Role |
+|---|---|---|
+| Authoring | `phast.core.problem`, `phast.workflow` | Fluent `Problem` objects and workflow contracts. |
+| Configuration | `phast.config` | YAML parsing, schema validation, `run`, `doctor`, and `explain-config` entry points. |
+| Mesh and geometry | `phast.core.mesh`, `phast.core.geometry_dsl`, `phast.core.geometry_compiler` | Mesh loading, declarative geometry parsing, Gmsh-backed geometry compilation, and mesh inspection. |
+| Physics | `phast.physics`, `phast.core.fem_operators` | Materials, initial conditions, boundary conditions, fracture mechanics, and FEM tensor operators. |
+| Solvers | `phast.solvers` | Mechanics, damage, staggered solves, sparse/direct solves, time integrators, and optional acceleration paths. |
+| Results | `phast.result`, `phast.utils.visualization`, `phast.utils.provenance` | Result loading, visual outputs, metadata, manifests, and reproducibility records. |
+
+## Design Principles
+
+- **YAML for reproducibility:** public examples should be rerunnable from a
+  declarative `config.yaml` and validated with `--validate-only`.
+- **Fluent Python for authoring:** use `phast.Problem` when exploring a new
+  setup, then preserve durable studies as YAML.
+- **Tensor-first numerics:** mechanics and damage kernels stay close to PyTorch
+  tensor operations so device, dtype, and autograd behavior remain inspectable.
+- **Explicit claim boundaries:** production, beta, scaffold, optional-backend,
+  and unsupported paths are documented in the capability matrix.
+- **Result bundles over hidden state:** examples should retain the config,
+  lockfile, manifests, CSV histories, and lightweight visuals needed to inspect
+  the run.
+
 ## What the Project Is
 
 The project combines:

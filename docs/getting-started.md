@@ -34,6 +34,8 @@ python -m phast doctor
 `doctor` is the first command to run on a new workstation or cluster login. It
 prints the optional sparse-direct backend status and the backend that
 `backend: auto` will choose for CPU implicit and quasi-static workflows.
+For a dedicated backend checklist and expected smoke-test output, see
+[Verify Install](verify-install.md).
 
 Validate one public example before running a full simulation:
 
