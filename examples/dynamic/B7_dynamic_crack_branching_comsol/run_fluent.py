@@ -1,4 +1,4 @@
-"""Run the B7 dynamic crack-branching COMSOL cross-check without YAML."""
+"""Run the B7 dynamic crack-branching COMSOL cross-check without a YAML configuration."""
 
 from __future__ import annotations
 

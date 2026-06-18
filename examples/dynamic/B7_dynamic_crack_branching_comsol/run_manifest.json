@@ -1,6 +1,6 @@
 {
   "example": "B7_dynamic_crack_branching_comsol",
-  "status": "public_candidate_without_comsol_binary",
+  "status": "public_cross_check_without_comsol_binary",
   "config": "config.yaml",
   "files": [
     "README.md",
@@ -9,14 +9,18 @@
     "comsol_branching_times.txt",
     "comsol_energy_curve.csv",
     "config.yaml",
+    "damage_evolution.gif",
+    "damage_evolution.mp4",
     "damage_final.png",
     "energy.png",
     "initial_conditions.png",
     "mesh.geo",
     "run_fluent.py",
+    "run_lockfile.json",
     "run_manifest.json",
+    "run_metadata.json",
     "thumbnail.png",
     "visual_manifest.json"
   ],
-  "notes": "Curated visual package is public-candidate evidence; raw COMSOL and trajectory artifacts stay external."
+  "notes": "Curated COMSOL/Ren dynamic crack-branching cross-check; raw COMSOL model/PDF, heavy trajectories, and full run directories remain external."
 }

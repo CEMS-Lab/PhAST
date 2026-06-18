@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "example": "B7_dynamic_crack_branching_comsol",
+  "command": "python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml",
+  "config_file": "examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml",
+  "config_sha256": "f33359a747fed3e7a2e9d5097d280d2f7e8a9a00d5a4d9f5154bf6d9e89cfeda",
+  "resolved_config": {
+    "schema_version": 1,
+    "problem": {
+      "name": "COMSOL Dynamic Crack Branching (PMMA-equiv.)",
+      "reference": "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (vendor documentation is not distributed)"
+    },
+    "acceptance": {
+      "status": "beta",
+      "reference_result": "Ren 2019 dynamic branching onset near 68.2 us; COMSOL Application Library 33 us retained as secondary vendor context",
+      "required_outputs": [
+        "config.yaml",
+        "energy.csv",
+        "crack_tip.csv",
+        "compare_report.txt",
+        "damage_final.png"
+      ],
+      "metrics": {
+        "branch_onset": {
+          "target": 68.2,
+          "tolerance": "20%",
+          "units": "us"
+        },
+        "final_morphology": {
+          "target": "clean Y-shaped branch by 75-80 us",
+          "tolerance": "visual/morphology comparator, no multiple spurious branches"
+        },
+        "elastic_energy_peak": {
+          "target": "COMSOL half-plate value doubled for full-plate convention",
+          "tolerance": "same domain convention must be stated in compare report"
+        }
+      },
+      "notes": "Root config is the stable public B7 entry point and now matches COMSOL's AT1 plus Amor/volumetric-deviatoric split. Issue #299 is resolved by using the published Ren/Borden-style timing window as the default validation target and treating the COMSOL 33 us event as secondary vendor context. Exact COMSOL timing parity remains diagnostic provenance, not the release acceptance gate.\n"
+    },
+    "geometry": {
+      "units": "mm",
+      "primitives": {
+        "plate": {
+          "type": "rectangle",
+          "origin": [
+            0,
+            0
+          ],
+          "size": [
+            100.0,
+            40.0
+          ]
+        },
+        "notch": {
+          "type": "polygon",
+          "vertices": [
+            [
+              0.0,
+              20.01
+            ],
+            [
+              50.0,
+              20.0
+            ],
+            [
+              0.0,
+              19.99
+            ]
+          ]
+        }
+      },
+      "domain": {
+        "base": "plate",
+        "subtract": [
+          "notch"
+        ]
+      },
+      "named_groups": {
+        "left": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              -0.005,
+              0.0
+            ],
+            "size": [
+              0.01,
+              40.0
+            ]
+          }
+        },
+        "top": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              0.0,
+              39.995
+            ],
+            "size": [
+              100.0,
+              0.01
+            ]
+          }
+        },
+        "bottom": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              0.0,
+              -0.005
+            ],
+            "size": [
+              100.0,
+              0.01
+            ]
+          }
+        }
+      },
+      "mesh": {
+        "element_size": {
+          "default": 1.0,
+          "refined": [
+            {
+              "primitive": "notch",
+              "size": 0.125,
+              "margin": 2.5
+            },
+            {
+              "region": {
+                "type": "box",
+                "x": [
+                  45.0,
+                  100.0
+                ],
+                "y": [
+                  0.0,
+                  40.0
+                ]
+              },
+              "size": 0.125,
+              "thickness": 1.0
+            }
+          ]
+        }
+      }
+    },
+    "material": {
+      "E": 32000.0,
+      "nu": 0.2,
+      "Gc": 0.003,
+      "l0": 0.5,
+      "rho": 2.45e-09,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "eta_residual": 1e-07
+    },
+    "boundary_conditions": [
+      {
+        "nodes": "top",
+        "type": "neumann",
+        "component": 1,
+        "value": 1.0
+      },
+      {
+        "nodes": "bottom",
+        "type": "neumann",
+        "component": 1,
+        "value": -1.0
+      },
+      {
+        "nodes": "left",
+        "type": "fix",
+        "component": 0
+      },
+      {
+        "nodes": "notch.boundary",
+        "type": "pf_dirichlet",
+        "value": 1.0
+      }
+    ],
+    "initial_conditions": {
+      "preseed_notch_nodesets": [
+        "notch.boundary"
+      ]
+    },
+    "loading": {
+      "protocol": "simple",
+      "ramp_type": "smooth",
+      "t_ramp": 5e-08,
+      "t_total": 8e-05,
+      "num_steps": 0
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "dt_safety": 0.8,
+      "use_multigrid": false,
+      "bounds_method": "projected_cg",
+      "damage_every": 2,
+      "eta_residual": 1e-07
+    },
+    "output": {
+      "trajectory": true,
+      "trajectory_format": "zarr",
+      "h5_every": 50,
+      "fast": true,
+      "print_every": 200
+    },
+    "device": {
+      "device": "cpu"
+    }
+  },
+  "reference_run_metadata": {
+    "timestamp": "2026-06-12T14:39:42.944511",
+    "platform": {
+      "system": "Linux",
+      "release": "5.14.0-611.11.1.el9_7.x86_64",
+      "machine": "x86_64",
+      "python": "3.11.15",
+      "pytorch": "2.8.0+cu128"
+    },
+    "problem": "COMSOL Dynamic Crack Branching (PMMA-equiv.)",
+    "device": {
+      "device": "cuda:0",
+      "dtype_default": "float64",
+      "gpu_name": "NVIDIA A100 80GB PCIe",
+      "vram_gb": 79.3
+    },
+    "material": {
+      "E": 32000.0,
+      "nu": 0.2,
+      "Gc": 0.003,
+      "l0": 0.5,
+      "energy_split": "amor",
+      "pf_model": "AT1",
+      "eta_residual": 1e-07,
+      "plane_stress": false,
+      "rho": 2.45e-09
+    },
+    "mesh": {
+      "n_nodes": 169077,
+      "n_elements": 336266,
+      "h_min": 0.002071067811862955
+    },
+    "solver": {
+      "solver_type": "explicit",
+      "time_integrator": "central_difference",
+      "rho_inf": 0.5,
+      "num_steps": 183941,
+      "dt": 4.3492424049122064e-10,
+      "c_R_mm_s": 2119003.0314552886,
+      "c_R_m_s": 2119.0030314552887,
+      "c_p_mm_s": 3809523.8095238092,
+      "c_s_mm_s": 2332847.374079217
+    },
+    "git_hash": "db039b99",
+    "total_time_s": 2139.84,
+    "crack_step": 0,
+    "config_file": "examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml",
+    "preseed_notch_nodesets": [
+      "notch.boundary"
+    ],
+    "memory": {
+      "cpu_rss_peak_MiB": 1776.5,
+      "gpu_allocated_peak_MiB": 295.2,
+      "gpu_reserved_peak_MiB": 364.0
+    }
+  },
+  "notes": "Sanitized public lockfile generated from the checked-in configuration and retained reference metadata; absolute HPC paths are intentionally omitted."
+}
