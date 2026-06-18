@@ -9,12 +9,14 @@
 
 ## Maintainers
 
-For project contact, use GitHub Issues for technical questions so discussions
-remain visible and searchable. For direct correspondence about the PhAST solver
-paper or repository, contact Allamaprabhu Ani
-([portfolio](https://allamaprabhuani.github.io/),
-`allamaprabhu.ani@city.ac.uk`). Sathiskumar A. Ponnusami's research profile is
-available at [saponnusami.com](https://www.saponnusami.com/).
+PhAST is maintained under the CEMS Lab public repository. Collaboration is
+welcome through GitHub Issues, Discussions, and Pull Requests, but changes to
+the public solver, documentation, examples, and release surface are accepted
+only after maintainer review and approval.
+
+Project stewardship: [Allamaprabhu Ani](https://allamaprabhuani.github.io/).
+Sathiskumar A. Ponnusami's research profile is available at
+[saponnusami.com](https://www.saponnusami.com/).
 
 ## Reporting issues
 

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">AT1 and AT2 dissipation functions</title>
+  <desc id="desc">Plot comparing w(d)=d for AT1 and w(d)=d squared for AT2 over damage d from zero to one.</desc>
+  <rect x="0" y="0" width="720" height="420" fill="#ffffff"/>
+  <line x1="90" y1="340" x2="650" y2="340" stroke="#111111" stroke-width="2"/>
+  <line x1="90" y1="340" x2="90" y2="55" stroke="#111111" stroke-width="2"/>
+  <text x="360" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#111111">damage d</text>
+  <text x="30" y="205" text-anchor="middle" transform="rotate(-90 30 205)" font-family="Arial, sans-serif" font-size="20" fill="#111111">local dissipation w(d)</text>
+  <text x="86" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#111111">0</text>
+  <text x="650" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#111111">1</text>
+  <text x="66" y="345" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#111111">0</text>
+  <text x="66" y="65" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#111111">1</text>
+  <line x1="90" y1="340" x2="650" y2="60" stroke="#d62728" stroke-width="4" fill="none"/>
+  <path d="M 90 340 C 230 322 370 270 510 165 C 585 110 625 78 650 60" stroke="#1f77b4" stroke-width="4" fill="none"/>
+  <circle cx="90" cy="340" r="4" fill="#111111"/>
+  <circle cx="650" cy="60" r="4" fill="#111111"/>
+  <rect x="420" y="92" width="205" height="84" rx="6" fill="#ffffff" stroke="#cccccc"/>
+  <line x1="440" y1="118" x2="500" y2="118" stroke="#d62728" stroke-width="4"/>
+  <text x="515" y="124" font-family="Arial, sans-serif" font-size="17" fill="#111111">AT1: w(d)=d</text>
+  <line x1="440" y1="150" x2="500" y2="150" stroke="#1f77b4" stroke-width="4"/>
+  <text x="515" y="156" font-family="Arial, sans-serif" font-size="17" fill="#111111">AT2: w(d)=d^2</text>
+  <text x="360" y="32" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#111111">Phase-field crack dissipation choices</text>
+</svg>

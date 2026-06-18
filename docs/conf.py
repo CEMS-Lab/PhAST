@@ -19,6 +19,7 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinx_immaterial",
+    "sphinxcontrib.mermaid",
 ]
 
 # MyST: enable common extensions but keep parsing forgiving for existing .md.

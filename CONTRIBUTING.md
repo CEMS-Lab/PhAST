@@ -33,6 +33,9 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
 
 ## 3. Pull Request Lifecycle
 
+- PhAST is maintained under the CEMS Lab public repository. Contributions are
+  welcome, but public changes are merged only after maintainer review and
+  approval.
 - Run the relevant validation commands locally.
 - Keep high-fidelity volumetric datasets (Zarr/H5), internal logs, and generated heavy media out of git.
 - Provide parity checks against established analytical or commercial benchmarks when modifying physics kernels.
