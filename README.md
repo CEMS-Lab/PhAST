@@ -27,18 +27,18 @@
 
 ---
 
-PhAST is a PyTorch-native finite-element solver for 2D phase-field fracture, explicit dynamics, and solid mechanics. It embeds phase-field fracture workflows within familiar PyTorch execution graphs, enabling mechanics, damage evolution, and post-processing pipelines to run as inspectable tensor operations.
+PhAST is a PyTorch-native finite-element solver for 2D phase-field fracture, explicit dynamics, and supporting solid-mechanics workflows. It embeds mechanics, damage evolution, and post-processing within familiar PyTorch execution graphs, so simulations can be inspected, differentiated, and reproduced using standard Python tooling.
 
-The public release provides robust support for brittle phase-field fracture and foundational solid mechanics. Advanced implementations covering plasticity, cohesive-interfaces, and PF-CZM capabilities are detailed in the [capability matrix](docs/user_guide/capability_matrix.md).
+The public release foregrounds brittle phase-field fracture benchmarks used for the associated solver paper. Solid mechanics, plasticity, cohesive-interface, and PF-CZM capabilities are included with explicit status labels in the [capability matrix](docs/user_guide/capability_matrix.md).
 
 Models can be authored programmatically via the fluent `phast.Problem` Python API, or executed declaratively via YAML configurations for batch processing, HPC submission, and exact reproducibility.
 
-## Core Strengths
+## What This Repository Provides
 
-- **PyTorch-Native Mechanics:** Mechanics, damage evolution, and foundational routines use PyTorch tensors, offering explicit control over device placement (CPU/GPU) and precision.
+- **PyTorch-Native Mechanics:** Mechanics, damage evolution, and post-processing use PyTorch tensors, offering explicit control over device placement, precision, and autograd.
 - **Unified Phase-Field Workflows:** Dynamic impact, crack branching, and quasi-static fracture studies share a consistent algorithmic framework and output schema.
 - **Dual Authoring Interfaces:** Formulate models using the `phast.Problem` API for iterative exploration, or deploy declarative YAML configurations for batch execution.
-- **Curated Validation Suite:** Promoted examples include load-displacement histories, final damage fields, and strict-parity checks against reference literature.
+- **Curated Validation Examples:** Promoted examples include setup figures, final fields, response histories, and lightweight animations.
 - **Standardized Post-Processing:** `phast.load_result` automatically handles stored manifests, CSV histories, and Zarr trajectory fields.
 
 ## Quickstart
@@ -46,15 +46,17 @@ Models can be authored programmatically via the fluent `phast.Problem` Python AP
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
 cd PhAST
+python -m venv .venv
+source .venv/bin/activate
 pip install -e .
 
 python -m phast doctor
 ```
 
-Verify the installation by running a foundational solid mechanics case:
+Validate a public fracture input deck without launching a full solve:
 
 ```bash
-python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate
+python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
 ```
 
 To inspect the structural definition of an input deck before execution:
@@ -86,10 +88,10 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 
 | Simulation Category | Execution Command | Expected Artifacts |
 |---|---|---|
-| **Dynamic Crack Branching** | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` | Curated damage fields, kinetic energy histories, metadata, and visual summaries. |
-| **Dynamic Fracture** | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` | Explicit crack propagation states, CSV histories, damage plots, and Zarr trajectory outputs. |
-| **Quasi-Static Fracture** | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml` | Load-displacement response curves, final phase-field damage, and parity comparison artifacts. |
-| **Solid Mechanics** | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml` | Mesh-level FEA fields, nodal displacements, visual manifests, and structured metadata. |
+| **Dynamic Crack Branching** | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` | Damage fields, kinetic-energy histories, metadata, and visual summaries. |
+| **Dynamic Fracture** | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` | Crack-propagation states, CSV histories, damage plots, and optional trajectory outputs. |
+| **Quasi-Static Fracture** | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml` | Load-displacement response curves, final phase-field damage, and comparison artifacts. |
+| **Solid Mechanics Beta** | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml` | Mesh-level FEA fields, nodal displacements, visual manifests, and structured metadata. |
 
 Browse the full [example gallery](docs/example-gallery.md) for the complete list of runnable YAML-first benchmarks.
 
@@ -101,6 +103,7 @@ Browse the full [example gallery](docs/example-gallery.md) for the complete list
 | Execute public benchmarks | Declarative `config.yaml` | [YAML Workflow](docs/user_guide/yaml_workflow.md) |
 | Post-process simulation data | `phast.load_result(path)` | [Public API Reference](docs/user_guide/public_api_reference.md) |
 | Review supported physics | Verification Matrix | [Capability Matrix](docs/user_guide/capability_matrix.md) |
+| Learn step-by-step setup | Tutorial notebook | [Problem Setup Walkthrough](docs/tutorial/problem_setup_walkthrough.ipynb) |
 
 ### Programmatic Authoring
 
@@ -143,6 +146,20 @@ print(result.history_names())
 | `tools/` | Maintenance utilities for regenerating documentation artifacts. |
 | `.github/` | Issue templates, Pull Request guidelines, and CI/CD Action workflows. |
 | `AGENTS.md`, `llms.txt`, `.cursorrules` | Agent-facing contribution guidance, repository orientation, and rigorous coding constraints. |
+
+## Contributing
+
+Contributions are welcome for solver kernels, example cases, validation scripts,
+post-processing utilities, documentation, and performance improvements. Start
+with [CONTRIBUTING.md](CONTRIBUTING.md), then use the [capability matrix](docs/user_guide/capability_matrix.md)
+and [example contract](docs/user_guide/example_contract.md) to keep public
+claims, examples, and artifacts consistent.
+
+AI-assisted contributions are also supported. Agent-facing guidance lives in
+[AGENTS.md](AGENTS.md), [llms.txt](llms.txt), [.cursorrules](.cursorrules), and
+[docs/agent-contribution-guide.md](docs/agent-contribution-guide.md). These
+files are intended to help contributors improve the solver and documentation
+without inventing benchmark results, capabilities, or paper metadata.
 
 ## Build The Docs
 
