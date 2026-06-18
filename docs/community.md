@@ -14,9 +14,10 @@ welcome through GitHub Issues, Discussions, and Pull Requests, but changes to
 the public solver, documentation, examples, and release surface are accepted
 only after maintainer review and approval.
 
-Project stewardship: [Allamaprabhu Ani](https://allamaprabhuani.github.io/).
-Sathiskumar A. Ponnusami's research profile is available at
-[saponnusami.com](https://www.saponnusami.com/).
+Lead developer and repository maintainer:
+[Allamaprabhu Ani](https://allamaprabhuani.github.io/). PhAST was developed
+as part of a supervised research programme with academic guidance from
+[Sathiskumar A. Ponnusami](https://www.saponnusami.com/).
 
 ## Reporting issues
 
