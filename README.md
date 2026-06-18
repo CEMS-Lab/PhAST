@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Phase-field Autograd Solver in Torch</strong><br>
-  A PyTorch-native differentiable finite element framework for phase-field fracture mechanics.
+  A matrix-free, differentiable PyTorch solver for phase-field fracture and FEM benchmarks.
 </p>
 
 <p align="center">
@@ -27,19 +27,24 @@
 
 ---
 
-PhAST is a PyTorch-native finite-element solver for 2D phase-field fracture, explicit dynamics, and supporting solid-mechanics workflows. It keeps mechanics, damage evolution, and post-processing close to PyTorch tensors, so simulations can be inspected, differentiated, and reproduced using standard Python tooling.
+PhAST is a matrix-free, differentiable PyTorch solver for 2D phase-field fracture, explicit dynamics, and supporting solid-mechanics workflows. It keeps mechanics, damage evolution, and post-processing close to PyTorch tensors, so simulations can be inspected, differentiated, and reproduced using standard Python tooling.
 
 The repository foregrounds brittle phase-field fracture benchmarks prepared for the associated solver paper. Solid mechanics, plasticity, cohesive-interface, and PF-CZM examples are included with explicit status labels in the [capability matrix](docs/user_guide/capability_matrix.md).
 
 Models can be authored programmatically via the fluent `phast.Problem` Python API, or executed declaratively via YAML configurations for batch processing, HPC submission, and exact reproducibility.
 
-## What This Repository Provides
+## Core Strengths
 
-- **PyTorch-Native Mechanics:** Mechanics, damage evolution, and post-processing use PyTorch tensors, offering explicit control over device placement, precision, and autograd.
-- **Unified Phase-Field Workflows:** Dynamic impact, crack branching, and quasi-static fracture studies share a consistent algorithmic framework and output schema.
-- **Dual Authoring Interfaces:** Formulate models using the `phast.Problem` API for iterative exploration, or deploy declarative YAML configurations for batch execution.
-- **Curated Validation Examples:** Promoted examples include setup figures, final fields, response histories, and compact animations.
-- **Standardized Post-Processing:** `phast.load_result` automatically handles stored manifests, CSV histories, and Zarr trajectory fields.
+- **Matrix-Free Operators:** Explicit fracture mechanics and damage updates use tensorized PyTorch kernels without persistent global stiffness assembly on the main dynamic path.
+- **Differentiable Mechanics:** Supported tensor operations stay close to PyTorch autograd, making forward runs inspectable and extensible for sensitivity studies.
+- **Phase-Field Fracture Focus:** Dynamic impact, crack branching, and quasi-static fracture workflows share a consistent mechanics/damage formulation and output schema.
+- **Public Benchmark Bundles:** Promoted examples include `config.yaml`, setup figures, final fields, response histories, manifests, and compact animations.
+- **YAML Plus Fluent API:** Use declarative YAML for reproducible runs and `phast.Problem` for programmatic model authoring.
+- **Standardized Post-Processing:** `phast.load_result` handles stored manifests, CSV histories, visuals, and retained trajectory fields.
+
+## Architecture At A Glance
+
+`YAML / phast.Problem` -> `Mesh` -> `Operators` -> `Solver` -> `Result bundle`
 
 ## Quickstart
 
@@ -57,6 +62,12 @@ Validate a public fracture configuration without launching a full solve:
 
 ```bash
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
+```
+
+Expected validation output:
+
+```text
+OK: examples/dynamic/B2_kalthoff_winkler/config.yaml passes schema validation.
 ```
 
 Inspect the parsed problem definition before execution:

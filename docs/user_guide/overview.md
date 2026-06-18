@@ -1,8 +1,13 @@
 # User Guide Overview
 
-`phast` is a 2D phase-field fracture framework built on PyTorch. It
-is intended for reproducible fracture simulations, benchmark comparisons,
-and trajectory/dataset generation from validated forward runs.
+`phast` is a matrix-free, differentiable PyTorch solver for 2D phase-field
+fracture, explicit dynamics, and FEM benchmark workflows. It is intended for
+reproducible fracture simulations, benchmark comparisons, and trajectory/dataset
+generation from validated forward runs.
+
+The core workflow is:
+
+`YAML / phast.Problem` -> `Mesh` -> `Operators` -> `Solver` -> `Result bundle`
 
 ## What the Project Is
 

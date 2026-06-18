@@ -7,9 +7,9 @@
 <div class="phast-hero-panel">
   <div>
     <p class="phast-eyebrow">CEMS Lab · PyTorch-native FEM workflows</p>
-    <h2>Differentiable phase-field fracture and FEM workflows in PyTorch.</h2>
+    <h2>Matrix-free, differentiable phase-field fracture and FEM benchmarks in PyTorch.</h2>
     <p>
-      PhAST is a differentiable finite-element framework for 2D brittle
+      PhAST is a matrix-free, differentiable finite-element framework for 2D brittle
       phase-field fracture, explicit dynamics, quasi-static benchmark
       reproduction, and promoted solid-mechanics examples. The public docs
       separate production, beta, optional-backend, scaffold, and unsupported
@@ -78,6 +78,10 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 | Browse runnable examples | [Example gallery](example-gallery.md) | flat public example folders |
 | Diagnose failed runs | [Troubleshooting](troubleshooting.md) | units, mesh, backend, and output checks |
 | Check supported physics | [Capability matrix](user_guide/capability_matrix.md) | production / beta / scaffold labels |
+
+## Workflow In One Line
+
+`YAML / phast.Problem` -> `Mesh` -> `Operators` -> `Solver` -> `Result bundle`
 
 ```{toctree}
 :maxdepth: 2

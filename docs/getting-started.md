@@ -35,6 +35,18 @@ python -m phast doctor
 prints the optional sparse-direct backend status and the backend that
 `backend: auto` will choose for CPU implicit and quasi-static workflows.
 
+Validate one public example before running a full simulation:
+
+```bash
+python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
+```
+
+Expected output:
+
+```text
+OK: examples/dynamic/B2_kalthoff_winkler/config.yaml passes schema validation.
+```
+
 Platform notes:
 
 | Platform | Practical note |
@@ -71,20 +83,20 @@ For public examples, reproducible sharing, CI, and HPC queues, validate the
 YAML declarative configuration that will be run:
 
 ```bash
-python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --validate-only
+python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml --validate-only
 ```
 
 Validation catches schema errors before mesh generation or solver allocation.
 For a readable summary of a setup:
 
 ```bash
-python -m phast explain-config configs/benchmarks/dynamic/B3_dynamic_sent.yaml
+python -m phast explain-config examples/dynamic/B3_dynamic_sent/config.yaml
 ```
 
 ## 4. Run a Forward Problem
 
 ```bash
-python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --device cpu --num_steps 20 --no-plots --output_dir runs/b3_dynamic_sent
+python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml --device cpu --num_steps 20 --no-plots --output_dir runs/b3_dynamic_sent
 ```
 
 Typical shipped configs cover dynamic fracture and quasi-static benchmarks. Use
