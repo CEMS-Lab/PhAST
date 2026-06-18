@@ -56,11 +56,13 @@ The two standard regularisations differ in `w(d)` and `c_w`:
 | AT1 | $d$ | $8/3$ | $\mathcal{H}_{c,0}=3G_c/(16\ell_0)$ | Pham, Marigo, Maurini (2011) |
 
 ```{figure} ../_static/at_dissipation.svg
-:alt: AT1 and AT2 dissipation functions
+:alt: AT1 and AT2 local crack-density terms
 :width: 78%
 
-AT1 and AT2 differ through the local dissipation density. The choice changes
-the nucleation behavior and the form of the damage subproblem.
+AT1 and AT2 differ through the local term $w(d)$. The full crack-surface
+density also includes the gradient penalty and the normalization constant
+$c_w$, so this plot should not be read as a complete fracture-energy density or
+as the one-dimensional crack profile.
 ```
 
 **AT2** is mathematically simpler -- the damage equation is linear in

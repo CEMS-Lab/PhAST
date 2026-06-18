@@ -117,7 +117,7 @@ $$
 
 with damage updated through the configured phase-field substep cadence.
 
-## AT1 and AT2 Dissipation
+## AT1 and AT2 Crack-Density Terms
 
 The regularization choice enters through $w(d)$ and $c_w$:
 
@@ -127,11 +127,11 @@ The regularization choice enters through $w(d)$ and $c_w$:
 | AT2 | $d^2$ | $1/2$ | Smooth damage response; commonly used for pre-cracked propagation. |
 
 ```{figure} ../_static/at_dissipation.svg
-:alt: AT1 and AT2 dissipation functions
+:alt: AT1 and AT2 local crack-density terms
 :width: 78%
 
-AT1 grows linearly with damage and gives a threshold-like response. AT2 is
-quadratic and is smoother for propagation from an existing notch.
+The figure compares only the local term $w(d)$. The full crack-surface density
+also includes the gradient penalty and the normalization constants $c_w$.
 ```
 
 The AT1 threshold is often written as
@@ -279,7 +279,7 @@ preconditioner setup explicitly requires one.
 | $G_c$ | fracture toughness | `material.Gc` or material preset override |
 | $\ell_0$ | regularization length | `material.l0` or material preset override |
 | $\eta$ | residual stiffness | `material.eta_residual` |
-| $w(d)$ | AT1/AT2 local dissipation | `material.overrides.pf_model` |
+| $w(d)$ | AT1/AT2 local crack-density term | `material.overrides.pf_model` |
 | $\psi^+$, $\psi^-$ | tensile/compressive energy split | `material.overrides.energy_split` |
 | $\varepsilon_{\mathrm{stag}}$ | staggered convergence tolerance | solver damage/staggered tolerance key |
 
