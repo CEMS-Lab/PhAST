@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-04-01T12:40:14.301498",
+  "platform": {
+    "system": "Linux",
+    "release": "5.14.0-611.11.1.el9_7.x86_64",
+    "machine": "x86_64",
+    "python": "3.11.15",
+    "pytorch": "2.8.0+cu128"
+  },
+  "problem": "Dynamic SENT \u2014 Straight Crack (Glass)",
+  "device": {
+    "device": "cuda:0",
+    "dtype_default": "float64",
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "vram_gb": 79.3
+  },
+  "material": {
+    "E": 32000.0,
+    "nu": 0.2,
+    "Gc": 0.003,
+    "l0": 0.5,
+    "energy_split": "spectral",
+    "pf_model": "AT2",
+    "eta_residual": 1e-06,
+    "rho": 2.45e-09
+  },
+  "mesh": {
+    "n_nodes": 1091,
+    "n_elements": 1940,
+    "h_min": 0.07787059161639752
+  },
+  "solver": {
+    "solver_type": "explicit",
+    "num_steps": 6116,
+    "dt": 1.635282423944348e-08,
+    "dt_s": "1.6353e-08",
+    "dt_us": "0.0164",
+    "t_total_us": "100.01",
+    "t_ramp_us": "20.0",
+    "disp_max_mm": 0.002,
+    "c_R_mm_s": 2119003.0
+  },
+  "git_hash": "adfab6b",
+  "total_time_s": 21.25,
+  "crack_step": 1079,
+  "crack_time_us": 17.645
+}

@@ -1,20 +1,20 @@
 # B3 Dynamic SENT
 
-Dynamic single-edge-notched tension lightweight example based on Borden et al. (2012). The folder is useful as a lightweight explicit-dynamics demonstration and keeps the current curated SENT CSV and PNG outputs beside the YAML configuration.
+Dynamic single-edge-notched tension lightweight example based on Borden et al. (2012). The folder provides a compact explicit-dynamics demonstration and keeps the curated SENT CSV, PNG, and animation outputs beside the YAML configuration.
 
-All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic diagnostics are intentionally excluded.
+All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic outputs are intentionally excluded.
 
 ## 1. Problem Description
 
-- 100 mm x 40 mm SENT plate with a 50 mm wedge notch generated through the geometry DSL.
+- 40 mm x 40 mm SENT plate with a 20 mm wedge notch generated through the geometry DSL and mirrored by `mesh.geo`.
 - Material model: soda-lime glass, AT2 phase field, spectral split, explicit dynamics.
-- Loading: constant opposite top/bottom tractions with the left edge constrained in x.
+- Loading: smooth-step prescribed vertical displacement on the top and bottom edges, ramped to `u_y = +/-0.002 mm` over 20 us and then held; left and right edges are constrained in `x`.
 - Claim boundary: qualitative lightweight dynamic fracture evidence, not convergence-quality benchmark validation.
 
 The YAML configuration is the canonical public input for this example. Expected runtime depends strongly on mesh size, device, and output cadence; the checked-in outputs are curated evidence and should not be regenerated during lightweight contract checks.
 
 
-## Run The Canonical YAML configuration
+## Run The Canonical YAML Configuration
 
 From the repository root:
 
@@ -40,6 +40,16 @@ python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml \
 ```
 
 Do not treat the short check as benchmark evidence; it is only a quick check for the declarative configuration and runner plumbing.
+
+To regenerate a fresh Gmsh mesh from the public geometry recipe:
+
+```bash
+gmsh examples/dynamic/B3_dynamic_sent/mesh.geo \
+  -2 -format msh2 \
+  -o examples/dynamic/B3_dynamic_sent/mesh.msh
+```
+
+The checked-in `mesh.msh` is the mesh used by the curated public evidence. Regenerating from `mesh.geo` is useful for reruns, but Gmsh version and import/export choices can produce small node/element-count differences.
 
 ## How The YAML Is Used
 
@@ -100,11 +110,12 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 
 | Initial conditions | Damage evolution |
 |---|---|
+| <img src="initial_conditions.png" alt="B3 dynamic SENT initial conditions" width="360"> | <img src="damage_evolution.gif" alt="B3 dynamic SENT damage evolution" width="360"> |
 
 | Quantity | Reference evidence | Status |
 | --- | --- | --- |
 | Package status | Dynamic lightweight example | PUBLIC EXAMPLE |
-| Curated evidence | Setup, multipanel damage, stress/displacement, energy, velocity, history, and crack-tip files | PRESENT |
-| Known limitation | Current config has h/l0 warning; add finer reference evidence before claiming benchmark convergence | DOCUMENTED |
+| Curated evidence | Setup image, final damage image, damage animation, history, energy, and crack-tip files | PRESENT |
+| Known limitation | Lightweight 1,091-node public evidence; use finer reruns before making convergence-quality claims | DOCUMENTED |
 
 The public result bundle is lightweight by design. It is suitable for documentation, review, and drift checks, while large full trajectories and source datasets remain outside the public example folder.

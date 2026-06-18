@@ -1,8 +1,8 @@
 # B2 Kalthoff-Winkler
 
-Dynamic Kalthoff-Winkler impact example based on Borden et al. (2012). The public folder contains the runnable YAML configuration and lightweight mesh-3 evidence from the canonical half-plate reference environment run `kalthoff_halfplate_19148/mesh3_h0.25`.
+Dynamic Kalthoff-Winkler impact example based on Borden et al. (2012). The public folder contains the runnable YAML configuration and lightweight mesh-3 evidence from the canonical half-plate reference run `kalthoff_halfplate_19148/mesh3_h0.25`.
 
-All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic diagnostics are intentionally excluded.
+All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic outputs are intentionally excluded.
 
 ## 1. Problem Description
 
@@ -14,7 +14,7 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 The YAML configuration is the canonical public input for this example. The reference evidence was produced in the reference environment with a single A100 80 GB GPU; the mesh-3 run metadata records 35,487 nodes, 70,447 elements, 11,775 explicit steps, and 79.22 s wall time. Do not regenerate this full benchmark during lightweight contract checks.
 
 
-## Run The Canonical YAML configuration
+## Run The Canonical YAML Configuration
 
 From the repository root:
 
@@ -112,8 +112,8 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 | Quantity | Reference evidence | Status |
 | --- | --- | --- |
 | Recorded run | reference A100 mesh-3 evidence; 35,487 nodes, 70,447 elements, 11,775 explicit steps | PRESENT |
-| Public field animation | `damage_evolution.gif` and `damage_evolution.mp4` generated from mesh-3 `external trajectory store` in the reference environment | PRESENT |
-| Excluded large files | `external trajectory store`, full run logs, and temporary result directories stay out of the public bundle | ENFORCED |
+| Public field animation | `damage_evolution.gif` and `damage_evolution.mp4` generated from the mesh-3 trajectory store in the reference environment | PRESENT |
+| Excluded large files | Full trajectory stores, run logs, and temporary result directories stay out of the public bundle | ENFORCED |
 
 To regenerate the reference visuals without transferring a large trajectory
 store, post-process in the reference environment and copy only the lightweight

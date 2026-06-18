@@ -1,4 +1,4 @@
-"""Run the B3 dynamic SENT example without a YAML deck."""
+"""Run the B3 dynamic SENT example without a YAML configuration."""
 
 from __future__ import annotations
 
@@ -23,19 +23,20 @@ def build_problem(num_steps: int | None = None) -> phast.Problem:
     problem.config.geometry = GeometryConfig(
         units="mm",
         primitives={
-            "plate": {"type": "rectangle", "origin": [0, 0], "size": [100.0, 40.0]},
+            "plate": {"type": "rectangle", "origin": [0, 0], "size": [40.0, 40.0]},
             "notch": {
                 "type": "polygon",
-                "vertices": [[0.0, 20.01], [50.0, 20.0], [0.0, 19.99]],
+                "vertices": [[0.0, 20.001], [20.0, 20.0], [0.0, 19.999]],
             },
         },
         domain={"base": "plate", "subtract": ["notch"]},
         named_groups={
             "left": {"region": {"type": "rectangle", "origin": [-0.01, 0.0], "size": [0.02, 40.0]}},
-            "top": {"region": {"type": "rectangle", "origin": [0.0, 39.99], "size": [100.0, 0.02]}},
-            "bottom": {"region": {"type": "rectangle", "origin": [0.0, -0.01], "size": [100.0, 0.02]}},
+            "right": {"region": {"type": "rectangle", "origin": [39.99, 0.0], "size": [0.02, 40.0]}},
+            "top": {"region": {"type": "rectangle", "origin": [0.0, 39.99], "size": [40.0, 0.02]}},
+            "bottom": {"region": {"type": "rectangle", "origin": [0.0, -0.01], "size": [40.0, 0.02]}},
         },
-        mesh={"element_size": {"default": 4.0, "refined": [{"primitive": "notch", "size": 0.5, "margin": 2.5}]}},
+        mesh={"element_size": {"default": 2.0, "refined": [{"primitive": "notch", "size": 0.25, "margin": 1.5}]}},
     )
     problem.config.material = MaterialConfig(
         E=32000.0,
@@ -49,10 +50,17 @@ def build_problem(num_steps: int | None = None) -> phast.Problem:
     )
     problem.config.boundary_conditions = [
         BoundaryConditionEntry(nodes="left", type="fix", component=0),
-        BoundaryConditionEntry(nodes="top", type="traction", component=1, value=1.0, ramp_type="constant"),
-        BoundaryConditionEntry(nodes="bottom", type="traction", component=1, value=-1.0, ramp_type="constant"),
+        BoundaryConditionEntry(nodes="right", type="fix", component=0),
+        BoundaryConditionEntry(nodes="top", type="prescribe", component=1, value=0.002),
+        BoundaryConditionEntry(nodes="bottom", type="prescribe", component=1, value=-0.002),
     ]
-    problem.config.loading = LoadingConfig(protocol="simple", t_total=5.0e-05, ramp_type="constant", num_steps=0)
+    problem.config.loading = LoadingConfig(
+        protocol="simple",
+        t_total=1.0e-04,
+        ramp_type="smooth_step",
+        t_ramp=2.0e-05,
+        num_steps=0,
+    )
     problem.config.solver = SolverSettings(solver_type="explicit", dt_safety=0.8)
     problem.config.output = OutputConfig(
         trajectory=True,

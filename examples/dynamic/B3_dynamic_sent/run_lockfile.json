@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "command": "python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml",
-  "config_sha256": "c6e497f0bd5419e8c0b65ca3084ce5ebc914fffd0a63b54080660a6ae68b7a3f",
+  "config_sha256": "abebef68a514c58a9fcf9bdb71cd2ec9fa7467930ac6137eabdd2926be39411c",
   "resolved_config": {
     "schema_version": 1,
     "example": "phast.examples.dynamic_sent_tension.run",
@@ -19,7 +19,7 @@
             0
           ],
           "size": [
-            100.0,
+            40.0,
             40.0
           ]
         },
@@ -28,22 +28,24 @@
           "vertices": [
             [
               0.0,
-              20.01
+              20.001
             ],
             [
-              50.0,
+              20.0,
               20.0
             ],
             [
               0.0,
-              19.99
+              19.999
             ]
           ]
         }
       },
       "domain": {
         "base": "plate",
-        "subtract": []
+        "subtract": [
+          "notch"
+        ]
       },
       "named_groups": {
         "left": {
@@ -51,6 +53,19 @@
             "type": "rectangle",
             "origin": [
               -0.01,
+              0.0
+            ],
+            "size": [
+              0.02,
+              40.0
+            ]
+          }
+        },
+        "right": {
+          "region": {
+            "type": "rectangle",
+            "origin": [
+              39.99,
               0.0
             ],
             "size": [
@@ -67,7 +82,7 @@
               39.99
             ],
             "size": [
-              100.0,
+              40.0,
               0.02
             ]
           }
@@ -80,7 +95,7 @@
               -0.01
             ],
             "size": [
-              100.0,
+              40.0,
               0.02
             ]
           }
@@ -88,12 +103,12 @@
       },
       "mesh": {
         "element_size": {
-          "default": 4.0,
+          "default": 2.0,
           "refined": [
             {
               "primitive": "notch",
-              "size": 0.5,
-              "margin": 2.5
+              "size": 0.25,
+              "margin": 1.5
             }
           ]
         }
@@ -116,24 +131,28 @@
         "component": 0
       },
       {
+        "nodes": "right",
+        "type": "fix",
+        "component": 0
+      },
+      {
         "nodes": "top",
-        "type": "traction",
+        "type": "prescribe",
         "component": 1,
-        "value": 1.0,
-        "ramp_type": "constant"
+        "value": 0.002
       },
       {
         "nodes": "bottom",
-        "type": "traction",
+        "type": "prescribe",
         "component": 1,
-        "value": -1.0,
-        "ramp_type": "constant"
+        "value": -0.002
       }
     ],
     "loading": {
       "protocol": "simple",
-      "t_total": 5e-05,
-      "ramp_type": "constant"
+      "t_total": 0.0001,
+      "ramp_type": "smooth_step",
+      "t_ramp": 2e-05
     },
     "solver": {
       "solver_type": "explicit",

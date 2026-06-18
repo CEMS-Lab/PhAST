@@ -3,42 +3,37 @@ example: phast.examples.dynamic_sent_tension.run
 problem:
   name: Dynamic SENT
   reference: Borden et al. (2012), CMAME
-# Geometry: inline-primitive DSL (issue #192). Plate rectangle minus a
-# triangular wedge notch (3-vertex polygon, edge-flush at x=0 — routed
-# through OCC fragment by the geometry compiler, PR #191/#199).
-# `left`/`top`/`bottom` BC node sets are tagged via thin RegionGroup
-# strips along each base edge; the bbox-aspect-ratio gate in
-# geometry_compiler._on_outline disambiguates which base edge each
-# strip targets (PR #201). l0 = 0.5, h_crack = 0.5, h_coarse = 4.0,
-# crack_band = 5*l0 = 2.5 — matches the legacy rectangular_sent
-# generator at branching=False (mesh_generator.py L1218 onwards).
+# Geometry: inline-primitive DSL. The B3 SENT plate is a 40 mm square
+# with a 20 mm V-notch at mid-height. The checked-in mesh.geo/mesh.msh
+# files provide the same public geometry recipe for direct Gmsh reruns.
 geometry:
   units: mm
   primitives:
-    plate: { type: rectangle, origin: [0, 0], size: [100.0, 40.0] }
+    plate: { type: rectangle, origin: [0, 0], size: [40.0, 40.0] }
     # Triangular wedge notch: tip at (a, H/2), mouth at left edge
     # spanning H/2 +- eps. eps = min(0.01*min(W,H), 0.01) = 0.01,
     # matching mesh_generator.rectangular_sent (notch_eps).
     notch:
       type: polygon
-      vertices: [[0.0, 20.01], [50.0, 20.0], [0.0, 19.99]]
+      vertices: [[0.0, 20.001], [20.0, 20.0], [0.0, 19.999]]
   domain:
     base: plate
     subtract: [notch]
   named_groups:
     left:   { region: { type: rectangle, origin: [-0.01,  0.0],   size: [0.02,   40.0] } }
-    top:    { region: { type: rectangle, origin: [ 0.0,   39.99], size: [100.0,  0.02] } }
-    bottom: { region: { type: rectangle, origin: [ 0.0,  -0.01],  size: [100.0,  0.02] } }
+    right:  { region: { type: rectangle, origin: [39.99,  0.0],   size: [0.02,   40.0] } }
+    top:    { region: { type: rectangle, origin: [ 0.0,   39.99], size: [40.0,  0.02] } }
+    bottom: { region: { type: rectangle, origin: [ 0.0,  -0.01],  size: [40.0,  0.02] } }
   mesh:
     element_size:
-      default: 4.0       # h_coarse
+      default: 2.0       # h_coarse
       refined:
         # Distance+Threshold band around the notch walls (matches
         # Field[1]/Field[2] in legacy .geo: refinement of width 5*l0
         # around the notch curves at h_crack).
         - primitive: notch
-          size: 0.5      # h_crack
-          margin: 2.5    # crack_band = 5*l0
+          size: 0.25     # h_crack
+          margin: 1.5
 # Inline material — Borden (2012) soda-lime glass.
 material:
   E: 32000.0            # 32 GPa
@@ -53,12 +48,16 @@ boundary_conditions:
 - nodes: left
   type: fix
   component: 0
-- {nodes: top,    type: traction, component: 1, value:  1.0, ramp_type: constant}
-- {nodes: bottom, type: traction, component: 1, value: -1.0, ramp_type: constant}
+- nodes: right
+  type: fix
+  component: 0
+- {nodes: top,    type: prescribe, component: 1, value:  0.002}
+- {nodes: bottom, type: prescribe, component: 1, value: -0.002}
 loading:
   protocol: simple
-  t_total: 5.0e-05
-  ramp_type: constant
+  t_total: 1.0e-04
+  ramp_type: smooth_step
+  t_ramp: 2.0e-05
 solver:
   solver_type: explicit
   dt_safety: 0.8

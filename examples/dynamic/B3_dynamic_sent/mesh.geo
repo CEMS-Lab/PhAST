@@ -1,6 +1,6 @@
-// Miehe SENT benchmark - auto-generated
+// B3 dynamic SENT benchmark geometry
 // L=40.0, a=20.0, l0=0.5, h_crack=0.25, h_coarse=2.0
-// V-notch opening: +/-0.001 mm (matching PhaseFieldX)
+// V-notch opening: +/-0.001 mm
 
 h_crack = 0.25;
 h_coarse = 2.0;
