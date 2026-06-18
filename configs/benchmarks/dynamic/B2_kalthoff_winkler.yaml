@@ -31,7 +31,7 @@ boundary_conditions:
   value: 1.0
 # Bottom edge is the symmetry plane in Borden (2012) Sec 4.3 — the
 # half-plate Kalthoff setup mirrors about y=0. ``symmetry axis=y`` is
-# the canonical shorthand for ``fix component=1`` on a horizontal
+# the reference shorthand for ``fix component=1`` on a horizontal
 # edge: it suppresses u_y while leaving u_x free. Bit-exact with
 # the legacy form used by older accepted decks.
 - {nodes: bottom, type: symmetry, axis: y}

@@ -5,7 +5,7 @@
 Compressible neo-Hookean cantilever solved by load-stepped Newton iteration with PhAST sparse linear solves. The example reports the load-displacement response, Newton iteration counts, differentiable final correction through `SparseSolveAutograd`, and final nonlinear field visualisations.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 Run commands from the repository root:
 

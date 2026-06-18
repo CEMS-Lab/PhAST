@@ -45,7 +45,7 @@ def main() -> None:
         detail = "; ".join(issue.message for issue in issues)
         raise SystemExit(f"invalid fluent setup: {detail}")
     print("OK: fluent setup compiles to the workflow contract.")
-    print("Canonical deck: examples/solid_mechanics_beta/neohookean_plate/config.yaml")
+    print("Reference deck: examples/solid_mechanics_beta/neohookean_plate/config.yaml")
     if args.run:
         problem.run(output_dir=args.output_dir, return_result=True)
 

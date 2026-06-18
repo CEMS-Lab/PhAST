@@ -417,7 +417,7 @@ def _stress_triaxiality_ps(s, e, nu=0.3):
     return sh / (vm + 1e-30)
 
 
-# Principal stress/strain: canonical implementations in fem_operators.py
+# Principal stress/strain: reference implementations in fem_operators.py
 from ..core.fem_operators import FEMOperators
 compute_principal_stress = FEMOperators.compute_principal_stress
 compute_principal_strain = FEMOperators.compute_principal_strain

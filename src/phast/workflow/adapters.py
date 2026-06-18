@@ -99,7 +99,7 @@ def _component_from_entry(entry: dict[str, Any]) -> int | None:
     return _DOF_COMPONENTS[key]
 
 
-def _canonical_bc_kind(kind: str | None) -> str:
+def _normalized_bc_kind(kind: str | None) -> str:
     if kind is None:
         raise ValueError("Boundary condition requires type or kind")
     key = str(kind).lower().strip()
@@ -549,7 +549,7 @@ def _schema_v2_boundary_conditions(raw: dict[str, Any]) -> list[BoundaryConditio
     specs: list[BoundaryConditionSpec] = []
     for index, entry in enumerate(raw.get("boundary_conditions") or []):
         data = dict(entry or {})
-        kind = _canonical_bc_kind(data.pop("type", data.pop("kind", None)))
+        kind = _normalized_bc_kind(data.pop("type", data.pop("kind", None)))
         region = data.pop("region", data.pop("nodes", None))
         value = data.pop("value", None)
         name = data.pop("name", None) or f"bc_{index}_{kind}_{region}"

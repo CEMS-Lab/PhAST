@@ -295,7 +295,7 @@ _CAPABILITIES: tuple[WorkflowCapability, ...] = (
         "history_output",
         "reaction_force",
         "production",
-        description="Canonical reaction-force history.",
+        description="Reference reaction-force history.",
     ),
     WorkflowCapability(
         "history_output",
@@ -313,7 +313,7 @@ _CAPABILITIES: tuple[WorkflowCapability, ...] = (
         "history_output",
         "load_displacement",
         "production",
-        description="Canonical load-displacement response history.",
+        description="Reference load-displacement response history.",
     ),
     WorkflowCapability(
         "history_output",

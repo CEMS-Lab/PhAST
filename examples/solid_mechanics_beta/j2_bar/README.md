@@ -5,7 +5,7 @@
 Mesh-level displacement-controlled J2/von-Mises plasticity with linear isotropic hardening. The example solves a mildly waisted bar, tracks equivalent plastic strain, and writes stress/plastic-strain fields for the reference public run.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 Run commands from the repository root:
 

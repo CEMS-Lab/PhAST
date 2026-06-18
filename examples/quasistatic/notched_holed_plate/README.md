@@ -4,7 +4,7 @@ Validated notched-holed plate benchmark based on the COMSOL 6.4 Geomechanics
 Application Library example "Brittle Fracture of a Holed Plate" and the
 Ambati, Gerasimov, and De Lorenzis phase-field fracture setup.
 
-This folder is self-contained: the canonical YAML configuration, equivalent
+This folder is self-contained: the example YAML configuration, equivalent
 Python setup script, mesh files, COMSOL reference curve, comparison script,
 validation report, CSV outputs, run metadata, and reference visual artifacts are
 kept beside each other.
@@ -36,7 +36,7 @@ The checked-in reference result used 200 load steps on CPU and took about
 10.5 hours in the recorded run metadata.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -68,7 +68,7 @@ python -u examples/quasistatic/notched_holed_plate/compare.py \
   --run-dir examples/quasistatic/notched_holed_plate/run_local
 ```
 
-The YAML configuration is the canonical public input for this example because it
+The YAML configuration is the primary public input for this example because it
 contains the exact rigid-connector setup used for the reference validation run.
 
 ### How The YAML Is Used
@@ -88,7 +88,7 @@ solver. The main YAML blocks map to solver setup as follows:
 | `loading` | Defines the load schedule. Here `cyclic_phases: "0.25:140,1.0:60"` means 140 steps to 0.25 mm per-pin displacement, then 60 steps to 1.0 mm. |
 | `solver` | Configures the quasi-static legacy staggered solver, tolerances, iteration limits, damage cadence, preconditioner, and backend. |
 | `output` | Chooses CSV files, plots, trajectory settings, profiling, and animation settings. |
-| `device` | Selects CPU/CUDA/MPS behavior. This reference configuration file is CPU by default. |
+| `device` | Selects CPU/CUDA/MPS behavior. This primary configuration file is CPU by default. |
 | `initial_conditions` | Optional damage preseeding; this configuration file leaves it unset. |
 
 Use YAML when the goal is reproducibility, review, record keeping, or batch
@@ -116,7 +116,7 @@ python examples/quasistatic/notched_holed_plate/run_fluent.py \
 The script constructs the same `phast.Problem` configuration objects used by
 the YAML workflow, including the inline geometry primitives, rigid connector
 pin constraints, two-stage displacement schedule, and `quasi_static_legacy`
-solver settings. The YAML configuration remains the canonical public
+solver settings. The YAML configuration remains the reference public
 reproduction input because it is the artifact saved into lockfiles and
 validation evidence.
 

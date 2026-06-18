@@ -57,7 +57,7 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 
 | Capability | Status | Public Statement |
 |---|---|---|
-| YAML problem definition | Production | Canonical execution entry point (e.g., `python -m phast run config.yaml`). |
+| YAML problem definition | Production | Primary execution entry point (e.g., `python -m phast run config.yaml`). |
 | YAML schema validation | Production | `--validate-only` strictly enforces schema compliance and reports line-numbered semantic errors. |
 | `explain-config` dry-run review | Production | Prints selected physics, solver paths, provenance, and setup warnings without initiating meshing or solving. |
 | `schema_version` | Production | Modern configs declare `schema_version: 1`; legacy files trigger review warnings. |

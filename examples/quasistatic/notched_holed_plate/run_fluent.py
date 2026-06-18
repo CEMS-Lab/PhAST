@@ -3,7 +3,7 @@
 This script constructs the same configuration objects used by ``config.yaml``.
 It is intended as a readable Python setup example for users who want to define
 the geometry, material, rigid connectors, loading, solver, and outputs
-programmatically while keeping the YAML file as the canonical reproduction
+programmatically while keeping the YAML file as the reference reproduction
 input.
 """
 

@@ -82,7 +82,7 @@ _DERIVED_FIELD_NAMES = {
 }
 
 
-def _canonical_field_name(name: str) -> str:
+def _reference_field_name(name: str) -> str:
     return _FIELD_ALIASES.get(name, name)
 
 
@@ -155,7 +155,7 @@ class Result:
     def history(self, name: str) -> list[dict[str, Any]]:
         """Return a CSV-backed history by name.
 
-        Current canonical names include ``response`` for solid-mechanics
+        Current standard names include ``response`` for solid-mechanics
         response tables, ``energy``, ``history``, ``solver_telemetry``,
         ``timing_per_step``, and ``reaction_force`` when a history CSV exposes
         that column.
@@ -190,19 +190,19 @@ class Result:
         raise ResultLoadError(f"No mesh metadata found in result directory: {self.path}")
 
     def field_names(self) -> list[str]:
-        """List canonical trajectory field names discovered read-only."""
+        """List reference trajectory field names discovered read-only."""
         return sorted(self._fields().keys())
 
     def has_field(self, name: str) -> bool:
-        """Return True if a canonical field or supported alias is present."""
-        return _canonical_field_name(name) in self._fields()
+        """Return True if a stored field or supported alias is present."""
+        return _reference_field_name(name) in self._fields()
 
     def field(self, name: str, step: int = -1):
         """Load a directly stored trajectory field as a NumPy array."""
-        canonical = _canonical_field_name(name)
+        reference = _reference_field_name(name)
         sources = self._field_sources()
-        if canonical not in sources:
-            if name in _DERIVED_FIELD_NAMES or canonical in _DERIVED_FIELD_NAMES:
+        if reference not in sources:
+            if name in _DERIVED_FIELD_NAMES or reference in _DERIVED_FIELD_NAMES:
                 available = ", ".join(self.field_names())
                 raise ResultLoadError(
                     f"Field {name!r} is not stored directly in this result. "
@@ -212,7 +212,7 @@ class Result:
             raise ResultLoadError(
                 f"Unknown field {name!r}. Available fields: {available}"
             )
-        source_kind, raw_names = sources[canonical]
+        source_kind, raw_names = sources[reference]
         raw_name = name if name in raw_names else sorted(raw_names)[0]
         if source_kind == "zarr":
             return self._load_zarr_field(raw_name, step=step)
@@ -361,11 +361,11 @@ class Result:
                 ("h5", self._discover_h5_fields()),
             ):
                 for raw_name in names:
-                    canonical = _canonical_field_name(raw_name)
-                    if canonical not in sources:
-                        sources[canonical] = (source_kind, {raw_name})
-                    elif sources[canonical][0] == source_kind:
-                        sources[canonical][1].add(raw_name)
+                    reference = _reference_field_name(raw_name)
+                    if reference not in sources:
+                        sources[reference] = (source_kind, {raw_name})
+                    elif sources[reference][0] == source_kind:
+                        sources[reference][1].add(raw_name)
             self._field_source_cache = sources
         return self._field_source_cache
 

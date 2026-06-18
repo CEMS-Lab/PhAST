@@ -34,7 +34,7 @@ delamination workflow. Those remain tracked under GitHub issues #553 and #554.
 
 From the repository root:
 
-The canonical reproducibility contract for this validation suite is:
+The primary reproducibility contract for this validation suite is:
 
 ```text
 configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml

@@ -1,5 +1,5 @@
 # ============================================================================
-# REFERENCE YAML — Every available option for phast
+# FULL YAML REFERENCE — Every available option for phast
 # ============================================================================
 #
 # This file documents ALL configurable options. Copy it, delete sections
@@ -18,7 +18,7 @@
 # Regenerate with the project release tooling when schema tables change.
 #
 # ----------------------------------------------------------------------------
-# UNITS — canonical convention (issue #141)
+# UNITS — reference convention (issue #141)
 # ----------------------------------------------------------------------------
 # The solver runs in a single, *consistent* unit system driven by the
 # mesh generators (which produce millimetre coordinates). All bare
@@ -51,7 +51,7 @@
 #   loading:
 #     t_total: "80 us"        # equivalent to 80.0e-6       (s)
 #     v0:      "16.5 m/s"     # equivalent to 16.5          (m/s — legacy)
-#                             # NB: loading.v0 is the only field whose canonical
+#                             # NB: loading.v0 is the only field whose reference
 #                             # unit is m/s (not internal mm/s); it is multiplied
 #                             # by 1e3 inside compute_load_factor at runtime.
 #
@@ -232,7 +232,7 @@ material:
                                          # at W_c0 = S_H/2 = 3 Gc/(16 l0).
                                          # Provide a float to override.
                                          # Ignored when pf_model == 'AT2'.
-    # --- Bare floats: internal units (canonical) ---
+    # --- Bare floats: internal units (reference) ---
     # E: 32000.0                         # Young's modulus [MPa]   (== 32 GPa)
     # nu: 0.2                            # Poisson's ratio
     # Gc: 3.0e-3                         # Fracture toughness [N/mm]   (== 3 J/m^2)

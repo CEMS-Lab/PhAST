@@ -78,7 +78,7 @@ geometry:
 # mortar (COMSOL "Brittle Fracture of a Holed Plate"). Plane stress,
 # AT2. The accepted 2026-05-15 HPC validation uses the historical
 # isotropic split below; exact strict COMSOL parity uses volDev/Amor and
-# should be revalidated before changing this canonical config.
+# should be revalidated before changing this reference configuration.
 material:
   E: 6000.0             # 6 GPa
   nu: 0.22

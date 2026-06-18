@@ -20,7 +20,7 @@ python -m phast run examples/<family>/<case>/config.yaml --output_dir runs/<case
 
 Use the fluent `phast.Problem` API when authoring new models. Where an example
 includes `run_fluent.py`, that script shows the equivalent manual Python setup;
-`config.yaml` remains the canonical reproducibility configuration file.
+`config.yaml` remains the primary reproducibility configuration file.
 
 For detailed artifact and promotion rules, see the
 [example contract](../docs/user_guide/example_contract.md).

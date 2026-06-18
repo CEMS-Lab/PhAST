@@ -12,9 +12,9 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 - Loading: two-step prestrain to 0.04 mm followed by dynamic release with the Dirichlet displacement held fixed.
 - Claim boundary: curated B6 crack-hole interaction evidence, not a separate convergence-quality validation gate.
 
-The YAML configuration is the canonical public input for this example. The retained reference run used 53,395 nodes, 106,199 elements, 101,295 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
+The YAML configuration is the primary public input for this example. The retained reference run used 53,395 nodes, 106,199 elements, 101,295 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -84,7 +84,7 @@ python examples/dynamic/B6_perforated_1hole_far/run_fluent.py \
   --output-dir examples/dynamic/B6_perforated_1hole_far/run_fluent_quick
 ```
 
-The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the reference public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 

@@ -38,7 +38,7 @@ python examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.
 
 ## Manual Or Fluent Setup
 
-The script-contract runner is canonical for this beta validation slice. The
+The script-contract runner is reference for this beta validation slice. The
 fluent authoring companion is:
 
 ```text

@@ -39,7 +39,7 @@ python examples/plasticity_interface_beta/run_j2_validation.py \
 
 ## Manual Or Fluent Setup
 
-The script-contract runner is canonical for this beta validation slice. The
+The script-contract runner is reference for this beta validation slice. The
 fluent authoring companion is:
 
 ```text

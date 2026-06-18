@@ -1,7 +1,7 @@
 """
 Unit parsing and normalisation for phast YAML inputs.
 
-Canonical internal convention (historical, mesh-driven)
+Reference internal convention (historical, mesh-driven)
 -------------------------------------------------------
 The solver internals run in a *consistent unit system* with these base units:
 
@@ -122,7 +122,7 @@ _DENSITY_TO_TPMM3 = {
 # traction -> N/mm
 #
 # Boundary tractions are assembled as force per boundary length in the
-# 2D weak form. The N/mm entries are the canonical units. Stress-like
+# 2D weak form. The N/mm entries are the reference units. Stress-like
 # suffixes are accepted as a convenience for plane-stress/plane-strain
 # benchmark YAMLs where the implicit out-of-plane thickness is 1 mm.
 _TRACTION_TO_NPMM = {
@@ -152,7 +152,7 @@ _TIME_TO_S = {
 # its legacy bare-float semantics is m/s (see config.py:143 — there is
 # an explicit ``v0_mm = loading.v0 * 1e3`` conversion before the field
 # reaches the solver). To keep bit-identical behaviour with legacy
-# configs that supplied a bare float in m/s, the canonical unit for
+# configs that supplied a bare float in m/s, the reference unit for
 # ``kind='velocity'`` is m/s, not the internal mm/s. The runtime
 # mm/s conversion in compute_load_factor is unchanged.
 _VELOCITY_TO_MPS = {

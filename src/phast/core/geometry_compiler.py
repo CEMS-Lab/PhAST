@@ -12,7 +12,7 @@ Cache layout (highest priority first):
 * ``$XDG_CACHE_HOME/phast/meshes/``
 * ``~/.cache/phast/meshes/``
 
-Each compiled mesh is keyed by a SHA-256 of the *canonicalised* parsed
+Each compiled mesh is keyed by a SHA-256 of the *normalized* parsed
 geometry (so cosmetic YAML edits do not bust the cache, and ``units: m``
 inputs hash identically to their mm-equivalent numeric form).
 
@@ -111,8 +111,8 @@ def cache_dir() -> Path:
     return d
 
 
-def _canonicalise_primitive(p: Primitive) -> Dict[str, Any]:
-    """Return a JSON-friendly canonical dict for hashing.
+def _normalize_primitive(p: Primitive) -> Dict[str, Any]:
+    """Return a JSON-friendly reference dict for hashing.
 
     All length quantities are already in mm at this point (the geometry
     DSL parser does the unit scaling), so two YAML inputs that describe
@@ -136,7 +136,7 @@ def _canonicalise_primitive(p: Primitive) -> Dict[str, Any]:
     raise TypeError(f'Unhandled primitive type {type(p).__name__}')
 
 
-def _canonicalise_named_group(g: NamedGroup) -> Dict[str, Any]:
+def _normalize_named_group(g: NamedGroup) -> Dict[str, Any]:
     if isinstance(g, SelectorAliasGroup):
         return {'kind': 'selector_alias', 'name': g.name,
                 'primitive': g.primitive,
@@ -146,42 +146,42 @@ def _canonicalise_named_group(g: NamedGroup) -> Dict[str, Any]:
                 'coords': list(g.coords)}
     if isinstance(g, RegionGroup):
         return {'kind': 'region', 'name': g.name,
-                'region': _canonicalise_primitive(g.region) if g.region else None}
+                'region': _normalize_primitive(g.region) if g.region else None}
     raise TypeError(f'Unhandled named-group type {type(g).__name__}')
 
 
-def _canonicalise_rule(r: ElementSizeRule) -> Dict[str, Any]:
+def _normalize_rule(r: ElementSizeRule) -> Dict[str, Any]:
     return {
-        'region': _canonicalise_primitive(r.region) if r.region is not None else None,
+        'region': _normalize_primitive(r.region) if r.region is not None else None,
         'primitive': r.primitive,
         'size': r.size,
         'margin': r.margin,
         # Mode + thickness are part of the cache key (issue #200): a
         # box-mode rule produces a *different* mesh than a threshold-mode
-        # rule with the same region geometry, so the canonical payload
+        # rule with the same region geometry, so the reference payload
         # must distinguish them.
         'mode': getattr(r, 'mode', 'threshold'),
         'thickness': getattr(r, 'thickness', 0.0),
     }
 
 
-def _canonical_payload(
+def _normalized_payload(
     primitives: Dict[str, Primitive],
     domain: Optional[Domain],
     named_groups: Dict[str, NamedGroup],
     mesh_dsl: Optional[MeshDSL],
 ) -> str:
-    """Build the canonical JSON string used as the SHA-256 input."""
+    """Build the reference JSON string used as the SHA-256 input."""
     payload = {
-        'primitives': {k: _canonicalise_primitive(v)
+        'primitives': {k: _normalize_primitive(v)
                        for k, v in sorted(primitives.items())},
         'domain': asdict(domain) if domain is not None else None,
-        'named_groups': {k: _canonicalise_named_group(v)
+        'named_groups': {k: _normalize_named_group(v)
                          for k, v in sorted(named_groups.items())},
         'mesh': (
             {
                 'default_size': mesh_dsl.default_size,
-                'refined': [_canonicalise_rule(r) for r in mesh_dsl.refined],
+                'refined': [_normalize_rule(r) for r in mesh_dsl.refined],
             }
             if mesh_dsl is not None else None
         ),
@@ -208,7 +208,7 @@ def _canonical_payload(
         # bump invalidates v4 caches.
         'compiler_version': 5,
         # Per-subtract boolean strategy ('cut' | 'fragment' | 'noop'): part
-        # of the canonical form so a strategy change (e.g. a primitive
+        # of the reference form so a strategy change (e.g. a primitive
         # nudged onto the boundary) busts the cache deterministically.
         'boolean_strategy': (
             _boolean_strategies(domain, primitives) if domain is not None
@@ -224,8 +224,8 @@ def cache_key(
     named_groups: Dict[str, NamedGroup],
     mesh_dsl: Optional[MeshDSL],
 ) -> str:
-    """Return the SHA-256 hex digest of the canonical geometry payload."""
-    payload = _canonical_payload(primitives, domain, named_groups, mesh_dsl)
+    """Return the SHA-256 hex digest of the reference geometry payload."""
+    payload = _normalized_payload(primitives, domain, named_groups, mesh_dsl)
     return hashlib.sha256(payload.encode('utf-8')).hexdigest()
 
 
@@ -448,7 +448,7 @@ def _emit_geo_text(
         lines.append('')
         lines.append('// Named groups (resolved at mesh time):')
         for name, g in named_groups.items():
-            lines.append(f'//   {name}: {_canonicalise_named_group(g)}')
+            lines.append(f'//   {name}: {_normalize_named_group(g)}')
 
     return '\n'.join(lines) + '\n'
 
@@ -486,7 +486,7 @@ def _polygon_signed_area(vertices: List[Tuple[float, float]]) -> float:
 
     OCC ``addPlaneSurface`` accepts either orientation for a single closed
     loop, but downstream booleans are sensitive to orientation. We
-    canonicalise to CCW in :func:`_add_occ_polygon` to keep the kept-region
+    normalize to CCW in :func:`_add_occ_polygon` to keep the kept-region
     bookkeeping deterministic.
     """
     n = len(vertices)
@@ -540,12 +540,12 @@ def _add_occ_polygon(gmsh, p: Polygon) -> int:
 
     OCC has no single ``addPolygon`` entry point; we assemble it from
     points, lines, a closed curve loop, and a plane surface. Vertices are
-    canonicalised to CCW orientation so downstream booleans (cut /
+    normalized to CCW orientation so downstream booleans (cut /
     fragment) see a consistent outward normal regardless of the YAML
     declaration order.
     """
     verts = list(p.vertices)
-    # Canonicalise to CCW so the OCC plane surface has a positive area
+    # Normalize to CCW so the OCC plane surface has a positive area
     # under the standard right-hand-rule orientation.
     if _polygon_signed_area(verts) < 0.0:
         verts = list(reversed(verts))
@@ -796,7 +796,7 @@ def _build_in_gmsh(
                 # the surface (point-on-boundary case): the tool entry of
                 # the omap then refers to the merged vertex tag rather than
                 # the original. Either way, use the omap entry as the
-                # canonical post-fragment point tag.
+                # reference post-fragment point tag.
                 tool_pts = [t for (d, t) in omap[1] if d == 0]
                 if tool_pts:
                     named_point_tags[gname] = tool_pts[0]
@@ -1205,7 +1205,7 @@ def compile_geometry(
     -------
     Path
         Absolute path to the cached ``.msh`` file. The path is stable
-        across runs for the same canonical geometry.
+        across runs for the same reference geometry.
     """
     if named_groups is None:
         named_groups = {}

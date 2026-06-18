@@ -135,7 +135,7 @@ class SolverConfig:
     # Issue #299 — Verlet ordering: corrector damage freshness.
     #   False (default): corrector uses ``d_n`` (lagged damage). This is the
     #     "fully decoupled lagged" explicit scheme matching Borden 2012's
-    #     canonical ordering — preserves bit-exact reproducibility against
+    #     reference ordering — preserves bit-exact reproducibility against
     #     all existing benchmarks (B1, B5, dataset_benchmark dynamic runs).
     #   True: predictor -> step_solve_damage(d_{n+1}) -> corrector with the
     #     fresh ``d_{n+1}``. Matches PhaFiDyn (Barki 2025) and the typical
@@ -994,7 +994,7 @@ class StaggeredSolver:
     def _step_full_explicit_fresh_d(self) -> torch.Tensor:
         """Explicit step with fresh d in the corrector (issue #299).
 
-        Reorders the canonical "lagged" Verlet step
+        Reorders the reference "lagged" Verlet step
             predictor -> corrector(d_n) -> psi+ -> step_solve_damage
         into the PhaFiDyn / segregated ordering
             predictor -> psi+ -> step_solve_damage(d_{n+1}) -> corrector(d_{n+1})

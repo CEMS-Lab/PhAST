@@ -14,8 +14,8 @@ API
 
 Side-selection convention
 -------------------------
-Marked edges are canonicalized by node id, so input orientation does not
-change which bulk side is duplicated. For a canonical edge with endpoints
+Marked edges are normalized by node id, so input orientation does not
+change which bulk side is duplicated. For a reference edge with endpoints
 ``p0``, ``p1`` and unit tangent ``t``, the edge normal is taken as
 ``n = (-t_y, t_x)`` (90 deg CCW rotation of the tangent — same convention as
 :func:`build_cohesive_strip`). The "bottom" side (the side whose nodes are
@@ -150,7 +150,7 @@ def _validate_inputs(
         seen.add(key)
 
 
-def _canonical_edges(
+def _normalized_edges(
         interface_edges: Sequence[Tuple[int, int]]) -> list[tuple[int, int]]:
     return [
         (min(int(a), int(b)), max(int(a), int(b)))
@@ -164,18 +164,18 @@ def _orient_interface_edges(
 ) -> list[tuple[int, int]]:
     """Return duplicate-free edges oriented consistently by geometry.
 
-    Node-id canonicalization is useful for duplicate detection, but using it as
+    Node-id normalization is useful for duplicate detection, but using it as
     the physical tangent can flip normals along an interface polyline. Each
     connected chain is therefore walked from its geometrically lower endpoint
     along the dominant coordinate axis; isolated edges reduce to the same
-    convention as the previous min-id canonicalization for horizontal cases.
+    convention as the previous min-id normalization for horizontal cases.
     """
-    canonical = _canonical_edges(interface_edges)
-    if not canonical:
+    reference = _normalized_edges(interface_edges)
+    if not reference:
         return []
 
     adjacency: dict[int, set[int]] = {}
-    for a, b in canonical:
+    for a, b in reference:
         adjacency.setdefault(a, set()).add(b)
         adjacency.setdefault(b, set()).add(a)
 
@@ -183,7 +183,7 @@ def _orient_interface_edges(
         other = 1 - axis
         return (float(nodes[n, axis]), float(nodes[n, other]), int(n))
 
-    remaining = {tuple(edge) for edge in canonical}
+    remaining = {tuple(edge) for edge in reference}
     oriented: list[tuple[int, int]] = []
     while remaining:
         stack = [next(iter(remaining))[0]]
@@ -300,7 +300,7 @@ def insert_cohesive_layer(
     nodes : (N, 2) float array — original node coordinates.
     elements : (E, 3) or (E, 4) int array — T3 triangle or Q4 connectivity.
     interface_edges : iterable of ``(n0, n1)`` pairs — interior edges marking
-        the cohesive interface. Edge orientation is canonicalized by node id.
+        the cohesive interface. Edge orientation is normalized by node id.
 
     Returns
     -------
@@ -511,10 +511,10 @@ def insert_cohesive_layer_meshio(
     if interface_edges is None:
         if interface_set is None:
             raise ValueError("Either interface_edges or interface_set is required")
-        edges = _canonical_edges(
+        edges = _normalized_edges(
             _extract_interface_edges_from_meshio(mesh, interface_set))
     else:
-        edges = _canonical_edges(interface_edges)
+        edges = _normalized_edges(interface_edges)
 
     tri_idx = _find_bulk_block(mesh, cell_block_index)
     tri_block = mesh.cells[tri_idx]

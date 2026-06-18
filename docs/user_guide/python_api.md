@@ -92,7 +92,7 @@ Both paths write standard result directories that can be inspected with
 | `.to_spec()` | Build the validated representation used by advanced checks and tooling. |
 
 Most users only need the fluent methods above. Public examples keep YAML as
-the canonical run artifact.
+the reference run artifact.
 
 ## Built-in Geometry Example
 
@@ -219,7 +219,7 @@ with `dof="x"`, `dof="y"`, or `dof="xy"`.
 ## Analysis Step Controls
 
 Current public fluent workflows use one primary analysis step. For complex
-sequential loading, use the workflow's loading protocol or a canonical YAML
+sequential loading, use the workflow's loading protocol or a YAML
 configuration file that documents the staged schedule.
 
 The valid `controls` keys depend on the step kind:

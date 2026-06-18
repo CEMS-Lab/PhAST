@@ -1,6 +1,6 @@
 # B2 Kalthoff-Winkler
 
-Dynamic Kalthoff-Winkler impact example based on Borden et al. (2012). The public folder contains the runnable YAML configuration and lightweight mesh-3 evidence from the canonical half-plate reference run `kalthoff_halfplate_19148/mesh3_h0.25`.
+Dynamic Kalthoff-Winkler impact example based on Borden et al. (2012). The public folder contains the runnable YAML configuration and lightweight mesh-3 evidence from the reference half-plate reference run `kalthoff_halfplate_19148/mesh3_h0.25`.
 
 All public-facing artifacts for this example stay directly in this folder. Full run folders, heavy trajectory stores, external COMSOL model files, and diagnostic outputs are intentionally excluded.
 
@@ -11,10 +11,10 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 - Loading: x-direction velocity impact on the left impact set, ramped to 16.5 m/s.
 - Reference evidence: mesh-3 initial conditions, final damage, field damage animation, energy response animation, history, energy, crack-tip, timing, and run metadata.
 
-The YAML configuration is the canonical public input for this example. The reference evidence was produced in the reference environment with a single A100 80 GB GPU; the mesh-3 run metadata records 35,487 nodes, 70,447 elements, 11,775 explicit steps, and 79.22 s wall time. Do not regenerate this full benchmark during lightweight contract checks.
+The YAML configuration is the primary public input for this example. The reference evidence was produced in the reference environment with a single A100 80 GB GPU; the mesh-3 run metadata records 35,487 nodes, 70,447 elements, 11,775 explicit steps, and 79.22 s wall time. Do not regenerate this full benchmark during lightweight contract checks.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -84,7 +84,7 @@ python examples/dynamic/B2_kalthoff_winkler/run_fluent.py \
   --output-dir examples/dynamic/B2_kalthoff_winkler/run_fluent_quick
 ```
 
-The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the reference public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 

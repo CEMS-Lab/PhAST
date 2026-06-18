@@ -24,7 +24,7 @@ derived documentation, examples, or release material.
 ## Usage Context
 
 - Public examples are YAML-first. Checked-in `config.yaml` decks are the
-  canonical shared run inputs.
+  reference shared run inputs.
 - The fluent `phast.Problem` API is the authoring path for supported workflows.
 - Completed runs expose machine-readable artifacts such as `run_manifest.json`,
   `run_lockfile.json`, `run_metadata.json`, `summary.json`, and CSV telemetry.

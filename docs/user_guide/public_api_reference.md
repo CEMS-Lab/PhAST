@@ -138,7 +138,7 @@ outputs = Outputs(
 )
 ```
 
-Canonical stored outputs include CSV histories, manifest files, and raw trajectory
+Stored outputs include CSV histories, manifest files, and raw trajectory
 fields when requested by the run configuration.
 
 ## `phast.Result`
@@ -166,19 +166,19 @@ print(result.visuals())
 | `history_names()` | List CSV-backed histories and supported aliases. |
 | `history(name)` | Return rows for a CSV-backed history. |
 | `visuals()` | Return visual manifest rows or discovered media artifacts. |
-| `field_names()` | Discover canonical stored field names from Zarr/H5 trajectory stores. |
-| `has_field(name)` | Check a canonical field name or supported alias. |
+| `field_names()` | Discover stored field names from Zarr/H5 trajectory stores. |
+| `has_field(name)` | Check a stored field name or supported alias. |
 | `field(name, step=-1)` | Load a directly stored raw Zarr/H5 field as a NumPy array. |
 
 `field(name)` returns **stored raw trajectory fields only** (for example `damage` and
 `displacement` when written). Derived quantities (for example von Mises, response transforms)
 are only available after post-processing and are not silently synthesized by `field()`.
 
-Canonical history aliases include `response`, `reaction_force`,
+History aliases include `response`, `reaction_force`,
 `load_displacement`, `max_damage`, `energy`, `solver_telemetry`, and
 `timing_per_step` when backed by existing CSV files or columns.
 
-Canonical field aliases include `damage`, `displacement`, `history_field`,
+Field aliases include `damage`, `displacement`, `history_field`,
 `history_field_nodal`, `stress`, `strain`, `velocity`, and `acceleration` when
 stored in an existing trajectory store. Field loading returns NumPy arrays
 because Zarr/H5 readers are NumPy-native; training code can use
@@ -215,7 +215,7 @@ It returns a read-only result handle with provenance, history, and discovered ar
 
 ## Result boundaries and execution policy
 
-- For public reproducibility and public examples: YAML configurations are the canonical distributed artifact.
+- For public reproducibility and public examples: YAML configurations are the primary distributed artifact.
 - For authoring and local iteration: fluent `Problem` is preferred.
 - For execution/reproduction: `phast.Problem.run(...)` for supported fluent paths,
   `python -m phast run <config.yaml>` for public configuration file workflows.

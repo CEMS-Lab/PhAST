@@ -284,7 +284,7 @@ problem.analysis_step(
 
 Current public fluent workflows use one primary analysis step. For staged
 loading, use the loading protocol supported by that workflow, or encode the
-staged run in the canonical YAML configuration for that example. Do not assume chained
+staged run in the example YAML configuration for that example. Do not assume chained
 `.analysis_step(...)` calls create a full Abaqus-style step sequence unless the
 specific workflow documents that behavior.
 

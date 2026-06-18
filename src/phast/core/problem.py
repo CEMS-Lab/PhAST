@@ -68,7 +68,7 @@ def _parse_dof(dof):
     return list(dof)
 
 
-def _canonical_bc_kind(kind):
+def _normalized_bc_kind(kind):
     key = str(kind).lower().strip()
     return _BC_KIND_ALIASES.get(key, key)
 
@@ -137,7 +137,7 @@ class Problem:
     def boundary_condition(self, kind, *, region, dof=None, value=None, name=None,
                            **parameters):
         """Add a boundary condition using workflow-domain naming."""
-        kind = _canonical_bc_kind(kind)
+        kind = _normalized_bc_kind(kind)
         if dof is None and kind in {'fix', 'prescribe', 'neumann', 'traction'}:
             raise ValueError(
                 f"Boundary condition {kind!r} requires dof='x', 'y', or 'xy'."

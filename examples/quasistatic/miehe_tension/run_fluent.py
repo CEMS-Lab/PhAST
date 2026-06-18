@@ -2,7 +2,7 @@
 
 This script is intentionally close to ``config.yaml``. It demonstrates the
 Python authoring path for users who want to construct a PhAST problem directly
-with the fluent API, while keeping the checked-in YAML configuration as the canonical
+with the fluent API, while keeping the checked-in YAML configuration as the reference
 reproducibility input.
 """
 

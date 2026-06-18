@@ -52,7 +52,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 # Units
 # ---------------------------------------------------------------------------
 
-# Internal canonical unit is millimetres; see PR #156 / mm-tonne-N-s-MPa.
+# Internal reference unit is millimetres; see PR #156 / mm-tonne-N-s-MPa.
 _UNIT_TO_MM: Dict[str, float] = {
     'mm': 1.0,
     'millimeter': 1.0,
@@ -105,7 +105,7 @@ class Primitive(ABC):
     """Abstract base for all geometry primitives.
 
     Subclasses are dataclasses carrying their geometric parameters in the
-    canonical internal unit (mm). The instance attribute :attr:`name` is
+    reference internal unit (mm). The instance attribute :attr:`name` is
     set by :func:`parse_primitives` once the primitive is keyed in the YAML
     mapping.
     """
@@ -617,7 +617,7 @@ _VALID_SELECTOR_KINDS = ('boundary', 'interior', 'centre')
 class NamedGroup(ABC):
     """Abstract base for the three named-group forms.
 
-    Subclasses are dataclasses carrying their parameters in the canonical
+    Subclasses are dataclasses carrying their parameters in the reference
     internal unit (mm). The instance attribute :attr:`name` is set by
     :func:`parse_named_groups` once the group is keyed in the YAML mapping.
     """

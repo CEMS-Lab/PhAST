@@ -12,10 +12,10 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 - Loading: smooth-ramped top and bottom Neumann traction, with opposite signs on the two horizontal edges.
 - Claim boundary: beta cross-check evidence; the Ren/Borden-style branch timing window is the public acceptance target, while the COMSOL Application Library timing is retained as secondary reference context.
 
-The YAML configuration is the canonical public input for this example. The retained reference run used 169,077 nodes, 336,266 elements, 183,941 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
+The YAML configuration is the primary public input for this example. The retained reference run used 169,077 nodes, 336,266 elements, 183,941 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -87,7 +87,7 @@ python examples/dynamic/B7_dynamic_crack_branching_comsol/run_fluent.py \
   --output-dir examples/dynamic/B7_dynamic_crack_branching_comsol/run_fluent_quick
 ```
 
-The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the reference public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 

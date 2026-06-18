@@ -1,6 +1,6 @@
 # Declarative YAML Workflows
 
-YAML is the canonical configuration format for reproducible simulations in PhAST. Declarative configurations should be used for sharing exact geometric and physical setups, submitting batch/HPC jobs, and enforcing strict reproducibility for academic publications.
+YAML is the primary configuration format for reproducible simulations in PhAST. Declarative configurations should be used for sharing exact geometric and physical setups, submitting batch/HPC jobs, and enforcing strict reproducibility for academic publications.
 
 While the fluent `phast.Problem` API is ideal for interactive model design, the final implementation should be serialized to YAML to ensure durability.
 

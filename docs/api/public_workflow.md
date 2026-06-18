@@ -21,7 +21,7 @@ loads, steps, outputs, and results.
 
 ## Authoring Boundary
 
-Use the fluent `phast.Problem` API to author new models. Use YAML configurations for public examples, reproducibility, batch/HPC runs, and sharing exact simulations. The public examples keep YAML as the canonical rerun surface until each fluent lowering path is promoted and covered by tests.
+Use the fluent `phast.Problem` API to author new models. Use YAML configurations for public examples, reproducibility, batch/HPC runs, and sharing exact simulations. The public examples keep YAML as the primary rerun surface until each fluent lowering path is promoted and covered by tests.
 
 ```python
 import phast

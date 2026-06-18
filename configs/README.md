@@ -45,15 +45,15 @@ can enable additional artifacts for a run.
 
 | Path | Contents |
 |---|---|
-| `configs/benchmarks/dynamic/` | Canonical dynamic fracture benchmark configs. |
-| `configs/benchmarks/quasistatic/` | Canonical quasi-static benchmark configs. |
+| `configs/benchmarks/dynamic/` | Reference dynamic fracture benchmark configs. |
+| `configs/benchmarks/quasistatic/` | Reference quasi-static benchmark configs. |
 | `configs/benchmarks/plasticity_interface/` | Beta plasticity/interface validation manifests and contracts. |
 | `configs/REFERENCE.yaml` | Human-readable reference for supported config fields. |
 | `configs/phast.schema.json` | Generated JSON Schema for editor and tooling support. |
 
 Top-level compatibility aliases such as `configs/B2_kalthoff_winkler.yaml` and
 `configs/QS_notched_holed_plate.yaml` have been removed from the public tree.
-Use the canonical `configs/benchmarks/...` paths in examples, documentation,
+Use the reference `configs/benchmarks/...` paths in examples, documentation,
 CI, and papers.
 
 Command manifests that are not directly runnable by `python -m phast run` are
@@ -84,7 +84,7 @@ mesh/material/solver/device summaries for reproducibility audits.
 
 Some historical configs retain an `example:` field for provenance or older
 demo wrappers. It is accepted by the schema, but it is not required for the
-canonical `python -m phast run ...` path.
+reference `python -m phast run ...` path.
 
 Benchmark and researcher-validation configs should include an `acceptance:`
 block. This structured metadata documents the reference result, required
@@ -119,7 +119,7 @@ python -m phast schema --output configs/phast.schema.json
 
 The schema is generated from the same dataclasses, enum tables, and numeric
 ranges as the runtime validator, so editor hints stay aligned with the
-canonical YAML loader.
+YAML loader.
 
 ## Units
 

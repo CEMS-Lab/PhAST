@@ -149,7 +149,7 @@ def main():
     parser.add_argument('--validate-only', action='store_true',
                         help='Validate the YAML config and exit (no run). '
                              'Useful in CI / pre-commit hooks.')
-    # Time-integrator opt-in (#573/#570). The canonical name for the
+    # Time-integrator opt-in (#573/#570). The package name for the
     # current production dynamic path is now 'central_difference' because
     # it is Velocity-Verlet / explicit Newmark-beta with beta=0, gamma=1/2.
     # 'verlet' and legacy 'newmark' remain accepted aliases for old scripts.

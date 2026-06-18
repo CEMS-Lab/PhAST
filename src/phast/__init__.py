@@ -47,9 +47,9 @@ adaptive            : Adaptive mesh refinement (newest vertex bisection)
 # but pytest reports that error against any test module that triggers
 # the parent package import indirectly, which broke fresh-clone CI
 # (issue #403 follow-up). The fix is to silently skip the relative
-# imports when the package is not loaded under its canonical name —
+# imports when the package is not loaded under its package name —
 # legitimate ``import phast`` uses (after ``pip install -e
-# .``) hit the canonical name and execute the full body.
+# .``) hit the package name and execute the full body.
 
 if __name__ == "phast":
     from .mesh import FEMMesh, build_node_adjacency

@@ -5,7 +5,7 @@
 Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against an Euler-Bernoulli estimate, differentiates the tip displacement with respect to Young's modulus, and writes standard displacement, stress, strain, and energy visualisations.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 Run commands from the repository root:
 

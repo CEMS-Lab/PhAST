@@ -52,7 +52,7 @@ plt.rcParams.update({
 HERE = Path(__file__).resolve().parent
 REF = HERE / "comsol_load_displacement.csv"
 # The public example root carries the promoted strict-parity reference package.
-CANONICAL_REFERENCE_RUNS: list[Path] = [HERE]
+REFERENCE_RUNS: list[Path] = [HERE]
 
 # Reference values from the COMSOL PDF text.
 REF_FIRST_LOAD_KN = 0.63
@@ -87,7 +87,7 @@ def find_latest_run_dir(base: Path) -> Path | None:
 
 
 def find_default_reference_run() -> Path | None:
-    for run_dir in CANONICAL_REFERENCE_RUNS:
+    for run_dir in REFERENCE_RUNS:
         if (run_dir / "results.csv").exists() or (run_dir / "history.csv").exists():
             return run_dir
     return None

@@ -3,7 +3,7 @@
 Validated single-edge-notched tension benchmark based on Miehe et al. (2010)
 and the PhaseFieldX 1711 reference response.
 
-This folder is self-contained: the canonical YAML configuration, equivalent
+This folder is self-contained: the example YAML configuration, equivalent
 Python fluent example, mesh files, validation report, run metadata, CSV outputs,
 and reference visual artifacts are kept beside each other.
 
@@ -28,7 +28,7 @@ The checked-in reference result used 350 load steps on CPU and took about
 905 seconds in the recorded run metadata.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -53,7 +53,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml \
   --output_dir examples/quasistatic/miehe_tension/run_quick
 ```
 
-The YAML configuration is the canonical public input for exact reproduction because it
+The YAML configuration is the primary public input for exact reproduction because it
 is the artifact saved into the lockfile and validation evidence.
 
 ### How The YAML Is Used
@@ -73,7 +73,7 @@ solver. The main YAML blocks map to solver setup as follows:
 | `loading` | Defines the load schedule. Here `cyclic_phases: "0.005:50,0.008:300"` means 50 steps to displacement 0.005, then 300 steps to 0.008. |
 | `solver` | Configures the quasi-static staggered mechanics/damage solver, tolerances, iteration limits, preconditioner, and backend. |
 | `output` | Chooses which CSV files, plots, trajectories, profiles, and animations are written. |
-| `device` | Selects CPU/CUDA/MPS behavior. This reference configuration file is CPU by default. |
+| `device` | Selects CPU/CUDA/MPS behavior. This primary configuration file is CPU by default. |
 | `initial_conditions` | Optional damage preseeding; this configuration file leaves it unset. |
 
 Use YAML when the goal is reproducibility, review, record keeping, or batch execution.

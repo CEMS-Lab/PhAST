@@ -69,7 +69,7 @@ plots.
 
 ## Validation
 
-The canonical dynamic configs currently pass schema validation with:
+The reference dynamic configs currently pass schema validation with:
 
 ```bash
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only

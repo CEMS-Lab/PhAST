@@ -298,7 +298,7 @@ def format_warnings(warnings: List[ValidationWarning],
 
 # Per-section keys that are accepted but ignored (legacy / typo-tolerated).
 # These appear in shipped configs that we don't want to break; add new ones
-# sparingly. New code should use the canonical location instead.
+# sparingly. New code should use the reference location instead.
 _DEPRECATED_KEYS = {
     'solver': {'device'},  # typo for top-level device.device, several configs
 }
@@ -1115,7 +1115,7 @@ def validate_config(raw: dict, line_map: Optional[dict] = None
                 message=(
                     f"{manifest_type!r} is an orchestration artifact, not a "
                     "runnable PhAST problem config. Use the listed commands, "
-                    "or run a canonical problem YAML under "
+                    "or run a reference problem YAML under "
                     "configs/benchmarks/<family>/<name>.yaml."
                 ),
                 line_no=line_map.get('manifest_type', 0),

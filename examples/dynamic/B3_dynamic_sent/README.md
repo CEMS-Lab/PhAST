@@ -11,10 +11,10 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 - Loading: smooth-step prescribed vertical displacement on the top and bottom edges, ramped to `u_y = +/-0.002 mm` over 20 us and then held; left and right edges are constrained in `x`.
 - Claim boundary: qualitative lightweight dynamic fracture evidence, not convergence-quality benchmark validation.
 
-The YAML configuration is the canonical public input for this example. Expected runtime depends strongly on mesh size, device, and output cadence; the checked-in outputs are curated evidence and should not be regenerated during lightweight contract checks.
+The YAML configuration is the primary public input for this example. Expected runtime depends strongly on mesh size, device, and output cadence; the checked-in outputs are curated evidence and should not be regenerated during lightweight contract checks.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -86,7 +86,7 @@ python examples/dynamic/B3_dynamic_sent/run_fluent.py \
   --output-dir examples/dynamic/B3_dynamic_sent/run_fluent_quick
 ```
 
-The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the reference public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 

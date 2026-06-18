@@ -95,7 +95,7 @@ def _eval_traction_ramp(t: float, ramp_type: str,
     - ``linear``      : factor = clamp(t / t_ramp, 0, 1) when t_ramp > 0.
     - ``smooth_step`` : Hermite C1 step ``3s² - 2s³`` with s = t / t_ramp,
       matching ``smooth_step`` / ``smooth_step_tensor`` in this module
-      (COMSOL convention; the canonical smooth Heaviside used elsewhere).
+      (COMSOL convention; the reference smooth Heaviside used elsewhere).
     - ``cosine``      : ``0.5 * (1 - cos(pi * s))`` with s = t / t_hold,
       i.e. a smooth full-cycle ramp that finishes at t_hold (matches
       ``LoadingConfig.ramp_type='smooth'`` in ``config.py``).

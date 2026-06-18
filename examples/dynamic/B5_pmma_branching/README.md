@@ -11,10 +11,10 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 - Loading: two-step prestrain followed by dynamic release with symmetric vertical displacement prescription.
 - Claim boundary: visual PMMA crack-path evidence from the selected public run; the archived metadata does not report an automatic branch step.
 
-The YAML configuration is the canonical public input for this example. The retained reference run used 949,210 nodes, 1,894,256 elements, 19,001 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
+The YAML configuration is the primary public input for this example. The retained reference run used 949,210 nodes, 1,894,256 elements, 19,001 explicit steps, and an A100 80 GB GPU. Do not regenerate the full benchmark during lightweight contract checks.
 
 
-## Run The Canonical YAML Configuration
+## Run The YAML Configuration
 
 From the repository root:
 
@@ -86,7 +86,7 @@ python examples/dynamic/B5_pmma_branching/run_fluent.py \
   --output-dir examples/dynamic/B5_pmma_branching/run_fluent_quick
 ```
 
-The YAML configuration remains the canonical public reproduction input because it is the artifact used by release manifests and lockfiles.
+The YAML configuration remains the reference public reproduction input because it is the artifact used by release manifests and lockfiles.
 
 ## How Manual Setup Works
 
