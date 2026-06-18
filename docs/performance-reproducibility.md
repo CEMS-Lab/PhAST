@@ -73,3 +73,34 @@ timing CSVs using Akantu, FEniCS, and PhAST final timing traces. Treat it as a
 reproducibility artifact for Paper-1 performance discussion, not as a universal
 hardware-independent claim. The source summary CSV is kept at
 `assets/dynamic_timing_comparison.csv`.
+
+## Hardware optimization and `torch.compile`
+
+PhAST can use `torch.compile` for selected CUDA tensor kernels, most notably
+matrix-free damage-solver products where the operator shape is stable enough to
+benefit from compilation. The control lives in the YAML device block:
+
+```yaml
+device:
+  device: cuda
+  compile: true
+```
+
+Set `compile: false` for short validation runs, CPU-first checks, macOS/MPS
+verification, or small examples where compile warmup can dominate the measured
+runtime. For long CUDA runs, compare both settings on the same mesh and output
+schedule before reporting a speedup.
+
+When publishing a `torch.compile` timing, report:
+
+- PyTorch version and CUDA version;
+- GPU model and driver;
+- whether `device.compile` was `true`, `false`, or selected by the runtime
+  policy;
+- warmup treatment and number of timed steps;
+- mesh size, field precision, and enabled output writers;
+- the generated `run_lockfile.json` and `run_metadata.json`.
+
+Do not treat an internal compile speedup as portable until it has been
+regenerated with the public configuration, hardware description, and retained
+timing artifacts.

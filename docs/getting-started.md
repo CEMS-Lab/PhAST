@@ -157,7 +157,8 @@ does not silently derive missing postprocessed fields.
 ### macOS (Apple Silicon or Intel)
 * **Execution Device:** Prefer `--device cpu`.
 * **Hardware note:** While Apple Silicon GPU (MPS) is supported, MPS currently lacks native `float64` operations, forcing the damage solver to CPU. High-precision mechanics and eigenvalue/spectral-sensitive operations are more stable and faster running directly on the CPU.
-* Run with `--no-compile` as PyTorch JIT warmup overhead dominates typical 2D meshes on Mac.
+* Keep `device.compile: false` for local validation unless you are explicitly
+  profiling a supported CUDA path.
 
 ### Linux & WSL2 (CUDA)
 * **Execution Device:** Use `--device cuda`.
@@ -166,7 +167,9 @@ does not silently derive missing postprocessed fields.
   pip install torch --index-url https://download.pytorch.org/whl/cu121  # Adjust cuXXX for your driver
   pip install -e .
   ```
-* `torch.compile` is supported and recommended for long-horizon or large-batch runs.
+* `torch.compile` can be enabled through `device.compile: true` in YAML for
+  long-horizon CUDA runs. Compare against `device.compile: false` on the same
+  mesh before reporting a timing claim.
 
 ### HPC Clusters (SLURM)
 ```bash

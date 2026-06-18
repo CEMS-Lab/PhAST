@@ -53,6 +53,14 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 | AMG / AmgX / GMG damage preconditioning | Experimental | Performance optimization paths for quasi-static fracture; production runs should default to Jacobi unless validating the preconditioner itself. |
 | Anderson acceleration | Beta | Available for staggered iterations; use only with benchmark-specific validation. |
 
+## Inverse Workflows
+
+| Capability | Status | Public Statement |
+|---|---|---|
+| Differentiable forward sensitivities | Beta | Supported tensor operations can participate in PyTorch autograd, but nonsmooth history, bounds, and active-set switches require case-specific interpretation. |
+| Public inverse-analysis examples | Scaffold | `examples/inverse_problems_beta/` is a README-only landing zone until promoted inverse examples include configs, losses, retained lightweight outputs, and validation notes. |
+| General-purpose inverse-calibration framework | Unsupported | The public release does not provide a turnkey inverse-problem framework for arbitrary observations, priors, or optimizers. |
+
 ## Declarative YAML Workflows
 
 | Capability | Status | Public Statement |

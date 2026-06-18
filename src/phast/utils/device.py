@@ -422,8 +422,8 @@ class DeviceContext:
         # Compile config: torch.compile causes recompilation loops on
         # spectral split (eigenvalue-sign flips per element change the
         # computation graph). On amor / isotropic / volumetric_deviatoric
-        # there is no such dynamic branching, so compile is a near-pure
-        # win on CUDA. Policy:
+        # there is less dynamic branching, so compile can be useful on long
+        # CUDA runs after warmup. Policy:
         #   compile_solvers=True      : force ON (disable if unsupported)
         #   compile_solvers=False     : force OFF
         #   compile_solvers=None, split provided : auto-decide
@@ -437,7 +437,8 @@ class DeviceContext:
                 self.compile_solvers = True
                 print(f"[device] torch.compile auto-enabled "
                       f"(device=cuda, split={energy_split}). Pass "
-                      f"--no-compile to override.", flush=True)
+                      f"device.compile: false in YAML to override.",
+                      flush=True)
             else:
                 self.compile_solvers = False
                 if (energy_split is not None
@@ -446,7 +447,8 @@ class DeviceContext:
                     and energy_split == 'spectral'):
                     print(f"[device] torch.compile auto-disabled "
                           f"(spectral split triggers recompilation loops). "
-                          f"Pass --compile to override.", flush=True)
+                          f"Set device.compile: true in YAML to override.",
+                          flush=True)
         else:
             self.compile_solvers = compile_solvers and self.has_compile
             if compile_solvers and not self.has_compile:
@@ -467,8 +469,8 @@ class DeviceContext:
             print(f"[device] Hint: CUDA is available. Use --device cuda for "
                   f"3-8x speedup on meshes >10k nodes.", flush=True)
         if self.device.type == 'cuda' and not self.compile_solvers:
-            print(f"[device] Hint: Use --compile for torch.compile JIT "
-                  f"optimization (10-30% speedup after warmup).", flush=True)
+            print(f"[device] Hint: set device.compile: true in YAML to test "
+                  f"torch.compile on long CUDA runs.", flush=True)
 
     @property
     def amp_enabled(self) -> bool:

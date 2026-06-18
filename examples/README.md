@@ -1,14 +1,15 @@
 # PhAST Examples Gallery
 
 This directory contains runnable PhAST examples for dynamic fracture,
-quasi-static fracture, solid mechanics, and beta plasticity/interface
-workflows. The examples are designed to be reproducible, self-contained, and
-easy to inspect on GitHub.
+quasi-static fracture, solid mechanics, beta plasticity/interface workflows,
+and a placeholder for future inverse-analysis examples. The promoted examples
+are designed to be reproducible, self-contained, and easy to inspect on GitHub.
 
 For Paper-1 reproduction, start with the dynamic and quasi-static fracture
 examples. Solid-mechanics folders provide supporting solver checks, while
 plasticity/interface folders are beta validation material with a narrower
-capability claim.
+capability claim. `inverse_problems_beta/` is currently a README-only landing
+zone, not a promoted runnable benchmark.
 
 Most public examples use declarative YAML input configurations. Validate and run them
 from the repository root:
@@ -90,6 +91,13 @@ python -m phast run configs/benchmarks/plasticity_interface/reproducibility_cont
 
 See [`plasticity_interface/README.md`](plasticity_interface_beta/) for the full beta
 capability boundary and direct script commands.
+
+## Inverse Problems Beta
+
+[`inverse_problems_beta/`](inverse_problems_beta/) is a placeholder for future
+differentiable inverse-analysis examples. Do not treat it as a promoted
+runnable example until a configuration, loss definition, retained lightweight
+outputs, and validation notes are added.
 
 ## Common CLI Flags
 
