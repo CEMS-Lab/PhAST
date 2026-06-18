@@ -26,7 +26,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from examples.plasticity_interface._promoted_result_utils import (
+from examples.plasticity_interface_beta._promoted_result_utils import (
     merge_run_manifest_artifacts,
     write_csv_rows,
     write_zarr_trajectory,

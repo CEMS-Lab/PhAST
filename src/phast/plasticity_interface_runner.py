@@ -11,23 +11,23 @@ import yaml
 
 _SUPPORTED_VALIDATIONS = {
     "diffuse_interphase": (
-        "examples.plasticity_interface.run_diffuse_interphase_validation",
+        "examples.plasticity_interface_beta.run_diffuse_interphase_validation",
         "run_validation",
     ),
     "j2_validation": (
-        "examples.plasticity_interface.run_j2_validation",
+        "examples.plasticity_interface_beta.run_j2_validation",
         "run_validation",
     ),
     "pfczm_uniaxial_strength": (
-        "examples.plasticity_interface.run_pfczm_uniaxial_strength_validation",
+        "examples.plasticity_interface_beta.run_pfczm_uniaxial_strength_validation",
         "run_validation",
     ),
     "structural_dcb_cohesive": (
-        "examples.plasticity_interface.run_structural_dcb_cohesive_benchmark",
+        "examples.plasticity_interface_beta.run_structural_dcb_cohesive_benchmark",
         "run_benchmark",
     ),
     "structural_dcb_refinement": (
-        "examples.plasticity_interface.run_structural_dcb_refinement_study",
+        "examples.plasticity_interface_beta.run_structural_dcb_refinement_study",
         "run_study",
     ),
 }

@@ -21,7 +21,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from examples.plasticity_interface.run_structural_dcb_cohesive_benchmark import (
+from examples.plasticity_interface_beta.run_structural_dcb_cohesive_benchmark import (
     run_benchmark,
 )
 

@@ -7,7 +7,7 @@ from phast import Problem
 
 
 ROOT = Path(__file__).resolve().parents[3]
-RESULT_DIR = ROOT / "examples" / "plasticity_interface" / "results" / "j2_validation"
+RESULT_DIR = ROOT / "examples" / "plasticity_interface_beta" / "results" / "j2_validation"
 
 
 def build_problem() -> Problem:

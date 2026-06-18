@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 try:
-    from examples.plasticity_interface.run_ductile_pf_plasticity_validation import (
+    from examples.plasticity_interface_beta.run_ductile_pf_plasticity_validation import (
         run_validation,
     )
 except ModuleNotFoundError:

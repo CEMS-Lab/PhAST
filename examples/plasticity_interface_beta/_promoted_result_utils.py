@@ -34,7 +34,7 @@ def write_zarr_trajectory(
     zarr_path = output_dir / "training_data.zarr"
     root = zarr.open_group(str(zarr_path), mode="w")
     root.attrs["format"] = "phast.trajectory.zarr"
-    root.attrs["writer"] = "examples.plasticity_interface._promoted_result_utils"
+    root.attrs["writer"] = "examples.plasticity_interface_beta._promoted_result_utils"
 
     sim = root.create_group("simulation_data")
     mesh = sim.create_group("mesh")

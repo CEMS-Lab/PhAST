@@ -1,56 +1,81 @@
 [
   {
+    "file": "cohesive_damage_final.png",
+    "path": "cohesive_damage_final.png",
     "artifact_type": "image",
-    "path": "structural_dcb_load_displacement.png",
-    "width_px": 1440,
-    "height_px": 672,
-    "size_bytes": 71176,
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 67741,
+    "description": "Final cohesive damage field.",
+    "width_px": 1360,
+    "height_px": 714,
     "review_dimension_passed": true
   },
   {
+    "file": "damage_evolution.gif",
+    "path": "damage_evolution.gif",
+    "artifact_type": "animation",
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 114481,
+    "description": "Damage evolution animation from the retained beta validation run.",
+    "width_px": 800,
+    "height_px": 420,
+    "frames": 6,
+    "media_passed": true,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "initial_conditions.png",
+    "path": "initial_conditions.png",
     "artifact_type": "image",
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 49859,
+    "description": "Problem setup and boundary-condition preview.",
+    "width_px": 1360,
+    "height_px": 714,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "structural_dcb_damage_front.png",
     "path": "structural_dcb_damage_front.png",
+    "artifact_type": "image",
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 70327,
+    "description": "Structural DCB damage-front evolution.",
     "width_px": 1440,
     "height_px": 672,
-    "size_bytes": 70327,
     "review_dimension_passed": true
   },
   {
-    "artifact_type": "image",
-    "path": "structural_dcb_energy.png",
-    "width_px": 1120,
-    "height_px": 672,
-    "size_bytes": 73862,
-    "review_dimension_passed": true
-  },
-  {
-    "artifact_type": "image",
+    "file": "structural_dcb_deformed_mesh.png",
     "path": "structural_dcb_deformed_mesh.png",
+    "artifact_type": "image",
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 133441,
+    "description": "Structural DCB deformed mesh visualization.",
     "width_px": 1280,
     "height_px": 672,
-    "size_bytes": 133441,
     "review_dimension_passed": true
   },
   {
+    "file": "structural_dcb_energy.png",
+    "path": "structural_dcb_energy.png",
     "artifact_type": "image",
-    "path": "initial_conditions.png",
-    "width_px": 1360,
-    "height_px": 714,
-    "size_bytes": 49859,
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 73862,
+    "description": "Structural DCB energy history.",
+    "width_px": 1120,
+    "height_px": 672,
     "review_dimension_passed": true
   },
   {
+    "file": "structural_dcb_load_displacement.png",
+    "path": "structural_dcb_load_displacement.png",
     "artifact_type": "image",
-    "path": "cohesive_damage_final.png",
-    "width_px": 1360,
-    "height_px": 714,
-    "size_bytes": 67741,
+    "visual_scope": "plasticity_interface_beta",
+    "size_bytes": 71176,
+    "description": "Structural DCB load-displacement response.",
+    "width_px": 1440,
+    "height_px": 672,
     "review_dimension_passed": true
-  },
-  {
-    "artifact_type": "animation",
-    "path": "damage_evolution.gif",
-    "size_bytes": 114481,
-    "media_passed": true
   }
 ]

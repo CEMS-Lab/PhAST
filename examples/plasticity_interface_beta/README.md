@@ -53,13 +53,11 @@ dispatcher:
 | --- | --- | --- | --- |
 | `j2_validation` | Standard J2 return-map validation example for the promoted plasticity slice. | `examples/plasticity_interface_beta/results/j2_validation` | `examples/plasticity_interface_beta/fluent_setups/j2_validation.py` |
 | `structural_dcb_cohesive` | DCB-style structural cohesive benchmark for the promoted cohesive/interface slice. | `examples/plasticity_interface_beta/results/structural_dcb_cohesive` | `examples/plasticity_interface_beta/fluent_setups/structural_dcb_cohesive.py` |
-| `structural_dcb_refinement` | Lightweight DCB cohesive mesh/load-step refinement trend for the promoted cohesive/interface slice. | `examples/plasticity_interface_beta/results/structural_dcb_refinement` | Script-contract runner; flat fluent setup pending tutorial promotion. |
 | `pfczm_uniaxial_strength` | One-dimensional PF-CZM strength calibration baseline verification for the promoted PF-CZM slice. | `examples/plasticity_interface_beta/results/pfczm_uniaxial_strength` | `examples/plasticity_interface_beta/fluent_setups/pfczm_uniaxial_strength.py` |
 
 ```bash
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_cohesive
-python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_refinement
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id pfczm_uniaxial_strength
 ```
 
@@ -73,10 +71,6 @@ python -m phast run configs/benchmarks/plasticity_interface/reproducibility_cont
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml \
   --validation-id structural_dcb_cohesive \
   --output_dir examples/plasticity_interface_beta/results/structural_dcb_cohesive
-
-python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml \
-  --validation-id structural_dcb_refinement \
-  --output_dir examples/plasticity_interface_beta/results/structural_dcb_refinement
 
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml \
   --validation-id pfczm_uniaxial_strength \

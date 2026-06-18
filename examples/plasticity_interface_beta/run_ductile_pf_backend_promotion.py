@@ -22,7 +22,7 @@ from pathlib import Path
 
 from phast.sparse_solve import available_sparse_backends
 
-from examples.plasticity_interface.run_ductile_pf_plasticity_validation import (
+from examples.plasticity_interface_beta.run_ductile_pf_plasticity_validation import (
     run_validation,
 )
 

@@ -135,7 +135,7 @@ you:
 | Choose staggered tolerances, damage cadence, preconditioner, and backend | `solver` |
 | Request CSVs, plots, trajectory settings, and animation outputs | `output` |
 | Choose CPU/CUDA/MPS | `device` |
-| Execute through `python -m phast run` | CLI run command |
+| Run the simulation | `python -m phast run <config.yaml>` or the matching Python runner |
 
 At the lower solver-development level, the sequence is: construct a
 `ProblemConfig`, call `resolve_config(cfg)`, instantiate `StaggeredSolver` with

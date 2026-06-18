@@ -34,7 +34,7 @@ from phast.fem_operators import FEMOperators
 from phast.material import Material
 from phast.mesh import FEMMesh
 
-from examples.plasticity_interface.run_solid_interface_fracture_examples import (
+from examples.plasticity_interface_beta.run_solid_interface_fracture_examples import (
     CASES,
     InterfaceCase,
     _build_fields,

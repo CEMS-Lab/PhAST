@@ -32,7 +32,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from examples.plasticity_interface._promoted_result_utils import write_zarr_trajectory
+from examples.plasticity_interface_beta._promoted_result_utils import write_zarr_trajectory
 from phast.damage_solver import PhaseFieldDamageSolver
 from phast.fem_operators import FEMOperators
 from phast.material import Material

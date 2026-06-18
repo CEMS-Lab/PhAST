@@ -33,22 +33,28 @@
     "max_von_mises_Pa": 114077.59387754832
   },
   "files": [
+    "README.md",
+    "config.yaml",
+    "deformed_shape.png",
+    "displacement_final.png",
+    "displacement_magnitude.png",
+    "field_evolution.mp4",
+    "fluent_setup.py",
+    "initial_conditions.png",
+    "mesh.geo",
     "response.csv",
     "response.png",
-    "initial_conditions.png",
-    "deformed_shape.png",
-    "displacement_magnitude.png",
-    "displacement_final.png",
-    "von_mises.png",
-    "stress_final.png",
-    "strain_energy.png",
-    "strain_final.png",
-    "field_evolution.mp4",
-    "thumbnail.png",
-    "visual_manifest.json",
-    "run_metadata.json",
+    "run.py",
+    "run_fluent.py",
     "run_lockfile.json",
     "run_manifest.json",
-    "fluent_setup.py"
-  ]
+    "run_metadata.json",
+    "strain_energy.png",
+    "strain_final.png",
+    "stress_final.png",
+    "thumbnail.png",
+    "visual_manifest.json",
+    "von_mises.png"
+  ],
+  "notes": "Flat retained solid-mechanics beta example bundle; raw scratch run directories are regenerated locally when needed."
 }

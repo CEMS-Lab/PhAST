@@ -102,7 +102,7 @@ Manual setup means creating the same objects that the YAML runner creates for yo
 | Define impact, traction, or prestrain release protocol and total simulation time | `loading` |
 | Choose explicit dynamics settings and damage cadence | `solver` |
 | Request CSV histories, trajectories, plots, manifests, and animations | `output` |
-| Execute through `python -m phast run` | CLI run command |
+| Run the simulation | `python -m phast run <config.yaml>` or the matching Python runner |
 
 The Python runner builds the same mesh, material, boundary-condition, solver, and output objects as the YAML workflow.
 
@@ -118,4 +118,4 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 | Curated evidence | Setup image, final damage image, damage animation, history, energy, and crack-tip files | PRESENT |
 | Known limitation | Lightweight 1,091-node public evidence; use finer reruns before making convergence-quality claims | DOCUMENTED |
 
-The public result bundle is lightweight by design. It is suitable for documentation, review, and drift checks, while large full trajectories and source datasets remain outside the public example folder.
+The checked-in result bundle is intentionally compact. It includes the files needed to inspect the setup and reference response, while large trajectory stores and raw run directories are regenerated locally when needed.

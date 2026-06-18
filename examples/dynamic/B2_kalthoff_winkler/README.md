@@ -99,7 +99,7 @@ Manual setup means creating the same objects that the YAML runner creates for yo
 | Define velocity-impact protocol, ramp time, and total simulation time | `loading` |
 | Choose explicit dynamics settings and damage cadence | `solver` |
 | Request CSV histories, trajectories, plots, manifests, and animations | `output` |
-| Execute through the public runner | CLI run command |
+| Run the simulation | `python -m phast run <config.yaml>` or the matching Python runner |
 
 The Python runner builds the same mesh, material, boundary-condition, solver, and output objects as the YAML workflow.
 

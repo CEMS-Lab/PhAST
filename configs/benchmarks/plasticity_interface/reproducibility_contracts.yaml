@@ -176,7 +176,7 @@ runs:
       - visual_manifest.json
     one_of_artifacts_per_case:
       - [damage_evolution.mp4, damage_evolution.gif]
-    claim_boundary: Solver-driven AT2 diffuse-interface smoke; not cohesive-zone or ASTM calibration.
+    claim_boundary: Solver-driven AT2 diffuse-interface baseline; not cohesive-zone or ASTM calibration.
 
   - id: cohesive_displacement_jump
     family: cohesive_elements
@@ -218,7 +218,7 @@ runs:
       - cohesive_mixed_mode_response.png
       - cohesive_mixed_mode_mesh_and_bc.png
       - visual_manifest.json
-    claim_boundary: Mixed-mode cohesive residual/tangent smoke benchmark.
+    claim_boundary: Mixed-mode cohesive residual/tangent baseline benchmark.
 
   - id: cohesive_contact_compression
     family: cohesive_elements
@@ -239,7 +239,7 @@ runs:
       - cohesive_contact_compression_response.png
       - cohesive_contact_compression_mesh_and_bc.png
       - visual_manifest.json
-    claim_boundary: Contact-compression branch smoke with no damage growth.
+    claim_boundary: Contact-compression branch baseline with no damage growth.
 
   - id: cohesive_delamination_patch
     family: cohesive_elements
@@ -261,7 +261,7 @@ runs:
       - cohesive_delamination_patch_damage_profile.png
       - cohesive_delamination_patch_mesh_and_bc.png
       - visual_manifest.json
-    claim_boundary: Multi-element delamination patch smoke; structural calibration remains gated.
+    claim_boundary: Multi-element delamination patch baseline; structural calibration remains gated.
 
   - id: structural_dcb_cohesive
     family: cohesive_elements
@@ -286,7 +286,7 @@ runs:
       - structural_dcb_energy.png
       - structural_dcb_deformed_mesh.png
       - visual_manifest.json
-    claim_boundary: DCB-style structural cohesive smoke; not ASTM D5528 data reduction.
+    claim_boundary: DCB-style structural cohesive baseline; not ASTM D5528 data reduction.
 
   - id: structural_dcb_refinement
     family: cohesive_elements
@@ -342,7 +342,7 @@ runs:
       - mesh_deformed.png
       - damage_history.png
       - visual_manifest.json
-    claim_boundary: Coupled brittle AT2 matrix damage plus cohesive interface smoke; not calibrated PF-CZM or ductile PF-plasticity-cohesive.
+    claim_boundary: Coupled brittle AT2 matrix damage plus cohesive interface baseline; not calibrated PF-CZM or ductile PF-plasticity-cohesive.
 
   - id: pfczm_uniaxial_strength
     family: pfczm
@@ -374,7 +374,7 @@ runs:
       - mesh_deformed.png
       - damage_evolution.gif
       - visual_manifest.json
-    claim_boundary: Forward Wu PF-CZM strength calibration smoke; structural crack growth and mixed-mode validation remain gated.
+    claim_boundary: Forward Wu PF-CZM strength calibration baseline; structural crack growth and mixed-mode validation remain gated.
 
   - id: q4_sparse_at2_smoke
     family: q4_sparse_phase_field
@@ -406,7 +406,7 @@ runs:
       - mesh_deformed.png
       - load_displacement.png
       - visual_manifest.json
-    claim_boundary: Q4 sparse mechanics plus AT2 damage smoke; Q4 PF-CZM/plasticity/cohesive-coupled paths remain gated.
+    claim_boundary: Q4 sparse mechanics plus AT2 damage baseline; Q4 PF-CZM/plasticity/cohesive-coupled paths remain gated.
 
   - id: sparse_j2_backend_promotion
     family: backend_promotion

@@ -7,7 +7,7 @@ from phast import Problem
 
 
 ROOT = Path(__file__).resolve().parents[3]
-RESULT_DIR = ROOT / "examples" / "plasticity_interface" / "results" / "pfczm_uniaxial_strength"
+RESULT_DIR = ROOT / "examples" / "plasticity_interface_beta" / "results" / "pfczm_uniaxial_strength"
 
 
 def build_problem() -> Problem:
