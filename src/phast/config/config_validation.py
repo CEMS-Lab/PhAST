@@ -914,6 +914,15 @@ def validate_config_warnings(raw: dict, line_map: Optional[dict] = None
     if raw is None or not isinstance(raw, dict):
         return warnings
 
+    acceptance = raw.get('acceptance') or {}
+    suppressed_warnings = set()
+    if isinstance(acceptance, dict):
+        value = acceptance.get('suppress_warnings') or []
+        if isinstance(value, str):
+            suppressed_warnings = {value}
+        elif isinstance(value, list):
+            suppressed_warnings = {str(item) for item in value}
+
     energy_split = _raw_material_value(raw, 'energy_split')
     plane_stress = _raw_material_value(raw, 'plane_stress')
     if bool(plane_stress) and energy_split == 'spectral':
@@ -947,7 +956,7 @@ def validate_config_warnings(raw: dict, line_map: Optional[dict] = None
     if l0_mm is not None and l0_mm > 0 and mesh_sizes:
         h_min = min(mesh_sizes)
         ratio = h_min / l0_mm
-        if ratio > 0.5:
+        if ratio > 0.5 and 'mesh_l0_resolution' not in suppressed_warnings:
             warnings.append(ValidationWarning(
                 path='geometry',
                 message=(

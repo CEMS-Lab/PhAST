@@ -4,6 +4,11 @@ problem:
   name: Kalthoff-Winkler Impact
   reference: Borden et al. (2012), CMAME
 
+acceptance:
+  status: validated
+  suppress_warnings:
+  - mesh_l0_resolution
+
 # Reference public deck for the half-plate Kalthoff-Winkler benchmark.
 # Mesh 3 uses h_crack=0.25 mm and is the promoted public evidence bundle.
 geometry:

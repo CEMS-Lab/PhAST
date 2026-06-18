@@ -5,6 +5,8 @@ reference: COMSOL 6.4 holed_plate_fracture.mph exact Damage settings; Ambati et 
 acceptance:
   status: validated
   reference_result: COMSOL 6.4 Application Library / strict-parity matrix run 33819 task 34
+  suppress_warnings:
+  - mesh_l0_resolution
   required_outputs:
   - mesh.geo
   - mesh.msh

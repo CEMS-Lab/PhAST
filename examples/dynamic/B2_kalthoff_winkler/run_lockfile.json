@@ -1,13 +1,19 @@
 {
   "schema_version": 1,
   "command": "python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml",
-  "config_sha256": "da91bd705c9f0835678b0b48ccec0662eec4bbb47a13197d344a9311827bbb27",
+  "config_sha256": "9cb19f37d2a9ad3732a1b40bf9f1de12ffb5a8a8205c99ef135467416e8a87e6",
   "resolved_config": {
     "schema_version": 1,
     "example": "phast.examples.dynamic_kalthoff_shear.run",
     "problem": {
       "name": "Kalthoff-Winkler Impact",
       "reference": "Borden et al. (2012), CMAME"
+    },
+    "acceptance": {
+      "status": "validated",
+      "suppress_warnings": [
+        "mesh_l0_resolution"
+      ]
     },
     "geometry": {
       "type": "kalthoff_winkler",

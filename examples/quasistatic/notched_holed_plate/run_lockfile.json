@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "command": "python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate",
-  "config_sha256": "90d095733624c60c1f216c08bda688f761beb04b383cbab74a40c57275f7df10",
+  "config_sha256": "d1482d7acd3d62489fdead62c0b437ab54ba7212b552df9bbc3712f90b16a118",
   "resolved_config": {
     "schema_version": 1,
     "name": "COMSOL Notched Holed Plate strict .mph parity (volDev + eta=1e-5)",
@@ -9,6 +9,9 @@
     "acceptance": {
       "status": "validated",
       "reference_result": "COMSOL 6.4 Application Library / strict-parity matrix run 33819 task 34",
+      "suppress_warnings": [
+        "mesh_l0_resolution"
+      ],
       "required_outputs": [
         "mesh.geo",
         "mesh.msh",
