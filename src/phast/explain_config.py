@@ -1,11 +1,8 @@
-"""Backward-compatible shim for :mod:`phast.config.explain_config`."""
-from importlib import import_module as _import_module
-import sys as _sys
+"""Compatibility wrapper for :mod:`phast.config.explain_config`."""
 
-_module = _import_module("phast.config.explain_config")
-globals().update({
-    _name: _value for _name, _value in vars(_module).items()
-    if _name not in {"__builtins__", "__loader__", "__spec__"}
-})
-_sys.modules[__name__] = _module
-__all__ = [name for name in vars(_module) if not name.startswith("__")]
+from .config.explain_config import *  # noqa: F401,F403
+from .config.explain_config import main as _main
+
+
+if __name__ == "__main__":
+    raise SystemExit(_main())

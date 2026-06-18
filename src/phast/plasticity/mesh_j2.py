@@ -1,6 +1,7 @@
 """Mesh-level J2 elastoplastic mechanics and ductile PF coupling helpers.
 
-This module is the first production slice for the customer plasticity gates:
+This module is the first production slice for the beta plasticity validation
+gates:
 
 * Gate 1: per-element J2 state, commit/rollback, stress update, internal force,
   and plastic-work accounting on a mesh.

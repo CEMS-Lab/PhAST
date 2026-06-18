@@ -10,20 +10,20 @@ and sanity-checking YAML configurations.
 Usage
 -----
     # From a material preset:
-    python -m phast.tools.pre_simulation_calculator \
+    python -m phast precheck \
         --preset glass_borden --h_min 0.5 --l0 0.5 --t_total 8e-5
 
     # From explicit material parameters:
-    python -m phast.tools.pre_simulation_calculator \
+    python -m phast precheck \
         --E 32000 --nu 0.2 --rho 2.45e-9 --Gc 3e-3 --l0 0.5 \
         --h_min 0.5 --t_total 8e-5
 
     # From a YAML config:
-    python -m phast.tools.pre_simulation_calculator \
+    python -m phast precheck \
         --config configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
 
     # Self-test with reference values:
-    python -m phast.tools.pre_simulation_calculator --test
+    python -m phast precheck --test
 
 References
 ----------
@@ -689,6 +689,7 @@ def _fmt_time(seconds: float) -> str:
 def _parse_args():
     import argparse
     p = argparse.ArgumentParser(
+        prog="python -m phast precheck",
         description="Pre-simulation diagnostic calculator for explicit dynamics phase-field fracture.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""

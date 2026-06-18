@@ -4049,7 +4049,8 @@ class MonolithicSolver:
 # for a true discrete-time adjoint that composes with the existing
 # damage implicit-diff (`_AdjointDamageSolve*` in damage_solver.py).
 #
-# See docs/adjoint_explicit_dynamics_derivation.md for the derivation.
+# A full discrete-time adjoint derivation should be documented before this
+# experimental backward path is promoted as a public workflow.
 # -----------------------------------------------------------------------------
 
 

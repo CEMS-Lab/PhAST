@@ -38,10 +38,7 @@ import torch
 import numpy as np
 from typing import Tuple, Dict, Iterable, List, Optional, Sequence
 
-try:  # top-level module layout (matches sibling modules)
-    from mesh import FEMMesh
-except ImportError:  # fallback when imported as part of a package
-    from ..core.mesh import FEMMesh
+from ..core.mesh import FEMMesh
 
 
 # -------------------------------------------------------------------- #

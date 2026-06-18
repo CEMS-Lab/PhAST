@@ -1,6 +1,5 @@
-"""Backward-compatible alias for :mod:`phast.core.problem`."""
+"""Compatibility alias for :mod:`phast.core.problem`."""
 
-from importlib import import_module as _import_module
-import sys as _sys
+from ._compat import alias_module as _alias_module
 
-_sys.modules[__name__] = _import_module("phast.core.problem")
+_alias_module(__name__, 'phast.core.problem')

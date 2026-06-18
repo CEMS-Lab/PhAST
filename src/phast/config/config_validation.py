@@ -1155,6 +1155,16 @@ def validate_config(raw: dict, line_map: Optional[dict] = None
                 message=f"value {value} out of range; expected >= 1",
                 line_no=line_map.get('schema_version', 0),
             ))
+        elif value != 1:
+            errors.append(ValidationError(
+                path='schema_version',
+                message=f"value {value} is not supported by the schema-v1 validator",
+                line_no=line_map.get('schema_version', 0),
+                suggestion=(
+                    "Use schema_version: 1 for YAML runner configs, or route "
+                    "schema-v2 workflow decks through python -m phast run."
+                ),
+            ))
 
     # Each known section
     for section, cls in _DATACLASS_BY_SECTION.items():

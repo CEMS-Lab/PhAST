@@ -9,7 +9,7 @@ Usage::
 
     import matplotlib
     matplotlib.use('Agg')
-    from paper_figure_style import apply_style
+    from phast.utils.paper_figure_style import apply_style
     apply_style()
 
     import matplotlib.pyplot as plt

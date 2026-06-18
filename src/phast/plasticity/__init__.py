@@ -5,7 +5,7 @@ This package is the plasticity track foundation. It exposes a material-point
 return-mapping integrator plus the first mesh-level J2 state/coupling layer.
 The mesh layer validates per-element state, commit/rollback, internal-force
 assembly, plastic-work accounting, and ductile phase-field driving-force
-coupling. The customer validation example solves bounded AT2 damage on that
+coupling. The beta validation examples solve bounded AT2 damage on that
 ductile history; full global ``StaggeredSolver`` PF-plasticity benchmark
 integration is still a separate hardening step.
 

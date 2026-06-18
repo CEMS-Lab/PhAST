@@ -239,14 +239,14 @@ def build_explanation(config_path: str) -> tuple[str, int]:
     if solver_type in IMPLICIT_SOLVERS and solver.preconditioner in {'amg', 'amgx', 'gmg'}:
         warnings.append(
             f"Implicit/quasi-static fracture is configured with "
-            f"preconditioner={solver.preconditioner!r}; current customer "
+            f"preconditioner={solver.preconditioner!r}; public validation "
             "validation should use Jacobi unless this run is specifically "
             "testing the multigrid preconditioner."
         )
     if solver_type == 'monolithic':
         warnings.append(
             "Monolithic phase-field solve is experimental; use staggered "
-            "quasi_static/static/lbfgs for customer-facing implicit validation."
+            "quasi_static/static/lbfgs for public implicit validation."
         )
     if (solver_type == 'explicit'
             and raw_solver.get('use_multigrid') is True):
@@ -356,6 +356,7 @@ def build_explanation(config_path: str) -> tuple[str, int]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
+        prog="python -m phast explain-config",
         description="Explain a phast YAML config without running it."
     )
     parser.add_argument('config', help='Path to YAML config')

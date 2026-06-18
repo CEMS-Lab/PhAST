@@ -228,7 +228,7 @@ def generate_json_schema(schema_id: str = SCHEMA_ID) -> dict:
     properties: dict[str, dict] = {
         "schema_version": {
             "type": "integer",
-            "minimum": 1,
+            "const": 1,
             "default": _cfg.ProblemConfig.schema_version,
         },
         "problem": {
@@ -337,6 +337,7 @@ def write_schema(path: str | Path, *, indent: int = 2) -> None:
 
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(
+        prog="python -m phast schema",
         description="Export the phast YAML JSON Schema."
     )
     parser.add_argument(

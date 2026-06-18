@@ -37,9 +37,8 @@ adaptive            : Adaptive mesh refinement (newest vertex bisection)
 """
 
 # Guard against being imported under the wrong package name. When pytest
-# collects test modules from a clone whose directory name is not
-# ``phast`` (e.g. the GitHub-cloned dir is ``tps_main_check`` or
-# ``phast-feature-x``), Python may try to import this file as
+# collects modules from a clone whose directory name is not
+# ``phast`` (for example ``phast-feature-x``), Python may try to import this file as
 # part of the rootdir scan. ``__name__`` is then something other than
 # ``phast`` and the relative imports below would fail with
 # ``attempted relative import with no known parent package``.

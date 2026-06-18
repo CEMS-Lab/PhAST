@@ -1,4 +1,4 @@
-"""Environment diagnostics for customer installs."""
+"""Environment diagnostics for PhAST installs."""
 
 from __future__ import annotations
 

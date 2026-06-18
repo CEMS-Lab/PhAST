@@ -35,19 +35,19 @@ def main():
     sys.argv = [sys.argv[0]] + sys.argv[2:]
 
     if cmd == 'run':
-        from .run_config import main as run_main
+        from .config.run_config import main as run_main
         run_main()
     elif cmd == 'precheck':
-        from .precheck import main as pc_main
+        from .config.precheck import main as pc_main
         pc_main()
     elif cmd in ('explain-config', 'explain'):
-        from .explain_config import main as explain_main
+        from .config.explain_config import main as explain_main
         raise SystemExit(explain_main())
     elif cmd in ('schema', 'json-schema'):
-        from .config_schema import main as schema_main
+        from .config.config_schema import main as schema_main
         raise SystemExit(schema_main())
     elif cmd == 'doctor':
-        from .doctor import main as doctor_main
+        from .utils.doctor import main as doctor_main
         raise SystemExit(doctor_main())
     elif cmd == 'postprocess':
         from .postprocess_paper import main as pp_main

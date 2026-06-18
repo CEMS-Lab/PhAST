@@ -3,9 +3,9 @@
 Run a phase-field fracture simulation from a YAML config file.
 
 Usage:
-    python -m phast.run_config configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
-    python -m phast.run_config configs/benchmarks/dynamic/B5_pmma_branching.yaml --device cuda --fast
-    python -m phast.run_config configs/benchmarks/dynamic/B3_dynamic_sent.yaml --h5 --plots
+    python -m phast run configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
+    python -m phast run configs/benchmarks/dynamic/B5_pmma_branching.yaml --device cuda --fast
+    python -m phast run configs/benchmarks/dynamic/B3_dynamic_sent.yaml --h5 --plots
 
 CLI flags override YAML values.
 """
@@ -120,6 +120,7 @@ def _print_precheck_summary(mesh, mat, solver_cfg, cfg) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
+        prog="python -m phast run",
         description='Run phase-field fracture from YAML config')
     parser.add_argument('config', type=str, help='Path to YAML config file')
     # CLI overrides
@@ -820,7 +821,7 @@ def main():
         zarr_path = os.path.join(output_dir, 'training_data.zarr')
         if os.path.exists(h5_path) or os.path.exists(zarr_path):
             try:
-                from postprocess_paper import BenchmarkPostProcessor
+                from ..utils.postprocess_paper import BenchmarkPostProcessor
                 print(f"\n[forward-viz] generating "
                       f"{'snapshots' if want_plots else ''}"
                       f"{' + ' if want_plots and want_gif else ''}"

@@ -121,11 +121,11 @@ class SolverConfig:
     adaptive_dt_d_threshold: float = 0.01       # Legacy alias for dt_cutback_threshold
     adaptive_dt_min_factor: float = 0.1         # Legacy: minimum dt as fraction of CFL dt
     adaptive_dt_grow_rate: float = 1.1          # dt growth factor when Δd is quiescent
-    # PAPER_1_TODOS Section L3 — explicit growth/cutback heuristic.
-    # Cut dt by 0.5× when Δd_max in a step exceeds dt_cutback_threshold,
-    # grow by adaptive_dt_grow_rate× toward the live CFL bound when Δd_max
-    # falls below dt_growth_threshold. dt is hard-floored at dt_floor and
-    # capped at the live fem.recompute_dt_cfl() * dt_safety bound.
+    # Explicit growth/cutback heuristic: cut dt by 0.5x when delta-d_max in
+    # a step exceeds dt_cutback_threshold; grow by adaptive_dt_grow_rate
+    # toward the live CFL bound when delta-d_max falls below
+    # dt_growth_threshold. dt is hard-floored at dt_floor and capped at the
+    # live fem.recompute_dt_cfl() * dt_safety bound.
     dt_growth_threshold: float = 0.001          # Δd_max below which dt grows
     dt_cutback_threshold: float = 0.01          # Δd_max above which dt halves
     dt_floor: float = 1e-12                     # absolute lower bound on dt [s]
@@ -476,7 +476,6 @@ class StaggeredSolver:
             # (Newton-Raphson with autograd-enabled sparse-direct inner solve
             # for problems below sparse_dof_threshold; falls back to iterative
             # CG above). Preserves legacy semantics for problems > 200k dofs.
-            # See PAPER_1_TODOS.md Section N + GitHub issue #106.
             return QuasiStaticSolver(
                 self.fem, tol=cfg.static_tol,
                 max_iter=cfg.static_max_iter,
@@ -511,7 +510,7 @@ class StaggeredSolver:
     def _adapt_timestep(self, d_prev: torch.Tensor):
         """Adjust dt by Δd-driven growth/cutback (explicit dynamics only).
 
-        Implements PAPER_1_TODOS Section L3:
+        Implements the explicit dynamics timestep adaptation heuristic:
             d_max_step = max |d - d_prev|
             if d_max_step > dt_cutback_threshold:
                 dt ← max(dt * 0.5, dt_floor)
@@ -827,7 +826,7 @@ class StaggeredSolver:
         # When the user explicitly picks a method, the dispatcher wins.
         # Bug 2026-05-09: silent failure where both hard_max and softmax
         # sweep jobs ran as softplus(beta=10) because softmax_H_beta=10
-        # was passed unconditionally by the slurm.
+        # was passed unconditionally by a batch script.
         method = self.config.H_update_method
         if method == 'hard_max':
             beta = self.config.softmax_H_beta
