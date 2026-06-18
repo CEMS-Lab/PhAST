@@ -1,25 +1,8 @@
 [
   {
-    "file": "damage_evolution.gif",
-    "artifact_type": "animation",
-    "size_bytes": 991854,
-    "visual_scope": "dynamic",
-    "width_px": 700,
-    "height_px": 450,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "damage_final.png",
-    "artifact_type": "image",
-    "size_bytes": 40753,
-    "visual_scope": "dynamic",
-    "width_px": 968,
-    "height_px": 596,
-    "review_dimension_passed": true
-  },
-  {
     "file": "initial_conditions.png",
     "artifact_type": "image",
+    "label": "initial conditions",
     "size_bytes": 314043,
     "visual_scope": "dynamic",
     "width_px": 1884,
@@ -27,12 +10,31 @@
     "review_dimension_passed": true
   },
   {
+    "file": "damage_final.png",
+    "artifact_type": "image",
+    "label": "final damage",
+    "size_bytes": 40753,
+    "visual_scope": "dynamic",
+    "width_px": 968,
+    "height_px": 596,
+    "review_dimension_passed": true
+  },
+  {
     "file": "thumbnail.png",
     "artifact_type": "image",
+    "label": "thumbnail",
     "size_bytes": 203969,
     "visual_scope": "dynamic",
     "width_px": 6981,
     "height_px": 1236,
     "review_dimension_passed": true
+  },
+  {
+    "file": "damage_evolution.gif",
+    "artifact_type": "animation",
+    "label": "damage evolution gif",
+    "size_bytes": 991854,
+    "visual_scope": "dynamic",
+    "media_passed": true
   }
 ]

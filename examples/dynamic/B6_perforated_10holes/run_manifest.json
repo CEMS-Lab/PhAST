@@ -6,7 +6,6 @@
   "files": [
     "README.md",
     "config.yaml",
-    "run_fluent.py",
     "crack_tip.csv",
     "damage_evolution.gif",
     "damage_final.png",
@@ -15,10 +14,15 @@
     "initial_conditions.png",
     "mesh.geo",
     "mesh.msh",
+    "run_fluent.py",
+    "run_lockfile.json",
     "run_manifest.json",
     "run_metadata.json",
     "thumbnail.png",
     "visual_manifest.json"
   ],
-  "notes": []
+  "notes": [
+    "Public B6 perforated-plate example curated from retained reference outputs.",
+    "Raw trajectory stores and full run directories remain external."
+  ]
 }

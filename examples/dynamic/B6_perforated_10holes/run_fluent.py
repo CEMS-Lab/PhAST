@@ -1,4 +1,4 @@
-"""Run the B6 perforated 10-hole plate example without a YAML deck."""
+"""Run the B6 perforated 10-hole plate example without a YAML configuration."""
 
 from __future__ import annotations
 
