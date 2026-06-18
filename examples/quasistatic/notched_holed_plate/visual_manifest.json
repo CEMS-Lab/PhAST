@@ -3,72 +3,81 @@
     "file": "initial_conditions.png",
     "artifact_type": "image",
     "size_bytes": 251607,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 1597,
     "height_px": 827,
-    "review_dimension_passed": true
-  },
-  {
-    "file": "compare.png",
-    "artifact_type": "image",
-    "size_bytes": 84592,
-    "visual_scope": "quasistatic",
-    "width_px": 1200,
-    "height_px": 840,
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "description": "Problem setup schematic showing geometry, mesh context, and boundary conditions."
   },
   {
     "file": "damage_evolution.gif",
     "artifact_type": "image",
     "size_bytes": 150266,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 520,
     "height_px": 960,
-    "review_dimension_passed": true
+    "frames": 27,
+    "review_dimension_passed": true,
+    "description": "Damage evolution animation from the retained reference run."
   },
   {
     "file": "damage_final.png",
     "artifact_type": "image",
     "size_bytes": 41620,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 609,
     "height_px": 807,
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "description": "Final damage field from the retained reference run."
   },
   {
     "file": "damage_multipanel.png",
     "artifact_type": "image",
     "size_bytes": 58683,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 1708,
     "height_px": 762,
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "description": "Multi-step damage panel from the retained reference run."
+  },
+  {
+    "file": "compare.png",
+    "artifact_type": "image",
+    "size_bytes": 84592,
+    "visual_scope": "quasistatic_fracture",
+    "width_px": 1200,
+    "height_px": 840,
+    "review_dimension_passed": true,
+    "description": "Comparison plot against the external reference response."
   },
   {
     "file": "energy.png",
     "artifact_type": "image",
     "size_bytes": 69489,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 1184,
     "height_px": 733,
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "description": "Energy history from the retained reference run."
   },
   {
     "file": "load_displacement.png",
     "artifact_type": "image",
     "size_bytes": 65287,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 1200,
     "height_px": 800,
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "description": "Load-displacement response from the retained reference run."
   },
   {
     "file": "thumbnail.png",
     "artifact_type": "image",
     "size_bytes": 41620,
-    "visual_scope": "quasistatic",
+    "visual_scope": "quasistatic_fracture",
     "width_px": 609,
     "height_px": 807,
-    "review_dimension_passed": true
+    "review_dimension_passed": true,
+    "description": "Gallery thumbnail for the example."
   }
 ]

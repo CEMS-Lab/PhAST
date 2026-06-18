@@ -24,6 +24,7 @@
     "results.csv",
     "run_fluent.py",
     "run_lockfile.json",
+    "run_manifest.json",
     "run_metadata.json",
     "solver_telemetry.csv",
     "staggered_convergence.png",

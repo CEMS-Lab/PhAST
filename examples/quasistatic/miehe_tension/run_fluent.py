@@ -1,8 +1,8 @@
-"""Run the Miehe SENT quasi-static fracture example without a YAML deck.
+"""Run the Miehe SENT quasi-static fracture example without a YAML configuration.
 
 This script is intentionally close to ``config.yaml``. It demonstrates the
 Python authoring path for users who want to construct a PhAST problem directly
-with the fluent API, while keeping the checked-in YAML deck as the canonical
+with the fluent API, while keeping the checked-in YAML configuration as the canonical
 reproducibility input.
 """
 

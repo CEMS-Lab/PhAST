@@ -15,7 +15,7 @@ acceptance:
   - solver_telemetry.csv
   - load_displacement.png
   - damage_final.png
-  - damage_evolution.mp4
+  - damage_evolution.gif
   - damage_multipanel.png
   - compare.png
   - compare_report.txt

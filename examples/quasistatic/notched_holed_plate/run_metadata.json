@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-05-17T12:41:12.586941",
+  "platform": {
+    "system": "Linux",
+    "release": "5.14.0-611.11.1.el9_7.x86_64",
+    "machine": "x86_64",
+    "python": "3.11.15",
+    "pytorch": "2.8.0+cu128"
+  },
+  "problem": "COMSOL Notched Holed Plate strict .mph parity (volDev + eta=1e-5)",
+  "device": {
+    "device": "cpu",
+    "dtype_default": "float64"
+  },
+  "material": {
+    "E": 6000.0,
+    "nu": 0.22,
+    "Gc": 2.28,
+    "l0": 0.25,
+    "energy_split": "amor",
+    "pf_model": "AT2",
+    "eta_residual": 1e-05,
+    "plane_stress": true,
+    "rho": 2.4e-09
+  },
+  "mesh": {
+    "n_nodes": 19129,
+    "n_elements": 37666,
+    "h_min": 0.12569703569685234
+  },
+  "solver": {
+    "solver_type": "quasi_static_legacy",
+    "time_integrator": "central_difference",
+    "rho_inf": 0.5,
+    "num_steps": 200,
+    "dt": 0.01,
+    "c_R_mm_s": 923277.7666220266,
+    "c_R_m_s": 923.2777666220265,
+    "c_p_mm_s": 1620849.859332606,
+    "c_s_mm_s": 1012220.4127236451
+  },
+  "git_hash": "d201b32",
+  "total_time_s": 37888.99,
+  "crack_step": 41,
+  "config_file": "examples/quasistatic/notched_holed_plate/config.yaml",
+  "preseed_notch_nodesets": [],
+  "memory": {
+    "cpu_rss_peak_MiB": 774.5
+  }
+}

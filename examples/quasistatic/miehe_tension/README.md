@@ -28,7 +28,7 @@ The checked-in reference result used 350 load steps on CPU and took about
 905 seconds in the recorded run metadata.
 
 
-## Run The Canonical YAML configuration
+## Run The Canonical YAML Configuration
 
 From the repository root:
 

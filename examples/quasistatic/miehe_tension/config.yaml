@@ -17,7 +17,7 @@ acceptance:
     - load_displacement.png
     - staggered_convergence.png
     - damage_final.png
-    - damage_evolution.mp4
+    - damage_evolution.gif
     - compare.png
     - compare_report.txt
   metrics:

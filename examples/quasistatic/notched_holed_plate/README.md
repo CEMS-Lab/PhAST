@@ -4,9 +4,10 @@ Validated notched-holed plate benchmark based on the COMSOL 6.4 Geomechanics
 Application Library example "Brittle Fracture of a Holed Plate" and the
 Ambati, Gerasimov, and De Lorenzis phase-field fracture setup.
 
-This folder is self-contained: the canonical YAML configuration, mesh files,
-COMSOL reference curve, comparison script, validation report, CSV outputs, and
-reference visual artifacts are kept beside each other.
+This folder is self-contained: the canonical YAML configuration, equivalent
+Python setup script, mesh files, COMSOL reference curve, comparison script,
+validation report, CSV outputs, run metadata, and reference visual artifacts are
+kept beside each other.
 
 ## 1. Problem Description
 
@@ -35,7 +36,7 @@ The checked-in reference result used 200 load steps on CPU and took about
 10.5 hours in the recorded run metadata.
 
 
-## Run The Canonical YAML configuration
+## Run The Canonical YAML Configuration
 
 From the repository root:
 
@@ -96,14 +97,28 @@ output directory, and compared across machines.
 
 ## Run Without YAML
 
-This example is currently YAML-first only. A `run_fluent.py` companion is not
-included because the reference configuration file depends on the legacy quasi-static
-rigid-connector path. The fluent API can describe the mesh regions and boundary
-condition parameters, but the exact reference `quasi_static_legacy` execution
-path is not yet exposed as a stable manual/API example.
+Use `run_fluent.py` when you want to assemble the same benchmark directly in
+Python instead of loading the YAML configuration:
 
-For now, use `config.yaml` for exact reproduction and use the YAML blocks above
-as the manual setup map.
+```bash
+python examples/quasistatic/notched_holed_plate/run_fluent.py \
+  --output-dir examples/quasistatic/notched_holed_plate/run_fluent
+```
+
+For a short check:
+
+```bash
+python examples/quasistatic/notched_holed_plate/run_fluent.py \
+  --num-steps 5 \
+  --output-dir examples/quasistatic/notched_holed_plate/run_fluent_quick
+```
+
+The script constructs the same `phast.Problem` configuration objects used by
+the YAML workflow, including the inline geometry primitives, rigid connector
+pin constraints, two-stage displacement schedule, and `quasi_static_legacy`
+solver settings. The YAML configuration remains the canonical public
+reproduction input because it is the artifact saved into lockfiles and
+validation evidence.
 
 ### How Manual Setup Works
 
