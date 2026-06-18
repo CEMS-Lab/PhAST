@@ -1422,7 +1422,7 @@ class StaggeredSolver:
         Keep it broader than the primary variables: rejected learned proposals
         must also restore history diagnostics and installed heterogeneous
         material fields so the trusted correction does not inherit stale
-        private state.
+        internal state.
         """
         state = {
             'u': self.u.clone(),

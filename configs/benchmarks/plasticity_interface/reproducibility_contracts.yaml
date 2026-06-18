@@ -4,7 +4,7 @@ purpose: Reproducible validation contracts for plasticity, cohesive, PF-CZM, and
 base_paths:
   examples: examples/plasticity_interface_beta
   outputs: outputs/plasticity_interface
-  visual_requirements: docs/output_standards/index.md
+  visual_requirements: docs/user_guide/example_contract.md
 defaults:
   working_dir: repository_root
   mode: script_yaml_contract

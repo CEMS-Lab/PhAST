@@ -44,7 +44,7 @@ That YAML lists every validation runner, its exact launcher command, required
 CSV/JSON/mesh/visual artifacts, and the public claim boundary. Each promoted
 run should also retain the generated `config.yaml`,
 `run_manifest.json` when available, and `visual_manifest.json` for plots or
-animations according to `docs/output_standards/index.md`.
+animations according to `docs/user_guide/example_contract.md`.
 
 The first promoted #708 validation slice is available through the curated YAML
 dispatcher:
@@ -384,5 +384,5 @@ The scripts are CPU-scale validation examples and are intentionally small. They 
 `max_rss_kib` in `summary.json` so local and cluster runs can be compared
 without extra profiling tools.
 
-Figures follow `docs/output_standards/index.md`: STIX-style serif fonts,
+Figures follow `docs/user_guide/example_contract.md`: STIX-style serif fonts,
 review-safe dimensions, labelled colorbars, and explicit geometry/path overlays.

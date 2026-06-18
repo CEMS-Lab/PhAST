@@ -33,7 +33,7 @@ boundary_conditions:
 # half-plate Kalthoff setup mirrors about y=0. ``symmetry axis=y`` is
 # the canonical shorthand for ``fix component=1`` on a horizontal
 # edge: it suppresses u_y while leaving u_x free. Bit-exact with
-# the legacy form (see tests/test_bc_vocab.py).
+# the legacy form used by older accepted decks.
 - {nodes: bottom, type: symmetry, axis: y}
 loading:
   protocol: simple

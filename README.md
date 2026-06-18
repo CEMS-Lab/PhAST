@@ -156,7 +156,10 @@ Hosted documentation is published at <https://cems-lab.github.io/PhAST/>.
 
 ## Citation
 
-Use [`CITATION.cff`](CITATION.cff) when referencing the PhAST solver framework. Links to specific technical manuscripts will be updated as accompanying articles become public.
+Use [`CITATION.cff`](CITATION.cff) when referencing the PhAST solver framework.
+A manuscript describing the formulation, benchmarks, and inverse-analysis
+examples is in preparation; paper citation details will be added after public
+preprint or publication.
 
 ## Acknowledgments and AI Usage
 

@@ -26,7 +26,7 @@ the implementation.
 
 ## Artifact Hygiene
 
-- [ ] No raw HPC result bundles, private meeting material, or heavy generated
+- [ ] No raw HPC result bundles, unpublished meeting material, or heavy generated
       media were added to git.
 - [ ] New trajectory output is Zarr-first, or legacy H5 use is explicitly
       compatibility-only.

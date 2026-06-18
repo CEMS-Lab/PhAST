@@ -28,7 +28,7 @@ def _apply_num_steps(problem: phast.Problem, num_steps: int | None) -> phast.Pro
 def build_problem(num_steps: int | None = None) -> phast.Problem:
     problem = phast.Problem("COMSOL Dynamic Crack Branching (PMMA-equiv.)")
     problem.config.example = None
-    problem.config.reference = "COMSOL 6.4 Application Library 'Dynamic Crack Branching' (PDFs retained in the private development archive)"
+    problem.config.reference = "COMSOL 6.4 Application Library 'Dynamic Crack Branching'"
     problem.config.acceptance = {
         "status": "beta",
         "reference_result": "Ren 2019 dynamic branching onset near 68.2 us; COMSOL Application Library 33 us retained as secondary vendor context",

@@ -79,7 +79,7 @@ problem:
   reference: ""                          # Citation (e.g., "Borden et al. (2012)")
 
 # ---------- Acceptance metadata ----------
-# Optional but recommended for benchmark/customer-validation configs.
+# Optional but recommended for benchmark validation configs.
 # This structured but extensible block records what a correct run must
 # reproduce. Keep numerical tolerances explicit and list all required
 # artifacts so HPC submissions and post-processing scripts can be audited

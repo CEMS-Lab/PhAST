@@ -213,7 +213,7 @@ def _get_preset_values(preset: str) -> Optional[Dict]:
 
 # Hand-crafted minimal parameter sets for the most common generators, so
 # the stub is *runnable* (gmsh-buildable) out of the box. Generators not
-# listed here fall back to {} and a TODO comment.
+# listed here fall back to {} and a placeholder comment.
 GEOMETRY_DEFAULTS = {
     'rectangular_sent': dict(W=100.0, H=40.0, a=50.0, h_crack=0.5, h_coarse=4.0),
     'kalthoff_winkler': dict(W=100.0, H=200.0, a=50.0, h_crack=0.25, h_coarse=5.0),
@@ -274,7 +274,7 @@ def _render_geometry_block(geometry: Optional[str]) -> str:
             f"    # See mesh_generator.{gen} docstring for the full parameter list."
         )
     else:
-        lines.append("  parameters: {}             # TODO: fill in generator-specific params")
+        lines.append("  parameters: {}             # Fill in generator-specific params")
     lines.append("")
     return "\n".join(lines)
 

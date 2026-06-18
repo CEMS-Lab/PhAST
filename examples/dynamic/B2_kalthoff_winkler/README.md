@@ -115,10 +115,6 @@ The Python runner builds the same mesh, material, boundary-condition, solver, an
 | Public field animation | `damage_evolution.gif` and `damage_evolution.mp4` generated from mesh-3 `external trajectory store` in the reference environment | PRESENT |
 | Excluded large files | `external trajectory store`, full run logs, and temporary result directories stay out of the public bundle | ENFORCED |
 
-To regenerate the reference visuals without transferring the H5 file, post-process in the reference environment in:
-
-```bash
-~/shared-results/torch_pf_solver_bench/results/kalthoff_halfplate_19148/mesh3_h0.25
-```
-
-Then rsync only the lightweight CSV, PNG, GIF, MP4, JSON, and YAML artifacts back into this flat public folder.
+To regenerate the reference visuals without transferring a large trajectory
+store, post-process in the reference environment and copy only the lightweight
+CSV, PNG, GIF, MP4, JSON, and YAML artifacts back into this flat public folder.
