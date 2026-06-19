@@ -130,6 +130,7 @@ user_guide/yaml_workflow
 user_guide/physics
 user_guide/configuration
 user_guide/meshes
+user_guide/geometry_gallery
 user_guide/example_contract
 user_guide/capability_matrix
 user_guide/sparse_solve

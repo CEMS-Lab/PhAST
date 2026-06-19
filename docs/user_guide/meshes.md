@@ -36,6 +36,10 @@ If the starting point is a `.geo` file, generate the `.msh` with Gmsh first.
 PhAST's YAML runner loads the `.msh`; built-in YAML primitive geometries are
 compiled to cached `.geo`/`.msh` artifacts automatically.
 
+For public examples that keep their Gmsh source files beside the YAML deck, see
+the [geometry and setup gallery](geometry_gallery.md). It links each setup
+preview to the corresponding `mesh.geo` and `config.yaml` files.
+
 Since the mesh loading is built on [meshio](https://github.com/nschloe/meshio),
 adding support for other formats is straightforward — meshio can read 40+ mesh
 formats including:
