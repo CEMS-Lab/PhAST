@@ -197,13 +197,26 @@ Hosted documentation is published at <https://cems-lab.github.io/PhAST/>.
 
 ## Citation
 
-Use [`CITATION.cff`](CITATION.cff) when referencing the PhAST solver framework.
-A manuscript describing the formulation, benchmarks, and inverse-analysis
-examples is in preparation; paper citation details will be added after public
-preprint or publication.
+If PhAST contributes to your research, please cite the associated arXiv
+manuscript and the software repository metadata in [`CITATION.cff`](CITATION.cff).
 
 The Sphinx documentation includes a short [how-to-cite page](docs/citing.md)
 with a repository BibTeX entry and reproducibility notes.
+
+```bibtex
+@misc{ani2026phast,
+  title={A matrix-free, differentiable PyTorch solver for phase-field fracture: Formulation, benchmarks, and inverse analysis},
+  author={Ani, Allamaprabhu and Molinari, Jean-François and Subhash, Ghatu and Ponnusami, Sathiskumar Anusuya},
+  year={2026},
+  eprint={2606.23458},
+  archivePrefix={arXiv},
+  primaryClass={cs.CE},
+  url={https://arxiv.org/abs/2606.23458}
+}
+```
+
+Official code for the manuscript is hosted in this repository:
+<https://github.com/CEMS-Lab/PhAST>.
 
 ## Acknowledgments
 

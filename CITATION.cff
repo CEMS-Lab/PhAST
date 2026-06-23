@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use PhAST, please cite this software repository. Manuscript citation details will be added after public preprint or publication."
+message: "If you use PhAST, please cite the associated arXiv manuscript and this software repository."
 title: "PhAST: Phase-field Autograd Solver in Torch"
 authors:
   - family-names: Ani
@@ -16,7 +16,7 @@ authors:
     given-names: Sathiskumar A.
     affiliation: "City St George's, University of London; Queen Mary University of London"
 version: 0.16.2
-date-released: 2026-05-20
+date-released: 2026-06-22
 license: MIT
 repository-code: "https://github.com/CEMS-Lab/PhAST"
 url: "https://cems-lab.github.io/PhAST/"
@@ -27,3 +27,21 @@ keywords:
   - PyTorch
   - matrix-free solvers
   - differentiable mechanics
+preferred-citation:
+  type: article
+  title: "A matrix-free, differentiable PyTorch solver for phase-field fracture: Formulation, benchmarks, and inverse analysis"
+  authors:
+    - family-names: Ani
+      given-names: Allamaprabhu
+    - family-names: Molinari
+      given-names: Jean-Francois
+    - family-names: Subhash
+      given-names: Ghatu
+    - family-names: Ponnusami
+      given-names: Sathiskumar Anusuya
+  year: 2026
+  url: "https://arxiv.org/abs/2606.23458"
+  identifiers:
+    - type: other
+      value: "arXiv:2606.23458"
+      description: "arXiv identifier"
