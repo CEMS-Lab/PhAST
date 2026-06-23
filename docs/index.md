@@ -22,6 +22,7 @@
       <a class="phast-button" href="getting-started.html">Get started</a>
       <a class="phast-button phast-button-secondary" href="example-gallery.html">View examples</a>
       <a class="phast-button phast-button-secondary" href="user_guide/capability_matrix.html">Capability matrix</a>
+      <a class="phast-button phast-button-secondary" href="https://github.com/CEMS-Lab/PhAST">Source on GitHub</a>
     </p>
   </div>
   <div class="phast-command-card">
@@ -77,6 +78,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 | [Example gallery](example-gallery.md) | Runnable fracture, solid-mechanics, and beta validation examples with visual outputs. |
 | [Performance and reproducibility](performance-reproducibility.md) | Device choice, backend policy, timing evidence, and `torch.compile` reporting. |
 | [Community](community.md) | Issues, discussions, maintainer review, and contribution route. |
+| [Source repository](https://github.com/CEMS-Lab/PhAST) | Clone the code, open issues, inspect examples, and contribute through GitHub. |
 
 ## For New Users: Your First 15 Minutes
 
