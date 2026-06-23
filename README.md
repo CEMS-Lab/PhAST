@@ -18,6 +18,7 @@
 </p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2606.23458"><img alt="arXiv:2606.23458" src="https://img.shields.io/badge/arXiv-2606.23458-b31b1b"></a>
   <img alt="Python 3.10-3.12" src="https://img.shields.io/badge/python-3.10--3.12-3776ab">
   <img alt="PyTorch 2.0+" src="https://img.shields.io/badge/PyTorch-2.0%2B-ee4c2c">
   <img alt="License" src="https://img.shields.io/github/license/CEMS-Lab/PhAST">
