@@ -4,3 +4,4 @@ sphinx-immaterial
 sphinx-autodoc-typehints<2.0
 sphinx-copybutton>=0.5
 sphinxcontrib-mermaid>=2.0
+sphinx-sitemap>=2.5

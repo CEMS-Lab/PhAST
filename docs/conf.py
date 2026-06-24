@@ -20,6 +20,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_immaterial",
     "sphinxcontrib.mermaid",
+    "sphinx_sitemap",
 ]
 
 # MyST: enable common extensions but keep parsing forgiving for existing .md.
@@ -59,12 +60,19 @@ napoleon_numpy_docstring = True
 
 # HTML theme.
 html_theme = "sphinx_immaterial"
-html_title = "PhAST"
+html_title = "PhAST | PyTorch Phase-Field Fracture Solver"
+html_short_title = "PhAST"
+html_baseurl = "https://cems-lab.github.io/PhAST/"
 html_logo = "_static/brand/phast-icon.png"
 html_favicon = "_static/brand/phast-icon.png"
 html_static_path = ["_static"]
-html_extra_path = ["../assets"]
+html_extra_path = ["../assets", "extra"]
 html_css_files = ["phast.css"]
+html_meta = {
+    "description": "PhAST is an open-source, matrix-free PyTorch solver for explicit dynamic phase-field fracture, supporting CPU and GPU execution.",
+    "keywords": "PhAST, phase-field fracture, PyTorch, matrix-free solver, differentiable mechanics, fracture mechanics",
+    "viewport": "width=device-width, initial-scale=1.0",
+}
 html_theme_options = {
     "icon": {"repo": "fontawesome/brands/github"},
     "site_url": "https://cems-lab.github.io/PhAST/",

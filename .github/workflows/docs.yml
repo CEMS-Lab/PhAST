@@ -26,6 +26,10 @@ jobs:
       - name: Build
         run: |
           sphinx-build -W -b html docs docs/_build/html
+      - name: Verify sitemap
+        run: |
+          test -f docs/_build/html/sitemap.xml || { echo "Missing docs/_build/html/sitemap.xml"; exit 1; }
+          grep -q "cems-lab.github.io/PhAST" docs/_build/html/sitemap.xml || { echo "sitemap missing PhAST canonical host"; exit 1; }
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

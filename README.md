@@ -2,11 +2,13 @@
   <img src="assets/phast-banner.png" alt="PhAST logo" width="640">
 </p>
 
-<h1 align="center">PhAST</h1>
+<h1 align="center">PhAST: A matrix-free, differentiable PyTorch Solver for Phase-Field Fracture</h1>
 
 <p align="center">
   <strong>Phase-field Autograd Solver in Torch</strong><br>
   A matrix-free, differentiable PyTorch solver for phase-field fracture and FEM benchmarks.
+  <br><br>
+  <strong>PhAST is a matrix-free, differentiable PyTorch solver for phase-field fracture.</strong>
 </p>
 
 <p align="center">

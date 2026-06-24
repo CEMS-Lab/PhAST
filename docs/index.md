@@ -1,4 +1,4 @@
-# PhAST
+# PhAST: Matrix-Free, Differentiable PyTorch Solver for Phase-Field Fracture
 
 **Phase-field Autograd Solver in Torch**
 
@@ -7,9 +7,9 @@
 <div class="phast-hero-panel">
   <div>
     <p class="phast-eyebrow">CEMS Lab · PyTorch-native FEM workflows</p>
-    <h2>Matrix-free, differentiable phase-field fracture and FEM benchmarks in PyTorch.</h2>
+    <h2>PhAST is a matrix-free, differentiable PyTorch solver for phase-field fracture and FEM benchmarks.</h2>
     <p>
-      <b>What is PhAST?</b> PhAST is a Python library built on PyTorch that allows you to solve phase-field fracture problems without assembling large global matrices. It is designed to be differentiable, making it easier to combine with machine learning techniques.
+      <b>What is PhAST?</b> PhAST is a matrix-free, differentiable PyTorch solver for phase-field fracture in explicit dynamics and quasi-static mechanics. It is built without a global stiffness matrix assembly, and is designed to be differentiable so it integrates with machine-learning workflows.
       <br><br>
       <i>(New to phase-field modeling? Read our <a href="tutorial/01_phase_field_primer.html">Phase-Field Primer</a> and the <a href="tutorial/02_visual_glossary.html">Visual Glossary</a> to learn the basics).</i>
     </p>
