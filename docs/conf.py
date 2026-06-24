@@ -66,7 +66,7 @@ html_baseurl = "https://cems-lab.github.io/PhAST/"
 html_logo = "_static/brand/phast-icon.png"
 html_favicon = "_static/brand/phast-icon.png"
 html_static_path = ["_static"]
-html_extra_path = ["../assets", "extra"]
+html_extra_path = ["../assets"]
 html_css_files = ["phast.css"]
 html_meta = {
     "description": "PhAST is an open-source, matrix-free PyTorch solver for explicit dynamic phase-field fracture, supporting CPU and GPU execution.",
