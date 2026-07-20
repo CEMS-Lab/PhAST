@@ -33,28 +33,40 @@ def _torch_status() -> tuple[str, str, str]:
     return str(torch.__version__), str(cuda), str(mps)
 
 
-def _backend_status() -> tuple[object, str, str]:
-    from ..solvers.sparse_solve import available_sparse_backends
+def _backend_status(
+    cuda_available: bool = False,
+) -> tuple[object, str, str, str]:
+    from ..solvers.sparse_solve import (
+        available_sparse_backends,
+        resolve_sparse_backend,
+    )
 
     status = available_sparse_backends()
-    if status.petsc:
-        selected = "mumps"
-        note = "PETSc/MUMPS is available and will be preferred by backend='auto'."
-    elif status.scipy:
-        selected = "scipy"
-        note = "SciPy SuperLU is available; MUMPS is not active in this environment."
-    elif status.cudss:
-        selected = "cudss"
-        note = "cuDSS is available for CUDA sparse direct solves."
+    try:
+        cpu_selected = resolve_sparse_backend(
+            "auto", device_type="cpu", status=status)
+    except RuntimeError:
+        cpu_selected = "cg"
+    if cuda_available:
+        try:
+            cuda_selected = resolve_sparse_backend(
+                "auto", device_type="cuda", status=status)
+        except RuntimeError:
+            cuda_selected = "cg"
     else:
-        selected = "cg"
-        note = "No sparse-direct backend is active; matrix-free CG remains available."
-    return status, selected, note
+        cuda_selected = "unavailable"
+    note = (
+        "Automatic backend selection follows a deterministic availability "
+        "policy. It is not a universal performance guarantee; compare "
+        "backends on the target problem before publishing timing claims."
+    )
+    return status, cpu_selected, cuda_selected, note
 
 
 def build_report() -> str:
     torch_ver, cuda, mps = _torch_status()
-    status, selected, note = _backend_status()
+    status, cpu_selected, cuda_selected, note = _backend_status(
+        cuda == "True")
     lines = [
         "PhAST environment doctor",
         "=" * 34,
@@ -77,7 +89,8 @@ def build_report() -> str:
         f"  PETSc/MUMPS:   {status.petsc}",
         f"  cuDSS/nvmath:  {status.cudss}",
         "",
-        f"backend='auto' on CPU will select: {selected}",
+        f"backend='auto' on CPU will select:  {cpu_selected}",
+        f"backend='auto' on CUDA will select: {cuda_selected}",
         note,
         "",
         "Backend meanings:",
@@ -94,6 +107,7 @@ def build_report() -> str:
         "  cohesive contact: sparse quasi-static backend, backend=auto, normal-contact penalty only when configured",
         "  J2 plasticity: sparse quasi-static backend, backend=auto, guarded supported material combinations",
         "  dataset/deep learning: Zarr trajectory stores; MP4/raster visualisation when animations are requested",
+        "  learned damage: classical is default; learned_proposal keeps exact correction; learned_replacement is audited experimental inference",
         "",
         "Install guidance:",
         "  Start with: pip install -e .",

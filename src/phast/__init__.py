@@ -65,6 +65,11 @@ if __name__ == "phast":
         DirectSolver, LBFGSSolver, MonolithicSolver,
     )
     from .staggered_solver import StaggeredSolver, SolverConfig
+    from .learned_damage import (
+        DamageDecision, DamagePrediction, DamagePredictionRejected,
+        DamagePredictor, DamageStepContext, DamageUpdateController,
+        load_damage_predictor,
+    )
     from .device import DeviceContext, detect_device, get_device_tier, estimate_vram_mb, Profiler
     from .problem import Problem
     from .result import Result, ResultLoadError, load_result
@@ -124,6 +129,9 @@ if __name__ == "phast":
         'ExplicitDynamics', 'StaticSolver', 'QuasiStaticSolver', 'SecantCGSolver',
         'LBFGSSolver', 'MonolithicSolver',
         'StaggeredSolver', 'SolverConfig',
+        'DamageDecision', 'DamagePrediction', 'DamagePredictionRejected',
+        'DamagePredictor', 'DamageStepContext', 'DamageUpdateController',
+        'load_damage_predictor',
         # Device / performance
         'DeviceContext', 'detect_device', 'get_device_tier', 'estimate_vram_mb', 'Profiler',
         # Convenience

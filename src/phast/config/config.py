@@ -95,8 +95,8 @@ class MaterialConfig:
     1. ``preset`` (legacy): named preset from ``create_material`` registry.
     2. ``overrides`` (legacy): dict layered on top of the preset.
     3. Inline top-level fields (E, nu, Gc, l0, energy_split, pf_model,
-       plane_stress, eta_residual, rho, kinematics, ...): layered on top
-       of ``overrides``.
+       degradation_type, plane_stress, eta_residual, rho, kinematics, ...):
+       layered on top of ``overrides``.
 
     Either route — or a mix — is valid. ``preset`` is no longer required;
     a YAML block containing only inline fields produces a Material directly.
@@ -111,7 +111,7 @@ class MaterialConfig:
         Legacy keyword overrides applied on top of the preset.
     E, nu, Gc, l0, rho, eta_residual : float or None
         Inline material properties. ``None`` means "not specified inline".
-    energy_split, pf_model, kinematics : str or None
+    energy_split, pf_model, degradation_type, kinematics : str or None
         Inline string options.
     plane_stress : bool or None
         Inline plane-stress flag.
@@ -127,6 +127,7 @@ class MaterialConfig:
     eta_residual: Optional[float] = None
     energy_split: Optional[str] = None
     pf_model: Optional[str] = None
+    degradation_type: Optional[str] = None
     kinematics: Optional[str] = None
     plane_stress: Optional[bool] = None
     driving_force: Optional[str] = None  # 'strain_energy' | 'principal_stress' (issue #248)
@@ -377,6 +378,16 @@ class SolverSettings:
     softmax_H_beta: Optional[float] = None
     H_update_method: str = 'hard_max'
     enable_damage: bool = True
+    # Damage-subproblem route. ``classical`` is the default. Learned routes
+    # require a user-supplied ``module:factory`` predictor.
+    damage_update: str = 'classical'
+    damage_predictor: Optional[str] = None
+    damage_checkpoint: Optional[str] = None
+    damage_predictor_options: dict = field(default_factory=dict)
+    damage_residual_rtol: float = 1.0e-3
+    damage_residual_atol: float = 1.0e-8
+    damage_bound_tolerance: float = 1.0e-8
+    damage_fallback: bool = True
     fail_on_mechanics_nonconvergence: bool = True
     fail_on_stagger_nonconvergence: bool = True
     adaptive_dt: bool = False
@@ -800,7 +811,8 @@ def _resolve_material(config: ProblemConfig):
     mat_overrides = dict(config.material.overrides)
     _inline_field_names = (
         'E', 'nu', 'Gc', 'l0', 'rho', 'eta_residual',
-        'energy_split', 'pf_model', 'kinematics', 'plane_stress',
+        'energy_split', 'pf_model', 'degradation_type', 'kinematics',
+        'plane_stress',
         'driving_force', 'cubic_s', 'sigma_ts', 'pfczm_p',
         'pfczm_softening',
     )
@@ -1070,6 +1082,14 @@ def resolve_config(config: ProblemConfig) -> dict:
         softmax_H_beta=s.softmax_H_beta,
         H_update_method=s.H_update_method,
         enable_damage=s.enable_damage,
+        damage_update=s.damage_update,
+        damage_predictor=s.damage_predictor,
+        damage_checkpoint=s.damage_checkpoint,
+        damage_predictor_options=s.damage_predictor_options,
+        damage_residual_rtol=s.damage_residual_rtol,
+        damage_residual_atol=s.damage_residual_atol,
+        damage_bound_tolerance=s.damage_bound_tolerance,
+        damage_fallback=s.damage_fallback,
         fail_on_mechanics_nonconvergence=s.fail_on_mechanics_nonconvergence,
         fail_on_stagger_nonconvergence=s.fail_on_stagger_nonconvergence,
         adaptive_dt=s.adaptive_dt,

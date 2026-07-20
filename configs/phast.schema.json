@@ -148,6 +148,13 @@
                 "allencahn"
               ]
             },
+            "degradation_type": {
+              "enum": [
+                "standard",
+                "cubic",
+                "rational"
+              ]
+            },
             "driving_force": {
               "enum": [
                 "strain_energy",
@@ -290,6 +297,18 @@
             "AT2",
             "PFCZM",
             "allencahn"
+          ]
+        },
+        "degradation_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "enum": [
+            "standard",
+            "cubic",
+            "rational"
           ]
         },
         "kinematics": {
@@ -600,6 +619,53 @@
           ]
         },
         "enable_damage": {
+          "type": "boolean",
+          "default": true
+        },
+        "damage_update": {
+          "type": "string",
+          "default": "classical",
+          "enum": [
+            "classical",
+            "learned_proposal",
+            "learned_replacement"
+          ]
+        },
+        "damage_predictor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "damage_checkpoint": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "damage_predictor_options": {
+          "type": "object",
+          "additionalProperties": true,
+          "default": {}
+        },
+        "damage_residual_rtol": {
+          "type": "number",
+          "default": 0.001,
+          "minimum": 0.0
+        },
+        "damage_residual_atol": {
+          "type": "number",
+          "default": 1e-08,
+          "minimum": 0.0
+        },
+        "damage_bound_tolerance": {
+          "type": "number",
+          "default": 1e-08,
+          "minimum": 0.0
+        },
+        "damage_fallback": {
           "type": "boolean",
           "default": true
         },

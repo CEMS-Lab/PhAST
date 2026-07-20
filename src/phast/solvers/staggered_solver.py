@@ -39,6 +39,11 @@ from ..utils.io_utils import (write_vtu, write_visualization, write_h5_snapshot,
                         init_h5, CSVHistory)
 from ..utils.device import DeviceContext
 from ..plasticity import DuctilePhaseFieldCoupling, MeshJ2Elastoplasticity
+from ..learned_damage import (
+    DamageStepContext,
+    DamageUpdateController,
+    load_damage_predictor,
+)
 
 
 @dataclass
@@ -107,6 +112,14 @@ class SolverConfig:
     # ExplicitDynamics docstring.  Zero = pure Verlet (default).
     damping_ratio_max: float = 0.0
     enable_damage: bool = True                  # False = pure elastic (skip damage solve + H update)
+    damage_update: str = 'classical'            # classical | learned_proposal | learned_replacement
+    damage_predictor: Optional[str] = None       # module:factory
+    damage_checkpoint: Optional[str] = None
+    damage_predictor_options: dict | None = None
+    damage_residual_rtol: float = 1.0e-3
+    damage_residual_atol: float = 1.0e-8
+    damage_bound_tolerance: float = 1.0e-8
+    damage_fallback: bool = True
     # Linear-solver backend for the QuasiStaticSolver Newton inner step.
     # Forwarded to QuasiStaticSolver(backend=...) in _build_mechanics_solver.
     # 'auto' picks the best available sparse-direct path; 'scipy', 'mumps',
@@ -155,6 +168,18 @@ class SolverConfig:
     print_every: int = 10
 
     def __post_init__(self):
+        if self.damage_update not in {
+            'classical', 'learned_proposal', 'learned_replacement',
+        }:
+            raise ValueError(
+                "damage_update must be classical, learned_proposal, or "
+                f"learned_replacement; got {self.damage_update!r}"
+            )
+        if self.damage_update != 'classical' and not self.damage_predictor:
+            raise ValueError(
+                f"damage_update={self.damage_update!r} requires "
+                "damage_predictor='module:factory'."
+            )
         if (self.preconditioner is None and
                 self.solver_type in ('static', 'quasi_static',
                                      'quasi_static_legacy', 'lbfgs',
@@ -380,8 +405,26 @@ class StaggeredSolver:
         self._last_mechanics_converged = True
         self._last_mechanics_iter = 0
         self._last_dt_used = 0.0             # for adaptive-dt history (forward compat)
+        self.damage_controller = None
+        self._last_damage_route = 'classical'
+        if config.damage_update != 'classical':
+            predictor = load_damage_predictor(
+                config.damage_predictor,
+                checkpoint=config.damage_checkpoint,
+                device=self.device,
+                options=config.damage_predictor_options,
+            )
+            self.set_damage_predictor(
+                predictor,
+                mode=config.damage_update,
+                residual_rtol=config.damage_residual_rtol,
+                residual_atol=config.damage_residual_atol,
+                bound_tolerance=config.damage_bound_tolerance,
+                fallback=config.damage_fallback,
+            )
         print(f"[StaggeredSolver] State allocated: {N} nodes, {E} elements, "
               f"device={self.device}, dtype={self.dtype}", flush=True)
+        self.print_route_report()
 
     def _update_stagger_residual_diagnostics(self, residual_norm: float,
                                              residual0: float | None) -> None:
@@ -892,7 +935,7 @@ class StaggeredSolver:
         return psi
 
     def step_solve_damage(self, d_prev_step=None):
-        """Solve AT2 for damage.
+        """Update damage through the configured classical or learned route.
 
         If `self.diff_Gc` and/or `self.diff_l0` are set (0-d tensors,
         typically with requires_grad=True), they are forwarded to the
@@ -933,10 +976,28 @@ class StaggeredSolver:
             pf_mask, pf_vals = self.bcs.get_pf_dirichlet_mask_values()
         d_prev_arg = d_prev_step if d_prev_step is not None else self.d
         initial_guess = self.d if d_prev_step is not None else None
+        decision = None
+        if self.damage_controller is not None:
+            context = self._damage_step_context(d_prev_arg)
+            decision = self.damage_controller.decide(
+                context,
+                damage_solver=self.damage_solver,
+                phase_field_mask=pf_mask,
+                phase_field_values=pf_vals,
+            )
+            self._last_damage_route = decision.route
+            if decision.accepted_replacement:
+                self.d = decision.candidate
+                self._apply_pf_dirichlet()
+                return
+            if decision.candidate is not None:
+                initial_guess = decision.candidate
         self.d = self.damage_solver.solve(
             self.H_elem, d_prev_arg, Gc=Gc, l0=l0, Gc_field=Gc_field,
             pf_dirichlet_mask=pf_mask, pf_dirichlet_values=pf_vals,
             initial_guess=initial_guess)
+        if decision is None:
+            self._last_damage_route = 'classical'
         # Phase-field Dirichlet enforcement (issue #213): re-pin the
         # damage value at every step on nodes flagged with the
         # pf_dirichlet BC (matches COMSOL pre-crack convention).
@@ -1414,6 +1475,135 @@ class StaggeredSolver:
     def get_H_nodal(self) -> torch.Tensor:
         """Get current history variable at nodes (for neural operator input)."""
         return self.H_nodal
+
+    def set_damage_predictor(
+            self, predictor, *, mode='learned_proposal',
+            residual_rtol=1.0e-3, residual_atol=1.0e-8,
+            bound_tolerance=1.0e-8, fallback=True):
+        """Install a learned damage predictor for subsequent damage updates.
+
+        ``learned_proposal`` always retains the classical damage solve.
+        ``learned_replacement`` accepts a prediction only after the audits
+        implemented by :class:`phast.DamageUpdateController`.
+        """
+        self.damage_controller = DamageUpdateController(
+            predictor,
+            mode=mode,
+            residual_rtol=residual_rtol,
+            residual_atol=residual_atol,
+            bound_tolerance=bound_tolerance,
+            fallback=fallback,
+        )
+        self.config.damage_update = mode
+        self._last_damage_route = mode
+        return self
+
+    def clear_damage_predictor(self):
+        """Restore the classical damage-subproblem route."""
+        self.damage_controller = None
+        self.config.damage_update = 'classical'
+        self._last_damage_route = 'classical'
+        return self
+
+    def _damage_step_context(self, damage_previous):
+        material_fields = {
+            name: getattr(self.material, name, None)
+            for name in (
+                'E', 'nu', 'Gc', 'l0', 'rho', 'eta_residual',
+                'plane_stress', 'kinematics',
+            )
+        }
+        time_value = (
+            None if self.dt is None
+            else float(self._step_count * self.dt)
+        )
+        return DamageStepContext(
+            step=int(self._step_count),
+            time=time_value,
+            load_factor=float(getattr(self.bcs, 'load_factor', 1.0)),
+            nodes=self.mesh.nodes.detach(),
+            elements=self.mesh.elements.detach(),
+            displacement=self.u.detach(),
+            velocity=self.v.detach(),
+            history_element=self.H_elem.detach(),
+            history_nodal=self.H_nodal.detach(),
+            damage_previous=damage_previous.detach(),
+            material=material_fields,
+            phase_field_model=str(
+                getattr(self.material, 'pf_model', 'AT2')),
+            energy_split=str(
+                getattr(self.material, 'energy_split', 'unknown')),
+            device=self.device,
+            dtype=self.dtype,
+        )
+
+    def route_report(self):
+        """Return the selected mechanics, damage, device, and physics route."""
+        backend_resolved = getattr(self.mechanics, 'last_backend', None)
+        damage = {
+            'model': str(getattr(self.material, 'pf_model', 'AT2')),
+            'update': self.config.damage_update,
+            'bounds': self.config.bounds_method,
+            'preconditioner': self.config.preconditioner,
+            'last_route': self._last_damage_route,
+        }
+        if self.damage_controller is not None:
+            damage.update(self.damage_controller.summary())
+        return {
+            'device': str(self.device),
+            'dtype': str(self.dtype),
+            'element_type': str(
+                getattr(self.mesh, 'element_type', 'T3')),
+            'solver_type': self.config.solver_type,
+            'mechanics': self.mechanics.__class__.__name__,
+            'backend_requested': self.config.backend,
+            'backend_resolved': backend_resolved,
+            'time_integrator': self.config.time_integrator,
+            'phase_field_model': str(
+                getattr(self.material, 'pf_model', 'AT2')),
+            'energy_split': str(
+                getattr(self.material, 'energy_split', 'unknown')),
+            'history_update': self.config.H_update_method,
+            'damage': damage,
+        }
+
+    def print_route_report(self):
+        """Print a concise, explicit solver-route report."""
+        report = self.route_report()
+        damage = report['damage']
+        print("[PhAST route]", flush=True)
+        print(
+            f"  device={report['device']}; dtype={report['dtype']}; "
+            f"elements={report['element_type']}",
+            flush=True,
+        )
+        print(
+            f"  mechanics={report['mechanics']}; "
+            f"solver_type={report['solver_type']}; "
+            f"time_integrator={report['time_integrator']}; "
+            f"backend_requested={report['backend_requested']}; "
+            f"backend_resolved={report['backend_resolved'] or 'at first solve'}",
+            flush=True,
+        )
+        print(
+            f"  fracture={report['phase_field_model']}; "
+            f"energy_split={report['energy_split']}; "
+            f"history_update={report['history_update']}; "
+            f"damage_update={damage['update']}; "
+            f"bounds={damage['bounds']}; "
+            f"preconditioner={damage['preconditioner']}",
+            flush=True,
+        )
+        if self.damage_controller is not None:
+            print(
+                f"  predictor={damage['predictor']}; "
+                f"residual_rtol={damage['residual_rtol']:.3e}; "
+                f"residual_atol={damage['residual_atol']:.3e}; "
+                f"bound_tolerance={damage['bound_tolerance']:.3e}; "
+                f"fallback={damage['fallback_enabled']}",
+                flush=True,
+            )
+        return report
 
     def get_state(self) -> dict:
         """Get full solver state as a dict (for checkpointing/rollback).
@@ -1936,17 +2126,17 @@ class StaggeredSolver:
 
 
 class AIBridge:
-    """Residual monitor for neural operator + FEM solver-in-the-loop.
+    """Compatibility adapter for one externally supplied damage prediction.
 
-    Monitors the AT2 residual of neural operator damage predictions.
-    When ||R_d|| exceeds a threshold, falls back to FEM solver for
-    that step, ensuring physical consistency.
+    New integrations should use :meth:`StaggeredSolver.set_damage_predictor`.
+    This adapter now applies the same admissibility and projected-residual
+    audit as the public learned-replacement route.
 
     Parameters
     ----------
     solver : StaggeredSolver
     residual_threshold : float
-        Max acceptable ||R_d||. Default 1e-3.
+        Maximum relative projected residual. Default 1e-3.
     """
 
     def __init__(self, solver, residual_threshold=1e-3):
@@ -1967,22 +2157,31 @@ class AIBridge:
         d_final : (N,) validated damage field
         used_solver : bool — True if FEM solver was needed
         """
-        # Compute residual of NN prediction
-        R = self.solver.damage_solver.compute_residual(
-            self.solver.H_elem, d_nn)
-        r_norm = R.norm().item()
-
-        if r_norm < self.threshold:
-            # NN prediction is good — accept it
-            self.solver.d = d_nn.clone()
+        controller = DamageUpdateController(
+            lambda _context: d_nn,
+            mode='learned_replacement',
+            residual_rtol=self.threshold,
+            fallback=True,
+        )
+        pf_mask = pf_vals = None
+        if getattr(self.solver.bcs, 'pf_dirichlet_bcs', None):
+            pf_mask, pf_vals = (
+                self.solver.bcs.get_pf_dirichlet_mask_values())
+        decision = controller.decide(
+            self.solver._damage_step_context(self.solver.d),
+            damage_solver=self.solver.damage_solver,
+            phase_field_mask=pf_mask,
+            phase_field_values=pf_vals,
+        )
+        if decision.accepted_replacement:
+            self.solver.d = decision.candidate
+            self.solver._apply_pf_dirichlet()
             self.nn_steps += 1
-            return d_nn, False
-        else:
-            # NN prediction violates physics — fall back to FEM
-            self.solver.d = self.solver.damage_solver.solve(
-                self.solver.H_elem, self.solver.d)
-            self.fallback_steps += 1
-            return self.solver.d, True
+            return self.solver.d, False
+        self.solver.d = self.solver.damage_solver.solve(
+            self.solver.H_elem, self.solver.d)
+        self.fallback_steps += 1
+        return self.solver.d, True
 
     def stats(self):
         total = self.nn_steps + self.fallback_steps

@@ -386,6 +386,14 @@ solver:
   # softmax_H_beta: null  # float or null
   # H_update_method: hard_max  # str, enum: hard_max|softmax|smooth_max|log_smooth|custom_subgrad
   # enable_damage: true  # bool
+  # damage_update: classical  # str, enum: classical|learned_proposal|learned_replacement
+  # damage_predictor: null  # str or null, module:factory used by learned routes
+  # damage_checkpoint: null  # str or null, interpreted by the predictor factory
+  # damage_predictor_options: {}  # mapping, architecture-specific adapter options
+  # damage_residual_rtol: 0.001  # float, range: [0.0, +inf]
+  # damage_residual_atol: 1e-08  # float, range: [0.0, +inf]
+  # damage_bound_tolerance: 1e-08  # float, range: [0.0, +inf]
+  # damage_fallback: true  # bool, use classical damage solve after rejection
   # fail_on_mechanics_nonconvergence: true  # bool
   # adaptive_dt: false  # bool
   # adaptive_dt_d_threshold: 0.01  # float

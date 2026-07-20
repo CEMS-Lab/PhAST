@@ -328,6 +328,7 @@ class Problem:
         wall = time.time() - t0
         if verbose:
             print(f"  Done: {wall:.1f}s ({wall/max(n_steps,1)*1000:.1f} ms/step)")
+            solver.print_route_report()
 
         if output_dir:
             self._save_outputs(solver, mesh, output_dir, n_steps)

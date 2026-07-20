@@ -864,6 +864,8 @@ def main():
             print("[forward-viz] skipped: no trajectory snapshots in run "
                   "dir (set output.trajectory: true or pass --trajectory)")
 
+    solver.print_route_report()
+
     # Post-processing
     print(f"\nRun: python -m phast postprocess {output_dir}")
     print(f"All outputs in: {output_dir}/")

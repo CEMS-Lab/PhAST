@@ -9,14 +9,20 @@
     <p class="phast-eyebrow">CEMS Lab · PyTorch-native FEM workflows</p>
     <h2>PhAST is a matrix-free, differentiable PyTorch solver for phase-field fracture and FEM benchmarks.</h2>
     <p>
-      <b>What is PhAST?</b> PhAST is a matrix-free, differentiable PyTorch solver for phase-field fracture in explicit dynamics and quasi-static mechanics. It is built without a global stiffness matrix assembly, and is designed to be differentiable so it integrates with machine-learning workflows.
+      <b>What is PhAST?</b> PhAST is a PyTorch finite-element solver for
+      two-dimensional phase-field fracture in explicit dynamics and
+      quasi-static mechanics. Its principal dynamic pathway evaluates
+      finite-element operators without retaining a global stiffness matrix.
+      Selected tensor operations remain compatible with autograd, subject to
+      the documented limitations of history updates, active sets, and optional
+      sparse backends.
       <br><br>
       <i>(New to phase-field modeling? Read our <a href="tutorial/01_phase_field_primer.html">Phase-Field Primer</a> and the <a href="tutorial/02_visual_glossary.html">Visual Glossary</a> to learn the basics).</i>
     </p>
     <p>
       Use the fluent <code>phast.Problem</code> API to author new models. Use YAML
-      configurations for public examples, reproducibility, batch runs, and exact
-      reruns of published simulations.
+      configurations for documented examples, reproducibility, batch runs, and
+      reviewable reruns of published simulations.
     </p>
     <p class="phast-hero-links">
       <a class="phast-button" href="getting-started.html">Get started</a>
@@ -27,6 +33,8 @@
   </div>
   <div class="phast-command-card">
     <p class="phast-command-title">Run a first check</p>
+    <p><small>The base source installation does not require a separate PhAST
+    compilation step. Optional HPC backends are not required for validation.</small></p>
     <pre><code>pip install -e .
 python -m phast doctor
 python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only
@@ -80,12 +88,12 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 | [Community](community.md) | Issues, discussions, maintainer review, and contribution route. |
 | [Source repository](https://github.com/CEMS-Lab/PhAST) | Clone the code, open issues, inspect examples, and contribute through GitHub. |
 
-## For New Users: Your First 15 Minutes
+## For New Users
 
 If you are new to PhAST, we recommend following this path:
 1. **Learn the Basics:** Read the "What is PhAST?" summary above, then follow the [Phase-Field Primer](tutorial/01_phase_field_primer.md) and [Visual Glossary](tutorial/02_visual_glossary.md).
 2. **Install:** Follow the [Getting Started](getting-started.md) guide.
-3. **Run a Simple Example:** Run `python -m phast run examples/quasistatic/miehe_tension/config.yaml` to see a result quickly.
+3. **Run a compact installation check:** Execute `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate`.
 4. **Understand the API:** Read the [Python API](user_guide/python_api.md) to understand how the models are defined.
 5. **Check Capabilities:** Review the [Capability Matrix](user_guide/capability_matrix.md) to ensure your target problem is supported.
 
@@ -99,11 +107,16 @@ If you are new to PhAST, we recommend following this path:
 | Inspect completed runs | [Public API reference](user_guide/public_api_reference.md) | `phast.load_result(path)` |
 | Browse runnable examples | [Example gallery](example-gallery.md) | flat public example folders |
 | Diagnose failed runs | [Troubleshooting](troubleshooting.md) | units, mesh, backend, and output checks |
-| Check supported physics | [Capability matrix](user_guide/capability_matrix.md) | production / beta / scaffold labels |
+| Check supported physics | [Capability matrix](user_guide/capability_matrix.md) | supported / beta / experimental / scaffold labels |
 
 ## Workflow In One Line
 
 `YAML / phast.Problem` -> `Mesh` -> `Operators` -> `Solver` -> `Result bundle`
+
+For phase-field fracture, this sequence expands to configuration validation,
+mesh construction, mechanics update, tensile-history update, bounded damage
+solution, irreversibility enforcement, and result/provenance output. See the
+[solver overview](user_guide/overview.md) for the algorithmic pathway.
 
 ```{toctree}
 :maxdepth: 2
@@ -117,6 +130,7 @@ troubleshooting
 tutorial/index
 tutorial/01_phase_field_primer
 tutorial/02_visual_glossary
+tutorial/03_modular_fem_and_learned_damage
 tutorial/04_exploration_experiments
 user_guide/capability_matrix
 ```
@@ -131,6 +145,7 @@ user_guide/python_api
 user_guide/yaml_workflow
 user_guide/physics
 user_guide/configuration
+user_guide/learned_damage
 user_guide/meshes
 user_guide/geometry_gallery
 user_guide/example_contract

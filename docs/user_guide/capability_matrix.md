@@ -38,6 +38,8 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 | Coupled brittle PF + cohesive elements | Beta | Staggered AT2 matrix damage plus zero-thickness cohesive-interface delamination exists with matrix notch damage, convergence telemetry, and visual manifests. Calibrated PF-CZM structural validation studies remain gated. |
 | PF-CZM | Beta | Wu PF-CZM is available via `pf_model: PFCZM` for forward nonlinear damage solves with tensile-strength-calibrated rational degradation and uniaxial validation. Structural crack-growth and PF-plasticity-cohesive coupling remain gated. |
 | Coupled PF + plasticity + cohesive interfaces | Unsupported | Not currently supported within the public workflow surface. |
+| Learned damage proposal | Experimental | A user-supplied predictor may provide a projected initial guess; the classical damage solve remains authoritative. No trained model is distributed. |
+| Audited learned damage replacement | Experimental | A predicted damage state may replace one damage solve only after bound, irreversibility, phase-field boundary-condition, and projected-residual checks. Rejection uses the classical fallback by default. |
 | 3D fracture | Unsupported | The documented fracture element pathways are two-dimensional. |
 | P2 / Q8 / Q9 element primitives | Scaffold | Shape functions, quadrature, and single-element stiffness tests exist for higher-order families; global solver dispatch is not supported. |
 | Native Q4 isotropic mechanics + AT2 damage | Beta | Structured Q4 mesh helpers, native Q4 mesh admission, 2x2-Gauss isotropic mechanics, SciPy/MUMPS sparse-direct stiffness assembly, and matrix-free Q4 AT2 damage are tested. Q4 PF-CZM, AT1, and plasticity remain gated. |
