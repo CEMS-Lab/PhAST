@@ -1,7 +1,7 @@
 # Quasi-static Examples
 
 Curated quasi-static examples that can be run directly from YAML. Each folder
-contains a public `config.yaml`, promoted validation artifacts, and a
+contains a public `config.yaml`, curated reference artifacts, and a
 short README with the exact command.
 
 | Folder | Benchmark | Run command | Validation |
@@ -25,7 +25,7 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
 ```
 
-Run with the default Zarr trajectory store:
+Run with the trajectory settings recorded in the example configuration:
 
 ```bash
 python -m phast run examples/quasistatic/miehe_tension/config.yaml \

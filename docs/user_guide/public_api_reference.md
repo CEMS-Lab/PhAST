@@ -36,7 +36,7 @@ Common methods:
 - `.to_spec()`: build the validated representation used by advanced checks
 - `.validate_setup()`: optional preflight checks for mesh-bound regions
 - `.preview(output="...")` / `.plot_setup(...)`: setup visuals for geometry/BC setup review
-- `.run(output_dir=..., return_result=True)` for supported promoted/public paths
+- `.run(output_dir=..., return_result=True)` for documented public pathways
 
 For durable reproduction and public examples, keep the final run as a YAML
 declarative configuration and execute it with `python -m phast run <config.yaml>`.

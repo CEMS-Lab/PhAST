@@ -82,3 +82,8 @@ Open a GitHub issue when the problem persists after the checks above. Include:
 - `run_manifest.json`, `run_metadata.json`, and `run_lockfile.json` when a run
   directory exists;
 - a small image or `initial_conditions.png` if the issue is geometric or visual.
+
+Also open an issue when the documentation does not explain what to do next.
+Students and first-time users are welcome to submit incomplete diagnostic
+information; include the command and first observed failure, and the
+maintainers can help identify the next check.

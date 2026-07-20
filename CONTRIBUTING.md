@@ -1,9 +1,12 @@
 # Contributing to PhAST
 
-Welcome! PhAST is a PyTorch-native differentiable finite element framework for
-phase-field fracture mechanics. Contributions are welcome to improve
-performance, broaden physics coverage, and refine documentation. Please follow
-the rigorous academic and engineering standards outlined below.
+PhAST is a finite-element framework implemented in PyTorch for phase-field
+fracture mechanics. Contributions from researchers, students,
+scientific-software developers, and users are welcome. Useful contributions
+include clearer documentation, reproducible examples, bug reports, numerical
+verification, performance analysis, and carefully scoped solver improvements.
+If any instruction or example is unclear, open a GitHub issue; questions from
+new users are valuable documentation feedback.
 
 ## 1. Development Setup
 
@@ -17,10 +20,11 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-For workstation or HPC validation, install optional extras only when the machine supports them:
+Install optional extras only when they are required and supported by the
+machine:
 
 ```bash
-pip install -e ".[hpc,dataset]"
+pip install -e ".[dataset]"
 ```
 
 PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and are not required for the default CPU confidence suite.
@@ -37,14 +41,14 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
   welcome, but public changes are merged only after maintainer review and
   approval.
 - Run the relevant validation commands locally.
-- Keep high-fidelity volumetric datasets (Zarr/H5), internal logs, and generated heavy media out of git.
+- Keep high-fidelity volumetric datasets (Zarr/H5), local diagnostic logs, and generated heavy media out of git.
 - Provide parity checks against established analytical or commercial benchmarks when modifying physics kernels.
 - Update relevant documentation, such as `README.md`, YAML schemas, example
   READMEs, and capability pages, with user-facing changes.
 
 ## 4. Validation
 
-Run the fastest relevant checks before opening a pull request:
+Run the narrowest relevant checks before opening a pull request:
 
 ```bash
 PYTHONPATH=src python -m phast doctor
@@ -59,8 +63,9 @@ PYTHONPATH=src python -m phast run <config.yaml> --validate-only
 
 For generated visuals or retained example artifacts, inspect the output folder
 and update the relevant README or public contract file. The public repository
-does not ship the full internal regression suite; run any project-specific test
-commands documented in the pull request or issue that motivated the change.
+includes the tests intended for public review. Run any additional,
+project-specific checks documented in the pull request or issue that motivated
+the change.
 
 ## 5. Documentation Contributions
 
@@ -87,12 +92,12 @@ Open the local build:
 open docs/_build/html/index.html
 ```
 
-Good documentation pull requests are small and verifiable. Prefer one topic
-per PR: a broken command, a clearer explanation, a missing example note, a
-fixed figure reference, or a capability-boundary correction. If a page documents
-a runnable command, validate the command or state why it was not run.
+Good documentation pull requests are focused and verifiable. Prefer one topic
+per pull request: a broken command, a clearer explanation, a missing example
+note, a fixed figure reference, or a capability-boundary correction. If a page
+documents a runnable command, validate the command or state why it was not run.
 
-When editing promoted examples, use `docs/user_guide/example_contract.md` as
+When editing curated examples, use `docs/user_guide/example_contract.md` as
 the source of truth for required files, README content, visuals, and artifact
 conventions.
 
@@ -103,12 +108,20 @@ results, paper metadata, or local/HPC provenance.
 
 ## 6. Adding Examples
 
-To promote a local simulation to the public `examples/` gallery, follow
-`docs/user_guide/example_contract.md`. In short, promoted examples need a flat
+To add a simulation to the public `examples/` gallery, follow
+`docs/user_guide/example_contract.md`. In short, curated examples need a flat
 folder with `README.md`, `config.yaml`, a fluent Python companion when
 available, manifests, lightweight CSV outputs, setup/final-state visuals, and
 an evolution animation appropriate to the physics.
 
 The README should document the problem definition, exact run command, expected
-artifacts, claim boundary, and result-inspection snippet. Do not commit raw HPC
-run trees, large H5/Zarr stores, or unpublished diagnostic archives.
+artifacts, evidence boundary, and result-inspection snippet. Do not commit raw
+HPC run trees, large H5/Zarr stores, or unpublished diagnostic archives.
+
+## 7. Asking For Help
+
+Open an issue if you are unsure how to install PhAST, interpret a configuration,
+run an example, or contribute a change. A useful help request includes the
+command, configuration path, operating system, PyTorch version, and the first
+warning or traceback. It is acceptable to open an issue before diagnosing the
+solver internals.

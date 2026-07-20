@@ -1,8 +1,12 @@
 name: docs
-# Trigger policy: manual publish workflow.
+# Build and publish documentation after changes reach main; retain a manual
+# trigger for maintainers.
 # Run the same strict build locally before documentation PRs:
 #   sphinx-build -W -b html docs docs/_build/html
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 permissions:
   contents: read

@@ -1,6 +1,11 @@
 # Solid Mechanics Examples
 
-These examples are compact solid-mechanics workflows with a common public output contract. Each leaf folder is a mesh-level finite-element simulation and runs through `python -m phast run <config.yaml>`. The J2 bar is marked beta because it exercises the developing plasticity material-model path. Each reference FEA leaf folder contains `README.md`, `config.yaml`, `run_fluent.py`, `mesh.geo`, `run.py`, response animations, final field plots, and a flat reference result bundle.
+These examples are compact solid-mechanics workflows with a common public
+output contract. Each leaf folder is a mesh-level finite-element simulation and
+runs through `python -m phast run <config.yaml>`. The J2 bar is marked beta
+because its plasticity evidence is narrower than the linear-elastic checks.
+Each example README identifies the available YAML, fluent setup, mesh recipe,
+and retained result artifacts.
 
 Run commands from the repository root.
 
@@ -10,7 +15,7 @@ Run commands from the repository root.
 | Neo-Hookean cantilever | Supporting solver example | Load-stepped nonlinear hyperelastic FEA with Newton iterations | `python -m phast run examples/solid_mechanics_beta/neohookean_plate/config.yaml` | `response.csv`, final field PNGs, MP4 animations, manifests |
 | J2 plasticity bar | Beta material-model example | Mesh-level displacement-controlled von-Mises plasticity solve | `python -m phast run examples/solid_mechanics_beta/j2_bar/config.yaml` | `response.csv`, stress/plastic-strain PNGs, MP4 animations, manifests |
 
-The old script paths are retained as compatibility wrappers:
+The following script paths are retained as compatibility wrappers:
 
 ```bash
 python examples/solid_mechanics_beta/linear_plate/run.py --config examples/solid_mechanics_beta/linear_plate/config.yaml

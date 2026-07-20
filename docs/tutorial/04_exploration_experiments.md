@@ -1,6 +1,6 @@
 # Exploration experiments
 
-Once the [Getting Started](../getting-started.md) runs cleanly, the fastest way
+Once the [Getting Started](../getting-started.md) workflow completes, a direct way
 to build intuition is to break the simulation in controlled ways and
 watch what changes. Each experiment below is small (one parameter
 edit), independent, and re-uses an existing config so there is no new
@@ -49,7 +49,7 @@ python -m phast run B3_spectral.yaml --device cpu
 python -m phast run B3_starconvex.yaml --device cpu
 ```
 
-**Expected outcome.** `isotropic` propagates fastest (no compressive
+**Expected outcome.** `isotropic` may propagate more readily because compressive
 lock-out), `amor` and `spectral` produce qualitatively similar crack
 fronts, `star_convex` converges with fewer staggers per step at the
 cost of slightly different nucleation timing.
@@ -75,7 +75,7 @@ python -m phast run sent_l0_0p50.yaml  --device cpu  # rule-of-thumb 2h
 python -m phast run sent_l0_1p00.yaml  --device cpu
 ```
 
-**Expected outcome.** `l0 = 2 h` (here `0.5`) converges fastest --
+**Expected outcome.** `l0 = 2 h` (here `0.5`) may require fewer iterations,
 CG iteration counts hold steady through the run. At `l0 = 0.5 h` the
 damage is jagged, CG iterations spike, and you may see
 `max(d) < 1` at the crack tip. At `l0 = 4 h` the crack is too thick

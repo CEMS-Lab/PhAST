@@ -226,7 +226,7 @@ The valid `controls` keys depend on the step kind:
 
 | Step kind | Typical controls | Use |
 |---|---|---|
-| `solid_mechanics` | `tip_force_y`, example-specific load controls | Promoted solid-mechanics examples. |
+| `solid_mechanics` | `tip_force_y`, example-specific load controls | Curated solid-mechanics examples. |
 | `quasi_static` | `protocol`, `num_steps`, `dt`, active boundary conditions | Staggered quasi-static phase-field fracture. |
 | `explicit` | final time, time-step safety, output cadence, damage update cadence | Dynamic fracture configurations; use YAML for full reproducibility. |
 

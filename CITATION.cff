@@ -20,7 +20,7 @@ date-released: 2026-06-22
 license: MIT
 repository-code: "https://github.com/CEMS-Lab/PhAST"
 url: "https://cems-lab.github.io/PhAST/"
-abstract: "A PyTorch-native finite-element solver for reproducible phase-field fracture, explicit dynamics, solid mechanics, and differentiable inverse-analysis workflows."
+abstract: "A PyTorch-native finite-element solver for reproducible two-dimensional phase-field fracture, explicit dynamics, and selected solid-mechanics workflows. Supported tensor operations can be used in differentiability studies; the public software does not provide a general-purpose inverse-analysis framework."
 keywords:
   - phase-field fracture
   - finite element method

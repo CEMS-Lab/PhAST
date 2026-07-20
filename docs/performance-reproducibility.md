@@ -101,6 +101,6 @@ When publishing a `torch.compile` timing, report:
 - mesh size, field precision, and enabled output writers;
 - the generated `run_lockfile.json` and `run_metadata.json`.
 
-Do not treat an internal compile speedup as portable until it has been
+Do not treat a locally observed compilation speedup as portable until it has been
 regenerated with the public configuration, hardware description, and retained
 timing artifacts.

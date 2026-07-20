@@ -50,7 +50,7 @@ result API + visualization + provenance
   setup, then preserve durable studies as YAML.
 - **Tensor-first numerics:** mechanics and damage kernels stay close to PyTorch
   tensor operations so device, dtype, and autograd behavior remain inspectable.
-- **Explicit claim boundaries:** production, beta, scaffold, optional-backend,
+- **Explicit evidence boundaries:** supported, beta, scaffold, optional-backend,
   and unsupported paths are documented in the capability matrix.
 - **Result bundles over hidden state:** examples should retain the config,
   lockfile, manifests, CSV histories, and lightweight visuals needed to inspect
@@ -67,9 +67,9 @@ The project combines:
 | Provenance outputs | Standard result folders with resolved configs, lockfiles, diagnostics, and comparison artifacts. |
 | Documentation/tests | Capability boundaries, examples, regression tests, and benchmark notes. |
 
-The codebase is research-oriented but keeps production/beta/experimental status
-visible. Use the capability matrix before relying on a path for paper claims,
-automation, or external comparison.
+The codebase is research-oriented and records supported, beta, experimental,
+and unsupported status explicitly. Consult the capability matrix before using
+a pathway for a publication, automated study, or external comparison.
 
 ## What It Is Not
 
@@ -78,8 +78,8 @@ phase-field equations and can expose supported tensor computations to autograd,
 but the public release is scoped to forward fracture workflows rather than
 neural surrogates.
 
-It is also not a full 3D fracture platform. Current production workflows target
-2D triangulated meshes.
+It is also not a full 3D fracture platform. The principal supported fracture
+workflows use two-dimensional triangulated meshes.
 
 ## Major Workflows
 
@@ -103,6 +103,37 @@ large monolithic solve. Experimental monolithic paths may exist, but
 the staggered workflows remain the clearest default for benchmarked fracture
 runs.
 
+## Solver Sequence
+
+The public fracture pathway follows the same numerical sequence whether the
+model originated from YAML or `phast.Problem`:
+
+1. **Configuration and mesh.** PhAST validates the model, constructs or imports
+   the mesh, resolves named regions, and checks material and boundary data.
+2. **Element operators.** PyTorch gather-compute-scatter kernels evaluate
+   strain, stress, internal force, energy density, and damage-operator actions.
+3. **Mechanics.** Explicit runs advance displacement, velocity, and
+   acceleration with the documented central-difference/Velocity-Verlet pathway.
+   Quasi-static runs solve mechanical equilibrium with the configured
+   matrix-free or sparse backend.
+4. **Crack driving force.** The selected tensile/compressive energy split
+   defines the crack-driving energy. A history field retains the maximum
+   admissible driving state required by the irreversibility treatment.
+5. **Damage.** The configured AT1, AT2, or documented beta formulation solves
+   for the regularized damage field. Bounds, fixed-damage conditions, and
+   irreversibility are applied according to the selected solver pathway.
+6. **Coupling and convergence.** Quasi-static fracture alternates mechanics and
+   damage until the configured staggered criterion is satisfied. Explicit
+   dynamics updates damage at the configured cadence.
+7. **Results and provenance.** The run writes the resolved configuration,
+   lockfile, histories, requested fields, manifests, and lightweight visuals.
+
+"Matrix-free" describes operator application on the principal pathway; optional
+sparse-direct solvers and some preconditioners may assemble sparse matrices.
+"Differentiable" applies only to supported tensor operations. Nonsmooth maximum
+history updates, clipping, active-set changes, and external sparse libraries
+require case-specific treatment when derivatives are interpreted.
+
 ## Where to Go Next
 
 | Need | Page or path |
@@ -116,5 +147,6 @@ runs.
 | Benchmarks | `docs/example-gallery.md` and the public example folders |
 | Examples | `docs/user_guide/example_contract.md`, `examples/README.md`, and `docs/example-gallery.md` |
 
-GitHub workflows are currently manual-only. Run CI, docs, install checks, or
-wheel builds from the GitHub Actions tab when needed.
+Documentation publication is initiated through the repository's GitHub Actions
+workflow. Contributors should run the documented local checks before requesting
+review.

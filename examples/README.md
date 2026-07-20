@@ -2,7 +2,8 @@
 
 This directory contains the runnable PhAST examples grouped by physics family:
 dynamic fracture, quasi-static fracture, solid mechanics, beta
-plasticity/interface workflows, and a placeholder for future inverse-analysis
+plasticity/interface workflows, and a documentation-only location for possible
+future inverse-analysis
 examples. Each public example is kept compact so that a new user can inspect
 the input deck, run it, and compare the output bundle without searching through
 solver internals.
@@ -10,8 +11,8 @@ solver internals.
 Start with the dynamic and quasi-static fracture examples if you are learning
 the solver. Solid-mechanics folders provide supporting finite-element checks,
 while plasticity/interface folders are beta validation workflows with a narrower
-claim boundary. `inverse_problems_beta/` is a placeholder for future inverse
-analysis examples and is not yet a promoted runnable benchmark.
+evidence boundary. `inverse_problems_beta/` contains documentation only and is
+not a runnable inverse-analysis example.
 
 Most public examples use declarative YAML input configurations. Validate and
 run them from the repository root:
@@ -25,7 +26,7 @@ Use the fluent `phast.Problem` API when authoring new models. Where an example
 includes `run_fluent.py`, that script shows the equivalent Python setup;
 `config.yaml` remains the primary reproducibility configuration file.
 
-For detailed artifact and promotion rules, see the
+For detailed artifact and curation rules, see the
 [example contract](../docs/user_guide/example_contract.md).
 
 ## Dynamic Fracture
@@ -96,10 +97,10 @@ beta capability boundary and direct script commands.
 
 ## Inverse Problems Beta
 
-[`inverse_problems_beta/`](inverse_problems_beta/) is a placeholder for future
-differentiable inverse-analysis examples. Do not treat it as a promoted
-runnable example until a configuration, loss definition, lightweight outputs,
-and validation notes are added.
+[`inverse_problems_beta/`](inverse_problems_beta/) documents requirements for a
+possible future differentiable inverse-analysis example. It must not be
+described as runnable unless a configuration, loss definition, lightweight
+outputs, and validation notes are added.
 
 ## Common CLI Flags
 
@@ -128,3 +129,8 @@ Public example folders are intentionally compact. Typical files include:
 Large raw trajectories, scratch run directories, and machine-specific logs are
 not part of the lightweight example folders. Generate fresh results with
 `--output_dir runs/<case>` when you need full local output for inspection.
+
+If an example command, YAML field, or expected output is unclear, open a
+[GitHub issue](https://github.com/CEMS-Lab/PhAST/issues/new/choose). Questions
+from students and first-time users are welcome and help identify missing
+documentation.

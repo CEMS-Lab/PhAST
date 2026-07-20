@@ -79,7 +79,7 @@ Every agent contribution must follow this sequence.
 - Prefer small, reviewable pull requests.
 - Do not invent benchmark results, solver capabilities, timings, references,
   or paper/publication details.
-- Keep the distinction between production, beta, scaffold, and unsupported
+- Keep the distinction between supported, beta, scaffold, and unsupported
   workflows exactly aligned with `docs/user_guide/capability_matrix.md`.
 - If a command appears in documentation or an example README, run it or state
   why it was not run.
@@ -110,7 +110,7 @@ constraints.
 generated artifacts and must not be committed.
 
 ## Tone and Language
-- **Academic and Formal**: All documentation, comments, and public-facing text must use a formal, academic tone suitable for a State-Of-The-Art (SOTA) FEM solver.
-- **No Internal Slang**: Do NOT use software-development slang (e.g., "ships with", "hack", "we need to fix this later", "epic").
-- **No Internal References**: Do NOT reference internal GitHub issues (e.g., "#107", "PR #146"), Jira tickets, or private workflow phases. Refer to features generically (e.g. "The framework supports...").
+- **Academic and Formal**: Documentation, comments, and public-facing text must use precise language appropriate for research software in computational mechanics.
+- **No Development Slang**: Do not use release or development slang such as "ships with", "hack", "epic", or "fix this later".
+- **No Process-Derived Claims**: Do not use issue numbers, pull-request numbers, ticket identifiers, or private workflow phases as scientific explanation. Describe the implemented behavior and evidence directly.
 - **No Emoticons**: Do not use emojis or emoticons in the documentation or source code.

@@ -8,7 +8,7 @@ version = "0.16.2"
 authors = [
   { name="Allamaprabhu Ani", email="allamaprabhu.ani@city.ac.uk" },
 ]
-description = "PhAST: Phase-field Autograd Solver in Torch"
+description = "Matrix-free PyTorch finite-element solver for phase-field fracture"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
@@ -54,7 +54,8 @@ viz-fast = [
     "pyvista>=0.48",
     "pyvista-zstd>=0.2",
 ]
-# NVIDIA AmgX: fastest CUDA-native AMG. Requires AmgX C libs pre-installed
+# NVIDIA AmgX: optional CUDA-native AMG. Requires AmgX C libraries
+# to be installed separately.
 # (module load amgx / build from source). Do NOT include in auto groups —
 # pip install will fail if AmgX libs are missing. Install separately:
 #   pip install pyamgx    (after: module load amgx)
@@ -100,7 +101,7 @@ dataset = [
     "zarr>=2.18,<3",
     "numcodecs>=0.13",
 ]
-# PETSc/MUMPS backend stub (epic #105 phase 2, #107)
+# Optional PETSc/MUMPS sparse-direct backend.
 petsc = [
     "petsc>=3.20",
     "petsc4py>=3.20",

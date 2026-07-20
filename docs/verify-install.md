@@ -82,3 +82,8 @@ and `device.compile` policy before running a costly simulation.
 
 If these checks fail, use [Troubleshooting](troubleshooting.md) before opening an
 issue.
+
+If the instructions themselves are unclear, or you cannot determine whether an
+outcome is expected, open a
+[documentation or support issue](https://github.com/CEMS-Lab/PhAST/issues/new/choose).
+New users are not expected to diagnose solver internals before asking for help.

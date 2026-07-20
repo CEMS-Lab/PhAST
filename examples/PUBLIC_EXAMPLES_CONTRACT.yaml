@@ -1,5 +1,5 @@
 schema_version: 1
-purpose: Public PhAST examples contract for release promotion, docs, and CI drift checks.
+purpose: Public PhAST examples contract for release curation, docs, and CI drift checks.
 source_tree: PhAST
 public_target: CEMS-Lab/PhAST
 principles:
@@ -15,7 +15,7 @@ tiers:
 - id: yaml_first
   status: public
   command: python -m phast run <config.yaml>
-  contract: README.md plus config.yaml plus lightweight promoted outputs.
+  contract: README.md plus config.yaml plus lightweight curated outputs.
   public_gallery: true
 - id: script_contract
   status: beta
@@ -63,7 +63,7 @@ families:
     tutorial_ready: false
     tutorial_blockers:
     - Lightweight baseline example; not convergence-quality dynamic fracture evidence.
-    - Needs finer promoted evidence before tutorial-ready status.
+    - Needs finer curated evidence before tutorial-ready status.
     required_artifacts:
     - README.md
     - config.yaml
@@ -257,7 +257,7 @@ families:
     status: promoted_public_validation
     tutorial_ready: false
     tutorial_blockers:
-    - Fluent/manual companion remains pending until rigid-connector lowering is promoted.
+    - Fluent/manual companion remains pending until rigid-connector lowering is curated.
     required_artifacts:
     - README.md
     - config.yaml
@@ -366,19 +366,19 @@ families:
     tutorial_ready: false
     tutorial_blockers:
     - Script-contract beta workflow; not yet a flat YAML-first tutorial folder.
-    - Needs fluent/YAML promotion plus trajectory and animation bundle.
+    - Needs fluent/YAML curation plus trajectory and animation bundle.
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation
     validation_id: j2_validation
     retained_result: examples/plasticity_interface_beta/results/j2_validation
     fluent_setup: examples/plasticity_interface_beta/fluent_setups/j2_validation.py
-    role: Standard J2 return-map validation example for the promoted plasticity slice.
+    role: Standard J2 return-map validation example for the curated plasticity slice.
   - id: ductile_pf_plasticity
     path: examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py
     kind: sparse_j2_plus_ductile_pf_validation
     tutorial_ready: false
     tutorial_blockers:
-    - Beta validation script pending YAML/fluent promotion.
+    - Beta validation script pending YAML/fluent curation.
     - Needs full tutorial folder, trajectory store or manifest, and animations.
   - id: ductile_pf_sensitivity
     path: examples/plasticity_interface_beta/run_ductile_pf_sensitivity_study.py
@@ -386,14 +386,14 @@ families:
     tutorial_ready: false
     tutorial_blockers:
     - Sensitivity study is not a first-run public tutorial.
-    - Needs curated reduced tutorial case before promotion.
+    - Needs curated reduced tutorial case before curation.
   - id: diffuse_interphase
     path: examples/plasticity_interface_beta/run_diffuse_interphase_validation.py
     kind: diffuse_interface_validation
     tutorial_ready: false
     tutorial_blockers:
     - Script-contract beta workflow; not yet a flat YAML-first tutorial folder.
-    - Needs fluent/YAML promotion plus trajectory and animation bundle.
+    - Needs fluent/YAML curation plus trajectory and animation bundle.
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id diffuse_interphase
     validation_id: diffuse_interphase
@@ -403,41 +403,41 @@ families:
     tutorial_ready: false
     tutorial_blockers:
     - Aggregate beta contract rather than a single tutorial example.
-    - Needs individual promoted tutorial folders for cohesive/PF-CZM examples.
+    - Needs individual curated tutorial folders for cohesive/PF-CZM examples.
   - id: structural_dcb_cohesive
     path: examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.py
     kind: cohesive_elements
     tutorial_ready: false
     tutorial_blockers:
     - Script-contract beta workflow; not yet a flat YAML-first tutorial folder.
-    - Needs fluent/YAML promotion plus trajectory and animation bundle.
+    - Needs fluent/YAML curation plus trajectory and animation bundle.
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_cohesive
     validation_id: structural_dcb_cohesive
     retained_result: examples/plasticity_interface_beta/results/structural_dcb_cohesive
     fluent_setup: examples/plasticity_interface_beta/fluent_setups/structural_dcb_cohesive.py
-    role: DCB-style structural cohesive benchmark for the promoted cohesive/interface slice.
+    role: DCB-style structural cohesive benchmark for the curated cohesive/interface slice.
   - id: structural_dcb_refinement
     path: examples/plasticity_interface_beta/run_structural_dcb_refinement_study.py
     kind: cohesive_elements
     tutorial_ready: false
     tutorial_blockers:
     - Script-contract beta refinement study; not yet a flat YAML-first tutorial folder.
-    - Needs animation bundle before tutorial promotion.
+    - Needs animation bundle before tutorial curation.
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_refinement
     validation_id: structural_dcb_refinement
-    role: Lightweight DCB cohesive mesh/load-step refinement trend for the promoted cohesive/interface slice.
+    role: Lightweight DCB cohesive mesh/load-step refinement trend for the curated cohesive/interface slice.
   - id: pfczm_uniaxial_strength
     path: examples/plasticity_interface_beta/run_pfczm_uniaxial_strength_validation.py
     kind: pfczm
     tutorial_ready: false
     tutorial_blockers:
     - Script-contract beta workflow; not yet a flat YAML-first tutorial folder.
-    - Needs fluent/YAML promotion plus animation bundle.
+    - Needs fluent/YAML curation plus animation bundle.
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id pfczm_uniaxial_strength
     validation_id: pfczm_uniaxial_strength
     retained_result: examples/plasticity_interface_beta/results/pfczm_uniaxial_strength
     fluent_setup: examples/plasticity_interface_beta/fluent_setups/pfczm_uniaxial_strength.py
-    role: One-dimensional PF-CZM strength calibration baseline verification for the promoted PF-CZM slice.
+    role: One-dimensional PF-CZM strength calibration baseline verification for the curated PF-CZM slice.

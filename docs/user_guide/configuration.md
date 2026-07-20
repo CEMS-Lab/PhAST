@@ -22,7 +22,7 @@ explicit validation of that path.
 
 ```
 CUDA HPC (A100/H100/V100):
-  pyamgx installed? → amgx (fastest, GPU-native AMG)
+  pyamgx installed? → amgx (optional GPU-native AMG)
   pyamg installed?  → amg (CPU setup, GPU solve)
   else              → gmg (2-level geometric, always available)
 
@@ -37,7 +37,7 @@ Apple MPS:
   → gmg (no CUDA, no AMG; float32 with CPU float64 fallback for CG)
 
 CPU:
-  pyamg installed?  → amg (fastest CPU option)
+  pyamg installed?  → amg (optional CPU AMG)
   else              → gmg
 ```
 
@@ -49,7 +49,7 @@ Anderson acceleration (Type II, Walker & Ni 2011) reduces stagger iterations by 
 |-------|--------|-------------|-----------------|
 | 0 | None | Baseline | Debugging, simple problems |
 | 3 | 3 vectors | Good | General use, default recommendation |
-| 5 | 5 vectors | Best | Large meshes, tight tolerances |
+| 5 | 5 vectors | Highest storage cost | Large meshes and tight tolerances after case-specific evaluation |
 | 7+ | 7+ vectors | Diminishing returns | Rarely needed |
 
 Usage: `SolverConfig(anderson_depth=3)` or `--anderson_depth 3`
@@ -58,7 +58,7 @@ Usage: `SolverConfig(anderson_depth=3)` or `--anderson_depth 3`
 
 ```
 Is the problem pure Mode I tension?
-  YES → isotropic (fastest, simplest)
+  YES → isotropic (lowest split complexity)
   NO  →
     Is crack path expected to curve?
       YES → spectral (Miehe 2010, eigenvalue decomposition)
@@ -73,7 +73,7 @@ Is the problem pure Mode I tension?
 
 ### Convergence Criterion Comparison
 
-| Criterion | Formula | Speed | Strictness | Best For |
+| Criterion | Formula | Relative cost | Interpretation | Typical use |
 |-----------|---------|-------|------------|----------|
 | `relative` | `\|\|Δd\|\|/\|\|d\|\| < tol` | Fast | Medium | **Default**, general use |
 | `absolute` | `\|\|Δd\|\| < tol` | Fast | Varies | Simple problems, debugging |

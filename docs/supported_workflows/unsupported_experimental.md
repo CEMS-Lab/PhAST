@@ -16,7 +16,7 @@ PhAST workflows.
 
 If a feature is marked scaffold, beta, optional-backend, or unsupported in the
 [capability matrix](../user_guide/capability_matrix.md), treat docs and
-examples as implementation notes until the feature is promoted through:
+examples as implementation notes until the feature is supported through:
 
 1. a public YAML configuration or script-contract manifest;
 2. required outputs from `docs/user_guide/example_contract.md`;

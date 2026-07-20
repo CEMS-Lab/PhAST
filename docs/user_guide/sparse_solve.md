@@ -25,7 +25,7 @@ Use a sparse representation when one of the following is true:
 - a workflow needs a conventional matrix for analysis or external tooling;
 - a small problem is better served by a direct solve than by a Krylov method.
 
-For large production fracture runs, the sparse matrix is typically most useful as
+For large fracture calculations, the sparse matrix is typically most useful as
 an internal preconditioning aid. For small verification problems, a direct
 sparse solve may be acceptable.
 

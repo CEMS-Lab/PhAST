@@ -1,8 +1,11 @@
 # Declarative YAML Workflows
 
-YAML is the primary configuration format for reproducible simulations in PhAST. Declarative configurations should be used for sharing exact geometric and physical setups, submitting batch/HPC jobs, and enforcing strict reproducibility for academic publications.
+YAML is the primary configuration format for reproducible simulations in
+PhAST. Declarative configurations record the geometric, physical, numerical,
+and output choices needed to review and repeat an academic simulation.
 
-While the fluent `phast.Problem` API is ideal for interactive model design, the final implementation should be serialized to YAML to ensure durability.
+The fluent `phast.Problem` API is useful for programmatic model construction;
+YAML is preferred when a complete setup must be shared and reviewed.
 
 YAML is the public reproduction format because it is explicit, machine-readable,
 and stable across reruns. A validated configuration makes it possible to
@@ -74,7 +77,24 @@ output:
   trajectory_format: zarr
 ```
 
-*Note: Public validation examples contain the exact keys required by their execution pathways. It is recommended to use existing examples as a foundation for novel configurations.*
+Public examples contain the keys required by their documented execution
+pathways. Begin with the nearest example and modify one physical or numerical
+choice at a time.
+
+## Runnable Decks, Templates, And Contracts
+
+Not every YAML file in the repository represents one solver problem:
+
+| File class | Directly runnable? | Interpretation |
+|---|---|---|
+| `examples/<family>/<case>/config.yaml` | Yes | Complete example-local solver input. |
+| `configs/benchmarks/<family>/<case>.yaml` | Yes | Complete benchmark solver input. |
+| `configs/REFERENCE.yaml` | No | Annotated field reference and template. |
+| `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` | No | Example documentation and artifact inventory. |
+| `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml` | Only with `--validation-id` | Dispatcher manifest for beta validation programs. |
+
+Contracts and manifests describe a collection of programs or expected
+artifacts. They are not interchangeable with a single fracture `config.yaml`.
 
 ## External Meshes and Provenance
 
@@ -113,16 +133,19 @@ python -m phast run config.yaml --trajectory --trajectory-format zarr
 
 ## Standardized Artifact Directory
 
-A successfully executed configuration writes an immutable artifact directory (e.g., `runs/notched_holed_plate/`). For promoted academic examples, this directory guarantees:
+A successfully executed configuration writes an artifact directory such as
+`runs/notched_holed_plate/`. Depending on the selected output settings and
+runner, the directory may include:
 - The exact `config.yaml` used for execution.
 - `run_lockfile.json` capturing the parsed state, Git hashes, and dependencies.
 - CSV histories (response, kinetic energy, nonlinear convergence).
-- High-fidelity Zarr trajectories.
+- High-fidelity Zarr trajectories when trajectory output is enabled.
 - Visual manifests and pre-rendered plots.
 
 ## Result Inspection
 
-The resulting artifact directory is strictly read-only and can be queried programmatically:
+The public `Result` interface treats the existing artifact directory as
+read-only and can be queried programmatically:
 
 ```python
 import phast
@@ -139,4 +162,8 @@ The `Result` object exposes only quantities that were explicitly written during 
 
 ## Extensibility Boundary
 
-YAML configurations strictly route to validated PhAST solver execution pathways. They do not execute arbitrary Python scripts or compile arbitrary weak-form PDEs. If a configuration requests physics outside the supported [Capability Matrix](capability_matrix.md), the validation phase will cleanly intercept and report the violation before any compute is allocated.
+YAML configurations route to explicitly implemented PhAST execution pathways.
+They do not compile arbitrary weak-form PDEs. The capability matrix defines the
+documented support boundary. Schema validation detects unsupported combinations
+that are represented in the validator, but it is not a substitute for checking
+the numerical evidence associated with a model.

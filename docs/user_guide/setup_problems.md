@@ -36,8 +36,9 @@ workflows. It does not compile arbitrary weak forms from user text.
 
 ## Units
 
-PhAST is unit-agnostic, like Abaqus. It does not convert units for you. Choose
-one consistent unit system and use it everywhere:
+For bare numerical values, PhAST uses the documented reference convention
+shown below. Supported quoted unit strings are converted at the configuration
+boundary, but all values in one model must still be dimensionally consistent:
 
 | Quantity | SI example | mm-N-MPa style example |
 |---|---|---|

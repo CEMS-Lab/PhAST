@@ -9,10 +9,11 @@
 
 ## Maintainers
 
-PhAST is maintained under the CEMS Lab public repository. Collaboration is
-welcome through GitHub Issues, Discussions, and Pull Requests, but changes to
-the public solver, documentation, examples, and release surface are accepted
-only after maintainer review and approval.
+PhAST is maintained in the CEMS Lab public repository. Researchers, students,
+scientific-software developers, educators, and users are invited to review the
+solver, reproduce examples, improve explanations, propose carefully scoped
+examples, and provide technical feedback through GitHub Issues, Discussions,
+and Pull Requests. Changes are incorporated after maintainer review.
 
 Lead developer and repository maintainer:
 [Allamaprabhu Ani](https://allamaprabhuani.github.io/). PhAST was developed
@@ -21,12 +22,19 @@ as part of a supervised research programme with academic guidance from
 
 ## Reporting issues
 
+Open an issue whenever an installation step, YAML field, example, equation, or
+error message is unclear. Becoming stuck is sufficient reason to ask for help;
+you do not need to identify the underlying code defect first.
+
 When opening bugs or documentation gaps, include:
 
 - exact command and config file (if any),
 - reproducibility details (PyTorch/CUDA/OS),
 - minimal output snippet or traceback,
 - the first failing file or assertion.
+
+Questions and partial reports are welcome. Maintainers can request additional
+reproducibility information during triage.
 
 ## Contributing
 
@@ -39,5 +47,5 @@ When opening bugs or documentation gaps, include:
 
 - Release notes: https://github.com/CEMS-Lab/PhAST/releases
 - API + docs dependencies: `requirements-docs.txt`
-- Release and bug triage runbook: use GitHub Releases and Issues in the public
-  repository.
+- GitHub Releases is the project changelog; Issues records user-reported
+  defects, questions, and proposed improvements.

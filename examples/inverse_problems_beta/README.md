@@ -1,8 +1,8 @@
 # Inverse Problems Beta
 
-**Status: beta placeholder.** This folder marks the intended public location for
-inverse-analysis examples built on differentiable PhAST forward runs. No
-runnable inverse benchmark is promoted from this folder yet.
+**Status: documentation scaffold.** This folder records the requirements for a
+possible future inverse-analysis example based on differentiable PhAST forward
+operations. It does not contain a runnable inverse benchmark.
 
 The current public release foregrounds forward phase-field fracture examples.
 Inverse workflows should be added here only when they include:
@@ -16,9 +16,9 @@ Inverse workflows should be added here only when they include:
 - reproducibility notes identifying the PhAST commit, PyTorch version, device,
   and random seeds where applicable.
 
-Do not add raw trajectory stores, private calibration data, unpublished paper
+Do not add raw trajectory stores, restricted calibration data, unpublished paper
 artifacts, or large optimizer checkpoints to this folder. Store heavy data
-outside git and link it from a release artifact only after maintainer approval.
+outside git and provide a stable, citable archive link when appropriate.
 
 For now, use the forward examples under `examples/dynamic/` and
 `examples/quasistatic/` as the public reproducibility surface.

@@ -1,7 +1,7 @@
 # Quasi-static Fracture
 
 Quasi-static fracture is the main public validation path for implicit
-phase-field examples. Promoted cases are listed in
+phase-field examples. Curated cases are listed in
 `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` and follow the flat example contract.
 
 ## Start here
@@ -18,7 +18,7 @@ metadata, manifests, and comparison artifacts together.
 
 ## Expected outputs
 
-The promoted examples produce setup previews, CSV histories, damage fields,
+The curated examples produce setup previews, CSV histories, damage fields,
 comparison artifacts when a reference exists, and visual manifests. Required
 files include `initial_conditions.png`, `results.csv`, `history.csv`,
 `energy.csv`, `solver_telemetry.csv`, `timing_per_step.csv`,
@@ -29,4 +29,4 @@ files include `initial_conditions.png`, `results.csv`, `history.csv`,
 
 Do not treat deferred SENS, TPB, or L-shaped panel material as public examples
 until those folders have the same YAML, visual, manifest, and test coverage as
-the promoted cases.
+the curated cases.

@@ -1,7 +1,7 @@
 # Solid Mechanics
 
-Solid mechanics examples are promoted public FEA workflows when they are listed
-in `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` and ship the flat result bundle
+Solid mechanics examples are curated public FEA workflows when they are listed
+in `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` and provide the flat result bundle
 required by `docs/user_guide/example_contract.md`.
 
 ## Public path
@@ -21,7 +21,7 @@ outputs, and tests are covered.
 
 ## Expected outputs
 
-Promoted solid mechanics examples should include `run_manifest.json`,
+Curated solid mechanics examples should include `run_manifest.json`,
 `visual_manifest.json`, `initial_conditions.png`, `response.csv`,
 `response.png`, `thumbnail.png`, and the field plots listed in the public
 example contract. Inspect completed runs with:
@@ -37,7 +37,7 @@ print(result.visuals())
 
 ## Boundary
 
-The public J2 bar is a promoted solid-mechanics example, not a claim that every
-coupled elastoplastic phase-field/cohesive workflow is production-ready. Check
+The public J2 bar is a curated solid-mechanics example, not a claim that every
+coupled elastoplastic phase-field/cohesive workflow is generally supported. Check
 the [capability matrix](../user_guide/capability_matrix.md) before combining
 solid mechanics with beta plasticity/interface features.

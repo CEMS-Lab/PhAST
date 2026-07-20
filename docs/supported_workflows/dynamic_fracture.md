@@ -11,13 +11,13 @@ python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-
 python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml --validate-only
 ```
 
-For full production reruns, prefer CPU nodes when the GPU queue is busy and the
+For complete reference reruns, prefer CPU nodes when the GPU queue is busy and the
 case fits CPU memory; otherwise use CUDA for large trajectory-producing runs.
 Keep `dtype: float64` where the validation configuration file requires it.
 
 ## Expected outputs
 
-Promoted dynamic examples should include `run_manifest.json`,
+Curated dynamic examples should include `run_manifest.json`,
 `visual_manifest.json`, `initial_conditions.png`, `thumbnail.png`, damage
 snapshots or multipanels, `history.csv`, and `energy.csv`. Examples with
 reference comparisons should also include `compare.png` and
@@ -25,7 +25,7 @@ reference comparisons should also include `compare.png` and
 
 ## Boundary
 
-B1 branching remains a placeholder until the accepted quad rerun is promoted.
+B1 branching remains a placeholder until an accepted quadrilateral rerun is documented.
 B7 is a reference comparison case without COMSOL binaries or raw trajectory
 stores.
 Large Zarr/H5 trajectories belong in external storage or release artifacts, not

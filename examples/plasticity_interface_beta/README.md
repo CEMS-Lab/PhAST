@@ -1,7 +1,7 @@
 # Beta Plasticity and Diffuse-Interface Validation Examples
 
 **Status: beta validation suite.** These workflows are public for inspection
-and reproducibility, but they are not promoted as full production fracture
+and reproducibility, but they are not curated as full production fracture
 examples.
 
 These examples package the current beta boundary for plasticity and
@@ -13,7 +13,7 @@ not as full production fracture examples.
 | Example | What it validates | Readiness |
 | --- | --- | --- |
 | `run_j2_validation.py` | Standalone J2/von-Mises material-point return mapping with linear isotropic hardening | Runnable kernel validation |
-| `run_ductile_pf_plasticity_validation.py` | Sparse quasi-static J2 mechanics plus bounded AT2 phase-field damage solved on a ductile plastic-work history | Gate 1 solver validation plus Gate 2 operator-coupled damage validation; backend-selectable for promotion runs; guarded staggered T3 J2+AT2 path exists, benchmark matching pending |
+| `run_ductile_pf_plasticity_validation.py` | Sparse quasi-static J2 mechanics plus bounded AT2 phase-field damage solved on a ductile plastic-work history | Gate 1 solver validation plus Gate 2 operator-coupled damage validation; backend-selectable for curation runs; guarded staggered T3 J2+AT2 path exists, benchmark matching pending |
 | `run_ductile_pf_sensitivity_study.py` | Elastic-driving reference plus ductile plastic-work length-scale sensitivity table and plots | Public ductile validation study; not a SENT/TPB calibration |
 | `run_diffuse_interphase_validation.py` | Diffuse interface/interphase fields in a brittle phase-field setting using spatial `E(x)` and `Gc(x)` | Runnable field/path validation |
 | `run_solid_interface_fracture_examples.py` | Two deterministic crack-impinging-on-interface path-energy benchmarks: weak-interface deflection and strong-interface penetration | Diffuse solid-interface field/path screening examples; not solved crack-evolution runs |
@@ -42,19 +42,19 @@ configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
 ```
 
 That YAML lists every validation runner, its exact launcher command, required
-CSV/JSON/mesh/visual artifacts, and the public claim boundary. Each promoted
+CSV/JSON/mesh/visual artifacts, and the public claim boundary. Each curated
 run should also retain the generated `config.yaml`,
 `run_manifest.json` when available, and `visual_manifest.json` for plots or
 animations according to `docs/user_guide/example_contract.md`.
 
-The first promoted validation slice is available through the curated YAML
+The first curated validation slice is available through the curated YAML
 dispatcher:
 
 | Validation id | Role | Retained result | Fluent setup |
 | --- | --- | --- | --- |
-| `j2_validation` | Standard J2 return-map validation example for the promoted plasticity slice. | `examples/plasticity_interface_beta/results/j2_validation` | `examples/plasticity_interface_beta/fluent_setups/j2_validation.py` |
-| `structural_dcb_cohesive` | DCB-style structural cohesive benchmark for the promoted cohesive/interface slice. | `examples/plasticity_interface_beta/results/structural_dcb_cohesive` | `examples/plasticity_interface_beta/fluent_setups/structural_dcb_cohesive.py` |
-| `pfczm_uniaxial_strength` | One-dimensional PF-CZM strength calibration baseline verification for the promoted PF-CZM slice. | `examples/plasticity_interface_beta/results/pfczm_uniaxial_strength` | `examples/plasticity_interface_beta/fluent_setups/pfczm_uniaxial_strength.py` |
+| `j2_validation` | Standard J2 return-map validation example for the curated plasticity slice. | `examples/plasticity_interface_beta/results/j2_validation` | `examples/plasticity_interface_beta/fluent_setups/j2_validation.py` |
+| `structural_dcb_cohesive` | DCB-style structural cohesive benchmark for the curated cohesive/interface slice. | `examples/plasticity_interface_beta/results/structural_dcb_cohesive` | `examples/plasticity_interface_beta/fluent_setups/structural_dcb_cohesive.py` |
+| `pfczm_uniaxial_strength` | One-dimensional PF-CZM strength calibration baseline verification for the curated PF-CZM slice. | `examples/plasticity_interface_beta/results/pfczm_uniaxial_strength` | `examples/plasticity_interface_beta/fluent_setups/pfczm_uniaxial_strength.py` |
 
 ```bash
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation
@@ -341,7 +341,7 @@ forward PF-CZM damage-law calibration validation, not a full structural
 crack-growth, mixed-mode delamination, or ductile PF-plasticity-cohesive
 workflow.
 
-The sparse J2 backend-promotion harness records backend availability and
+The sparse J2 backend-curation harness records backend availability and
 fallback behavior for the same elastoplastic patch:
 
 ```bash
@@ -351,13 +351,13 @@ python examples/plasticity_interface_beta/run_sparse_j2_backend_promotion.py \
 ```
 
 It writes `config.yaml`, `run_lockfile.json`, `run_metadata.json`,
-Retained backend-promotion evidence shows PETSc/MUMPS can resolve
+Retained backend-curation evidence shows PETSc/MUMPS can resolve
 `auto -> mumps` and explicit `mumps -> mumps`, matching the SciPy baseline on
 the tested patch. A `cudss` request must either resolve on a configured
 nvmath/cuDSS environment or record a clean fallback reason. cuDSS remains a
-separate open promotion gate until `backend='cudss'` runs without fallback.
+separate open curation gate until `backend='cudss'` runs without fallback.
 
-The ductile PF-plasticity backend-promotion harness exercises the coupled
+The ductile PF-plasticity backend-curation harness exercises the coupled
 ductile validation under the same backend-selection contract:
 
 ```bash
@@ -369,7 +369,7 @@ python examples/plasticity_interface_beta/run_ductile_pf_backend_promotion.py \
 It writes the same retained evidence bundle plus `backend_promotion.csv`
 and one child bundle per requested backend. The current local proof point is
 the SciPy path; PETSc/MUMPS and cuDSS still depend on the active HPC/backend
-environment and remain the open promotion target for #659. Site-specific CPU
+environment and remain an open validation requirement. Site-specific CPU
 and GPU scheduler launchers live outside the public release payload.
 
 ## HPC/Memory Notes

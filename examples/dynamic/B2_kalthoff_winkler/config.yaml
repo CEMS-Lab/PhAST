@@ -10,7 +10,7 @@ acceptance:
   - mesh_l0_resolution
 
 # Reference public deck for the half-plate Kalthoff-Winkler benchmark.
-# Mesh 3 uses h_crack=0.25 mm and is the promoted public evidence bundle.
+# The retained reference mesh uses h_crack=0.25 mm.
 geometry:
   type: kalthoff_winkler
   parameters:

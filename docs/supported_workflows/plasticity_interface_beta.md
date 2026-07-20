@@ -2,7 +2,7 @@
 
 Plasticity, cohesive, PF-CZM, and interface examples are beta validation
 workflows unless the capability matrix says otherwise. They remain useful and
-tested, but they are not presented as a fully coupled production product.
+tested, but they are not presented as a broadly validated coupled workflow.
 
 ## Public beta path
 

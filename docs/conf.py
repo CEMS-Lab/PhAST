@@ -68,7 +68,7 @@ html_static_path = ["_static"]
 html_extra_path = ["../assets"]
 html_css_files = ["phast.css"]
 html_meta = {
-    "description": "PhAST is an open-source, matrix-free PyTorch solver for explicit dynamic phase-field fracture, supporting CPU and GPU execution.",
+    "description": "PhAST is an open-source PyTorch finite-element solver for two-dimensional dynamic and quasi-static phase-field fracture.",
     "keywords": "PhAST, phase-field fracture, PyTorch, matrix-free solver, differentiable mechanics, fracture mechanics",
     "viewport": "width=device-width, initial-scale=1.0",
 }

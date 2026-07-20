@@ -458,4 +458,4 @@ runs:
       - run_manifest.json
       - run.log
       - backend_promotion.csv
-    claim_boundary: Ductile PF backend-selection evidence; PETSc/MUMPS and cuDSS promotion depend on active backend environment.
+    claim_boundary: Ductile PF backend-selection evidence; PETSc/MUMPS and cuDSS curation depend on active backend environment.

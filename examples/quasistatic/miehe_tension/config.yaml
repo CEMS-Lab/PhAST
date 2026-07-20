@@ -1,11 +1,11 @@
 schema_version: 1
 problem:
-  name: Miehe SENT 37992
+  name: Miehe single-edge-notched tension
   reference: Miehe et al. (2010), PhaseFieldX Example 1711
 
 acceptance:
   status: validated
-  reference_result: PhaseFieldX 1711 / promoted HPC job 37992
+  reference_result: PhaseFieldX example 1711 and retained PhAST reference result
   required_outputs:
     - mesh.geo
     - mesh.msh
@@ -33,9 +33,9 @@ acceptance:
       observed_error_percent: 5.38
       tolerance_percent: 15.0
   notes: >
-    Reproduces the promoted script-driven HPC reference run 37992. The original
-    runner used a two-rate displacement schedule: 50 steps to 0.005 mm, then
-    300 steps to 0.008 mm. This YAML encodes that schedule with cyclic_phases.
+    The retained reference calculation used a two-rate displacement schedule:
+    50 steps to 0.005 mm, followed by 300 steps to 0.008 mm. This YAML records
+    that schedule with cyclic_phases.
 
 geometry:
   type: miehe_tension

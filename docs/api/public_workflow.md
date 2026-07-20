@@ -14,13 +14,16 @@ terms of problems, regions, materials, loads, steps, outputs, and results.
 | `phast.InitialCondition` | Seed fields such as initial damage where supported. | [Python API](../user_guide/python_api.md) |
 | `phast.BoundaryCondition` | Apply fix, prescribe, traction, symmetry, and Neumann-style conditions. | [Capability matrix](../user_guide/capability_matrix.md) |
 | `phast.AnalysisStep` | Select the solution type, loading protocol, and active conditions. | [YAML workflow](../user_guide/yaml_workflow.md) |
-| `phast.Outputs` | Request fields, histories, visuals, trajectories, and manifests. | [Promoted example contract](../user_guide/example_contract.md) |
+| `phast.Outputs` | Request fields, histories, visuals, trajectories, and manifests. | [Curated example contract](../user_guide/example_contract.md) |
 | `phast.Result` / `phast.load_result()` | Inspect completed run directories without rerunning solvers. | [Public API reference](../user_guide/public_api_reference.md) |
 | `phast.ResultLoadError` | Clear error for missing result directories, unknown fields, and reserved postprocess methods. | [Public API reference](../user_guide/public_api_reference.md) |
 
 ## Authoring Boundary
 
-Use the fluent `phast.Problem` API to author new models. Use YAML configurations for public examples, reproducibility, batch/HPC runs, and sharing exact simulations. The public examples keep YAML as the primary rerun surface until each fluent lowering path is promoted and covered by tests.
+Use the fluent `phast.Problem` API to author new models. Use YAML
+configurations for public examples, reproducibility, batch/HPC runs, and
+sharing reviewable simulations. Public examples retain YAML as the primary
+rerun interface unless an equivalent fluent pathway is documented and tested.
 
 ```python
 import phast
@@ -47,9 +50,10 @@ spec = problem.to_spec()
 ```
 
 The `ProblemSpec` contract is an implementation detail of the workflow layer.
-It lets PhAST validate YAML, fluent Python, promoted solid-mechanics
+It lets PhAST validate YAML, fluent Python, curated solid-mechanics
 examples, and result inspection through one common representation while
-keeping the public surface centered on domain nouns rather than internal data
+keeping the public interface centered on domain concepts rather than
+implementation data
 structures. Use the [capability matrix](../user_guide/capability_matrix.md) as
 the public boundary for supported workflows.
 
@@ -64,9 +68,9 @@ are present.
 
 ## Output Boundary
 
-Every promoted public example should expose a flat, predictable result bundle:
+Every curated public example should expose a flat, predictable result bundle:
 `config.yaml`, `run_manifest.json`, `visual_manifest.json`, representative
 PNG/MP4 artifacts, CSV histories where relevant, and Zarr-first trajectory
 outputs when the run stores fields. See
-[Promoted example contract](../user_guide/example_contract.md) for the artifact
+[Curated example contract](../user_guide/example_contract.md) for the artifact
 contract.

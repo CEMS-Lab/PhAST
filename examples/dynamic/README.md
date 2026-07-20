@@ -1,86 +1,72 @@
 # Dynamic Fracture Examples
 
-This folder holds the curated public dynamic fracture examples. Keep each
-example flat, YAML-first, and free of raw cluster dumps or vendor binaries.
+This directory contains two-dimensional explicit-dynamics phase-field fracture
+examples. Each case has an example-local `config.yaml` that can be validated or
+executed from the repository root.
 
-## Public Candidate Dynamic Fracture Examples
+## Example Index
 
-These folders are public dynamic-fracture examples. They are the primary
-public fracture examples unless a row states that it is an external comparison
-or supporting extension.
-
-| Example | Status | Role | Command |
-|---|---|---|---|
-| `B2_kalthoff_winkler/` | Public fracture example | Kalthoff-Winkler dynamic impact evidence. | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
-| `B3_dynamic_sent/` | Public fracture baseline | Lightweight dynamic SENT verification example. | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
-| `B5_pmma_branching/` | Public fracture example | Selected PMMA branching result. | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
-| `B6_perforated_30holes/` | Public fracture extension | Selected perforated PMMA plate; public B6 name replaces old source B4 naming. | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
-| `B6_perforated_10holes/` | Public fracture extension | Curated perforated PMMA variant with ten holes. | `python -m phast run examples/dynamic/B6_perforated_10holes/config.yaml` |
-| `B6_perforated_1hole_near/` | Public fracture extension | Curated single-hole PMMA variant with the hole near the crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_near/config.yaml` |
-| `B6_perforated_1hole_far/` | Public fracture extension | Curated single-hole PMMA variant with the hole farther from the crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_far/config.yaml` |
-| `B7_dynamic_crack_branching_comsol/` | External comparison example | Accepted dynamic branching comparison package. | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
-
-| Public example | Source status | Public release action |
+| Example | Role | Command |
 |---|---|---|
-| `B2_kalthoff_winkler` | Mesh-1 curated outputs exist; local H5 trajectory is not distributed. | Publish flat curated CSV/PNG/metadata outputs, not `external trajectory store`. |
-| `B3_dynamic_sent` | Curated outputs exist; config validates with an `h/l0 = 1` warning. | Publish as a runnable dynamic baseline verification example unless finer evidence is promoted. |
-| `B5_pmma_branching` | Representative PMMA parametric-study result retained as a flat public folder. | Publish the selected configuration file and curated visuals only. Keep other parametric studies outside the public repository. |
-| `B6_perforated_*` | Perforated-plate variants retained as flat public folders. | Publish only the B6 public folders; do not expose old naming or raw run dumps. |
-| `B7_dynamic_crack_branching_comsol` | Curated dynamic branching comparison package. | Publish PNG/CSV/report/metadata only. Link to vendor documentation instead of distributing proprietary binaries or vendor PDFs. |
+| `B2_kalthoff_winkler/` | Kalthoff-Winkler impact benchmark with documented reference artifacts. | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml` |
+| `B3_dynamic_sent/` | Compact dynamic single-edge-notched-tension verification case. | `python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml` |
+| `B5_pmma_branching/` | Selected PMMA crack-branching case. | `python -m phast run examples/dynamic/B5_pmma_branching/config.yaml` |
+| `B6_perforated_10holes/` | Perforated PMMA plate with ten holes. | `python -m phast run examples/dynamic/B6_perforated_10holes/config.yaml` |
+| `B6_perforated_30holes/` | Perforated PMMA plate with thirty holes. | `python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml` |
+| `B6_perforated_1hole_near/` | Single-hole variant with the hole near the expected crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_near/config.yaml` |
+| `B6_perforated_1hole_far/` | Single-hole variant with the hole farther from the expected crack path. | `python -m phast run examples/dynamic/B6_perforated_1hole_far/config.yaml` |
+| `B7_dynamic_crack_branching_comsol/` | Dynamic crack-branching comparison case. | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` |
 
-## Folder rule
+## Recommended Workflow
 
-Each public example folder should be flat and predictable:
-
-```text
-examples/dynamic/<example_name>/
-  README.md
-  config.yaml
-  mesh.geo
-  mesh.msh
-  run_manifest.json
-  visual_manifest.json
-  history.csv
-  energy.csv
-  crack_tip.csv
-  damage_final.png
-  thumbnail.png
-  damage_evolution.gif
-  damage_evolution.mp4
-```
-
-Do not leave curated public files under `figures/`, `outputs/`,
-`reference_runs/`, raw job dump folders, or dated run folders. Trajectory
-through a separate artifact release, not committed to the public repository.
-
-## Timing material
-
-Timing comparisons should not be mixed into the flat public examples gallery.
-If timing material is exposed publicly, promote it as a named benchmark artifact
-with its own README, exact commands, machine/backend notes, and regenerated
-plots.
-
-## Excluded Material
-
-- Raw run dumps used only for recovery and promotion.
-- Proprietary binary model files and vendor PDFs.
-- Historical PMMA parametric studies that are not the selected public B5 representative.
-- Any old B4 naming.
-
-## Validation
-
-The reference dynamic configs currently pass schema validation with:
+Validate and inspect a case before allocating a full simulation:
 
 ```bash
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
-python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml --validate-only
-python -m phast run examples/dynamic/B5_pmma_branching/config.yaml --validate-only
-python -m phast run examples/dynamic/B6_perforated_30holes/config.yaml --validate-only
-python -m phast run examples/dynamic/B6_perforated_10holes/config.yaml --validate-only
-python -m phast run examples/dynamic/B6_perforated_1hole_near/config.yaml --validate-only
-python -m phast run examples/dynamic/B6_perforated_1hole_far/config.yaml --validate-only
-python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only
+python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
 ```
 
-`B3_dynamic_sent` emits a mesh-resolution warning and should not be used as
-quantitative convergence evidence without a finer promoted run.
+Run into a separate result directory:
+
+```bash
+python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml \
+  --output_dir runs/B2_kalthoff_winkler
+```
+
+Dynamic fracture calculations can be computationally demanding. Review the
+mesh-to-length-scale ratio, stable time step, damage-update cadence, device, and
+trajectory settings before a complete rerun.
+
+## Evidence Boundaries
+
+- The retained PNG, CSV, JSON, and animation files provide lightweight
+  reference material for the specific checked-in configuration.
+- A schema-valid configuration is not, by itself, evidence of mesh convergence
+  or agreement with a literature reference.
+- `B3_dynamic_sent` reports an `h/l0 = 1` resolution warning and should be
+  treated as a compact verification case rather than quantitative convergence
+  evidence.
+- Vendor model files, proprietary documentation, raw cluster directories, and
+  large trajectory stores are not distributed in these example folders.
+
+## Typical Folder Contents
+
+An example may contain:
+
+```text
+README.md
+config.yaml
+mesh.geo
+mesh.msh
+run_manifest.json
+visual_manifest.json
+history.csv
+energy.csv
+crack_tip.csv
+damage_final.png
+damage_evolution.gif
+```
+
+The exact set depends on the case and output settings. Generate complete local
+results with `--output_dir runs/<case>` rather than writing into the example
+directory.

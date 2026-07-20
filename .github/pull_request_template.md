@@ -25,7 +25,7 @@
 - [ ] New or changed commands in documentation were run, or the reason for not
       running them is stated in this PR.
 - [ ] Example documentation follows `docs/user_guide/example_contract.md` when
-      promoted example files or visuals changed.
+      curated example files or visuals changed.
 
 ## Physics and Benchmark Notes
 

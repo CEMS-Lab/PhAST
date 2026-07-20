@@ -1,8 +1,10 @@
 # Configuration Files
 
 This directory contains the public YAML configuration surface for PhAST.
-Runnable benchmark configs live under `configs/benchmarks/`; schema and
-reference files live at the top level.
+Runnable benchmark decks live under `configs/benchmarks/`; schema and
+reference files live at the top level. A small number of files under
+`configs/benchmarks/` are explicitly labelled dispatcher contracts rather than
+single-problem inputs.
 
 ```bash
 python -m phast run configs/benchmarks/<family>/<name>.yaml
@@ -47,7 +49,7 @@ can enable additional artifacts for a run.
 |---|---|
 | `configs/benchmarks/dynamic/` | Reference dynamic fracture benchmark configs. |
 | `configs/benchmarks/quasistatic/` | Reference quasi-static benchmark configs. |
-| `configs/benchmarks/plasticity_interface/` | Beta plasticity/interface validation manifests and contracts. |
+| `configs/benchmarks/plasticity_interface/` | Beta plasticity/interface dispatcher manifests and reproducibility contracts; use the documented `--validation-id` command. |
 | `configs/REFERENCE.yaml` | Human-readable reference for supported config fields. |
 | `configs/phast.schema.json` | Generated JSON Schema for editor and tooling support. |
 
@@ -56,8 +58,9 @@ Top-level compatibility aliases such as `configs/B2_kalthoff_winkler.yaml` and
 Use the reference `configs/benchmarks/...` paths in examples, documentation,
 CI, and papers.
 
-Command manifests that are not directly runnable by `python -m phast run` are
-not part of the public config tree.
+The file name and accompanying README determine whether a YAML is a solver deck,
+reference, or dispatcher contract. Do not infer executability from the `.yaml`
+extension alone.
 
 Each run writes both `config.yaml` and `run_lockfile.json` into the output
 directory. `config.yaml` is the post-CLI resolved problem definition;
@@ -107,9 +110,10 @@ node-set references in imported meshes with line-numbered messages. Relative
 `geometry.mesh_path` values are checked against the YAML file's directory first,
 then the current working directory.
 
-Command manifests and reproducibility contracts intentionally fail
-`--validate-only` because they describe orchestration or expected artifacts
-rather than a single solver problem.
+`examples/PUBLIC_EXAMPLES_CONTRACT.yaml` and `configs/REFERENCE.yaml` are not
+solver inputs. The plasticity/interface reproducibility contract is a
+dispatcher manifest and must be accompanied by `--validation-id`; it does not
+describe one phase-field problem.
 
 For IDE autocomplete and external tooling, use the generated JSON Schema:
 
@@ -168,6 +172,6 @@ suffix list.
 - Set `output.reaction_node_set` and `output.reaction_component` for
   quasi-static load-displacement comparisons.
 - Run `--validate-only` and `explain-config` before submitting a long run.
-- For quasi-static fracture, use the current safe defaults:
+- For quasi-static fracture, begin with the conservative documented defaults:
   `solver_type: quasi_static`, `backend: auto`, and `preconditioner: jacobi`
-  unless a backend-specific validation issue says otherwise.
+  unless a benchmark or backend study documents a different choice.
