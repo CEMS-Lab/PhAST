@@ -12,6 +12,7 @@
 
 ## Validation
 
+- [ ] `python -m pytest -q tests`
 - [ ] `PYTHONPATH=src python -m phast doctor`
 - [ ] `sphinx-build -W -b html docs docs/_build/html`
 - [ ] Relevant configs passed `python -m phast run <config> --validate-only`

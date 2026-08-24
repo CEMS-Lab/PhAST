@@ -4,6 +4,44 @@ Phase-field fracture simulations are sensitive to units, mesh resolution,
 boundary conditions, and time-step choices. This page lists common symptoms and
 the first checks to perform before changing solver code.
 
+## Numerical Mechanics FAQ
+
+### Is $h\leq\ell_0/2$ sufficient?
+
+No. It is a useful starting resolution criterion near the expected crack path,
+not a convergence certificate. Assess $h$-refinement at fixed $\ell_0$ using
+load-displacement response, fracture energy, crack path, and solver convergence.
+Study $\ell_0$ separately because changing it changes the regularized model.
+
+### Does every route use staggered convergence?
+
+No. Supported quasistatic calculations perform inner mechanics-damage
+iterations and ordinarily monitor displacement and damage changes. Explicit
+dynamics performs one segregated pass per time step, with damage solved at the
+configured cadence. The monolithic $(\mathbf{u},d)$ minimizer is experimental.
+
+### Is the AT2 damage update explicit because mechanics is explicit?
+
+No. For fixed history and the standard quadratic AT2 operator, the damage
+residual is affine in $d$, but its finite-element discretization remains a
+global elliptic linear solve. Explicit dynamics can therefore use an explicit
+mechanics update while invoking an implicit damage solve at selected steps.
+
+### What is the difference between history, bounds, and an active set?
+
+The history maximum makes the crack-driving field nondecreasing. Nodal
+no-healing is imposed separately through $d_{n+1}\geq d_n$. Projected CG
+maintains the bound through an active set; `post_clamp` solves the unconstrained
+system and clamps afterward, so it is not an active-set solution.
+
+### Does adaptive explicit time stepping retry a failed step?
+
+The automatic explicit step is bounded by an elastic-wave CFL estimate. The
+optional damage-increment controller adjusts the subsequent step after the
+current step is completed; it does not reject and recompute that completed
+step. In quasistatic runs, the configured increment is a continuation/load
+increment rather than physical time.
+
 ## Quick Triage
 
 | Symptom | Likely cause | First checks |

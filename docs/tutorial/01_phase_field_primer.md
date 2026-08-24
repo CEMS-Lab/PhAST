@@ -34,17 +34,22 @@ the regularised energy is
 \mathcal{E}(\mathbf{u}, d)
 = \int_{\Omega} g(d) \, \psi^+(\boldsymbol{\varepsilon}(\mathbf{u})) \, d\Omega
   + \int_{\Omega} \psi^-(\boldsymbol{\varepsilon}(\mathbf{u})) \, d\Omega
-  + G_c \int_{\Omega}
+  + \frac{G_c}{4c_w} \int_{\Omega}
     \left[
-      \frac{w(d)}{c_w \ell_0}
-      + \frac{\ell_0}{c_w} |\nabla d|^2
-    \right] d\Omega .
+      \frac{w(d)}{\ell_0}
+      + \ell_0 |\nabla d|^2
+    \right] d\Omega ,
+\qquad c_w=\int_0^1\sqrt{w(s)}\,ds.
 ```
 
-$g(d) = (1-d)^2 + \eta_{\mathrm{residual}}$ is the degradation function;
+$g_\eta(d) = (1-\eta)(1-d)^2 + \eta$ is the standard degradation function;
 $w(d)$ is the local dissipation density; $c_w$ is a normalisation constant. The
-Euler-Lagrange system is two coupled PDEs (mechanics and damage) which
-the staggered solver alternates between.
+normalization above gives $c_w=1/2$ for AT2 and $c_w=2/3$ for AT1. The displayed
+functional describes the standard split model before external work is
+subtracted. PhAST treats the small residual stiffness as a mechanics
+regularization; its conventional linear AT1/AT2 damage operator retains the
+$\eta$-independent driving coefficients. Other degradation families have
+separate capability boundaries and should not be inferred from this equation.
 
 ## AT1 vs AT2
 
@@ -53,7 +58,7 @@ The two standard regularisations differ in `w(d)` and `c_w`:
 | Model | `w(d)` | `c_w` | Elastic threshold | Reference |
 |-------|--------|-------|-------------------|-----------|
 | AT2 | $d^2$ | $1/2$ | None; damage may start at nonzero strain | Bourdin et al. (2011) |
-| AT1 | $d$ | $8/3$ | $\mathcal{H}_{c,0}=3G_c/(16\ell_0)$ | Pham, Marigo, Maurini (2011) |
+| AT1 | $d$ | $2/3$ | $\mathcal{H}_{c,0}=3G_c/(16\ell_0)$ | Pham, Marigo, Maurini (2011) |
 
 ```{figure} ../_static/at_dissipation.svg
 :alt: AT1 and AT2 local crack-density terms
@@ -83,7 +88,7 @@ In a YAML config, switch with `material.overrides.pf_model: AT1` or
 a pre-crack (Ambati et al. 2015, Bleyer et al. 2017); AT2 is the right
 choice for propagation from an existing notch (Borden et al. 2012).
 
-The history field
+For the default hard-history route, the history field
 
 ```{math}
 \mathcal{H}(\mathbf{x}, t) =
@@ -91,16 +96,25 @@ The history field
 \left(\boldsymbol{\varepsilon}(\mathbf{u}(\mathbf{x}, \tau))\right)
 ```
 
-enforces irreversibility (a node
-cannot heal). Combined with the damage-bound constraint
-$d_{\mathrm{new}} \geq d_{\mathrm{old}}$, this gives the monotone crack growth observed in
-experiments.
+makes the crack-driving field nondecreasing. Nodal no-healing is imposed
+separately through the lower bound $d_{n+1}\geq d_n$. The projected-CG route
+maintains this bound through an active set; `post_clamp` instead enforces
+admissibility after an unconstrained solve and is not an active-set solution.
+The authoritative history is elementwise for T3 and quadrature-based for Q4;
+nodal history is a projected field used for output and selected interfaces.
+Optional smooth-history routes alter this update and must be interpreted as
+separate differentiability approximations.
 
 ## Staggered minimisation loop
 
-The coupled equations are solved by alternate minimization. PhAST freezes
-damage while solving mechanics, updates the tensile history field, then freezes
-mechanics while solving damage.
+The supported quasistatic route uses alternate mechanics-damage iterations.
+PhAST freezes damage while solving mechanics, updates the driving history, then
+freezes mechanics while solving damage. Convergence ordinarily assesses both
+displacement and damage changes. Explicit dynamics instead performs one
+segregated pass per time step, with damage solved at the configured cadence; it
+does not use the quasistatic inner convergence test. The joint monolithic
+$(\mathbf{u},d)$ minimizer is an experimental comparison pathway and does not
+provide the projected-CG active-set enforcement described above.
 
 ```{mermaid}
 flowchart TD
@@ -110,12 +124,12 @@ flowchart TD
     D --> E[Freeze u]
     E --> F[Solve damage for d]
     F --> G[Project bounds and irreversibility]
-    G --> H{norm_inf damage update < tolerance?}
+    G --> H{displacement and damage updates satisfy criteria?}
     H -- no --> B
     H -- yes --> I[Advance step and write outputs]
 ```
 
-The stopping criterion is
+One representative damage component of the quasistatic stopping test is
 
 ```{math}
 \| d^{k+1} - d^k \|_{\infty}
@@ -124,9 +138,10 @@ The stopping criterion is
 
 ## Energy splits -- why we don't degrade `psi` directly
 
-If `g(d)` multiplies the *full* strain energy `psi(eps)`, cracks can
-close under compression and develop on the compressive side of a
-bend -- both unphysical. The fix is to split
+If `g(d)` multiplies the full strain energy, compressive energy can drive
+damage and compressive stiffness can be removed from damaged zones. This may
+produce spurious damage or interpenetration. Tension-compression splits mitigate
+that behaviour:
 
 ```{math}
 \psi(\boldsymbol{\varepsilon})
@@ -134,8 +149,8 @@ bend -- both unphysical. The fix is to split
   + \psi^-(\boldsymbol{\varepsilon}),
 ```
 
-where only `psi+` (the "damaging" part) is degraded. PhAST
-implements five splits in `fem_operators.py`:
+For split formulations, only `psi+` is degraded. The `isotropic` option is an
+intentional unsplit exception. PhAST exposes the following routes:
 
 | `energy_split` | What gets degraded | When to use |
 |----------------|--------------------|-------------|
@@ -144,6 +159,7 @@ implements five splits in `fem_operators.py`:
 | `spectral` | tensile principal strains | Curving / branching cracks (Miehe, Welschinger, Hofacker 2010) |
 | `spectral_stress` | tensile principal stresses | Opt-in COMSOL parity; experimental |
 | `star_convex` | tension full / compression deviatoric | Improved convergence, nucleation (Kumar, Francfort, Lopez-Pamies 2020) |
+| `spectral_plane_stress_condensed` | condensed plane-stress spectral contribution | Research comparison; use only with case-specific verification |
 
 `amor` is a safe starting point. `spectral` is what most published
 dynamic-fracture benchmarks use (Borden 2012, Bleyer 2017). For
@@ -165,11 +181,12 @@ splits or plane-stress `amor` for thin PMMA-style dynamic benchmarks.
 | Residual stiffness | `eta_residual` | `1e-7` (default) | Numerical floor on `g(d)`; prevents zero-stiffness rows |
 | `pf_model` | -- | `AT1` or `AT2` | Sets whether nucleation has a threshold |
 
-The mesh size `h` near the crack must satisfy roughly `h <= l0 / 2`
-to resolve the diffuse damage band. If you double `l0`, you can halve
-the element count -- but the apparent fracture toughness changes
-slightly (the `Gc` of the *regularised* model is not exactly `Gc` of
-the sharp-crack model unless the mesh is fine enough).
+The mesh size `h` near the crack should commonly satisfy `h <= l0 / 2`
+to resolve the diffuse damage band. This is a starting resolution criterion,
+not a convergence guarantee. Mesh refinement should vary $h$ at fixed
+$\ell_0$. A separate $\ell_0$ sensitivity study addresses the regularized
+model: changing $\ell_0$ changes crack-band width, nucleation response, and
+computational cost, and is not merely a mesh-coarsening device.
 
 In mathematical form:
 

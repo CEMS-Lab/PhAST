@@ -1,0 +1,39 @@
+name: Question or installation help
+description: Ask for help installing PhAST, running an example, or interpreting documented output.
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for asking. It is acceptable to open this form before diagnosing solver internals.
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      description: Name the documentation page, example, or configuration if applicable.
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command
+      placeholder: python -m phast run examples/.../config.yaml
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include operating system, Python and PyTorch versions, and accelerator if used.
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: PhAST doctor output
+      description: Paste python -m phast doctor output. Remove private paths if necessary.
+      render: shell
+  - type: textarea
+    id: failure
+    attributes:
+      label: First warning or failure
+      description: Include the earliest relevant warning, exception, or unexpected result.
+      render: shell

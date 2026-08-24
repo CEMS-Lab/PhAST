@@ -1,5 +1,47 @@
 # Getting Started
 
+This is the canonical installation and first-run route. The README and tutorial
+index summarize this page rather than defining separate installation contracts.
+
+## Installation Route Selector
+
+PhAST is a Python/PyTorch project. There is no native C++ library or CMake build
+to compile. "Source installation" means installing the Python package from this
+repository.
+
+### Conda
+
+From the repository root:
+
+```bash
+conda env create -f environment.yml
+conda activate phast
+python run_sanitizer.py
+```
+
+The supplied environment is a portable Python 3.11 CPU baseline. PETSc/MUMPS,
+CUDA, AmgX, and site-specific MPI stacks remain optional installations and are
+not implied by this environment.
+
+### CPU Docker image
+
+Docker Desktop or Docker Engine can build the same Linux CPU reference image on
+Linux, macOS, or Windows hosts:
+
+```bash
+docker build -t phast:cpu .
+docker run --rm phast:cpu
+```
+
+The image runs `python run_sanitizer.py` by default. It does not claim CUDA,
+Apple MPS, PETSc/MUMPS, MPI, or host-native performance.
+
+### Editable Python source installation
+
+The virtual-environment commands below install `pip install -e .`. This route is
+appropriate for students changing PhAST source or documentation; no separate
+native compilation step is required.
+
 This guide takes a new user from a source checkout to a validated configuration,
 a small completed simulation, and programmatic result inspection. No optional
 HPC or sparse-direct backend is required for the basic workflow.

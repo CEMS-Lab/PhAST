@@ -1,5 +1,22 @@
 # Verify Install
 
+## Quick single-element sanitizer
+
+From a source checkout, run:
+
+```bash
+python run_sanitizer.py
+```
+
+The sanitizer exercises one T3 element, the fixed-history AT2 damage solve,
+SciPy sparse linear algebra, and headless Matplotlib output. It reports the CPU,
+CUDA, MPS, PETSc, PyAMG, and PyVista availability it observes. Optional backends
+are reported as optional rather than required.
+
+The script is designed to be quick, but two seconds is not a universal
+wall-clock guarantee: Python and PyTorch cold imports vary across operating
+systems and machines. The reported kernel-and-plot time excludes imports.
+
 Use this page after installation, on a new workstation, or after loading a new
 HPC environment. The goal is to confirm that PhAST can import, see the expected
 optional backends, and validate a public configuration before launching a full

@@ -1,0 +1,19 @@
+name: Container smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  cpu-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CPU image
+        run: docker build --tag phast:ci .
+      - name: Run single-element sanitizer
+        run: docker run --rm phast:ci

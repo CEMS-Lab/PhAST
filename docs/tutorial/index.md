@@ -1,5 +1,22 @@
 # Tutorials
 
+## Student Notebook Sequence
+
+1. [SENT setup and two-step CPU workflow check](problem_setup_walkthrough.ipynb)
+   teaches geometry, meshing, named regions, boundary conditions, material,
+   solver selection, and retained outputs. Its default run is not crack-growth
+   validation.
+2. [Mesh-resolution diagnostic](https://github.com/CEMS-Lab/PhAST/blob/main/examples/notebooks/02_mesh_resolution_diagnostic.ipynb)
+   samples an AT2 profile at several $h/\ell_0$ ratios. It is not a solved
+   convergence study.
+3. [Retained Miehe SENT results](https://github.com/CEMS-Lab/PhAST/blob/main/examples/notebooks/03_miehe_retained_results.ipynb)
+   examines checked-in load-displacement and damage evidence and states the
+   current post-processing boundary.
+
+Asymmetric three-point bending and L-shaped panel notebooks are not presented
+as public benchmarks because the current repository does not retain the
+benchmark-specific evidence required to support those claims.
+
 This page is the onboarding map for new PhAST users. Start with the shortest
 validation path, then move to Python authoring, YAML reproduction, and result
 inspection.

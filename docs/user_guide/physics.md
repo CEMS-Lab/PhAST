@@ -32,17 +32,18 @@ $$
 \mathcal{E}(\mathbf{u}, d)
 = \int_{\Omega} g(d) \, \psi^+(\boldsymbol{\varepsilon}(\mathbf{u})) \, d\Omega
   + \int_{\Omega} \psi^-(\boldsymbol{\varepsilon}(\mathbf{u})) \, d\Omega
-  + G_c \int_{\Omega}
+  + \frac{G_c}{4c_w} \int_{\Omega}
     \left[
-      \frac{w(d)}{c_w \ell_0}
-      + \frac{\ell_0}{c_w} \lvert \nabla d \rvert^2
-    \right] d\Omega .
+      \frac{w(d)}{\ell_0}
+      + \ell_0 \lvert \nabla d \rvert^2
+    \right] d\Omega,
+\qquad c_w=\int_0^1\sqrt{w(s)}\,ds.
 $$
 
 The degradation function is
 
 $$
-g(d) = (1-d)^2 + \eta,
+g_\eta(d) = (1-\eta)(1-d)^2 + \eta,
 $$
 
 with a small residual stiffness $\eta$ to avoid singular stiffness rows in
@@ -53,9 +54,18 @@ The equivalent crack surface density is often written separately as
 
 $$
 \gamma(d, \nabla d)
-= \frac{w(d)}{c_w \ell_0}
-  + \frac{\ell_0}{c_w} \lvert \nabla d \rvert^2 .
+= \frac{1}{4c_w}\left[
+    \frac{w(d)}{\ell_0}
+    + \ell_0 \lvert \nabla d \rvert^2
+  \right].
 $$
+
+The displayed expression is the standard split internal energy. Complete
+potential energy also includes external work from prescribed tractions and body
+forces. The current linear AT1/AT2 damage operator retains conventional
+$\eta$-independent driving coefficients; the small $\eta$ is therefore treated
+as a mechanics regularization rather than an exactly consistent term in that
+damage operator.
 
 ## Governing Equations
 
@@ -101,6 +111,10 @@ $$
 \left(\boldsymbol{\varepsilon}(\mathbf{u}(\mathbf{x}, \tau))\right).
 $$
 
+This is the default hard-history update. Optional smooth-history routes are
+separate differentiability approximations rather than the same discrete
+irreversibility mechanism.
+
 The natural phase-field boundary condition is
 
 $$
@@ -123,7 +137,7 @@ The regularization choice enters through $w(d)$ and $c_w$:
 
 | Model | $w(d)$ | $c_w$ | Consequence |
 |---|---:|---:|---|
-| AT1 | $d$ | $8/3$ | Has an elastic threshold before damage nucleation. |
+| AT1 | $d$ | $2/3$ | Has an elastic threshold before damage nucleation. |
 | AT2 | $d^2$ | $1/2$ | Smooth damage response; commonly used for pre-cracked propagation. |
 
 ```{figure} ../_static/at_dissipation.svg
@@ -149,7 +163,8 @@ not equivalent to the active-set solve.
 
 ## Energy Splits
 
-Damage should not degrade compressive strain energy. PhAST therefore splits
+An unsplit degradation can allow compressive energy to drive damage and can
+remove compressive stiffness in damaged zones. PhAST therefore offers splits of
 the elastic energy into tensile and compressive parts:
 
 $$
@@ -158,7 +173,8 @@ $$
   + \psi^-(\boldsymbol{\varepsilon}),
 $$
 
-and applies $g(d)$ only to $\psi^+$. The public configuration key is
+and applies $g(d)$ only to $\psi^+$ for split formulations. The `isotropic`
+route is the intentional unsplit exception. The public configuration key is
 `material.overrides.energy_split`.
 
 | `energy_split` | Degraded energy | Typical use |
@@ -168,6 +184,7 @@ and applies $g(d)$ only to $\psi^+$. The public configuration key is
 | `spectral` | tensile principal-strain contribution | Miehe-style crack turning and branching. |
 | `spectral_stress` | tensile principal-stress contribution | Opt-in parity studies. |
 | `star_convex` | tensile full energy with compressive deviatoric treatment | Nucleation and convergence studies. |
+| `spectral_plane_stress_condensed` | condensed plane-stress spectral contribution | Research comparison requiring case-specific verification. |
 
 The distinction is visible in bending, impact, and branching examples, where
 compressive regions should not create artificial damage. The public dynamic
@@ -218,9 +235,12 @@ plane-stress settings and an Amor-style split.
 
 ## Staggered Solver Loop
 
-The coupled fracture problem is solved by alternate minimization: freeze the
-damage field, solve mechanics, then freeze mechanics and solve damage. The
-iteration stops when the damage update is sufficiently small.
+The supported quasistatic fracture route uses alternate mechanics-damage
+iterations. Convergence ordinarily assesses both displacement and damage
+changes. Explicit dynamics performs one segregated pass per time step and
+solves damage at the configured cadence without a quasistatic inner stagger
+test. The joint monolithic $(\mathbf{u},d)$ route is experimental and does not
+use projected-CG active-set enforcement.
 
 ```{mermaid}
 flowchart TD
@@ -230,13 +250,13 @@ flowchart TD
     D --> E[Freeze displacement u]
     E --> F[Solve damage equation for d]
     F --> G[Apply irreversibility and bounds]
-    G --> H{norm_inf(d_new - d_old) < tolerance?}
+    G --> H{displacement and damage criteria satisfied?}
     H -- no --> B
     H -- yes --> I[Store fields, histories, and visuals]
     I --> J[Advance to next step]
 ```
 
-In notation, the convergence check is
+One representative damage component of the convergence check is
 
 $$
 \lVert d^{k+1} - d^k \rVert_{\infty} < \varepsilon_{\mathrm{stag}},
@@ -308,6 +328,10 @@ $$
 
 near the expected crack path, with local refinement around notches, holes, or
 branching regions.
+
+This criterion is not a convergence guarantee. Refine $h$ at fixed $\ell_0$
+when assessing discretization error, and study $\ell_0$ separately because it
+changes the regularized fracture model.
 
 ## References
 

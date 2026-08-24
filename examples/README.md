@@ -125,7 +125,6 @@ outputs, and validation notes are added.
 | `--output_dir DIR` | Write results to a custom directory. |
 | `--plots` | Generate PNG figures when supported. |
 | `--gif` | Generate an animated GIF when supported. |
-| `--vtu` | Write VTU snapshots for ParaView. |
 | `--trajectory --trajectory-format zarr` | Write a Zarr trajectory store for inspection or reuse. |
 | `--device cpu/cuda` | Select the compute device. |
 

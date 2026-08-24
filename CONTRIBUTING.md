@@ -33,7 +33,9 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
 
 - **Type Hinting**: All new Python functions must use strict type hints.
 - **Device Safety**: Ensure tensor operations are device-agnostic (`cpu`/`cuda`).
-- **Autograd Compatibility**: All new physics kernels must remain fully differentiable and support PyTorch's `autograd`.
+- **Autograd Compatibility**: Preserve and document autograd compatibility for
+  supported smooth tensor pathways. Identify nonsmooth history updates,
+  projections, bounds, active sets, and external sparse-backend boundaries.
 
 ## 3. Pull Request Lifecycle
 
@@ -51,6 +53,7 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
 Run the narrowest relevant checks before opening a pull request:
 
 ```bash
+python -m pytest -q tests
 PYTHONPATH=src python -m phast doctor
 sphinx-build -W -b html docs docs/_build/html
 ```
