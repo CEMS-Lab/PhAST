@@ -24,8 +24,8 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 | Small-strain 2D linear elasticity | Supported | Exercised through the core mechanics kernels and documented static and quasi-static examples. |
 | Brittle phase-field fracture, AT2 | Supported | Available for explicit dynamics and staggered quasi-static/static solves within the documented examples. |
 | Brittle phase-field fracture, AT1 | Beta | Supported via projected damage solves and AT1 threshold fields; benchmark coverage is expanding. |
-| Heterogeneous elastic fields `E(x)` | Supported | Per-element fields support structural inclusions and weak/strong bands in documented forward studies. |
-| Heterogeneous fracture fields `Gc(x)` | Supported | Per-element fields support weak zones and microstructure-style morphology studies in forward simulations. |
+| Heterogeneous elastic fields `E(x)` | Supported programmatic path | Per-element fields support structural inclusions and weak/strong bands. The element ordering and low-level authoring route are demonstrated in the [heterogeneous-fields teaching example](https://github.com/CEMS-Lab/PhAST/tree/main/examples/heterogeneous_fields); arbitrary field maps are not currently a general YAML feature. |
+| Heterogeneous fracture fields `Gc(x)` | Supported programmatic path | Per-element fields support weak zones and microstructure-style forward studies through the same [heterogeneous-fields teaching example](https://github.com/CEMS-Lab/PhAST/tree/main/examples/heterogeneous_fields). The example is not a coupled benchmark or material-calibration claim. |
 | Diffuse interface fracture | Beta | Solver-driven weak-interface deflection and strong-interface penetration examples use spatial `E(x)`/`Gc(x)` fields plus AT2 damage solves; discrete cohesive and PF-CZM calibration remain separate. |
 | Plane strain | Supported | Default 2D constitutive setting. |
 | Plane stress | Beta | Available via `material.plane_stress`; formal benchmark coverage is narrower than plane strain. |

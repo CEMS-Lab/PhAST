@@ -17,6 +17,13 @@ python examples/solid_mechanics_beta/linear_plate/run_fluent.py
 
 Use `--output_dir <path>` with `python -m phast run` for local reruns that should not overwrite the reference outputs.
 
+The expected finite-element tip displacement is approximately `-2.024e-06 m`,
+with a documented `-14.98%` difference from the Euler-Bernoulli estimate. A
+newcomer smoke run should reproduce these recorded values to normal floating-
+point tolerance. This comparison is an onboarding regression target, not a
+general finite-element accuracy criterion. The example writes field plots but
+does not retain reloadable displacement or stress arrays in Zarr/HDF5.
+
 ## How The YAML Is Used
 
 `mesh` defines the structured rectangular grid, `material` defines the linear elastic constants, and `loading.tip_force_y` defines the applied tip load. The workflow lowers those blocks to the solid-mechanics example runner, which assembles the CST system, solves the sparse linear problem, writes field plots, and records the response history.

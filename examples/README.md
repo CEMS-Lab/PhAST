@@ -1,7 +1,7 @@
 # PhAST Examples Gallery
 
 This directory contains the runnable PhAST examples grouped by physics family:
-dynamic fracture, quasi-static fracture, solid mechanics, beta
+dynamic fracture, quasi-static fracture, solid mechanics, heterogeneous-field teaching, beta
 plasticity/interface workflows, and a documentation-only location for possible
 future inverse-analysis
 examples. Each public example is kept compact so that a new user can inspect
@@ -72,6 +72,21 @@ python examples/solid_mechanics_beta/neohookean_plate/run_fluent.py
 python examples/solid_mechanics_beta/j2_bar/run_fluent.py
 ```
 
+## Heterogeneous Material Fields
+
+[`heterogeneous_fields/`](heterogeneous_fields/) is a script-contract teaching
+example for element-ordered `E(x)` and `Gc(x)` arrays. It is intentionally not a
+general YAML workflow:
+
+```bash
+python examples/heterogeneous_fields/run.py \
+  --config examples/heterogeneous_fields/parameters.yaml \
+  --output-dir runs/heterogeneous_fields
+```
+
+The example solves a bounded AT2 damage subproblem under an imposed affine
+strain field. It does not claim coupled microstructure-fracture validation.
+
 ## Beta Plasticity And Interface
 
 All folders and validation bundles under `examples/plasticity_interface_beta/`
@@ -106,7 +121,7 @@ outputs, and validation notes are added.
 
 | Flag | Output |
 | :--- | :--- |
-| `--validate-only` | Check the YAML configuration without launching the solve. |
+| `--validate-only` | Check YAML schema and semantic consistency without launching the solve; not scientific or mesh-convergence validation. |
 | `--output_dir DIR` | Write results to a custom directory. |
 | `--plots` | Generate PNG figures when supported. |
 | `--gif` | Generate an animated GIF when supported. |
@@ -119,7 +134,7 @@ outputs, and validation notes are added.
 Public example folders are intentionally compact. Typical files include:
 
 - `README.md` with the physics, commands, and result summary.
-- `config.yaml` for YAML-first examples.
+- `config.yaml` for YAML-first examples, or a clearly labelled parameter file and entry-point script for script-contract examples.
 - `run_fluent.py` when an equivalent Python setup is provided.
 - `mesh.geo` for mesh-based examples when a Gmsh recipe is available.
 - `initial_conditions.png`, final field plots, response plots, and lightweight animations.

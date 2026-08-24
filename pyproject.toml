@@ -11,7 +11,7 @@ authors = [
 description = "Matrix-free PyTorch finite-element solver for phase-field fracture"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 keywords = ["phase-field", "fracture", "fem", "pytorch", "autograd", "scientific-computing"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -21,6 +21,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Intended Audience :: Science/Research",
@@ -94,6 +95,7 @@ dev = [
     "sphinx-autodoc-typehints<2.0",
     "myst-parser<4.0",
     "sphinx-copybutton>=0.5",
+    "sphinxcontrib-mermaid>=2.0",
 ]
 # Zarr is part of the core install because new trajectory and dataset
 # workflows are Zarr-first. This extra is kept as a stable install alias.

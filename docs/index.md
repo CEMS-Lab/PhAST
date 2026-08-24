@@ -64,8 +64,9 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
   </div>
   <div class="phast-card">
     <h3>Public benchmark bundles</h3>
-    <p>Public examples include YAML inputs, setup figures, final fields, response
-    histories, manifests, and compact animations.</p>
+    <p>Public examples include YAML inputs, setup figures, final field plots,
+    response histories, manifests, and compact animations. Reloadable numerical
+    fields require a retained trajectory store.</p>
     <p><a href="example-gallery.html">Example gallery</a></p>
   </div>
   <div class="phast-card">
@@ -96,6 +97,7 @@ If you are new to PhAST, we recommend following this path:
 3. **Run a compact installation check:** Execute `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate`.
 4. **Understand the API:** Read the [Python API](user_guide/python_api.md) to understand how the models are defined.
 5. **Check Capabilities:** Review the [Capability Matrix](user_guide/capability_matrix.md) to ensure your target problem is supported.
+6. **Introduce heterogeneity carefully:** Use the [Heterogeneous Material Fields](tutorial/05_heterogeneous_material_fields.md) teaching example before constructing elementwise material maps.
 
 ## Which Path Should I Use?
 
@@ -132,6 +134,7 @@ tutorial/01_phase_field_primer
 tutorial/02_visual_glossary
 tutorial/03_modular_fem_and_learned_damage
 tutorial/04_exploration_experiments
+tutorial/05_heterogeneous_material_fields
 user_guide/capability_matrix
 ```
 

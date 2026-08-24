@@ -1,0 +1,20 @@
+[
+  {
+    "file": "material_fields.png",
+    "size_bytes": 44774,
+    "visual_scope": "heterogeneous_fields_teaching",
+    "artifact_type": "image",
+    "width_px": 1440,
+    "height_px": 608,
+    "review_dimension_passed": true
+  },
+  {
+    "file": "damage_final.png",
+    "size_bytes": 37635,
+    "visual_scope": "heterogeneous_fields_teaching",
+    "artifact_type": "image",
+    "width_px": 960,
+    "height_px": 576,
+    "review_dimension_passed": true
+  }
+]

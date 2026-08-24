@@ -1,0 +1,32 @@
+schema_version: 1
+example_type: script_contract
+problem:
+  name: Elementwise E(x) and Gc(x) AT2 teaching problem
+  capability_boundary: Imposed-strain damage subproblem; not a coupled benchmark
+mesh:
+  nx: 24
+  ny: 12
+  length: 2.0
+  height: 1.0
+material:
+  E: 1000.0
+  nu: 0.25
+  Gc: 1.0
+  l0: 0.08
+  energy_split: amor
+  plane_stress: true
+heterogeneity:
+  soft_inclusion:
+    center: [0.65, 0.5]
+    radius: 0.20
+    E_ratio: 0.45
+  weak_band:
+    x_center: 1.35
+    width: 0.18
+    Gc_ratio: 0.35
+loading:
+  strain_yy: 0.08
+solver:
+  tolerance: 1.0e-8
+  max_iterations: 500
+  bounds_method: projected_cg

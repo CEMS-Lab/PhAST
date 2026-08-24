@@ -13,6 +13,15 @@ All public-facing artifacts for this example stay directly in this folder. Full 
 
 The YAML configuration is the primary public input for this example. The reference evidence was produced in the reference environment with a single A100 80 GB GPU; the mesh-3 run metadata records 35,487 nodes, 70,447 elements, 11,775 explicit steps, and 79.22 s wall time. Do not regenerate this full benchmark during lightweight contract checks.
 
+The retained crack-region size is `h_crack = 0.25 mm` and the phase-field
+length is `l0 = 0.195 mm`, giving `h_crack/l0` approximately `1.28`. This is
+coarser than the general `h <= l0/2` newcomer guideline. The
+`mesh_l0_resolution` warning is suppressed only because this deck records the
+specific retained mesh-3 reference calculation and its checked-in evidence.
+Here, `acceptance.status: validated` means that the retained case-specific
+reference evidence was accepted; it is not a general mesh-convergence claim.
+New studies should perform their own mesh and length-scale assessment.
+
 
 ## Run The YAML Configuration
 
@@ -23,6 +32,9 @@ python -m pip install -e .
 python -m phast doctor
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
 ```
+
+This command validates configuration structure and semantics only. It does not
+rerun or scientifically revalidate the retained Kalthoff-Winkler result.
 
 Run the full YAML configuration only when you intend to regenerate the dynamic result bundle:
 

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "example": "heterogeneous_fields.elementwise_E_Gc_AT2",
+  "python": "3.11.15",
+  "pytorch": "2.13.0",
+  "device": "cpu",
+  "dtype": "float64",
+  "runtime_seconds": 0.3265944169834256
+}

@@ -17,6 +17,7 @@ archives. They point to the same workflows listed in the sections that follow.
 | Notched-holed plate | Supported | YAML-first | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | final damage, response CSVs, comparison report, visual manifest | `phast.load_result("runs/notched_holed_plate")` |
 | Linear plate | Supported | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` |
 | Kalthoff-Winkler | Supported | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` |
+| Heterogeneous fields | Teaching example | Script contract | `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields` | elementwise `E`/`Gc` CSV, nodal damage CSV, field plots, manifests | `phast.load_result("runs/heterogeneous_fields")` |
 
 Use the [capability matrix](user_guide/capability_matrix.md) before assuming a
 workflow status. Use the
@@ -96,6 +97,18 @@ The quasi-static family provides documented pathways for selected literature com
   Mesh-level J2 plasticity bar FEA with von Mises and equivalent-plastic-strain
   fields.
 
+### Heterogeneous material fields
+
+- `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields`
+  constructs element-ordered `E(x)` and `Gc(x)` fields, evaluates a
+  mechanics-derived tensile history under an imposed affine strain, and solves
+  bounded AT2 damage.
+- This is a script-contract teaching example because arbitrary material-field
+  maps are not currently represented by the general YAML runner.
+- It is not a coupled equilibrium benchmark, cohesive interface model, or
+  validated microstructure-fracture study. See the example README before
+  adapting image or segmentation data.
+
 ### Beta plasticity, cohesive, and PF-CZM validation
 
 - **J2 plasticity and ductile PF-plasticity**:
@@ -121,7 +134,8 @@ the folder also contains the README, setup image, result visuals, and
 postprocessing scripts expected by the public example contract.
 
 Use `python -m phast run <config.yaml> --validate-only` to parse and
-schema-check a benchmark without running the solve. The full YAML schema is
+schema-check a benchmark without running the solve. This is configuration
+validation, not scientific or mesh-convergence validation. The full YAML schema is
 documented in `configs/REFERENCE.yaml`.
 
 ### Quasi-static Benchmarks

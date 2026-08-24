@@ -17,6 +17,7 @@ Launch the step-by-step problem setup notebook in Colab:
 | [Python API](../user_guide/python_api.md) | 10-15 min | Author a model with `phast.Problem` and understand the fluent method map. |
 | [Visual glossary](02_visual_glossary.md) | 10 min | Read the picture-first guide to AT1/AT2, energy splits, and `l0`. |
 | [Modular FEM and learned damage](03_modular_fem_and_learned_damage.md) | 20 min | Assemble geometry, material, boundary conditions, fracture choices, solver routes, and an audited learned-damage plug-in. |
+| [Heterogeneous material fields](05_heterogeneous_material_fields.md) | 15 min | Define element-ordered `E(x)` and `Gc(x)` arrays and solve a bounded AT2 damage teaching problem. |
 | [YAML workflow](../user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
 | [Example gallery](../example-gallery.md) | 5 min | Choose a runnable dynamic, quasi-static, or solid-mechanics example. |
 | [Public API reference](../user_guide/public_api_reference.md) | 5 min | Read metadata, histories, visuals, and stored trajectory fields. |
@@ -31,7 +32,9 @@ Launch the step-by-step problem setup notebook in Colab:
 6. Read the [visual glossary](02_visual_glossary.md) if the terminology feels abstract.
 7. Read [Modular FEM and learned damage](03_modular_fem_and_learned_damage.md)
    before introducing a learned damage proposal.
-8. Move durable studies into a YAML configuration when you need reproducibility or HPC
+8. Run [Heterogeneous material fields](05_heterogeneous_material_fields.md)
+   before adapting a segmented or multiphase material map.
+9. Move durable studies into a YAML configuration when you need reproducibility or HPC
    submission.
 
 Users coming from Abaqus, COMSOL, FEniCS, or deal.II should read
@@ -47,6 +50,7 @@ databases to the PhAST fluent API and YAML configuration structure.
 | Dynamic crack branching | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only` | Crack-branching comparison package and visual summaries. |
 | Quasi-static fracture | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | Final damage, response histories, comparison artifacts, and result manifests. |
 | Solid mechanics | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | Displacement/stress plots, response history, and metadata. |
+| Heterogeneous AT2 teaching problem | `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields` | Elementwise material CSV, nodal damage CSV, field plots, metadata, and manifests. |
 
 The example gallery lists the current public examples and their expected
 artifacts. Longer or beta validation workflows are summarized in the capability

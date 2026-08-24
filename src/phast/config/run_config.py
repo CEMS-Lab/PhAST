@@ -250,11 +250,16 @@ def main():
         run_solid_mechanics_config,
     )
     if is_solid_mechanics_config(args.config):
-        raise SystemExit(run_solid_mechanics_config(
-            args.config,
-            output_dir=args.output_dir,
-            validate_only=args.validate_only,
-        ))
+        try:
+            code = run_solid_mechanics_config(
+                args.config,
+                output_dir=args.output_dir,
+                validate_only=args.validate_only,
+            )
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            sys.exit(2)
+        raise SystemExit(code)
 
     # Schema validation (issue #150). Runs before the main loader so the
     # user sees a line-numbered error block instead of a deep KeyError.

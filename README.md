@@ -55,7 +55,7 @@ controls, and requested outputs in one reviewable file.
   with PyTorch autograd where documented, enabling carefully interpreted
   sensitivity studies.
 - **Phase-Field Fracture Focus:** Dynamic impact, crack branching, and quasi-static fracture workflows share a consistent mechanics/damage formulation and output schema.
-- **Public Benchmark Bundles:** Public examples provide `config.yaml`, setup figures, final fields, response histories, manifests, and compact animations.
+- **Public Benchmark Bundles:** Public examples provide `config.yaml`, setup figures, final field plots, response histories, manifests, and compact animations. Numerical fields are reloadable only when the result bundle retains a trajectory store.
 - **YAML Plus Fluent API:** Use declarative YAML for reproducible runs and `phast.Problem` for programmatic model authoring.
 - **Standardized Post-Processing:** `phast.load_result` handles stored manifests, CSV histories, visuals, and retained trajectory fields.
 
@@ -89,7 +89,7 @@ If you are new to PhAST, follow this sequence:
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
 cd PhAST
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
@@ -97,11 +97,18 @@ python -m pip install -e .
 python -m phast doctor
 ```
 
+PhAST currently supports Python 3.10-3.12; Python 3.11 is recommended for a
+first source installation.
+
 Validate a public fracture configuration without launching a full solve:
 
 ```bash
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
 ```
+
+`--validate-only` checks the schema and semantic consistency of the input. It
+does not run the solver or establish mesh convergence, benchmark reproduction,
+or physical validity.
 
 Expected validation output:
 
@@ -175,6 +182,7 @@ Browse the full [example gallery](docs/example-gallery.md) for the complete list
 | Review supported physics | Capability matrix | [Capability Matrix](docs/user_guide/capability_matrix.md) |
 | Learn step-by-step setup | Tutorial notebook | [Problem Setup Walkthrough](docs/tutorial/problem_setup_walkthrough.ipynb) |
 | Add an audited learned damage model | Predictor plug-in protocol | [Modular FEM and Learned Damage](docs/tutorial/03_modular_fem_and_learned_damage.md) |
+| Learn elementwise `E(x)` and `Gc(x)` fields | Script-contract teaching example | [Heterogeneous Material Fields](docs/tutorial/05_heterogeneous_material_fields.md) |
 | Diagnose failed runs | Troubleshooting guide | [Troubleshooting](docs/troubleshooting.md) |
 
 ### Programmatic Authoring

@@ -6,6 +6,9 @@ problem:
 
 acceptance:
   status: validated
+  # Case-specific retained mesh-3 evidence. h_crack/l0 is approximately 1.28,
+  # so this suppresses a general resolution warning rather than asserting mesh
+  # convergence. See README.md before adapting this deck to a new study.
   suppress_warnings:
   - mesh_l0_resolution
 

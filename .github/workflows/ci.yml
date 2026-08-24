@@ -28,7 +28,7 @@ jobs:
       - name: Install package and test dependencies
         run: python -m pip install -e ".[dev]"
 
-      - name: Run focused public tests
+      - name: Run public unit and onboarding tests
         run: python -m pytest -q tests
 
       - name: Report selected solver route
@@ -39,3 +39,25 @@ jobs:
         run: |
           python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
           python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --validate-only
+
+  supported-python-range:
+    name: Python ${{ matrix.python-version }} / Ubuntu
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package and test dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Run public unit and onboarding tests
+        run: python -m pytest -q tests

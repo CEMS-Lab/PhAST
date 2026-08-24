@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "example": "heterogeneous_fields.elementwise_E_Gc_AT2",
+  "capability_boundary": "imposed-strain AT2 damage subproblem; not a coupled benchmark",
+  "element_order": "row e of mesh.elements corresponds to E_field[e] and Gc_field[e]",
+  "n_nodes": 325,
+  "n_elements": 576,
+  "E_min": 450.0,
+  "E_max": 1000.0,
+  "Gc_min": 0.35,
+  "Gc_max": 1.0,
+  "damage_min": 0.20841767320066681,
+  "damage_max": 0.5421506864108574,
+  "damage_iterations": 20,
+  "damage_converged": true,
+  "elapsed_seconds": 0.3265944169834256
+}

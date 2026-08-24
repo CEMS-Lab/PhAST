@@ -6,7 +6,8 @@ HPC or sparse-direct backend is required for the basic workflow.
 
 ## 1. Prerequisites
 
-PhAST requires Python 3.10 or later and Git. The base installation obtains
+PhAST currently supports Python 3.10-3.12 and requires Git. Python 3.11 is
+recommended for a first installation. The base installation obtains
 PyTorch, NumPy, SciPy, Gmsh, meshio, Matplotlib, YAML support, and the standard
 result-storage dependencies from `pyproject.toml`.
 
@@ -21,7 +22,7 @@ On Linux or macOS:
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
 cd PhAST
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
@@ -40,6 +41,10 @@ python -m pip install -e .
 
 An editable installation is appropriate for a source repository: changes made
 under `src/phast/` are immediately available in the active environment.
+
+Before creating the environment, check `python3.11 --version` (or the selected
+Python 3.10-3.12 interpreter). Do not rely on an unqualified `python3` when it
+selects a newer, untested interpreter.
 
 ## 3. Verify The Environment
 
@@ -65,6 +70,12 @@ Expected output:
 ```text
 OK: examples/dynamic/B2_kalthoff_winkler/config.yaml passes schema validation.
 ```
+
+This message means that the YAML satisfies the schema and the implemented
+semantic preflight checks. It does not run a fracture solve and does not prove
+mesh convergence, benchmark reproduction, or physical validity. Review the
+example README, `explain-config` warnings, retained comparison evidence, and
+mesh-to-length-scale ratio before making a scientific claim.
 
 For a readable summary of the model before execution:
 
@@ -104,7 +115,12 @@ python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
 
 The example is a supporting solid-mechanics check rather than a phase-field
 fracture validation case. It is used here because it provides a compact first
-execution.
+execution. It writes response data, metadata, manifests, and field plots; it
+does not retain reloadable displacement or stress arrays in a trajectory store.
+The expected finite-element tip displacement is approximately
+`-2.024e-6 m`, about `-14.98%` relative to the documented Euler-Bernoulli
+estimate. Reproducing that recorded value indicates that the compact example
+followed its expected route; it is not a general accuracy criterion.
 
 Inspect the completed result without rerunning the solver:
 
