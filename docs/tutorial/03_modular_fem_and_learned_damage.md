@@ -4,6 +4,14 @@ This tutorial describes how the main components of a phase-field fracture
 problem fit together in PhAST. It also introduces the experimental
 learned-damage plug-in without assuming prior knowledge of the codebase.
 
+| Lesson item | Scope |
+|---|---|
+| Prerequisites | Complete the installation checks and read the phase-field primer. |
+| Classical route | Quasi-static staggered phase-field fracture through a checked-in YAML configuration. |
+| Experimental route | A user-supplied learned proposal or replacement for the damage subproblem only. |
+| Hardware | CPU is sufficient for configuration inspection and the bounded example route. |
+| Verification | Inspect the selected route, result manifest, convergence history, and learned acceptance/fallback telemetry. |
+
 ## 1. The finite-element problem
 
 A runnable problem combines:
@@ -36,64 +44,22 @@ parameters. Although the material layer contains additional degradation
 functions, PhAST does not present cubic or rational degradation as supported
 coupled AT1/AT2 damage solves.
 
-## 3. Define a classical problem
+## 3. Begin from a complete classical problem
 
-This fragment illustrates the responsibilities. Start from a complete example
-because mesh and physical-group names are geometry-specific.
-
-```yaml
-schema_version: 1
-
-problem:
-  name: introductory_fracture_problem
-
-geometry:
-  mesh_path: meshes/specimen.msh
-
-material:
-  E: 210000.0
-  nu: 0.30
-  rho: 7.8e-9
-  Gc: 2.7
-  l0: 0.02
-  pf_model: AT2
-  degradation_type: standard
-  energy_split: spectral
-
-boundary_conditions:
-  - type: fix
-    nodes: bottom
-    component: 0
-    value: 0.0
-  - type: fix
-    nodes: bottom
-    component: 1
-    value: 0.0
-
-loading:
-  protocol: simple
-  num_steps: 100
-
-solver:
-  solver_type: quasi_static
-  backend: auto
-  damage_update: classical
-
-device:
-  device: null
-
-output:
-  print_every: 10
-  trajectory: true
-```
-
-Validate and run a complete configuration:
+Mesh groups, loading controls, and output requests are geometry-specific. Use
+the checked-in Miehe tension configuration rather than a fragment containing
+placeholder paths:
 
 ```bash
-python -m phast run path/to/problem.yaml --validate-only
-python -m phast run path/to/problem.yaml \
-  --output_dir runs/introductory_fracture_problem
+python -m phast explain-config examples/quasistatic/miehe_tension/config.yaml
+python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-only
+python -m phast run examples/quasistatic/miehe_tension/config.yaml \
+  --num_steps 5 --output_dir runs/miehe_tension_five_step
 ```
+
+The five-step calculation is a bounded workflow exercise, not a crack-growth
+validation result. Read the example README before undertaking the full
+calculation; it records the retained runtime and evidence boundary.
 
 ## 4. How automatic route selection works
 
@@ -111,6 +77,10 @@ python -m phast doctor
 ```
 
 ## 5. Use a learned model as a proposal
+
+PhAST does not distribute a generally applicable trained damage checkpoint.
+The following block documents the plug-in contract and is not independently
+runnable until the user supplies a compatible factory and checkpoint.
 
 ```yaml
 solver:
@@ -148,6 +118,10 @@ solve. The converged classical update remains authoritative.
 
 ## 6. Experimental learned replacement
 
+This mode still replaces only the damage-subproblem update. Mechanics, history
+construction, constraints, audit checks, and the classical fallback remain
+part of the PhAST workflow.
+
 ```yaml
 solver:
   damage_update: learned_replacement
@@ -184,3 +158,7 @@ The plug-in is architecture-neutral. Students and developers are invited to
 propose adapters, tutorials, and audited examples. If an installation step,
 configuration field, or solver message is unclear, open a GitHub issue with
 the configuration, environment report, and minimal reproduction.
+
+Continue with [Heterogeneous material fields](05_heterogeneous_material_fields.md)
+for an element-ordered material-field teaching problem, or return to the
+[example gallery](../example-gallery.md) for complete classical workflows.

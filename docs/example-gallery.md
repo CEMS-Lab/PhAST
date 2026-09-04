@@ -4,6 +4,18 @@ This section maps core solver capabilities to runnable workflows in the
 repository, so users can quickly see the public examples that are supported
 today.
 
+## How examples are classified
+
+| Label | Meaning |
+|---|---|
+| **Runnable solve** | The checked-in input has a documented execution route and produces the stated output bundle. |
+| **Validate-only** | The command checks configuration structure and implemented-option constraints; it does not solve the problem. |
+| **Template or manifest** | The file documents fields or records artifacts and is not itself a solver input. |
+| **Retained evidence** | Checked-in results may be inspected without implying that a new calculation was executed. |
+
+Each example-local README is authoritative for its exact command, runtime,
+outputs, limitations, and evidence boundary.
+
 ## Representative results
 
 The panels below are lightweight documentation thumbnails, not raw benchmark

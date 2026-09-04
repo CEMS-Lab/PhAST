@@ -51,6 +51,11 @@ regularization; its conventional linear AT1/AT2 damage operator retains the
 $\eta$-independent driving coefficients. Other degradation families have
 separate capability boundaries and should not be inferred from this equation.
 
+With this convention, the AT1 weak form uses $3G_c\ell_0/4$ for the gradient
+term and $2\mathcal{H}-3G_c/(8\ell_0)$ for the damage source. Thus the
+corresponding zero-damage threshold is $\mathcal{H}_{c,0}=3G_c/(16\ell_0)$;
+these are two forms of the same normalization, not separate AT1 constants.
+
 ## AT1 vs AT2
 
 The two standard regularisations differ in `w(d)` and `c_w`:
@@ -100,8 +105,10 @@ makes the crack-driving field nondecreasing. Nodal no-healing is imposed
 separately through the lower bound $d_{n+1}\geq d_n$. The projected-CG route
 maintains this bound through an active set; `post_clamp` instead enforces
 admissibility after an unconstrained solve and is not an active-set solution.
-The authoritative history is elementwise for T3 and quadrature-based for Q4;
-nodal history is a projected field used for output and selected interfaces.
+The authoritative history is elementwise for T3. The native Q4 route is a beta
+capability limited to isotropic mechanics with AT2 damage; where that route is
+used, its history is quadrature-based. Nodal history is a projected field used
+for output and selected interfaces.
 Optional smooth-history routes alter this update and must be interpreted as
 separate differentiability approximations.
 

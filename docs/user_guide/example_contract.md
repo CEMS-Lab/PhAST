@@ -1,3 +1,11 @@
+# Example inputs and outputs
+
+This page defines the public contract for example inputs and retained outputs.
+It is a curation reference rather than a beginner tutorial. Start with the
+[example gallery](../example-gallery.md) or [Getting started](../getting-started.md)
+if you are learning the workflow. Maintainer-only selection and release
+guidance is in [Example curation](../maintainer/example_curation.md).
+
 # Curated example contract
 
 This is the example contract for curated PhAST example folders. Link to
@@ -107,7 +115,7 @@ Every curated example `README.md` must contain:
 - result-inspection snippet using `phast.load_result(path)`.
 
 The README should say what the example demonstrates and what it does not
-demonstrate. Do not describe a beta workflow as a production solver path. Do
+demonstrate. Do not describe a beta workflow as a validated solver path. Do
 not imply that a qualitative crack image is a benchmark validation unless the
 comparison report and pass/fail metrics are present.
 
@@ -345,8 +353,12 @@ visuals = result.visuals()
 
 if result.has_field("damage"):
     damage = result.field("damage", step=-1)
-    result.plot("damage", step=-1)
+    print(damage.shape, damage.min(), damage.max())
 ```
+
+`Result.plot()` is not part of the current public result interface. Use stored
+visual artifacts, the documented post-processing command, or an explicit
+Matplotlib/PyVista workflow.
 
 Use `phast.load_result(path)` for existing result folders. Do not require users
 to rerun the solver just to inspect metadata, histories, visuals, or stored
@@ -447,13 +459,14 @@ All links should point back to this page for the full contract.
 
 Use precise labels:
 
-- "production" for tested public-facing workflows;
+- "production" only where an established example contract uses that literal
+  metadata value; the label is not, by itself, evidence of validation;
 - "beta" for useful but capability-limited workflows;
 - "diagnostic" for numerical-method evidence;
 - "scaffold" for API or config surfaces that exist but are not validated.
 
 Avoid broad claims such as "general fracture solver", "validated for all
-geometries", or "GPU production path" unless the relevant benchmark,
+geometries", or "validated GPU performance" unless the relevant benchmark,
 comparison, and performance evidence exists.
 
 ## Tests and drift checks

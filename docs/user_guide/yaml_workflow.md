@@ -15,7 +15,9 @@ contract without reinterpreting interactive Python state.
 ## Configuration Scope
 
 A declarative YAML configuration explicitly defines:
-- **Geometry**: Built-in primitives or paths to external meshes.
+- **Geometry**: Built-in generators or paths to external meshes. The
+  declarative primitive DSL is a beta capability with limited supported
+  combinations; it is not an arbitrary geometry compiler.
 - **Constitutive Models**: Material definitions, physics presets, and specific parameters.
 - **Boundary Conditions**: Kinematic constraints and loading protocols.
 - **Solver Execution**: Mathematical backend, temporal discretization, tolerances, and hardware device.
@@ -26,7 +28,7 @@ A declarative YAML configuration explicitly defines:
 PhAST provides three primary CLI entry points for interacting with YAML configurations:
 
 ```bash
-# 1. Validate schema constraints and semantic logic without solving
+# 1. Validate schema and workflow-contract constraints only; do not solve
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
 
 # 2. Inspect the parsed configuration graph and hardware placement
@@ -36,7 +38,10 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate
 ```
 
-For batch processing and HPC environments, this identical sequence ensures configurations are mathematically valid on the head node before consuming cluster compute resources.
+`--validate-only` parses the YAML and applies the available schema/workflow
+checks, then exits before configuration resolution, factory imports, checkpoint
+loading, mesh generation, or solving. It is a preflight check, not runtime,
+mathematical, or scientific validation.
 
 This matters because the same configuration file can be shared across local
 development, continuous integration, and HPC submission workflows without
@@ -98,7 +103,11 @@ artifacts. They are not interchangeable with a single fracture `config.yaml`.
 
 ## External Meshes and Provenance
 
-For built-in examples, structural geometry can be declared directly in YAML and PhAST will generate the underlying computational mesh via Gmsh. For custom domains, generate a format-compliant mesh (e.g., `.msh`) and reference it:
+For built-in examples, structural geometry can be declared directly in YAML and
+PhAST can generate the underlying computational mesh via Gmsh. The
+declarative primitive DSL is beta and only selected combinations are supported;
+consult the capability matrix before using boolean operations. For custom
+domains, generate a format-compliant mesh (e.g., `.msh`) and reference it:
 
 ```yaml
 geometry:

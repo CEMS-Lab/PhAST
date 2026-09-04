@@ -36,9 +36,9 @@
     <p><small>The base source installation does not require a separate PhAST
     compilation step. Optional HPC backends are not required for validation.</small></p>
     <pre><code>pip install -e .
+python run_sanitizer.py
 python -m phast doctor
-python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only
-python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-only</code></pre>
+python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate</code></pre>
   </div>
 </div>
 
@@ -81,29 +81,31 @@ python -m phast run examples/quasistatic/miehe_tension/config.yaml --validate-on
 
 | Section | What it covers |
 |---|---|
+| [Install](install.md) | Recommended source, Conda, and Docker routes. |
 | [Getting started](getting-started.md) | Installation, `phast doctor`, validation, first run, and result inspection. |
-| [Verify install](verify-install.md) | Backend visibility, expected doctor output, and a schema-validation smoke test. |
+| [Verify install](verify-install.md) | Environment discovery, sanitizer, configuration preflight, and completed-run checks. |
 | [User guide](user_guide/overview.md) | Problem setup, YAML, Python API, physics, meshes, sparse solves, and result APIs. |
 | [Example gallery](example-gallery.md) | Runnable fracture, solid-mechanics, and beta validation examples with visual outputs. |
 | [Performance and reproducibility](performance-reproducibility.md) | Device choice, backend policy, timing evidence, and `torch.compile` reporting. |
-| [Community](community.md) | Issues, discussions, maintainer review, and contribution route. |
+| [Community](community.md) | Issues, maintainer review, and contribution routes. |
 | [Source repository](https://github.com/CEMS-Lab/PhAST) | Clone the code, open issues, inspect examples, and contribute through GitHub. |
 
 ## For New Users
 
-If you are new to PhAST, we recommend following this path:
-1. **Learn the Basics:** Read the "What is PhAST?" summary above, then follow the [Phase-Field Primer](tutorial/01_phase_field_primer.md) and [Visual Glossary](tutorial/02_visual_glossary.md).
-2. **Install:** Follow the [Getting Started](getting-started.md) guide.
-3. **Run a compact installation check:** Execute `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate`.
-4. **Understand the API:** Read the [Python API](user_guide/python_api.md) to understand how the models are defined.
-5. **Check Capabilities:** Review the [Capability Matrix](user_guide/capability_matrix.md) to ensure your target problem is supported.
-6. **Introduce heterogeneity carefully:** Use the [Heterogeneous Material Fields](tutorial/05_heterogeneous_material_fields.md) teaching example before constructing elementwise material maps.
+If you are new to PhAST, follow one continuous route:
+
+1. **Install and diagnose the environment:** Use [Install](install.md), then run the sanitizer and `python -m phast doctor`.
+2. **Complete a bounded solve:** Run the linear-plate example and inspect its result directory.
+3. **Learn the formulation:** Read the [Phase-Field Primer](tutorial/01_phase_field_primer.md) and [Visual Glossary](tutorial/02_visual_glossary.md).
+4. **Construct a model:** Work through the [problem-setup notebook](tutorial/notebook_setup.ipynb) and the [Python API](user_guide/python_api.md).
+5. **Check the capability boundary:** Review the [Capability Matrix](user_guide/capability_matrix.md) before selecting a fracture, beta, or experimental route.
+6. **Progress to fracture and heterogeneity:** Use the tutorial sequence and example-local READMEs, which state runtime and evidence boundaries.
 
 ## Which Path Should I Use?
 
 | Goal | First page | Stable surface |
 |---|---|
-| Install and run a first case | [Getting started](getting-started.md) | `python -m phast doctor` |
+| Install and run a first case | [Install](install.md) and [Getting started](getting-started.md) | `python run_sanitizer.py` followed by `python -m phast doctor` |
 | Author new models | [Python API](user_guide/python_api.md) and [Setting up problems](user_guide/setup_problems.md) | `phast.Problem` |
 | Reproduce or batch-run examples | [YAML workflow](user_guide/yaml_workflow.md) | `python -m phast run config.yaml` |
 | Inspect completed runs | [Public API reference](user_guide/public_api_reference.md) | `phast.load_result(path)` |
@@ -122,44 +124,60 @@ solution, irreversibility enforcement, and result/provenance output. See the
 
 ```{toctree}
 :maxdepth: 2
-:caption: Get Started
+:caption: Start
+
+install
 getting-started
 verify-install
-user_guide/public_api_reference
-agent-contribution-guide
-citing
 troubleshooting
-tutorial/index
-tutorial/01_phase_field_primer
-tutorial/02_visual_glossary
-tutorial/03_modular_fem_and_learned_damage
-tutorial/04_exploration_experiments
-tutorial/05_heterogeneous_material_fields
-user_guide/capability_matrix
 ```
 
 ```{toctree}
 :maxdepth: 2
-:caption: User Guide
+:caption: Learn
+
+tutorial/index
+tutorial/01_phase_field_primer
+tutorial/02_visual_glossary
+tutorial/notebook_setup
+tutorial/notebook_mesh_resolution
+tutorial/notebook_retained_results
+tutorial/03_modular_fem_and_learned_damage
+tutorial/04_exploration_experiments
+tutorial/05_heterogeneous_material_fields
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: User Manual
 
 user_guide/overview
-user_guide/setup_problems
-user_guide/python_api
-user_guide/yaml_workflow
 user_guide/physics
+user_guide/numerical_methods
 user_guide/configuration
-user_guide/learned_damage
 user_guide/meshes
 user_guide/geometry_gallery
-user_guide/example_contract
-user_guide/capability_matrix
 user_guide/sparse_solve
 ```
 
 ```{toctree}
 :maxdepth: 2
-:caption: Supported Workflows
+:caption: How-to Guides
 
+user_guide/setup_problems
+user_guide/python_api
+user_guide/yaml_workflow
+user_guide/results_visualization
+user_guide/learned_damage
+performance-reproducibility
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Examples
+
+example-gallery
+user_guide/example_contract
 supported_workflows/solid_mechanics
 supported_workflows/quasistatic_fracture
 supported_workflows/dynamic_fracture
@@ -169,16 +187,14 @@ supported_workflows/unsupported_experimental
 
 ```{toctree}
 :maxdepth: 2
-:caption: Example Gallery
+:caption: Reference
 
-example-gallery
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: API Reference
-
+reference/index
+reference/cli
+reference/configuration
 user_guide/public_api_reference
+user_guide/glossary
+user_guide/capability_matrix
 api/public_workflow
 api/sparse_solve
 api/time_integrators
@@ -188,14 +204,9 @@ api/adaptive
 
 ```{toctree}
 :maxdepth: 1
-:caption: Performance & Reproducibility
-
-performance-reproducibility
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: Community
+:caption: Project
 
 community
+citing
+agent-contribution-guide
 ```

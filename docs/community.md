@@ -5,15 +5,15 @@
 - Repository: https://github.com/CEMS-Lab/PhAST
 - Issue tracker: https://github.com/CEMS-Lab/PhAST/issues
 - Pull requests: https://github.com/CEMS-Lab/PhAST/pulls
-- Discussions: https://github.com/CEMS-Lab/PhAST/discussions
+- Question form: https://github.com/CEMS-Lab/PhAST/issues/new?template=question.yml
 
 ## Maintainers
 
 PhAST is maintained in the CEMS Lab public repository. Researchers, students,
 scientific-software developers, educators, and users are invited to review the
 solver, reproduce examples, improve explanations, propose carefully scoped
-examples, and provide technical feedback through GitHub Issues, Discussions,
-and Pull Requests. Changes are incorporated after maintainer review.
+examples, and provide technical feedback through GitHub Issues and Pull
+Requests. Changes are incorporated after maintainer review.
 
 Lead developer and repository maintainer:
 [Allamaprabhu Ani](https://allamaprabhuani.github.io/). PhAST was developed

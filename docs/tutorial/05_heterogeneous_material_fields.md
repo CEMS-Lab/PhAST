@@ -6,6 +6,14 @@ ordering and damage-solver interface using a small CPU example. It does not
 claim that arbitrary material maps are available through the general YAML
 runner.
 
+| Lesson item | Scope |
+|---|---|
+| Prerequisites | Installation verification, phase-field primer, and basic NumPy array indexing. |
+| Problem | Structured T3 mesh with elementwise `E` and `Gc`, imposed affine strain, and bounded AT2 damage. |
+| Boundary conditions | No coupled equilibrium boundary-value problem is solved; the strain field is imposed. |
+| Hardware and runtime | Bounded CPU teaching calculation; consult the example output rather than inferring benchmark performance. |
+| Verification | Confirm `damage_converged`, damage bounds, element ordering, manifests, and generated CSV/PNG artifacts. |
+
 ## Run The Teaching Example
 
 From the repository root:
@@ -71,3 +79,7 @@ gradients require case-specific verification.
 
 See the public [`examples/heterogeneous_fields/README.md`](https://github.com/CEMS-Lab/PhAST/blob/main/examples/heterogeneous_fields/README.md)
 for parameters, outputs, and adaptation guidance.
+
+Next, use the [mesh-resolution diagnostic](notebook_mesh_resolution.ipynb) to
+interpret `h/l0`, or return to [Modular fracture problems](03_modular_fem_and_learned_damage.md)
+before introducing a learned damage proposal.

@@ -13,46 +13,23 @@ mat = create_material('glass_borden', eta_residual=1e-6)
 
 ### Preconditioner Selection Logic
 
-For explicit dynamics, `preconditioner=None` with `use_multigrid=True` resolves
-through the auto-selection chain below. For `static`, `quasi_static`,
-`quasi_static_legacy`, `lbfgs`, and `monolithic`, unresolved preconditioners
-default to `jacobi` to avoid fragile AMG/GMG behavior in reaction-dominated
-implicit endgame states. Use `preconditioner='auto'` or `'amg'` only for
-explicit validation of that path.
+For implicit solver types, an unspecified preconditioner defaults to `jacobi`.
+Other preconditioners are optional paths whose availability and suitability
+depend on the selected solver, device, mesh, and installed dependencies. Check
+the capability matrix before treating one as part of a reproducible workflow.
 
 ```
-CUDA HPC (A100/H100/V100):
-  pyamgx installed? → amgx (optional GPU-native AMG)
-  pyamg installed?  → amg (CPU setup, GPU solve)
-  else              → gmg (2-level geometric, always available)
-
-CUDA Workstation (RTX 3090/4090/A6000):
-  pyamg installed?  → amg
-  else              → gmg
-
-CUDA Consumer (RTX 2080/3060):
-  → gmg (low VRAM, AMG setup overhead not worth it)
-
-Apple MPS:
-  → gmg (no CUDA, no AMG; float32 with CPU float64 fallback for CG)
-
-CPU:
-  pyamg installed?  → amg (optional CPU AMG)
-  else              → gmg
+The available vocabulary includes `jacobi`, `gmg`, and optional `amg`/`amgx`
+backends. Automatic selection is environment-dependent; no device-specific
+performance ranking is implied here.
 ```
 
 ### Anderson Acceleration Guide
 
-Anderson acceleration (Type II, Walker & Ni 2011) reduces stagger iterations by 30-50%.
-
-| Depth | Memory | Convergence | Recommended For |
-|-------|--------|-------------|-----------------|
-| 0 | None | Baseline | Debugging, simple problems |
-| 3 | 3 vectors | Good | General use, default recommendation |
-| 5 | 5 vectors | Highest storage cost | Large meshes and tight tolerances after case-specific evaluation |
-| 7+ | 7+ vectors | Diminishing returns | Rarely needed |
-
-Usage: `SolverConfig(anderson_depth=3)` or `--anderson_depth 3`
+`anderson_depth` enables an optional Type-II fixed-point acceleration for the
+staggered damage update. Its effect is problem-dependent; no iteration-saving
+percentage or generally preferred depth is asserted here. Leave it at its
+default unless the selected case has been evaluated with that option.
 
 ### Energy Split Decision Tree
 
@@ -85,7 +62,7 @@ Is the problem pure Mode I tension?
 
 | Problem class | Solver | `solver_type` | Status | Use case |
 |---|---|---|---|---|
-| Nonlinear quasi-static | `QuasiStaticSolver` | `quasi_static` | Primary path for new quasi-static fracture runs | Newton-Raphson with sparse-direct or matrix-free mechanics; spectral direct uses a frozen-state secant tangent. |
+| Nonlinear quasi-static | `QuasiStaticSolver` | `quasi_static` | Primary path for new quasi-static fracture runs | Newton-Raphson with sparse-direct or matrix-free mechanics; the matrix-free mechanics action uses an automatic-differentiation JVP. |
 | Nonlinear quasi-static | `SecantCGSolver` | `quasi_static_legacy` | Compatibility path for older validated runs | Frozen-secant CG for older accepted runs and selected iterative-CG connector support. |
 | Explicit dynamics | `ExplicitDynamics` | `explicit` | Active dynamic-fracture path | Impact, wave-driven fracture, branching, and rapid trajectory generation. |
 | Linear static equilibrium | `StaticSolver` | `static` | Supporting path | Single load step with `d=0`, used by selected mechanics setup paths. |
@@ -93,8 +70,8 @@ Is the problem pure Mode I tension?
 
 | Problem | Solver | Why |
 |---------|--------|-----|
-| Dynamic fracture | `explicit` (ExplicitDynamics) | O(N) per step, CFL-limited |
-| Quasi-static SENT/SENS/TPB | `quasi_static` (QuasiStaticSolver) | Standard staggered scheme; spectral tangent via autograd-JVP |
+| Dynamic fracture | `explicit` (ExplicitDynamics) | CFL-limited explicit time integration |
+| Quasi-static SENT/SENS/TPB | `quasi_static` (QuasiStaticSolver) | Standard staggered scheme; mechanics action via automatic-differentiation JVP |
 | Benchmark comparison | `quasi_static` + `linf` criterion | Strictest, matches PhaseFieldX |
 | Frozen-secant CG fallback | `quasi_static_legacy` (SecantCGSolver) | Required for iterative-CG `rigid_connector` MPC |
 | Energy minimisation | `monolithic` (MonolithicSolver) | Joint (u,d), no stagger |
@@ -137,16 +114,9 @@ use the benchmark value unless you are deliberately studying sensitivity.
 
 ### Recommended Settings per Benchmark
 
-| Benchmark | Energy Split | Preconditioner | Anderson | Steps | Stagger Tol | damage_every |
-|-----------|-------------|----------------|----------|-------|-------------|-------------|
-| SENT (QS) | isotropic | auto | 3 | 150 | 1e-6 | N/A |
-| SENS (QS) | spectral | auto | 5 | 200 | 1e-6 | N/A |
-| TPB (QS) | spectral | auto | 3 | 200 | 1e-6 | N/A |
-| L-panel (QS) | spectral | auto | 5 | 1400 | 1e-6 | N/A |
-| B1 Branching | spectral | auto | N/A | ~1500 | N/A | 1 |
-| B2 Kalthoff | spectral | auto | N/A | ~2000 | N/A | 3 |
-| B3 SENT (dyn) | spectral | auto | N/A | ~1500 | N/A | 3 |
-| B5 PMMA | amor (PS) | jacobi (AT1) | N/A | ~19000 | N/A | 3 |
+| Benchmark | Energy Split | Preconditioner | Steps | Stagger Tol | damage_every |
+|-----------|-------------|----------------|-------|-------------|-------------|
+| Representative cases | case-dependent | case-dependent | case-dependent | case-dependent | case-dependent |
 
 ### Benchmark Acceptance Metadata
 
@@ -202,21 +172,7 @@ the repository or linked from the public record.
   ) and `SecantCGSolver` (`quasi_static_legacy`) are supported;
   fall back to `quasi_static_legacy` if the new spectral-split tangent
   exhibits stalls on a particular configuration
-- **Version note:** If CG reports 5000 iterations every step, update to a
-  release that includes the corresponding convergence fix. Earlier revisions
-  could stall because of an overly strict absolute tolerance, unstable AMG
-  directions in reaction-dominated regimes, and unnecessary hierarchy
-  rebuilds. The corrected path uses a relative tolerance, quality checks with
-  Jacobi fallback, and cached hierarchy data.
-
-**`[AMG] pyAMG failed (array must not contain infs or NaNs), skipping
-hierarchy rebuild` warnings during crack transition:**
-
-*Benign — simulation results are unaffected.* These warnings fire during the
-narrow window where damage jumps from `max(d) ≈ 0.6` to `max(d) = 1.0` at
-crack nucleation. The reaction coefficient `reaction_coeff = (2H + Gc/l0)
-· area/12` passed into `_assemble_sparse_cpu` is itself finite (guarded at
-`multigrid.py:875` and would emit a separate `[AMG] WARNING: N non-finite
-reaction_coeff entries, clamping` message if it weren't). The inf/NaN
-appears *inside* `pyamg.smoothed_aggregation_solver(A_csr)` setup, where
-operations like Jacobi relaxation-weight estimation (`1/diag`), Lanczos
+- Optional AMG backends can be unavailable or can reject a problem during
+  setup. Treat such messages as backend-specific diagnostics and compare the
+  resulting route and outputs explicitly; they do not by themselves establish
+  that a simulation result is unaffected.

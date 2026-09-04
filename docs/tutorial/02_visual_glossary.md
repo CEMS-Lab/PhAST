@@ -40,7 +40,7 @@ table below summarizes the public choices in PhAST.
 
 | Model | Local term `w(d)` | `c_w` | Visual interpretation |
 |---|---:|---:|---|
-| AT1 | `d` | `8/3` | Damage stays at zero until a threshold is reached. |
+| AT1 | `d` | `2/3` | Damage stays at zero until a threshold is reached. |
 | AT2 | `d^2` | `1/2` | Damage can begin smoothly once the crack driving field is nonzero. |
 
 ```{figure} ../_static/at_dissipation.svg
@@ -51,6 +51,11 @@ The plot compares only the local dissipation term. The full crack-surface
 density also includes the gradient penalty and the normalization constant
 `c_w`.
 ```
+
+For AT1, this normalization gives the implemented damage source
+$2\mathcal{H}-3G_c/(8\ell_0)$ and gradient coefficient $3G_c\ell_0/4$.
+The threshold is therefore $\mathcal{H}_{c,0}=3G_c/(16\ell_0)$, consistent
+with the primer and physics manual.
 
 ## What the regularisation length scale does
 

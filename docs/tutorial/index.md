@@ -2,14 +2,14 @@
 
 ## Student Notebook Sequence
 
-1. [SENT setup and two-step CPU workflow check](problem_setup_walkthrough.ipynb)
+1. [SENT setup and two-step CPU workflow check](notebook_setup.ipynb)
    teaches geometry, meshing, named regions, boundary conditions, material,
    solver selection, and retained outputs. Its default run is not crack-growth
    validation.
-2. [Mesh-resolution diagnostic](https://github.com/CEMS-Lab/PhAST/blob/main/examples/notebooks/02_mesh_resolution_diagnostic.ipynb)
+2. [Mesh-resolution diagnostic](notebook_mesh_resolution.ipynb)
    samples an AT2 profile at several $h/\ell_0$ ratios. It is not a solved
    convergence study.
-3. [Retained Miehe SENT results](https://github.com/CEMS-Lab/PhAST/blob/main/examples/notebooks/03_miehe_retained_results.ipynb)
+3. [Retained Miehe SENT results](notebook_retained_results.ipynb)
    examines checked-in load-displacement and damage evidence and states the
    current post-processing boundary.
 
@@ -30,7 +30,10 @@ Launch the step-by-step problem setup notebook in Colab:
 | Tutorial | Time | What you learn |
 |---|---:|---|
 | [Getting started](../getting-started.md) | 5 min | Lightweight install (`pip install -e .`), run `doctor`, validate a shipped example, and inspect a result. |
-| [Problem setup notebook](problem_setup_walkthrough.ipynb) | 30-45 min | Create geometry, mesh and inspect named regions, apply initial conditions, supports, loads, solver settings, run a short solve, and post-process artifacts. |
+| [Phase-field primer](01_phase_field_primer.md) | 15 min | Connect Griffith fracture energy, regularization, degradation, energy splits, history, and the staggered solve. |
+| [Problem setup notebook](notebook_setup.ipynb) | 30-45 min | Create geometry, mesh and inspect named regions, apply initial conditions, supports, loads, solver settings, run a short solve, and post-process artifacts. |
+| [Mesh-resolution diagnostic](notebook_mesh_resolution.ipynb) | 10 min | Interpret nodal sampling of an analytical AT2 profile; this is not an FEM convergence study. |
+| [Retained-results notebook](notebook_retained_results.ipynb) | 10 min | Inspect checked-in Miehe result evidence without rerunning the full calculation. |
 | [Python API](../user_guide/python_api.md) | 10-15 min | Author a model with `phast.Problem` and understand the fluent method map. |
 | [Visual glossary](02_visual_glossary.md) | 10 min | Read the picture-first guide to AT1/AT2, energy splits, and `l0`. |
 | [Modular FEM and learned damage](03_modular_fem_and_learned_damage.md) | 20 min | Assemble geometry, material, boundary conditions, fracture choices, solver routes, and an audited learned-damage plug-in. |
@@ -63,8 +66,8 @@ databases to the PhAST fluent API and YAML configuration structure.
 
 | Workflow | Entry point | Typical output |
 |---|---|---|
-| Dynamic fracture | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only` | Dynamic damage fields, histories, metadata, and curated animation assets. |
-| Dynamic crack branching | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only` | Crack-branching comparison package and visual summaries. |
+| Dynamic-fracture preflight | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only` | Configuration acceptance report only; no simulation fields are generated. |
+| Dynamic-branching preflight | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only` | Configuration acceptance report only; retained artifacts are separate evidence. |
 | Quasi-static fracture | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | Final damage, response histories, comparison artifacts, and result manifests. |
 | Solid mechanics | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | Displacement/stress plots, response history, and metadata. |
 | Heterogeneous AT2 teaching problem | `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields` | Elementwise material CSV, nodal damage CSV, field plots, metadata, and manifests. |
@@ -109,21 +112,6 @@ print(result.metadata())
 print(result.history_names())
 print(result.visuals())
 ```
-
-## Tutorial Contract
-
-Each public tutorial should state:
-
-- the command to run from the repository root,
-- expected runtime and device,
-- what physics and solver path are active,
-- which output files should appear,
-- how to inspect the result with `phast.load_result(...)`,
-- which capability-matrix row supports the claim.
-
-If an example depends on unavailable raw trajectory output, unreleased paper
-assets, or a custom diagnostic script to make sense, it should stay out of the
-public tutorial path until it has documented implementation and evidence.
 
 ## Related Guides
 

@@ -1,13 +1,13 @@
 # ============================================================================
-# FULL YAML REFERENCE — Every available option for phast
+# FULL YAML REFERENCE — Documentation-only field reference for PhAST
 # ============================================================================
 #
-# This file documents ALL configurable options. Copy it, delete sections
-# you don't need, and fill in your values. Defaults are shown in comments.
+# This file documents configurable options. It is not a runnable configuration:
+# do not pass it to the solver. Use a complete example-local config.yaml or a
+# benchmark config as the execution input.
 #
-# Run with:
-#   python -m phast run my_problem.yaml
-#   python -m phast run my_problem.yaml --device cuda --fast
+# The mappings below are illustrative reference material and are intentionally
+# not an execution contract.
 #
 # CLI flags override YAML values. See configs/README.md for precedence.
 #
@@ -16,13 +16,15 @@
 # ----------------------------------------------------------------------------
 # Source: phast config dataclasses plus enum/range validation tables.
 # Regenerate with the project release tooling when schema tables change.
+
+reference_only: true  # Deliberately rejected by the runnable config schema.
 #
 # ----------------------------------------------------------------------------
-# UNITS — reference convention (issue #141)
+# UNITS — reference convention
 # ----------------------------------------------------------------------------
 # The solver runs in a single, *consistent* unit system driven by the
 # mesh generators (which produce millimetre coordinates). All bare
-# numeric values in this YAML are interpreted in those internal units:
+# numeric values in this YAML are interpreted in the solver unit system:
 #
 #     length    : mm
 #     mass      : tonne (= 1000 kg)
@@ -135,12 +137,10 @@ geometry:
 #   three_point_bending
 
 # ---------- Geometry: declarative primitive vocabulary + boolean ops -------
-# Phase 2.1 (#142) introduces a declarative alternative to the built-in
-# generators above: name your primitives in YAML, then (Phase 2.2, #143)
-# compose them via boolean ops to define the computational domain.
-# Mutually exclusive with `geometry.type`. The compiler that turns this
-# into a mesh lands in #146; for now this block is parsed + validated
-# but raises NotImplementedError at resolve time.
+# The declarative primitive geometry DSL is a beta capability. Selected
+# primitive/domain combinations can be compiled to a mesh; broader geometry
+# coverage and boolean-operation combinations remain outside the supported
+# execution boundary. Consult the capability matrix before using this recipe.
 #
 # geometry:
 #   units: mm                              # mm (default) | m
@@ -232,14 +232,14 @@ material:
                                          # at W_c0 = S_H/2 = 3 Gc/(16 l0).
                                          # Provide a float to override.
                                          # Ignored when pf_model == 'AT2'.
-    # --- Bare floats: internal units (reference) ---
+    # --- Bare floats: solver units (reference) ---
     # E: 32000.0                         # Young's modulus [MPa]   (== 32 GPa)
     # nu: 0.2                            # Poisson's ratio
     # Gc: 3.0e-3                         # Fracture toughness [N/mm]   (== 3 J/m^2)
     # rho: 2.45e-9                       # Density [tonne/mm^3]    (== 2450 kg/m^3)
-    # eta_residual: 1.0e-7               # Residual stiffness in degradation (default; #272)
+    # eta_residual: 1.0e-7               # Residual stiffness in degradation (default)
     # plane_stress: false                # true for plane stress, false for plane strain
-    # --- Equivalent SI-string forms (issue #141) ---
+    # --- Equivalent SI-string forms ---
     # E: "32 GPa"
     # Gc: "3 J/m^2"
     # l0: "0.25 mm"
@@ -282,13 +282,13 @@ material:
 #                     (shorthand for `fix component=<axis>`). axis names the
 #                     suppressed component: an edge parallel to x has
 #                     axis=y (fix v=0); parallel to y has axis=x (fix u=0).
-#   rigid_connector — Full master/slave rigid-body MPC (issue #154). The
+#   rigid_connector — Full master/slave rigid-body MPC. The
 #                     master gets a free rotation DOF and slave nodes are
 #                     tied via the linearised rigid-body constraint
 #                     u_slave = u_master + theta x (X_slave - X_master).
 #                     Default ``rotation_free: true``; set
-#                     ``rotation_free: false`` to recover the legacy
-#                     "welded" behaviour shipped in #155 (every slave +
+#                     ``rotation_free: false`` to recover the fixed-rotation
+#                     "welded" behaviour (every slave and
 #                     master locked to the master's prescribed translation,
 #                     no rotation freedom).
 #                     Currently active in the static path
@@ -463,6 +463,7 @@ initial_conditions:
 # NOT YET SUPPORTED
 # ============================================================================
 # BC types:     periodic, pressure (normal traction), contact
-# Elements:     T6 (quadratic), Q4/Q8 (quads), T4 (3D tetrahedra)
+# Elements:     T6 (quadratic), Q8 (quads), T4 (3D tetrahedra)
+# Q4:           beta for native isotropic mechanics + AT2 damage only
 # Time:         implicit dynamics (HHT-alpha)
 # ============================================================================

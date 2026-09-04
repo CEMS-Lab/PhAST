@@ -1,176 +1,186 @@
-# Exploration experiments
+# Controlled exploration experiments
 
-Once the [Getting Started](../getting-started.md) workflow completes, a direct way
-to build intuition is to break the simulation in controlled ways and
-watch what changes. Each experiment below is small (one parameter
-edit), independent, and re-uses an existing config so there is no new
-mesh to debug.
+These experiments are intended for students who have completed the
+[Getting Started](../getting-started.md) workflow and can inspect a PhAST result
+directory. Each experiment changes one documented input while keeping the
+remaining configuration fixed.
 
-All commands assume you start from the repository root.
+The experiments are study designs, not predicted benchmark outcomes. Record the
+resolved configuration, selected solver route, runtime, convergence history,
+field outputs, and comparison metric for every variant. Long dynamic examples
+should first be checked with `--validate-only`; configuration acceptance does
+not execute the simulation.
 
-## 1. Vary Poisson's ratio and watch the crack curve
+| Lesson item | Scope |
+|---|---|
+| Prerequisites | Completed installation checks and familiarity with YAML. |
+| Baseline | An unchanged checked-in example and a separate copied configuration for each variant. |
+| Hardware | CPU is sufficient for preflight; full dynamic runs can be expensive. |
+| Outputs | Separate output directory, metadata, manifests, histories, and requested fields for each variant. |
+| Verification | Compare one variable at a time against the unchanged baseline. |
 
-**Motivation.** `nu` enters every energy split: it controls the
-Lame coefficient `lambda` which, in turn, sets how compressive
-strain is partitioned. Big-`nu` materials behave more like rubber and
-crack paths tend to curve more sharply.
+All commands assume the repository root as the working directory.
 
-```bash
-# Edit configs/benchmarks/dynamic/B7_dynamic_crack_branching_comsol.yaml in a copy:
-#   material.overrides.nu: 0.20    (default for glass_borden)
-# Try 0.10, 0.30, 0.40 in three separate runs.
-python -m phast run my_B7_nu010.yaml --device cpu
-python -m phast run my_B7_nu030.yaml --device cpu
-python -m phast run my_B7_nu040.yaml --device cpu
-```
+## Prepare configuration copies
 
-**Expected outcome.** As `nu` rises the branch angle widens (more
-compressive locking on the inside of the curve) and branching onset
-arrives a few microseconds earlier.
-
-**If pushed further.** `nu >= 0.49` makes the bulk modulus grow very
-large and the explicit timestep collapse; `nu < 0` is unphysical and CG
-will stall.
-
-## 2. Compare energy splits on the same SENT
-
-**Motivation.** Section 3 of the [primer](01_phase_field_primer.md)
-lists five splits. The one you pick matters: the same SENT geometry
-under the same load can produce a single straight crack, a curving
-crack, or a bilateral branch depending on the split.
+Create a dedicated directory before editing any example:
 
 ```bash
-# Make four copies of configs/benchmarks/dynamic/B3_dynamic_sent.yaml with
-#   material.overrides.energy_split: isotropic  | amor | spectral | star_convex
-# (skip spectral_stress unless you are checking COMSOL parity)
-python -m phast run B3_isotropic.yaml --device cpu
-python -m phast run B3_amor.yaml --device cpu
-python -m phast run B3_spectral.yaml --device cpu
-python -m phast run B3_starconvex.yaml --device cpu
+mkdir -p runs/config_variants
+cp configs/benchmarks/dynamic/B7_dynamic_crack_branching_comsol.yaml \
+  runs/config_variants/B7_baseline.yaml
+cp configs/benchmarks/dynamic/B3_dynamic_sent.yaml \
+  runs/config_variants/B3_baseline.yaml
 ```
 
-**Expected outcome.** `isotropic` may propagate more readily because compressive
-lock-out), `amor` and `spectral` produce qualitatively similar crack
-fronts, `star_convex` converges with fewer staggers per step at the
-cost of slightly different nucleation timing.
+Copy the relevant baseline again for each variant, change only the named YAML
+field, and retain the edited file with its output. Do not edit the checked-in
+baseline.
 
-**If pushed further.** `isotropic` may close cracks under reflected
-compressive waves -- damage decreases, which violates irreversibility
-unless `H` is enforced. If you see `max(d)` drop step-to-step, switch
-to `amor` or `spectral`.
+## 1. Poisson-ratio sensitivity
 
-## 3. Vary `l0` from `0.5 h` to `2 h`
-
-**Motivation.** The regularisation length `l0` must resolve the
-diffuse damage band, so the rule of thumb is `l0 >= 2 h`. Pushing
-below that under-resolves the band; pushing above wastes resolution.
+Change `material.overrides.nu` in copies of `B7_baseline.yaml`. Use values
+that are admissible for the selected constitutive assumption and retain the
+same mesh, load, time integration, output cadence, and solver controls.
 
 ```bash
-# In a copied dynamic SENT YAML configuration:
-#   geometry.parameters.h_crack: 0.25
-#   material.overrides.l0:  0.125 / 0.25 / 0.5 / 1.0
-python -m phast run sent_l0_0p125.yaml --device cpu  # under-resolved
-python -m phast run sent_l0_0p25.yaml  --device cpu
-python -m phast run sent_l0_0p50.yaml  --device cpu  # rule-of-thumb 2h
-python -m phast run sent_l0_1p00.yaml  --device cpu
+python -m phast run runs/config_variants/B7_nu010.yaml --validate-only
+python -m phast run runs/config_variants/B7_nu030.yaml --validate-only
+python -m phast run runs/config_variants/B7_nu040.yaml --validate-only
 ```
 
-**Expected outcome.** `l0 = 2 h` (here `0.5`) may require fewer iterations,
-CG iteration counts hold steady through the run. At `l0 = 0.5 h` the
-damage is jagged, CG iterations spike, and you may see
-`max(d) < 1` at the crack tip. At `l0 = 4 h` the crack is too thick
-and visually different from the reference but cheap.
+For completed runs, compare crack-path geometry, branching time, energy
+histories, stable time step, and wall-clock time. Do not assume the direction or
+magnitude of a trend before measuring it. Values near incompressibility require
+particular care, and negative Poisson ratios are not categorically unphysical;
+their admissibility depends on the material model and study.
 
-**If pushed further.** `l0 < h` means fewer than one element in the
-band; the crack pattern becomes mesh-dependent.
+## 2. Energy-split comparison
 
-## 4. Compare output cadence
+Create copies of `B3_baseline.yaml` and change only
+`material.overrides.energy_split` to an implemented choice such as
+`isotropic`, `amor`, `spectral`, or `star_convex`. Consult the
+[capability matrix](../user_guide/capability_matrix.md) before selecting a
+specialized route.
 
-**Motivation.** Output cadence changes wall-clock cost and disk usage.
-Before a long run, compare a dense trajectory against a sparse trajectory on a
-short validation window.
+```bash
+python -m phast run runs/config_variants/B3_isotropic.yaml --validate-only
+python -m phast run runs/config_variants/B3_amor.yaml --validate-only
+python -m phast run runs/config_variants/B3_spectral.yaml --validate-only
+python -m phast run runs/config_variants/B3_star_convex.yaml --validate-only
+```
+
+For completed runs, compare the tensile driving field, damage onset, crack
+path, energy balance, and solver telemetry. Differences must be reported as
+case-specific observations rather than general rankings of the splits.
+
+## 3. Resolution relative to the regularization length
+
+Create variants that change `geometry.parameters.h_crack` and
+`material.overrides.l0` while retaining all other settings. The commonly used
+starting diagnostic `h <= l0 / 2` is a resolution guideline, not a universal
+convergence guarantee.
+
+Before a full FEM study, use the
+[mesh-resolution notebook](notebook_mesh_resolution.ipynb) to understand how
+sampling changes with `h/l0`. A defensible numerical study should then compare
+at least:
+
+- the actual element-size distribution near the crack;
+- damage-band width and orientation;
+- load-displacement or energy response;
+- crack path;
+- solver convergence and computational cost.
+
+The analytical notebook is not a replacement for mesh-convergence evidence.
+
+## 4. Output-cadence comparison
+
+Output cadence changes disk usage and can change wall-clock time. Compare dense
+and sparse output on the same short execution window:
 
 ```bash
 python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml \
-  --device cpu --num_steps 50 --output_dir output/sent_dense
+  --device cpu --num_steps 50 --output_dir runs/sent_dense
 python -m phast run examples/dynamic/B3_dynamic_sent/config.yaml \
-  --device cpu --num_steps 50 --h5_every 10 --output_dir output/sent_sparse
+  --device cpu --num_steps 50 --h5_every 10 --output_dir runs/sent_sparse
 ```
 
-**Expected outcome.** The dense run writes more snapshots and is easier to
-animate. The sparse run is smaller and faster to move between machines.
-
-**If pushed further.** Very sparse output can miss crack-initiation
-frames. Keep enough snapshots to explain the response you plan to show.
+Record total bytes, number of stored snapshots, runtime, and whether the
+retained cadence resolves the event being studied. Output cadence should not
+change the governing update, but output and transfer costs must be measured
+rather than assumed.
 
 ## 5. Inspect result artifacts
 
-**Motivation.** A result directory should be self-describing. Check manifests,
-histories, visuals, and metadata before you compare or share a run.
+A result directory should remain self-describing:
 
 ```bash
 python - <<'PY'
 import phast
 
-result = phast.load_result("output/sent_dense")
-print(result.metadata())
-print(result.visuals())
-print(result.history_names())
+for path in ("runs/sent_dense", "runs/sent_sparse"):
+    result = phast.load_result(path)
+    print(path)
+    print(result.metadata())
+    print(result.manifest())
+    print(result.visuals())
+    print(result.history_names())
 PY
 ```
 
-**Expected outcome.** You should see run metadata, visual artifact paths, and
-CSV history names. Missing manifests or empty histories mean the run should be
-regenerated before it becomes a public example.
+A visual file is not a reloadable numerical trajectory. Confirm that the
+configuration, metadata, manifests, histories, mesh information, and requested
+trajectory fields required by the comparison are present.
 
-**Too far.** Do not mix outputs from different runs in one directory. Use a new
-`--output_dir` for each configuration.
+## 6. Damage-update cadence in explicit dynamics
 
-## 6. Subcycle damage after a reference check
-
-**Motivation.** In explicit dynamics the elastic CFL timestep is
-about three times finer than the damage propagation needs. Solving
-the damage equation every third step can shorten the wall-clock by
-40-50%, but it should be treated as a throughput setting after the
-`damage_every: 1` reference run has been checked.
+The `solver.damage_every` setting controls how often the implicit damage
+subproblem is updated relative to explicit mechanics steps. Create copied
+configurations with values such as 1, 3, and 5, then validate each file before
+running:
 
 ```bash
-# Edit solver.damage_every in any explicit config.
-python -m phast run B1_de1.yaml --device cpu     # damage_every: 1
-python -m phast run B1_de3.yaml --device cpu     # damage_every: 3 (throughput)
-python -m phast run B1_de5.yaml --device cpu     # damage_every: 5 (aggressive)
+python -m phast run runs/config_variants/B3_damage_every_1.yaml --validate-only
+python -m phast run runs/config_variants/B3_damage_every_3.yaml --validate-only
+python -m phast run runs/config_variants/B3_damage_every_5.yaml --validate-only
 ```
 
-**Expected outcome.** `damage_every: 3` matches `damage_every: 1`
-visually and on energy budgets. `damage_every: 5` is faster still but
-the branching onset shifts a few hundred nanoseconds late.
+Use `damage_every: 1` as the comparison baseline. For completed runs, measure
+damage-solve time, total time, onset time, crack morphology, energy history, and
+the number of accepted damage updates. No fixed speedup or accuracy equivalence
+is implied; both depend on the problem, mesh, time step, and fracture model.
 
-**If pushed further.** With AT1 + Amor splits, `damage_every > 1` can
-delay or suppress branching. Use `damage_every: 1` whenever the run is
-being compared against a reference figure.
+## 7. Anderson acceleration for staggered convergence
 
-## 7. Anderson acceleration for stagger convergence
-
-**Motivation.** The staggered scheme is a fixed-point iteration; it
-can stall. Anderson acceleration (Walker & Ni 2011) restarts the
-fixed point with a least-squares-projected step.
+For a quasi-static copied configuration, compare the unaccelerated staggered
+iteration against selected `anderson_depth` values:
 
 ```yaml
 solver:
   solver_type: quasi_static
-  anderson_depth: 5     # try 0 (off), 3, 5, 7
+  anderson_depth: 3
 ```
 
-**Expected outcome.** Depth 3 cuts stagger iterations 30%; depth 5 by
-50%. Above 7 the linear-least-squares cost dominates and you see
-diminishing returns.
+Record staggered iterations, rejected or restarted updates, linear-solver work,
+wall-clock time, and the final response. Anderson acceleration can help or harm
+a particular fixed-point sequence. PhAST therefore does not assign a universal
+percentage reduction or preferred depth.
 
-**If pushed further.** On highly nonlinear steps Anderson can overshoot
-and produce non-monotone damage. If CG counts spike right after an
-Anderson restart, reduce the depth.
+## Reporting the experiment
 
-## Where to next
+For each comparison, retain:
 
-These experiments cover parameters that move the crack pattern and change the
-artifact bundle. The full parameter schema is in `configs/REFERENCE.yaml`, and
-solid-mechanics API notes live under `docs/api/`.
+1. The unchanged baseline configuration.
+2. Every copied variant configuration.
+3. The exact command and PhAST revision.
+4. Device, dtype, resolved backend, solver and preconditioner.
+5. Mesh and `h/l0` information.
+6. Runtime and iteration-level telemetry.
+7. Matched field, history, and signed-difference plots where applicable.
+8. A statement distinguishing configuration preflight, completed execution,
+   numerical verification, and scientific validation.
+
+Continue with [Results and visualization](../user_guide/results_visualization.md)
+for result interpretation and [Performance and reproducibility](../performance-reproducibility.md)
+before publishing timing comparisons.

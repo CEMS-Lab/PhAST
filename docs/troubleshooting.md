@@ -1,5 +1,44 @@
 # Troubleshooting and Failure Modes
 
+## Installation recovery by platform
+
+Start with `python -m phast doctor` and record the first error, rather than
+installing optional backends pre-emptively.
+
+### Windows
+
+Use PowerShell in a fresh virtual environment. If `python` is not found, use
+the Python launcher (`py -3.11`) or install Python 3.10--3.12 with the launcher
+enabled. If a package wheel is unavailable, retry with Python 3.11 and update
+`pip`; do not mix packages from multiple Python installations. Run commands
+from the repository root so example paths resolve.
+
+### macOS
+
+Use a supported Python from `python3` or a conda environment. On Apple Silicon,
+CPU float64 is the conservative verification route; MPS availability is useful
+information, not a requirement. If Gmsh or a plotting import fails, recreate
+the environment rather than combining Homebrew and conda binary stacks.
+
+### Linux and HPC
+
+Create a clean virtualenv or conda environment on the login or development
+node, then run the doctor and sanitizer before selecting a scheduler or GPU
+backend. PETSc/MUMPS, cuDSS, AmgX, and CuPy are optional and must match the
+machine's MPI, CUDA, and compiler stack. A missing optional backend is not a
+base-install failure.
+
+### Docker
+
+Build and run the bounded check from the repository root:
+
+```bash
+docker build --tag phast:local .
+docker run --rm phast:local
+```
+
+The image runs `run_sanitizer.py` only. It does not run a long simulation.
+
 Phase-field fracture simulations are sensitive to units, mesh resolution,
 boundary conditions, and time-step choices. This page lists common symptoms and
 the first checks to perform before changing solver code.

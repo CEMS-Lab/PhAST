@@ -27,6 +27,9 @@
       running them is stated in this PR.
 - [ ] Example documentation follows `docs/user_guide/example_contract.md` when
       curated example files or visuals changed.
+- [ ] Capability wording remains aligned with the supported, beta,
+      experimental, and scaffold classifications.
+- [ ] Validation-only commands are not presented as completed simulations.
 
 ## Physics and Benchmark Notes
 

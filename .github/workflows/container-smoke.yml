@@ -17,3 +17,5 @@ jobs:
         run: docker build --tag phast:ci .
       - name: Run single-element sanitizer
         run: docker run --rm phast:ci
+      - name: Confirm no simulation command is used
+        run: docker inspect phast:ci --format '{{json .Config.Cmd}}' | grep -F 'run_sanitizer.py'

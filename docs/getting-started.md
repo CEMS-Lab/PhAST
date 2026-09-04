@@ -128,6 +128,10 @@ python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
 The [installation verification page](verify-install.md) explains common
 `doctor` outcomes.
 
+For a shorter installation-only route, see [Install](install.md). Continue
+with the [example gallery](example-gallery.md) to choose between a runnable
+solve and a validate-only configuration.
+
 ## 4. Know Which YAML Files Are Runnable
 
 PhAST contains several kinds of YAML file:

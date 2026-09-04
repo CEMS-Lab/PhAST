@@ -154,6 +154,11 @@ $$
 \mathcal{H}_{c,0} = \frac{3G_c}{16\ell_0}.
 $$
 
+This is the threshold implied by the same $c_w=2/3$ normalization shown
+above: the implemented AT1 weak form has gradient coefficient
+$3G_c\ell_0/4$ and source $2\mathcal{H}-3G_c/(8\ell_0)$. The source coefficient
+is not an additional normalization convention.
+
 In PhAST, choose the model with `material.overrides.pf_model: AT1` or
 `material.overrides.pf_model: AT2`.
 
@@ -268,23 +273,19 @@ where $\varepsilon_{\mathrm{stag}}$ maps to the configured staggered tolerance.
 
 PhAST's public fracture path applies finite-element operators through
 gather-compute-scatter tensor kernels rather than assembling a global stiffness
-matrix for every operator application. For a linearized internal force
-$\mathbf{f}_{\mathrm{int}}$, the Krylov product can be viewed as
-
-$$
-\mathbf{K}\mathbf{p}
-= \mathbf{f}_{\mathrm{int}}(\mathbf{p})
-  - \mathbf{f}_{\mathrm{int}}(\mathbf{0}),
-$$
-
-or, around a nonlinear reference state $\bar{\mathbf{u}}$,
+matrix for every operator application. The mechanics JVP used by the
+quasi-static Newton route is
 
 $$
 \mathbf{K}(\bar{\mathbf{u}})\mathbf{p}
-\approx
-\mathbf{f}_{\mathrm{int}}(\bar{\mathbf{u}}+\mathbf{p})
-- \mathbf{f}_{\mathrm{int}}(\bar{\mathbf{u}}).
+= D_{\mathbf{u}}\mathbf{f}_{\mathrm{int}}(\bar{\mathbf{u}},d)[\mathbf{p}],
 $$
+
+and is evaluated in the implementation with an automatic-differentiation
+JVP. This is distinct from the legacy CG route, whose `secant_matvec` applies
+a perfectly linear operator formed from projections frozen at the current
+state. That frozen secant operator is not the consistent Jacobian for spectral
+splits because it omits eigenvector-rotation terms.
 
 This is the matrix-free sense used throughout the repository: the solver
 materializes the action of the weak-form operator on a vector, while avoiding a

@@ -277,7 +277,7 @@ example with a standard result bundle.
 
 Next pages:
 
-- [Problem setup notebook](../tutorial/problem_setup_walkthrough.ipynb)
+- [Problem setup notebook](../tutorial/notebook_setup.ipynb)
 - [Setting up new problems](setup_problems.md)
 - [YAML workflow](yaml_workflow.md)
 - [Public API reference](public_api_reference.md)

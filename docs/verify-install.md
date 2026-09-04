@@ -1,5 +1,19 @@
 # Verify Install
 
+## Verification ladder
+
+Use the checks in this order. Each rung is stronger and more expensive than
+the previous one:
+
+1. **Doctor** reports what the current environment can provide.
+2. **Sanitizer** performs a bounded single-element CPU calculation and plot.
+3. **Validate-only** checks a public YAML configuration without solving it.
+4. **Completed run** executes the selected example and produces a result bundle.
+
+Passing a lower rung does not certify the next one. In particular,
+`--validate-only` is schema and path preflight; it is not runtime or scientific
+validation.
+
 ## Quick single-element sanitizer
 
 From a source checkout, run:
@@ -98,7 +112,8 @@ and `device.compile` policy before running a costly simulation.
 | Validation passes | The config is structurally valid. | Run the example with an explicit `--output_dir`. |
 
 If these checks fail, use [Troubleshooting](troubleshooting.md) before opening an
-issue.
+issue. The sanitizer should be the first completed computation to compare
+across platforms.
 
 If the instructions themselves are unclear, or you cannot determine whether an
 outcome is expected, open a

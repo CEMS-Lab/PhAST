@@ -1,0 +1,14 @@
+{% extends "!layout.html" %}
+{% block extrahead %}
+{{ super() }}
+<meta name="description" content="{{ phast_description }}">
+{% set canonical_path = '' if pagename == 'index' else pagename ~ '.html' %}
+<link rel="canonical" href="{{ canonical_baseurl }}/{{ canonical_path }}">
+{% if pagename.startswith('_modules/') or pagename.startswith('_sources/') or pagename.startswith('maintainer/') or pagename in ('agent-contribution-guide', 'genindex', 'py-modindex', 'search') %}
+<meta name="robots" content="noindex,follow">
+{% endif %}
+{% endblock %}
+{% block footer %}
+{{ super() }}
+<p class="phast-build-meta">PhAST {{ phast_version }} | source commit {{ phast_commit }}</p>
+{% endblock %}

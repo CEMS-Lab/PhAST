@@ -29,7 +29,21 @@ pip install -e ".[dataset]"
 
 PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and are not required for the default CPU confidence suite.
 
-## 2. Coding Standards
+## 2. First Contribution
+
+Before changing solver behavior, a first contribution can be documentation,
+an example clarification, a focused test, or an actionable bug report. A
+minimal contribution route is:
+
+1. Fork the repository and create a descriptively named branch.
+2. Reproduce the documented behavior on the smallest relevant example.
+3. Change one coherent concern and update adjacent documentation.
+4. Run the narrowest checks listed below.
+5. Open a draft pull request and state commands not run and why.
+
+All participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+## 3. Coding Standards
 
 - **Type Hinting**: All new Python functions must use strict type hints.
 - **Device Safety**: Ensure tensor operations are device-agnostic (`cpu`/`cuda`).
@@ -37,7 +51,7 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
   supported smooth tensor pathways. Identify nonsmooth history updates,
   projections, bounds, active sets, and external sparse-backend boundaries.
 
-## 3. Pull Request Lifecycle
+## 4. Pull Request Lifecycle
 
 - PhAST is maintained under the CEMS Lab public repository. Contributions are
   welcome, but public changes are merged only after maintainer review and
@@ -48,7 +62,7 @@ PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and ar
 - Update relevant documentation, such as `README.md`, YAML schemas, example
   READMEs, and capability pages, with user-facing changes.
 
-## 4. Validation
+## 5. Validation
 
 Run the narrowest relevant checks before opening a pull request:
 
@@ -70,7 +84,7 @@ includes the tests intended for public review. Run any additional,
 project-specific checks documented in the pull request or issue that motivated
 the change.
 
-## 5. Documentation Contributions
+## 6. Documentation Contributions
 
 Documentation source lives in `docs/` and is built with Sphinx/MyST. Example
 folders also contain public-facing `README.md` files, so changes to example
@@ -109,7 +123,7 @@ AI-assisted contributions are welcome when they follow `AGENTS.md`, `llms.txt`,
 commands where possible and must not invent solver capabilities, benchmark
 results, paper metadata, or local/HPC provenance.
 
-## 6. Adding Examples
+## 7. Adding Examples
 
 To add a simulation to the public `examples/` gallery, follow
 `docs/user_guide/example_contract.md`. In short, curated examples need a flat
@@ -121,7 +135,7 @@ The README should document the problem definition, exact run command, expected
 artifacts, evidence boundary, and result-inspection snippet. Do not commit raw
 HPC run trees, large H5/Zarr stores, or unpublished diagnostic archives.
 
-## 7. Asking For Help
+## 8. Asking For Help
 
 Open an issue if you are unsure how to install PhAST, interpret a configuration,
 run an example, or contribute a change. A useful help request includes the

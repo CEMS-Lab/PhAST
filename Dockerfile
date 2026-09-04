@@ -13,4 +13,6 @@ COPY . .
 RUN python -m pip install --no-cache-dir --upgrade pip \
     && python -m pip install --no-cache-dir .
 
+# The image deliberately performs only the bounded installation check. It does
+# not launch a fracture simulation during image builds or CI smoke tests.
 CMD ["python", "run_sanitizer.py"]
