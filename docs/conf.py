@@ -49,6 +49,7 @@ nb_execution_mode = os.environ.get("PHAST_NB_EXECUTION_MODE", "off")
 nb_execution_excludepatterns = ["tutorial/problem_setup_walkthrough.ipynb"]
 nb_execution_timeout = 180
 nb_execution_raise_on_error = True
+nb_execution_show_tb = True
 
 source_suffix = {
     ".rst": "restructuredtext",
