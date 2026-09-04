@@ -25,7 +25,7 @@ inspection.
 
 Launch the step-by-step problem setup notebook in Colab:
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CEMS-Lab/PhAST/blob/main/docs/tutorial/problem_setup_walkthrough.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CEMS-Lab/PhAST/blob/ea6a90f1ae22d8fdd69cc41d6e197d4229977968/docs/tutorial/problem_setup_walkthrough.ipynb)
 
 | Tutorial | Time | What you learn |
 |---|---:|---|
