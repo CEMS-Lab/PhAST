@@ -25,8 +25,8 @@ reference comparisons should also include `compare.png` and
 
 ## Boundary
 
-B1 branching remains a placeholder until an accepted quadrilateral rerun is documented.
-B7 is a reference comparison case without COMSOL binaries or raw trajectory
-stores.
+Treat only the cases listed in the example gallery with an example-local
+execution contract as public workflows. B7 is a reference comparison case
+without COMSOL binaries or raw trajectory stores.
 Large Zarr/H5 trajectories belong in external storage or release artifacts, not
 inside lightweight public example folders.

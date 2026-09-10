@@ -36,6 +36,10 @@ docker run --rm phast:cpu
 The image runs `python run_sanitizer.py` by default. It does not claim CUDA,
 Apple MPS, PETSc/MUMPS, MPI, or host-native performance.
 
+For a completed example with a persistent host output directory, including
+Windows PowerShell syntax and conservative container limits, follow the
+[Docker commands in the installation guide](install.md#docker).
+
 ### Editable Python source installation
 
 The virtual-environment commands below install `pip install -e .`. This route is

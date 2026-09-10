@@ -139,12 +139,14 @@ troubleshooting
 tutorial/index
 tutorial/01_phase_field_primer
 tutorial/02_visual_glossary
+tutorial/notebook_dynamic_sent
 tutorial/notebook_setup
 tutorial/notebook_mesh_resolution
 tutorial/notebook_retained_results
 tutorial/03_modular_fem_and_learned_damage
 tutorial/04_exploration_experiments
 tutorial/05_heterogeneous_material_fields
+tutorial/06_first_research_study
 ```
 
 ```{toctree}

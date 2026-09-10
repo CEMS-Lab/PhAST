@@ -93,9 +93,15 @@ The quasi-static family provides documented pathways for selected literature com
   `examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml` is the
   full-plate COMSOL cross-check.
 - **Benchmark workflow**:
-  1. Launch via `python -m phast run <cfg>`
-  2. Run `compare.py` in the corresponding `examples/dynamic/<case>/` directory.
-  3. Save comparison artifacts (`compare.txt`, `compare.png`) in run folder.
+  1. Use the command in the example-local README and write to an explicit
+     `--output_dir`.
+  2. Inspect the generated manifest, histories, and damage fields.
+  3. If the README provides a case-specific comparison command, run that exact
+     command. Do not assume that every dynamic example provides a generic
+     `compare.py`.
+  4. Where retained comparison evidence is supplied, the standard filenames
+     are `compare_report.txt` and `compare.png`. Retained evidence is not a
+     substitute for a comparison generated from a new run.
 
 ### Solid mechanics FEA
 
@@ -174,11 +180,13 @@ flat YAML, manifest, and visualization contract.
 
 ### Acceptance Checks
 
-Each curated benchmark example may provide a local `compare.py`. Run it manually
-after the simulation completes; it loads the run output and reference data, then
-writes comparison artifacts into the run directory. The acceptance metric is
-case-specific: examples include peak load, load-displacement envelope error,
-branching onset time, final crack-path morphology, and required-output checks.
+Some curated benchmark examples provide a local comparison utility, such as
+`compare.py`; others provide only retained comparison evidence. Follow the
+example-local README rather than inferring a command from another case. When a
+comparison utility is present, run it after the simulation completes so that it
+loads the new output and reference data and writes case-specific artifacts. The
+acceptance metric may concern peak load, load-displacement envelope error,
+branching onset time, final crack-path morphology, or required-output checks.
 
 For load-displacement comparisons, configure the reaction writer explicitly:
 

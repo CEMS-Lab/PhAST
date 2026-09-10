@@ -11,7 +11,9 @@ runs.
 | Small or moderate float64 validation run | CPU first, especially when GPUs are queued |
 | Large dynamic trajectory run | CUDA if available and queue wait is reasonable |
 | Quasi-static fracture | `backend: auto`, Jacobi-safe defaults unless the configuration file pins another tested backend |
-| Optional sparse-direct backends | Use PETSc/MUMPS, cuDSS, AmgX, or PyVista only where the capability matrix and local doctor output support them |
+| Optional sparse-solver backends | Use PETSc/MUMPS or cuDSS only where the capability matrix and local doctor output support the selected route |
+| Optional iterative acceleration or preconditioning | Use AmgX or PyAMG only where the selected workflow documents support and the local doctor detects the dependency |
+| Optional visualization | Use PyVista for supported post-processing workflows; it is not a linear-solver backend |
 
 PhAST's reference public runs use double precision where the mechanics and
 damage kernels require it. CUDA and CPU float64 are the most reliable choices

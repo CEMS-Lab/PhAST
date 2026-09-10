@@ -81,16 +81,33 @@ Run the first completed example and retain its output on the host:
 ```bash
 mkdir -p runs
 docker run --rm \
+  --cpus 2 --memory 4g \
   --volume "$PWD/runs:/opt/phast/runs" \
   phast:local \
   python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 
+The equivalent Windows PowerShell command is:
+
+```powershell
+New-Item -ItemType Directory -Force runs | Out-Null
+docker run --rm `
+  --cpus 2 --memory 4g `
+  --mount "type=bind,source=$((Resolve-Path .\runs).Path),target=/opt/phast/runs" `
+  phast:local `
+  python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml `
+  --output_dir runs/linear_plate
+```
+
+The two-CPU, 4 GB limits are a conservative starting point for the compact
+linear-plate check, not a resource prescription for fracture benchmarks.
+Increase them only after inspecting the requirements of the selected example.
+
 Open an interactive shell when inspecting the container environment:
 
 ```bash
-docker run --rm -it --entrypoint /bin/sh phast:local
+docker run --rm -it --cpus 2 --memory 4g --entrypoint /bin/sh phast:local
 ```
 
 ## Verify before running a simulation
