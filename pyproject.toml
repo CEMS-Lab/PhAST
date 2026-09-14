@@ -11,7 +11,7 @@ authors = [
 description = "Matrix-free PyTorch finite-element solver for phase-field fracture"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10"
 keywords = ["phase-field", "fracture", "fem", "pytorch", "autograd", "scientific-computing"]
 classifiers = [
     "Programming Language :: Python :: 3",

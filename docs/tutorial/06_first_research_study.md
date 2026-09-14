@@ -22,7 +22,8 @@ research result.
 
 ## 1. Reproduce the baseline route
 
-Begin from the repository root in a supported Python 3.10-3.12 environment:
+Begin from the repository root in a Python 3.10-or-newer environment. Python
+3.11 is the recommended baseline:
 
 ```bash
 python -m phast doctor

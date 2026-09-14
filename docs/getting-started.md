@@ -52,8 +52,10 @@ HPC or sparse-direct backend is required for the basic workflow.
 
 ## 1. Prerequisites
 
-PhAST currently supports Python 3.10-3.12 and requires Git. Python 3.11 is
-recommended for a first installation. The base installation obtains
+PhAST requires Python 3.10 or newer and requires Git. Python 3.11 is
+recommended for a first installation. Continuous integration currently
+verifies Python 3.10-3.12; later Python versions are permitted but are not yet
+part of the regular test matrix. The base installation obtains
 PyTorch, NumPy, SciPy, Gmsh, meshio, Matplotlib, YAML support, and the standard
 result-storage dependencies from `pyproject.toml`.
 
@@ -89,8 +91,8 @@ An editable installation is appropriate for a source repository: changes made
 under `src/phast/` are immediately available in the active environment.
 
 Before creating the environment, check `python3.11 --version` (or the selected
-Python 3.10-3.12 interpreter). Do not rely on an unqualified `python3` when it
-selects a newer, untested interpreter.
+Python interpreter) and confirm that it is Python 3.10 or newer. Later Python
+versions may be used, although Python 3.11 remains the recommended baseline.
 
 ## 3. Verify The Environment
 

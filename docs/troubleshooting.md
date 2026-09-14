@@ -8,8 +8,8 @@ installing optional backends pre-emptively.
 ### Windows
 
 Use PowerShell in a fresh virtual environment. If `python` is not found, use
-the Python launcher (`py -3.11`) or install Python 3.10--3.12 with the launcher
-enabled. If a package wheel is unavailable, retry with Python 3.11 and update
+the Python launcher (`py -3.11`) or install Python 3.10 or newer with the
+launcher enabled. If a package wheel is unavailable, retry with Python 3.11 and update
 `pip`; do not mix packages from multiple Python installations. Run commands
 from the repository root so example paths resolve.
 

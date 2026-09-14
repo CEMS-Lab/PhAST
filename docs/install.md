@@ -1,8 +1,10 @@
 # Install PhAST
 
-PhAST supports Python 3.10, 3.11, and 3.12. The base installation includes
-the dependencies needed by the public solver; PETSc/MUMPS, GPU direct solvers,
-and other HPC backends remain optional.
+PhAST requires Python 3.10 or newer. Python 3.11 is the recommended baseline,
+and continuous integration currently verifies Python 3.10-3.12. Later Python
+versions are permitted but are not yet part of the regular test matrix. The
+base installation includes the dependencies needed by the public solver;
+PETSc/MUMPS, GPU direct solvers, and other HPC backends remain optional.
 
 ## Tested platform matrix
 
@@ -125,7 +127,7 @@ deferred until the doctor shows that the intended workflow needs it.
 
 | First error | Check |
 |---|---|
-| `python: command not found` | Install Python 3.10-3.12 and use `python3` on Unix or `py -3.11` on Windows. |
+| `python: command not found` | Install Python 3.10 or newer and use `python3` on Unix or `py -3.11` on Windows. |
 | `ModuleNotFoundError: phast` | Activate the environment and rerun `python -m pip install -e .` from the repository root. |
 | Gmsh import or library error | Confirm that the environment contains one consistent Gmsh installation; avoid mixing Conda and Homebrew binary stacks. |
 | CUDA/PyTorch incompatibility | Install the PyTorch build matching the local CUDA driver, then confirm it with `python -m phast doctor`. |
