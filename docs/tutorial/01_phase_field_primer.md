@@ -93,6 +93,31 @@ In a YAML config, switch with `material.overrides.pf_model: AT1` or
 a pre-crack (Ambati et al. 2015, Bleyer et al. 2017); AT2 is the right
 choice for propagation from an existing notch (Borden et al. 2012).
 
+### Experimental rational AT2 degradation
+
+PhAST also exposes the parameter-free rational law
+
+$$
+g(d)=\frac{(1-d)^2}{(1-d)^2+d}.
+$$
+
+Select it with `degradation_type: rational_at2` only together with
+`pf_model: AT2`. Unlike the standard quadratic degradation, this law makes the
+fixed-history damage residual nonlinear. The current forward route enforces
+$d_n \le d \le 1$ with a projected Newton iteration and an energy line search.
+For T3 meshes, the Newton direction uses an explicitly assembled SciPy sparse
+consistent tangent on the CPU, with safeguarded diagonal descent as a fallback.
+It is therefore an exception to the primary matrix-free damage path. The
+current implementation requires elementwise history and does not provide a
+differentiable rational-AT2 damage solve.
+
+The independent stress option `stress_degradation: full` selects a hybrid,
+non-variational formulation: the configured `energy_split` still defines the
+crack-driving history, while one scalar degradation factor is applied to the
+complete undamaged stress. The default `stress_degradation: split` retains the
+variational split-stress route. These choices must be recorded with reported
+results because they define different constitutive models.
+
 For the default hard-history route, the history field
 
 ```{math}

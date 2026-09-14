@@ -96,6 +96,82 @@ class DamageStepContext:
         edges = torch.cat(pairs, dim=0)
         return torch.unique(edges, dim=0).t().contiguous()
 
+    def element_areas(self) -> torch.Tensor:
+        """Return the area of every three-node triangle in the mesh."""
+
+        if self.elements.shape[1] != 3:
+            raise NotImplementedError(
+                "element_areas currently covers three-node triangles; got "
+                f"{self.elements.shape[1]} local nodes")
+        xy = self.nodes[:, :2][self.elements]
+        x0, x1, x2 = xy[:, 0], xy[:, 1], xy[:, 2]
+        twice_area = (
+            (x1[:, 0] - x0[:, 0]) * (x2[:, 1] - x0[:, 1])
+            - (x2[:, 0] - x0[:, 0]) * (x1[:, 1] - x0[:, 1])
+        )
+        return 0.5 * twice_area.abs()
+
+    def assemble_element_to_nodes(self, values: torch.Tensor) -> torch.Tensor:
+        """Assemble ``sum_e int N_i value_e dOmega`` over the mesh.
+
+        This is the finite-element integral of a linear shape function against
+        a piecewise-constant element field, without mass inversion. Divide by
+        the lumped mass returned for a unit field to obtain a nodal average
+        instead.
+        """
+
+        values = values.reshape(-1)
+        if values.shape[0] != self.elements.shape[0]:
+            raise ValueError(
+                "values must hold one entry per element; got "
+                f"{values.shape[0]} for {self.elements.shape[0]} elements")
+        n_local = self.elements.shape[1]
+        weighted = (
+            values * self.element_areas() / n_local
+        ).repeat_interleave(n_local)
+        accumulated = torch.zeros(
+            self.nodes.shape[0], dtype=weighted.dtype, device=weighted.device)
+        accumulated.index_add_(0, self.elements.reshape(-1), weighted)
+        return accumulated
+
+    def boundary_node_mask(self) -> torch.Tensor:
+        """Flag nodes on the topological boundary of the mesh.
+
+        An element edge shared by exactly one element lies on a boundary. The
+        test is topological, so interior voids such as holes and slots are
+        detected alongside the outer perimeter.
+        """
+
+        n_local = self.elements.shape[1]
+        pairs = torch.cat(
+            [
+                torch.stack(
+                    (
+                        self.elements[:, local],
+                        self.elements[:, (local + 1) % n_local],
+                    ),
+                    dim=1,
+                )
+                for local in range(n_local)
+            ],
+            dim=0,
+        )
+        undirected, counts = torch.unique(
+            pairs.sort(dim=1).values, dim=0, return_counts=True)
+        boundary_edges = undirected[counts == 1]
+        mask = torch.zeros(
+            self.nodes.shape[0], dtype=torch.bool, device=self.nodes.device)
+        mask[boundary_edges.reshape(-1)] = True
+        return mask
+
+    def edge_lengths(self, edge_index: torch.Tensor) -> torch.Tensor:
+        """Return the Euclidean length of every edge in ``edge_index``."""
+
+        delta = (
+            self.nodes[:, :2][edge_index[0]] - self.nodes[:, :2][edge_index[1]]
+        )
+        return torch.linalg.vector_norm(delta, dim=1)
+
 
 @dataclass(frozen=True)
 class DamagePrediction:

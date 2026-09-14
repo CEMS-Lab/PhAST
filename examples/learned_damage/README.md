@@ -67,3 +67,80 @@ solver.set_damage_predictor(predictor, mode="learned_proposal")
 Start with `learned_proposal`. Treat direct replacement as a separate
 experimental study requiring independent finite-element comparisons and
 complete reporting of all fallback events.
+
+## Swapping architectures
+
+The finite-element workflow does not change when a learned predictor is used.
+Geometry construction, meshing, named region identification, boundary
+conditions, loading, material properties, solver selection and time integration
+are written exactly as for a classical run. One key inside the solver block
+selects which operation performs the damage update, and a second names the
+adapter:
+
+```yaml
+solver:
+  solver_type: explicit
+  damage_update: learned_proposal
+  damage_predictor: examples.learned_damage.architectures.mesh_graph_net:create_predictor
+  damage_checkpoint: checkpoints/mesh_graph_net.pt
+  damage_fallback: true
+```
+
+Changing architecture means changing those two lines:
+
+| Architecture | `damage_predictor` |
+|---|---|
+| Persistence, interface demonstration | `examples.learned_damage.predictor_plugin:create_predictor` |
+| TorchScript, architecture-agnostic | `examples.learned_damage.predictor_plugin:create_predictor` |
+| Mesh-graph network | `examples.learned_damage.architectures.mesh_graph_net:create_predictor` |
+| Your own | `my_package.my_architecture:create_predictor` |
+
+Each architecture needs a wrapper, because each one has its own graph
+construction, feature ordering and normalization. The wrapper is the only place
+that knowledge belongs. `examples/learned_damage/architectures/template.py` is a
+commented skeleton with the two methods to fill in.
+
+## Finite-element helpers available to any predictor
+
+`DamageStepContext` supplies the quantities that predictors of every
+architecture tend to need, so that a wrapper carries model-specific code only:
+
+| Method | Returns |
+|---|---|
+| `canonical_node_features()` | `[x, y, H, d_prev, u_x, u_y]` per node |
+| `graph_edge_index()` | directed, duplicate-free mesh edges |
+| `element_areas()` | area of every triangle |
+| `assemble_element_to_nodes(v)` | `sum_e int N_i v_e dOmega` |
+| `boundary_node_mask()` | topological boundary nodes, interior voids included |
+| `edge_lengths(edge_index)` | length of every edge |
+
+## Portable checkpoints
+
+`architectures/mesh_graph_net.py` provides `export_torchscript`, which converts a
+state-dict checkpoint into a TorchScript archive. The archive carries its own
+architecture, so it evaluates with no model source on the import path and can be
+distributed as a single file. Optimizer state is dropped in the process.
+
+```python
+from examples.learned_damage.architectures.mesh_graph_net import export_torchscript
+
+export_torchscript("training_checkpoint.pt", "mesh_graph_net.pt")
+```
+
+Load checkpoints only from sources you trust. The state-dict loader accepts
+tensor-and-metadata archives through PyTorch's restricted `weights_only` mode;
+the example does not deserialize arbitrary Python objects.
+
+The `examples.learned_damage...` module paths are available when running from
+the PhAST source checkout. They are examples rather than modules installed in
+the core `phast` wheel. A deployed predictor should therefore live in its own
+installed package or use an application-specific import path.
+
+## Auditing an accepted damage field
+
+`phast.solvers.damage_solver.damage_kkt_metrics` reports the box-constrained
+KKT conditions for one damage field: projected stationarity, feasibility of the
+irreversibility interval, dual sign conditions on the active sets, and
+complementarity. Post-clamping and relaxed iterates can hide exactly these
+violations, so the projected norms are the right quantity to report when
+comparing a learned update against a classical one.

@@ -23,7 +23,7 @@ GPU strategy:
 import torch
 import warnings
 import math
-from ..core.fem_operators import FEMOperators
+from ..core.fem_operators import FEMOperators, stress_split_of
 from ..utils.device import device_supports_float64
 from .time_integrators import gen_alpha_params
 
@@ -1261,7 +1261,7 @@ class QuasiStaticSolver:
         from .sparse_solve import (
             SparseSolveAutograd, _MumpsSparseSolveAutograd)
 
-        split = getattr(self.fem.material, 'energy_split', 'isotropic')
+        split = stress_split_of(self.fem.material)
         if split == 'isotropic':
             indices, values, n_dof = self._assemble_K_isotropic(d)
         else:
@@ -1396,7 +1396,7 @@ class QuasiStaticSolver:
             raise ValueError(
                 f"arc-length load scaling alpha must be > 0, got {alpha}")
 
-        energy_split = getattr(self.fem.material, 'energy_split', 'isotropic')
+        energy_split = stress_split_of(self.fem.material)
         spectral_split = energy_split in (
             'spectral', 'spectral_plane_stress_condensed',
             'amor', 'star_convex')
@@ -1683,7 +1683,7 @@ class QuasiStaticSolver:
                 d, f_ext, bc_mask, bc_vals, u_init=u_init,
                 rigid_connectors=rigid_connectors)
 
-        energy_split = getattr(self.fem.material, 'energy_split', 'isotropic')
+        energy_split = stress_split_of(self.fem.material)
         if self.backend == 'cudss':
             raise NotImplementedError(
                 "backend='cudss' is currently supported only for sparse J2 "

@@ -20,6 +20,18 @@ from .mesh import FEMMesh
 from ..physics.material import Material
 
 
+
+def stress_split_of(material) -> str:
+    """Return the split governing the stress and the fixed-damage tangent.
+
+    Falls back to ``energy_split`` for material objects that predate the
+    ``stress_degradation`` contract.
+    """
+    resolver = getattr(material, 'effective_stress_split', None)
+    if callable(resolver):
+        return resolver()
+    return getattr(material, 'energy_split', 'isotropic')
+
 class FEMOperators:
     """Vectorized FEM operators for plane-strain linear triangles.
 
@@ -621,7 +633,10 @@ class FEMOperators:
             strain = self.compute_strain(u)
         eps_xx, eps_yy, gam_xy = strain
 
-        split = self.material.energy_split
+        # Under stress_degradation='full' the whole stress carries one scalar
+        # factor, which is exactly the isotropic expression. The history field
+        # keeps material.energy_split.
+        split = stress_split_of(self.material)
         if split == 'spectral':
             return self.compute_stress_spectral_algebraic(eps_xx, eps_yy, gam_xy, g_d)
         elif split == 'spectral_stress':
@@ -724,7 +739,9 @@ class FEMOperators:
         g_d = self.material.degradation(d_e)
 
         eps_xx, eps_yy, gam_xy = self.compute_strain(u)
-        split = self.material.energy_split
+        # The total-stress hybrid law is linear in displacement at fixed
+        # damage, so its secant action is exactly the isotropic action.
+        split = stress_split_of(self.material)
 
         state = {'g_d': g_d, 'split': split}
 
@@ -1375,21 +1392,35 @@ class FEMOperators:
         mesh = self.mesh
         mat = self.material
 
+        # The total-stress hybrid degrades the complete undamaged stress while
+        # retaining a spectral tensile history, so its mechanical energy uses
+        # g(d)*psi_0 rather than g(d)*psi_plus + psi_minus.
+        full_stress = stress_split_of(mat) == 'isotropic' and (
+            getattr(mat, 'stress_degradation', 'split') == 'full')
+
         # Degraded elastic energy
         if getattr(mesh, 'element_type', 'T3') == 'Q4':
             d_q = torch.einsum('qa,ea->eq', mesh.quad_N, d[mesh.elements])
             g_d = mat.degradation(d_q)
-            psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
-            E_elastic = (
-                (g_d * psi_plus + psi_minus) * mesh.quad_wdetJ
-            ).sum().item()
+            if full_stress:
+                E_elastic = (
+                    g_d * self._psi_plus_isotropic(strain) * mesh.quad_wdetJ
+                ).sum().item()
+            else:
+                psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
+                E_elastic = (
+                    (g_d * psi_plus + psi_minus) * mesh.quad_wdetJ
+                ).sum().item()
         else:
             d_e = d[mesh.elements].mean(1)
             g_d = mat.degradation(d_e)
 
             # Total elastic energy comprises degraded tensile + intact compressive parts
-            psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
-            elastic_density = (g_d * psi_plus) + psi_minus
+            if full_stress:
+                elastic_density = g_d * self._psi_plus_isotropic(strain)
+            else:
+                psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
+                elastic_density = (g_d * psi_plus) + psi_minus
             E_elastic = (elastic_density * mesh.areas).sum().item()
 
         E_surf, E_grad = self._fracture_energy_terms(d)
@@ -1420,19 +1451,33 @@ class FEMOperators:
         mesh = self.mesh
         mat = self.material
 
+        full_stress = stress_split_of(mat) == 'isotropic' and (
+            getattr(mat, 'stress_degradation', 'split') == 'full')
+
         # Elastic energy (degraded tensile + intact compressive)
         if getattr(mesh, 'element_type', 'T3') == 'Q4':
             d_q = torch.einsum('qa,ea->eq', mesh.quad_N, d[mesh.elements])
             g_d = mat.degradation(d_q)
-            psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
-            E_elastic = (
-                (g_d * psi_plus + psi_minus) * mesh.quad_wdetJ
-            ).sum().item()
+            if full_stress:
+                E_elastic = (
+                    g_d * self._psi_plus_isotropic(strain) * mesh.quad_wdetJ
+                ).sum().item()
+            else:
+                psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
+                E_elastic = (
+                    (g_d * psi_plus + psi_minus) * mesh.quad_wdetJ
+                ).sum().item()
         else:
             d_e = d[mesh.elements].mean(1)
             g_d = mat.degradation(d_e)
-            psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
-            E_elastic = ((g_d * psi_plus + psi_minus) * mesh.areas).sum().item()
+            if full_stress:
+                E_elastic = (
+                    g_d * self._psi_plus_isotropic(strain) * mesh.areas
+                ).sum().item()
+            else:
+                psi_minus = self._psi_minus_for_energy(strain, d, psi_plus)
+                E_elastic = (
+                    (g_d * psi_plus + psi_minus) * mesh.areas).sum().item()
 
         E_frac_surf, E_frac_grad = self._fracture_energy_terms(d)
         E_fracture = E_frac_surf + E_frac_grad

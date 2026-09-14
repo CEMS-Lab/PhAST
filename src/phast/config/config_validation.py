@@ -90,7 +90,8 @@ ENUMS = {
     'solver.preconditioner': [
         None, 'auto', 'amg', 'amgx', 'gmg', 'jacobi', 'none',
     ],
-    'material.degradation_type': ['standard', 'cubic', 'rational'],
+    'material.degradation_type': ['standard', 'cubic', 'rational', 'rational_at2'],
+    'material.stress_degradation': ['split', 'full'],
     'device.device': [None, 'cpu', 'cuda', 'mps'],
     'boundary_conditions[].type': [
         'fix', 'prescribe', 'neumann',
@@ -119,7 +120,8 @@ OVERRIDE_ENUMS = {
         'volumetric_deviatoric', 'star_convex', 'isotropic',
     ],
     'pf_model': ['AT1', 'AT2', 'PFCZM', 'allencahn'],
-    'degradation_type': ['standard', 'cubic', 'rational'],
+    'degradation_type': ['standard', 'cubic', 'rational', 'rational_at2'],
+    'stress_degradation': ['split', 'full'],
     'driving_force': ['strain_energy', 'principal_stress'],
     'pfczm_softening': ['linear', 'exponential'],
 }
@@ -818,12 +820,26 @@ def _validate_cross_field_compatibility(raw: dict, line_map: dict,
                              line_map.get('material', 0)),
             ),
         ))
-    elif pf_model not in {'', 'PFCZM'} and degradation_type != 'standard':
+    elif (degradation_type == 'rational_at2' and pf_model not in {'', 'AT2'}):
+        errors.append(ValidationError(
+            path='material.degradation_type',
+            message=(
+                "degradation_type='rational_at2' is defined for pf_model='AT2'"
+            ),
+            line_no=line_map.get(
+                'material.degradation_type',
+                line_map.get('material.overrides.degradation_type',
+                             line_map.get('material', 0)),
+            ),
+            suggestion="Use pf_model: AT2, or degradation_type: standard.",
+        ))
+    elif (pf_model not in {'', 'PFCZM'}
+            and degradation_type not in ('standard', 'rational_at2')):
         errors.append(ValidationError(
             path='material.degradation_type',
             message=(
                 "the coupled AT1/AT2 damage solver currently supports "
-                "degradation_type='standard' only"
+                "degradation_type='standard' and 'rational_at2' only"
             ),
             line_no=line_map.get(
                 'material.degradation_type',
@@ -831,8 +847,8 @@ def _validate_cross_field_compatibility(raw: dict, line_map: dict,
                              line_map.get('material', 0)),
             ),
             suggestion=(
-                "Use degradation_type: standard. Non-standard mechanical "
-                "degradation laws are not yet a supported coupled "
+                "Use degradation_type: standard or rational_at2. Other "
+                "mechanical degradation laws are not yet a supported coupled "
                 "damage-update route."
             ),
         ))

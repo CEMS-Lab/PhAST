@@ -133,6 +133,89 @@ def zero_active_entries(values: torch.Tensor,
     return out
 
 
+@torch.no_grad()
+def damage_kkt_metrics(
+        residual: torch.Tensor,
+        d: torch.Tensor,
+        d_prev: torch.Tensor,
+        *,
+        upper_bound: float = 1.0,
+        bound_atol: float = 1e-12,
+        fixed: torch.Tensor | None = None) -> dict[str, float | int | bool]:
+    """Audit the box-constrained KKT conditions for one damage field.
+
+    ``residual`` must use the solver's gradient convention ``A d - b``.
+    With the irreversible interval ``d_prev <= d <= upper_bound``, a
+    lower-active degree of freedom is valid when ``residual >= 0`` and an
+    upper-active one is valid when ``residual <= 0``.  Interior degrees of
+    freedom require a zero residual.  The returned projected norms therefore
+    measure precisely the KKT violation that a post-clamp or relaxed iterate
+    can hide.
+
+    Nodes already saturated in ``d_prev`` are treated as fixed, because their
+    lower and upper bounds coincide.  Explicit phase-field Dirichlet nodes can
+    be supplied through ``fixed`` and are likewise excluded from stationarity.
+    """
+    if residual.shape != d.shape or d_prev.shape != d.shape:
+        raise ValueError(
+            "residual, d, and d_prev must have identical shapes; got "
+            f"{tuple(residual.shape)}, {tuple(d.shape)}, {tuple(d_prev.shape)}")
+    if bound_atol < 0.0:
+        raise ValueError("bound_atol must be non-negative")
+
+    saturated = d_prev >= upper_bound - bound_atol
+    if fixed is not None:
+        fixed_mask = fixed.to(device=d.device, dtype=torch.bool) | saturated
+    else:
+        fixed_mask = saturated
+    active = classify_damage_active_set(
+        d, d_prev, upper_bound=upper_bound, lower_atol=bound_atol,
+        upper_atol=bound_atol, fixed=fixed_mask)
+
+    projected = residual.clone()
+    # Lower-active nodes permit only positive damage increments. A negative
+    # gradient would lower energy in that feasible direction and violates KKT.
+    projected[active.lower] = torch.minimum(
+        projected[active.lower], torch.zeros_like(projected[active.lower]))
+    # Upper-active nodes permit only negative damage increments. A positive
+    # gradient would lower energy by leaving the upper bound.
+    projected[active.upper] = torch.maximum(
+        projected[active.upper], torch.zeros_like(projected[active.upper]))
+    projected[active.fixed] = 0.0
+
+    lower_gap = d - d_prev
+    upper_gap = upper_bound - d
+    lower_dual = torch.clamp(residual, min=0.0)
+    upper_dual = torch.clamp(-residual, min=0.0)
+    lower_complementarity = lower_dual * torch.clamp(lower_gap, min=0.0)
+    upper_complementarity = upper_dual * torch.clamp(upper_gap, min=0.0)
+
+    def _max_or_zero(values: torch.Tensor) -> float:
+        return float(values.max().item()) if values.numel() else 0.0
+
+    return {
+        "kkt_projected_l2": float(torch.linalg.vector_norm(projected).item()),
+        "kkt_projected_linf": _max_or_zero(projected.abs()),
+        "kkt_lower_feasibility_linf": _max_or_zero(
+            torch.clamp(-lower_gap, min=0.0)),
+        "kkt_upper_feasibility_linf": _max_or_zero(
+            torch.clamp(-upper_gap, min=0.0)),
+        "kkt_lower_dual_violation_linf": _max_or_zero(
+            torch.clamp(-residual[active.lower], min=0.0)),
+        "kkt_upper_dual_violation_linf": _max_or_zero(
+            torch.clamp(residual[active.upper], min=0.0)),
+        "kkt_complementarity_linf": _max_or_zero(torch.maximum(
+            lower_complementarity, upper_complementarity)),
+        "kkt_lower_active_count": int(active.lower.sum().item()),
+        "kkt_upper_active_count": int(active.upper.sum().item()),
+        "kkt_fixed_count": int(active.fixed.sum().item()),
+        "kkt_interior_count": int(active.interior.sum().item()),
+        "kkt_feasible": bool(
+            _max_or_zero(torch.clamp(-lower_gap, min=0.0)) <= bound_atol
+            and _max_or_zero(torch.clamp(-upper_gap, min=0.0)) <= bound_atol),
+    }
+
+
 def make_gamma_corrected_Gc_field(solver, Gc_scalar):
     """Build a per-element Gc field from a scalar, baking in gamma correction.
 
@@ -1131,13 +1214,15 @@ class PhaseFieldDamageSolver:
               f"{h_tag})...",
               flush=True)
         degradation_type = getattr(fem.material, 'degradation_type', 'standard')
-        if degradation_type != 'standard' and pf_tag != 'PFCZM':
+        if (degradation_type not in ('standard', 'rational_at2')
+                and pf_tag != 'PFCZM'):
             raise NotImplementedError(
-                "PhaseFieldDamageSolver currently supports only "
-                "degradation_type='standard'. Non-standard degradation laws "
-                f"({degradation_type!r}) require a nonlinear damage residual "
-                "consistent with g'(d)."
+                "PhaseFieldDamageSolver currently supports "
+                "degradation_type='standard' and 'rational_at2'. Other "
+                f"degradation laws ({degradation_type!r}) require a nonlinear "
+                "damage residual consistent with g'(d)."
             )
+        self._degradation_type = degradation_type
         self.fem = fem
         self._bounds_method = bounds_method
         self.material = fem.material
@@ -1352,9 +1437,14 @@ class PhaseFieldDamageSolver:
         # makes the coarse matrix singular. PF-CZM is nonlinear and uses a
         # diagonal safeguarded descent, so multigrid preconditioners for the
         # linear AT2 operator are not applicable there either.
-        if self._pf_model in ('AT1', 'PFCZM') and requested in ('auto', 'amg', 'gmg'):
+        if ((self._pf_model in ('AT1', 'PFCZM')
+             or self._degradation_type == 'rational_at2')
+                and requested in ('auto', 'amg', 'gmg')):
             requested = 'jacobi'
-            print(f"[PhaseFieldDamageSolver] {self._pf_model} model: using "
+            model_label = ('rational AT2'
+                           if self._degradation_type == 'rational_at2'
+                           else self._pf_model)
+            print(f"[PhaseFieldDamageSolver] {model_label} model: using "
                   f"Jacobi preconditioner", flush=True)
 
         # Build preconditioner with automatic fallback chain:
@@ -1897,6 +1987,12 @@ class PhaseFieldDamageSolver:
             H_cg = H_input
             d_cg = d
 
+        if self._degradation_type == 'rational_at2':
+            residual, _energy = self._rational_at2_residual_energy(H_cg, d_cg)
+            if need_transfer:
+                residual = residual.to(device=d.device, dtype=d.dtype)
+            return residual
+
         if self._pf_model == 'PFCZM':
             if self._nodal_H:
                 raise NotImplementedError("PF-CZM residual supports element-wise H only.")
@@ -2433,6 +2529,14 @@ class PhaseFieldDamageSolver:
                     "material overrides, or convert Q4 cells to T3 for adjoint "
                     "damage workflows.")
 
+            if self._degradation_type == 'rational_at2' and (
+                    getattr(self, 'differentiable', False)
+                    or Gc_needs_grad or l0_needs_grad
+                    or Gc_field_needs_grad):
+                raise NotImplementedError(
+                    "Differentiable rational AT2 solves are not yet "
+                    "implemented; use the forward projected solve.")
+
             if self._pf_model == 'PFCZM' and (
                     getattr(self, 'differentiable', False)
                     or Gc_needs_grad or l0_needs_grad or Gc_field_needs_grad):
@@ -2515,6 +2619,11 @@ class PhaseFieldDamageSolver:
                     "or have the staggered loop forward its dt.")
             return self.step_allencahn(H_input, d_prev, dt)
 
+        if self._degradation_type == 'rational_at2':
+            self.last_backend = 'rational_at2_projected'
+            return self._solve_rational_at2_projected(
+                H_input, d_prev, pf_dirichlet_mask, pf_dirichlet_values)
+
         if self._pf_model == 'PFCZM':
             return self._solve_pfczm_projected(
                 H_input, d_prev, pf_dirichlet_mask, pf_dirichlet_values)
@@ -2536,6 +2645,345 @@ class PhaseFieldDamageSolver:
                 H_input, d_prev, pf_dirichlet_mask, pf_dirichlet_values)
 
     @torch.no_grad()
+    def _rational_at2_residual_energy(self, H_cg, d_cg):
+        """Assemble the rational AT2 residual and energy.
+
+        The parameter-free rational AT2 law uses
+
+            E_d = int[H g(d) + Gc/(2 l0) d^2
+                      + Gc l0/2 |grad d|^2] dOmega,
+            g(d) = (1-d)^2 / ((1-d)^2 + d).
+
+        T3 reaction terms use the symmetric three-point triangle quadrature;
+        the gradient term is exact for linear triangles. Native Q4 uses the
+        mesh Gauss rule. This keeps the returned residual exactly consistent
+        with the energy used by the safeguarded line search.
+        """
+        elements = self._cg_elements
+        Gc_e = self._element_Gc_cg()
+
+        if self._native_q4_damage:
+            N = self._cg_quad_N
+            gp = self._cg_quad_grad_phi
+            wdet = self._cg_quad_wdetJ
+            d_e = d_cg[elements]
+            d_q = torch.einsum('qa,ea->eq', N, d_e)
+            gd_x = torch.einsum('eqa,ea->eq', gp[..., 0], d_e)
+            gd_y = torch.einsum('eqa,ea->eq', gp[..., 1], d_e)
+            H_q = self._q4_history_at_gauss(H_cg)
+            g, g_p, _g_pp = (
+                self.material.rational_at2_degradation_derivatives(d_q))
+            q = H_q * g_p + (Gc_e / self._l0).unsqueeze(1) * d_q
+            mass_contrib = torch.einsum('qa,eq->ea', N, q * wdet)
+            lap_contrib = (
+                (Gc_e * self._l0).view(-1, 1)
+                * (
+                    wdet.unsqueeze(2)
+                    * (
+                        gp[..., 0] * gd_x.unsqueeze(2)
+                        + gp[..., 1] * gd_y.unsqueeze(2)
+                    )
+                ).sum(dim=1)
+            )
+            residual = torch.zeros(
+                self._cg_n_nodes, dtype=self._cg_dtype,
+                device=self._cg_device)
+            residual.scatter_add_(
+                0, self._elem_flat, (mass_contrib + lap_contrib).flatten())
+            energy = (
+                wdet
+                * (
+                    H_q * g
+                    + 0.5 * (Gc_e / self._l0).unsqueeze(1) * d_q.square()
+                    + 0.5 * (Gc_e * self._l0).unsqueeze(1)
+                    * (gd_x.square() + gd_y.square())
+                )
+            ).sum()
+            return residual, energy
+
+        if self._nodal_H:
+            raise NotImplementedError(
+                "rational AT2 currently supports element-wise H only.")
+        areas = self._cg_areas
+        gp = self._cg_grad_phi
+        d_e = d_cg[elements]
+        N = torch.as_tensor(
+            [[2.0 / 3.0, 1.0 / 6.0, 1.0 / 6.0],
+             [1.0 / 6.0, 2.0 / 3.0, 1.0 / 6.0],
+             [1.0 / 6.0, 1.0 / 6.0, 2.0 / 3.0]],
+            dtype=self._cg_dtype, device=self._cg_device)
+        d_q = torch.einsum('qa,ea->eq', N, d_e)
+        weight = (areas / 3.0).unsqueeze(1)
+        g, g_p, _g_pp = (
+            self.material.rational_at2_degradation_derivatives(d_q))
+        q = H_cg.unsqueeze(1) * g_p + (
+            Gc_e / self._l0).unsqueeze(1) * d_q
+        mass_contrib = torch.einsum('qa,eq->ea', N, q * weight)
+
+        gd_x = (gp[:, :, 0] * d_e).sum(1)
+        gd_y = (gp[:, :, 1] * d_e).sum(1)
+        lap_contrib = (Gc_e * self._l0).unsqueeze(1) * (
+            self._areas_col * (
+                gp[:, :, 0] * gd_x.unsqueeze(1)
+                + gp[:, :, 1] * gd_y.unsqueeze(1)))
+        residual = torch.zeros(
+            self._cg_n_nodes, dtype=self._cg_dtype, device=self._cg_device)
+        residual.scatter_add_(
+            0, self._elem_flat, (mass_contrib + lap_contrib).flatten())
+
+        local_energy = (
+            weight
+            * (
+                H_cg.unsqueeze(1) * g
+                + 0.5 * (Gc_e / self._l0).unsqueeze(1) * d_q.square()
+            )
+        ).sum()
+        grad_energy = (
+            0.5 * Gc_e * self._l0 * areas
+            * (gd_x.square() + gd_y.square())
+        ).sum()
+        return residual, local_energy + grad_energy
+
+
+    def _rational_at2_descent_diag(self, H_cg, d_cg):
+        """Positive diagonal scaling for the rational AT2 projected solve."""
+        elements = self._cg_elements
+        Gc_e = self._element_Gc_cg()
+        d_e = d_cg[elements]
+
+        if self._native_q4_damage:
+            N = self._cg_quad_N
+            wdet = self._cg_quad_wdetJ
+            d_q = torch.einsum('qa,ea->eq', N, d_e)
+            H_q = self._q4_history_at_gauss(H_cg)
+            _g, _g_p, g_pp = (
+                self.material.rational_at2_degradation_derivatives(d_q))
+            qprime = H_q * g_pp + (Gc_e / self._l0).unsqueeze(1)
+            mass_diag = torch.einsum('qa,eq->ea', N * N, qprime * wdet)
+            lap_diag = (Gc_e * self._l0).unsqueeze(1) * self._cg_diag_lap
+        else:
+            if self._nodal_H:
+                raise NotImplementedError(
+                    "rational AT2 currently supports element-wise H only.")
+            N = torch.as_tensor(
+                [[2.0 / 3.0, 1.0 / 6.0, 1.0 / 6.0],
+                 [1.0 / 6.0, 2.0 / 3.0, 1.0 / 6.0],
+                 [1.0 / 6.0, 1.0 / 6.0, 2.0 / 3.0]],
+                dtype=self._cg_dtype, device=self._cg_device)
+            d_q = torch.einsum('qa,ea->eq', N, d_e)
+            _g, _g_p, g_pp = (
+                self.material.rational_at2_degradation_derivatives(d_q))
+            qprime = H_cg.unsqueeze(1) * g_pp + (
+                Gc_e / self._l0).unsqueeze(1)
+            weight = (self._cg_areas / 3.0).unsqueeze(1)
+            mass_diag = torch.einsum('qa,eq->ea', N * N, qprime * weight)
+            gp = self._cg_grad_phi
+            lap_diag = (Gc_e * self._l0).unsqueeze(1) * (
+                self._areas_col
+                * (gp[:, :, 0].square() + gp[:, :, 1].square()))
+
+        diag = torch.zeros(
+            self._cg_n_nodes, dtype=self._cg_dtype, device=self._cg_device)
+        diag.scatter_add_(
+            0, self._elem_flat,
+            (mass_diag.abs() + lap_diag + 1.0e-18).flatten())
+        return diag.clamp_min(1.0e-18)
+
+
+    def _rational_at2_newton_direction(
+            self, H_cg, d_cg, residual, active):
+        """Assemble the consistent T3 tangent and solve on free damage DOFs.
+
+        Returns ``None`` when sparse Newton is unavailable or the tangent
+        solve fails; the caller then uses safeguarded diagonal descent.
+        """
+        if self._native_q4_damage or self._nodal_H:
+            return None
+        try:
+            import numpy as np
+            import scipy.sparse as sp
+            import scipy.sparse.linalg as spla
+
+            elements = self._cg_elements
+            areas = self._cg_areas
+            gp = self._cg_grad_phi
+            Gc_e = self._element_Gc_cg()
+            d_e = d_cg[elements]
+            N = torch.as_tensor(
+                [[2.0 / 3.0, 1.0 / 6.0, 1.0 / 6.0],
+                 [1.0 / 6.0, 2.0 / 3.0, 1.0 / 6.0],
+                 [1.0 / 6.0, 1.0 / 6.0, 2.0 / 3.0]],
+                dtype=self._cg_dtype, device=self._cg_device)
+            d_q = torch.einsum('qa,ea->eq', N, d_e)
+            _g, _g_p, g_pp = (
+                self.material.rational_at2_degradation_derivatives(d_q))
+            qprime = H_cg.unsqueeze(1) * g_pp + (
+                Gc_e / self._l0).unsqueeze(1)
+            mass_local = torch.einsum(
+                'qa,qb,eq,e->eab', N, N, qprime, areas / 3.0)
+            lap_local = (Gc_e * self._l0 * areas).view(-1, 1, 1) * (
+                torch.einsum('eai,ebi->eab', gp, gp))
+            tangent = (mass_local + lap_local).detach().cpu().numpy()
+            element_np = elements.detach().cpu().numpy()
+            rows = np.repeat(element_np, 3, axis=1).reshape(-1)
+            cols = np.tile(element_np, (1, 3)).reshape(-1)
+            matrix = sp.coo_matrix(
+                (tangent.reshape(-1), (rows, cols)),
+                shape=(self._cg_n_nodes, self._cg_n_nodes)).tocsr()
+            free = (~active).detach().cpu().numpy().astype(bool)
+            if not np.any(free):
+                return torch.zeros_like(d_cg)
+            rhs = -residual.detach().cpu().numpy()[free]
+            matrix_free = matrix[free][:, free]
+            step_free = spla.spsolve(matrix_free, rhs)
+            if not np.all(np.isfinite(step_free)):
+                return None
+            direction = torch.zeros_like(d_cg)
+            direction[torch.as_tensor(
+                free, device=d_cg.device)] = torch.from_numpy(
+                    np.asarray(step_free)).to(
+                        device=d_cg.device, dtype=d_cg.dtype)
+            return direction
+        except Exception:
+            return None
+
+
+    def _solve_rational_at2_projected(
+            self, H_elem: torch.Tensor, d_prev: torch.Tensor,
+            pf_dirichlet_mask=None,
+            pf_dirichlet_values=None) -> torch.Tensor:
+        """Solve the rational AT2 variational inequality.
+
+        The state is constrained to ``d_prev <= d <= 1``. A positive
+        diagonal Newton scaling and energy backtracking make every accepted
+        update feasible and non-increasing in the consistently integrated
+        rational AT2 functional.
+        """
+        if self._nodal_H:
+            raise NotImplementedError(
+                "rational AT2 currently supports element-wise H only.")
+
+        orig_device = d_prev.device
+        orig_dtype = d_prev.dtype
+        cg_dev = self._cg_device
+        need_transfer = (
+            orig_device != cg_dev
+            or orig_dtype != self._cg_dtype
+            or H_elem.device != cg_dev
+            or H_elem.dtype != self._cg_dtype
+        )
+        H_cg = H_elem.detach().to(dtype=self._cg_dtype, device=cg_dev)
+        d_prev_cg = d_prev.detach().to(
+            dtype=self._cg_dtype, device=cg_dev)
+        lb = torch.clamp(d_prev_cg.clone(), 0.0, 1.0)
+        initial_guess = getattr(self, '_cg_initial_guess', None)
+        if initial_guess is None:
+            d = lb.clone()
+        else:
+            guess = initial_guess.detach().to(
+                dtype=self._cg_dtype, device=cg_dev)
+            d = torch.clamp(torch.maximum(guess, lb), 0.0, 1.0)
+        fixed, vals = self._prepare_pf_dirichlet(
+            pf_dirichlet_mask, pf_dirichlet_values,
+            self._cg_device, self._cg_dtype)
+        if fixed is not None:
+            vals = torch.clamp(vals, 0.0, 1.0)
+            d = torch.where(fixed, vals, d)
+            lb = torch.where(fixed, vals, lb)
+
+        self.last_iter = self.max_iter
+        self.last_residual = float('inf')
+        self.last_energy = float('nan')
+        self.last_converged = False
+        initial_projected_norm = None
+
+        for i in range(self.max_iter):
+            residual, energy = self._rational_at2_residual_energy(H_cg, d)
+            if fixed is not None:
+                residual[fixed] = 0.0
+            active = (
+                ((d <= lb + 1.0e-14) & (residual > 0.0))
+                | ((d >= 1.0 - 1.0e-14) & (residual < 0.0))
+            )
+            if fixed is not None:
+                active = active | fixed
+            projected = zero_active_entries(residual, active)
+            projected_norm = float(torch.linalg.vector_norm(projected).item())
+            if initial_projected_norm is None:
+                initial_projected_norm = projected_norm
+            tolerance = max(
+                self.tol * max(initial_projected_norm, 1.0e-30),
+                self.tol * math.sqrt(max(self._cg_n_nodes, 1)),
+            )
+            self.last_residual = projected_norm
+            self.last_energy = float(energy.item())
+            if projected_norm <= tolerance:
+                self.last_iter = i
+                self.last_converged = True
+                break
+
+            direction = self._rational_at2_newton_direction(
+                H_cg, d, residual, active)
+            if direction is None:
+                diag = self._rational_at2_descent_diag(H_cg, d)
+                direction = -projected / diag
+                direction[active] = 0.0
+            if not bool(torch.isfinite(direction).all()):
+                self.last_iter = i
+                break
+            descent = float(torch.dot(projected, direction).item())
+            if descent >= 0.0:
+                diag = self._rational_at2_descent_diag(H_cg, d)
+                direction = -projected / diag
+                direction[active] = 0.0
+                descent = float(torch.dot(projected, direction).item())
+            if descent >= 0.0:
+                self.last_iter = i
+                break
+
+            accepted = False
+            step = 1.0
+            energy_value = float(energy.item())
+            for _ in range(40):
+                candidate = torch.clamp(
+                    torch.maximum(d + step * direction, lb), 0.0, 1.0)
+                if fixed is not None:
+                    candidate = torch.where(fixed, vals, candidate)
+                _candidate_residual, candidate_energy = (
+                    self._rational_at2_residual_energy(H_cg, candidate))
+                candidate_value = float(candidate_energy.item())
+                armijo = energy_value + 1.0e-4 * step * descent
+                if math.isfinite(candidate_value) and candidate_value <= armijo:
+                    d = candidate
+                    accepted = True
+                    break
+                step *= 0.5
+            if not accepted:
+                self.last_iter = i
+                break
+        else:
+            self.last_iter = self.max_iter
+
+        d = torch.clamp(torch.maximum(d, lb), 0.0, 1.0)
+        if fixed is not None:
+            d = torch.where(fixed, vals, d)
+        if need_transfer:
+            return d.to(device=orig_device, dtype=orig_dtype)
+        return d
+
+    @torch.no_grad()
+
+    def _q4_history_at_gauss(self, H_input):
+        """Return Q4 H at Gauss points from element, Gauss, or nodal input."""
+        if self._nodal_H:
+            if H_input.shape != (self._cg_n_nodes,):
+                raise ValueError(
+                    "Native Q4 nodal_H damage expects H with shape "
+                    f"({self._cg_n_nodes},), got {tuple(H_input.shape)}")
+            H_e = H_input[self._cg_elements]
+            return torch.einsum('qa,ea->eq', self._cg_quad_N, H_e)
+        return self._normalize_q4_H(H_input)
+
     def _solve_pfczm_projected(self, H_elem: torch.Tensor,
                                d_prev: torch.Tensor,
                                pf_dirichlet_mask=None,

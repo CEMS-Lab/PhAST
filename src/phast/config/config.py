@@ -128,6 +128,7 @@ class MaterialConfig:
     energy_split: Optional[str] = None
     pf_model: Optional[str] = None
     degradation_type: Optional[str] = None
+    stress_degradation: Optional[str] = None
     kinematics: Optional[str] = None
     plane_stress: Optional[bool] = None
     driving_force: Optional[str] = None  # 'strain_energy' | 'principal_stress' (issue #248)
@@ -811,7 +812,8 @@ def _resolve_material(config: ProblemConfig):
     mat_overrides = dict(config.material.overrides)
     _inline_field_names = (
         'E', 'nu', 'Gc', 'l0', 'rho', 'eta_residual',
-        'energy_split', 'pf_model', 'degradation_type', 'kinematics',
+        'energy_split', 'pf_model', 'degradation_type', 'stress_degradation',
+        'kinematics',
         'plane_stress',
         'driving_force', 'cubic_s', 'sigma_ts', 'pfczm_p',
         'pfczm_softening',

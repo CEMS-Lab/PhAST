@@ -60,6 +60,18 @@ class Material:
         'standard' (default): g(d) = (1-d)^2 + eta.
         'cubic': Borden cubic degradation family.
         'rational': Wu (2017) rational degradation — less length-scale sensitive.
+        'rational_at2': parameter-free rational law g(d) = (1-d)^2/((1-d)^2+d).
+            Carries no length-scale coefficient and no residual-stiffness
+            blend, so it is kept separate from the Wu-style 'rational'.
+            The damage subproblem is nonlinear under this law and is solved
+            by a bound-constrained projected Newton iteration.
+    stress_degradation : str
+        'split' (default): the stress is degraded through ``energy_split``,
+            which is the variational contract.
+        'full': the complete undamaged stress is degraded by one scalar
+            factor while the history field is still evaluated with
+            ``energy_split``. This selects the non-variational hybrid
+            formulation without changing the history-field split.
     cubic_s : float
         Shape parameter for the Borden cubic degradation family. Used only
         when ``degradation_type == 'cubic'``.
@@ -76,7 +88,14 @@ class Material:
     ] = 'amor'
     pf_model: Literal['AT1', 'AT2', 'PFCZM', 'allencahn'] = 'AT2'
     gamma_correction: bool = False
-    degradation_type: Literal['standard', 'cubic', 'rational'] = 'standard'
+    degradation_type: Literal[
+        'standard', 'cubic', 'rational', 'rational_at2'
+    ] = 'standard'
+    # Stress degradation is normally tied to ``energy_split``. The
+    # non-variational hybrid formulation instead computes the history from
+    # tensile spectral energy while degrading the complete undamaged stress
+    # tensor. 'full' selects that behavior without changing the history split.
+    stress_degradation: Literal['split', 'full'] = 'split'
     cubic_s: float = 1.0
     sigma_ts: float = 0.0  # tensile strength [MPa] for AT1 nucleation enhancement (0=off)
     pfczm_p: int = 2
@@ -163,6 +182,14 @@ class Material:
             raise ValueError(
                 f"pf_model must be 'AT1', 'AT2', 'PFCZM', or 'allencahn', got "
                 f"{self.pf_model!r}")
+        if self.stress_degradation not in {'split', 'full'}:
+            raise ValueError(
+                "stress_degradation must be 'split' or 'full', got "
+                f"{self.stress_degradation!r}")
+        if self.degradation_type == 'rational_at2' and self.pf_model != 'AT2':
+            raise ValueError(
+                "degradation_type='rational_at2' is defined for pf_model='AT2', "
+                f"got {self.pf_model!r}")
         if not isinstance(self.pfczm_p, int) or isinstance(self.pfczm_p, bool):
             raise ValueError(f"pfczm_p must be an integer >= 2, got {self.pfczm_p!r}")
         if self.pfczm_p < 2:
@@ -317,6 +344,37 @@ class Material:
             scale * ratio_pp,
         )
 
+    def rational_at2_degradation_derivatives(
+            self, d: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Return ``g``, ``g'`` and ``g''`` for the parameter-free rational law.
+
+        .. math::
+            g(d) = \\frac{(1-d)^2}{(1-d)^2 + d} = \\frac{(1-d)^2}{d^2 - d + 1}
+
+        The law carries no length-scale coefficient and applies no
+        residual-stiffness blend, which distinguishes it from the Wu-style
+        ``degradation_type='rational'``. The denominator has a minimum of
+        ``3/4`` at ``d = 1/2`` over ``[0, 1]`` and is clamped only to guard
+        against out-of-range iterates.
+        """
+        denominator = (d * d - d + 1.0).clamp_min(1.0e-30)
+        g = (1.0 - d) ** 2 / denominator
+        gp = (d * d - 1.0) / (denominator * denominator)
+        gpp = -2.0 * (d ** 3 - 3.0 * d + 1.0) / (denominator ** 3)
+        return g, gp, gpp
+
+    def effective_stress_split(self) -> str:
+        """Return the split governing the stress and the mechanical tangent.
+
+        Under ``stress_degradation='full'`` the whole stress carries a single
+        scalar factor, so the stress and its fixed-damage tangent coincide with
+        the isotropic case even when the history field uses another split.
+        """
+        if self.stress_degradation == 'full':
+            return 'isotropic'
+        return self.energy_split
+
     @property
     def lam(self) -> float:
         """First Lamé parameter (lambda).
@@ -443,12 +501,16 @@ class Material:
           'standard': g(d) = (1-d)^2 + eta  (AT2 default)
           'cubic':    Borden cubic family
                       g(d) = (3-s)(1-d)^2 - (2-s)(1-d)^3
+          'rational_at2': g(d) = (1-d)^2 / ((1-d)^2 + d), parameter-free and
+                      applied without a residual-stiffness blend.
           'rational': g(d) = (1-eta) * (1-d)^2 / ((1-d)^2 + a1*d*(1+d)) + eta
                       Wu (2017) rational degradation — less length-scale sensitive.
                       a1 = 4 / (pi * l0), calibrated to match AT2 peak stress.
                       The (1-eta)*R(d) + eta blending matches the 'standard'
                       and 'cubic' forms so g(0) = 1 exactly (closes #279).
         """
+        if self.degradation_type == 'rational_at2':
+            return self.rational_at2_degradation_derivatives(d)[0]
         if self.degradation_type == 'cubic':
             omd = 1.0 - d
             ratio = ((3.0 - self.cubic_s) * omd * omd
