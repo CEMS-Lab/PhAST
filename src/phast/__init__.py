@@ -52,6 +52,8 @@ adaptive            : Adaptive mesh refinement (newest vertex bisection)
 # .``) hit the package name and execute the full body.
 
 if __name__ == "phast":
+    from .line_mesh import LineMesh, line_mesh
+    from .bar import BarResult, solve_bar
     from .mesh import FEMMesh, build_node_adjacency
     from .material import Material, create_material
     from .boundary_conditions import (
@@ -122,6 +124,7 @@ if __name__ == "phast":
         pass
 
     __all__ = [
+        'LineMesh', 'line_mesh', 'BarResult', 'solve_bar',
         # Core
         'FEMMesh', 'Material', 'create_material',
         'BoundaryConditions', 'DirichletBC', 'NeumannBC',

@@ -22,6 +22,7 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 | Capability | Status | Public Statement |
 |---|---|---|
 | Small-strain 2D linear elasticity | Supported | Exercised through the core mechanics kernels and documented static and quasi-static examples. |
+| Small-strain 1D axial elasticity | Beta | Separate CPU float64 Python API: `line_mesh`, `LineMesh`, and `solve_bar`. Uniform material/area, one left displacement constraint and a right-end force; analytical fields and first-order gradients are tested. See the [1D bar API](one_dimensional_bar.md). |
 | Brittle phase-field fracture, AT2 | Supported | Available for explicit dynamics and staggered quasi-static/static solves within the documented examples. |
 | Brittle phase-field fracture, AT1 | Beta | Supported via projected damage solves and AT1 threshold fields; benchmark coverage is expanding. |
 | Heterogeneous elastic fields `E(x)` | Supported programmatic path | Per-element fields support structural inclusions and weak/strong bands. The element ordering and low-level authoring route are demonstrated in the [heterogeneous-fields teaching example](https://github.com/CEMS-Lab/PhAST/tree/main/examples/heterogeneous_fields); arbitrary field maps are not currently a general YAML feature. |
