@@ -14,7 +14,7 @@ from phast.workflow import validate_problem_spec
 def build_problem() -> phast.Problem:
     return (
         phast.Problem("Linear elastic plate")
-        .geometry("structured_grid", nx=20, ny=10, length=1.0, height=0.2)
+        .geometry("structured_grid", units="m", nx=20, ny=10, length=1.0, height=0.2)
         .region("body", kind="domain")
         .material("steel", region="body", E=2.1e11, nu=0.3)
         .analysis_step("load", kind="solid_mechanics",

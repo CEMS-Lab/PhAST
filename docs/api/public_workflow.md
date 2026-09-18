@@ -66,6 +66,30 @@ is marked beta, scaffold, optional-backend, or unsupported, keep it out of
 public examples unless the corresponding contract tests and visual manifests
 are present.
 
+For a promoted solid-mechanics example, advanced tooling may execute a
+Python-built `ProblemSpec` through the same YAML runner. From the repository
+root, the linear-plate fluent companion provides a complete setup:
+
+```bash
+PYTHONPATH=src:. python examples/solid_mechanics_beta/linear_plate/run_fluent.py --run --output-dir runs/linear_plate_python
+```
+
+The script reuses `fluent_setup.build_problem()` and calls
+`run_problem_spec(problem.to_spec(), output_dir=...)`. Calling
+`run_problem_spec(spec, validate_only=True)` checks the lowered YAML without
+solving or writing a result directory. This bridge is limited to Python-built
+specs for the published linear-plate runner. That runner clamps the left edge
+and applies a vertical point force at the right-edge mid-height node; it does
+not apply user-declared boundary conditions. Additional materials, load steps,
+initial conditions, imported meshes, and options the runner cannot represent
+are rejected before execution. This does not make arbitrary `ProblemSpec`
+instances executable. For routine use, prefer `Problem.run(...)` or the
+checked-in `config.yaml`.
+
+The linear-plate companion declares `units="m"` in `Problem.geometry(...)`
+to match its SI input values and metre-labelled displacement output. This is
+metadata for the built-in geometry path, not automatic unit conversion.
+
 ## Output Boundary
 
 Every curated public example should expose a flat, predictable result bundle:

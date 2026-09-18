@@ -64,6 +64,10 @@ field/history requests, and `.run()` submits the job.
 
 PhAST is unit-agnostic. Use one consistent unit system across geometry,
 material properties, loads, density, fracture energy, and time controls.
+`Problem.geometry(..., units="m")` records the geometry unit separately from
+the generator parameters. Classic built-in generators preserve the supplied
+numeric values. Use a consistent unit system for all inputs. The default
+remains `"mm"` for existing fluent setups.
 
 ## Python or YAML?
 
