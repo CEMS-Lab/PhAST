@@ -21,6 +21,8 @@ Usage
     # From a YAML config:
     python -m phast precheck \
         --config configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
+    # The config path may also be passed positionally:
+    python -m phast precheck configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
 
     # Self-test with reference values:
     python -m phast precheck --test
@@ -704,12 +706,16 @@ Examples:
   %(prog)s --E 32000 --nu 0.2 --rho 2.45e-9 --Gc 3e-3 --l0 0.5 --h_min 0.5
 
   # From YAML config:
+  %(prog)s configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
+  # Equivalent explicit form:
   %(prog)s --config configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
 
   # Self-test:
   %(prog)s --test
 """)
     # Material source (mutually-exclusive-ish)
+    p.add_argument('config_path', nargs='?', default=None,
+                   help='Path to YAML config file (alternative to --config)')
     p.add_argument('--preset', type=str, default=None,
                    help='Material preset name (e.g. glass_borden, maraging_steel_kw)')
     p.add_argument('--config', type=str, default=None,
@@ -757,7 +763,11 @@ Examples:
     p.add_argument('--compare', action='store_true',
                    help='Print wave speed table for all material presets')
 
-    return p.parse_args()
+    args = p.parse_args()
+    if args.config_path and args.config:
+        p.error('provide the YAML path either positionally or with --config, not both')
+    args.config = args.config or args.config_path
+    return args
 
 
 def _run_from_preset(preset_name: str, overrides: dict):

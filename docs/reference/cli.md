@@ -7,7 +7,7 @@ The module entry point is `python -m phast`. Run it without a subcommand or with
 | Command | Purpose |
 |---|---|
 | `run CONFIG` | Validate, resolve, and run a supported YAML configuration. |
-| `precheck --config CONFIG` | Report pre-simulation diagnostics without running the solve. |
+| `precheck CONFIG` | Report pre-simulation diagnostics without running the solve. |
 | `explain-config CONFIG` | Explain configuration contents without generating a mesh or running. |
 | `schema` | Export the JSON Schema for YAML configurations. |
 | `doctor` | Report environment and solver-backend status. |
@@ -22,16 +22,17 @@ The module entry point is `python -m phast`. Run it without a subcommand or with
 
 ## Other command options
 
-`precheck` accepts `--config CONFIG` for a YAML file, or material and mesh
-parameters such as `--preset`, `--h_min`, and `--t_total`; the config path is
-not a positional argument. Run `python -m phast precheck --help` for all options.
+`precheck` accepts a YAML path either as `CONFIG` or as `--config CONFIG`.
+Do not supply both forms together. It also accepts material and mesh
+parameters such as `--preset`, `--h_min`, and `--t_total`. Run
+`python -m phast precheck --help` for all options.
 
 `schema` accepts `--output`, `--check`, and `--indent`. `postprocess` accepts a run directory and post-processing options such as `--dpi`. `new` accepts a name and starter options including `--type` and `--material`; consult the command help for the complete local option set.
 
 ## Examples
 
 ```bash
-python -m phast precheck --config examples/dynamic/B2_kalthoff_winkler/config.yaml
+python -m phast precheck examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast run config.yaml --validate-only
 python -m phast run config.yaml --device cuda --trajectory-format zarr
