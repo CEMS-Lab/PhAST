@@ -103,7 +103,6 @@ families:
     - history.csv
     - energy.csv
     - crack_tip.csv
-    - compare.png
   - id: B6_perforated_30holes
     path: examples/dynamic/B6_perforated_30holes
     status: public_candidate_renamed_from_old_B4_source
@@ -248,7 +247,6 @@ families:
     - timing_per_step.csv
     - damage_final.png
     - damage_evolution.gif
-    - damage_evolution.mp4
     - compare.png
     - compare_report.txt
     - thumbnail.png
@@ -275,7 +273,6 @@ families:
     - timing_per_step.csv
     - damage_final.png
     - damage_evolution.gif
-    - damage_evolution.mp4
     - damage_multipanel.png
     - compare.png
     - compare_report.txt
