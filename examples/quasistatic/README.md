@@ -48,7 +48,7 @@ Each public example should keep:
 - `config.yaml`
 - `mesh.geo` and `mesh.msh`
 - lightweight CSV, JSON, log, and comparison files
-- representative PNG/MP4 visuals
+- representative PNG images and GIF animations
 
 Large trajectory stores are generated on demand for local post-processing and
 are not part of the lightweight public example bundle.
