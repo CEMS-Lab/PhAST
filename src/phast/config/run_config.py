@@ -61,7 +61,7 @@ def _print_precheck_summary(mesh, mat, solver_cfg, cfg) -> None:
     """Compact pre-run diagnostic block.
 
     Prints the key physical + numerical invariants that
-    ``python -m phast precheck <yaml>`` reports in full. Kept
+    ``python -m phast precheck --config <yaml>`` reports in full. Kept
     tight (10 lines) so it does not drown the run log; the full report is
     still one command away. Categories mirror the paper's §3 diagnostic
     tool discussion (wave speeds, CFL, phase-field resolution, damage

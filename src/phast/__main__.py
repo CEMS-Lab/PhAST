@@ -13,7 +13,6 @@ Subcommands:
 
 Usage:
     python -m phast run configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
-    python -m phast precheck configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
     python -m phast precheck --config configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
     python -m phast explain-config configs/benchmarks/dynamic/B3_dynamic_sent.yaml
     python -m phast schema --output configs/phast.schema.json

@@ -7,7 +7,7 @@ The module entry point is `python -m phast`. Run it without a subcommand or with
 | Command | Purpose |
 |---|---|
 | `run CONFIG` | Validate, resolve, and run a supported YAML configuration. |
-| `precheck CONFIG` | Report pre-simulation diagnostics without running the solve. |
+| `precheck --config CONFIG` | Report pre-simulation diagnostics without running the solve. |
 | `explain-config CONFIG` | Explain configuration contents without generating a mesh or running. |
 | `schema` | Export the JSON Schema for YAML configurations. |
 | `doctor` | Report environment and solver-backend status. |
@@ -34,6 +34,7 @@ parameters such as `--preset`, `--h_min`, and `--t_total`. Run
 ```bash
 python -m phast precheck examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
+python -m phast precheck --config examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast run config.yaml --validate-only
 python -m phast run config.yaml --device cuda --trajectory-format zarr
 python -m phast schema --output configs/phast.schema.json
