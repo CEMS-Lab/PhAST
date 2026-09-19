@@ -2,7 +2,7 @@
 
 ## 1. Problem Description
 
-Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against an Euler-Bernoulli estimate, differentiates the tip displacement with respect to Young's modulus, and writes standard displacement, stress, strain, and energy visualisations.
+Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against an Euler-Bernoulli estimate, differentiates the tip displacement with respect to Young's modulus, and writes displacement-magnitude, von Mises stress and strain-energy-density visualisations.
 
 
 ## Run The YAML Configuration
@@ -34,11 +34,43 @@ does not retain reloadable displacement or stress arrays in Zarr/HDF5.
 python examples/solid_mechanics_beta/linear_plate/run_fluent.py --run --output-dir runs/linear_plate
 ```
 
-`run_fluent.py` builds the same problem manually with `phast.Problem`: geometry, region, material, load step, solver selection, and requested outputs are all declared in Python before the workflow contract is validated.
+`run_fluent.py` uses `fluent_setup.build_problem()` to declare the same
+geometry, region, material, load step, solver selection, and requested outputs
+in Python. With `--run`, it passes the resulting `ProblemSpec` to the existing
+solid-mechanics YAML runner. No separate solver implementation is used.
+
+The checked-in `config.yaml` remains the reference input for shared runs.
+For advanced Python tooling, `build_problem().to_spec()` from the existing
+`fluent_setup.py` companion can also be passed to
+`phast.workflow.run_problem_spec(...)`. For this promoted linear-plate case,
+the spec is lowered to the same solid-mechanics YAML runner. Passing
+`validate_only=True` checks the configuration without producing result
+artifacts. `output_dir` selects a separate result directory. This bridge is
+not a general executor for arbitrary Python-built problems.
+
+Relative result paths are resolved from the working directory, with `outputs`
+as the default. This runner always writes its fixed visual bundle and requires
+`plots=True` in the Python spec. Accepted field names are `displacement`,
+`von_mises` and `strain_energy`. These refer to the existing visualisations,
+not stored displacement, strain or stress tensor arrays. Legacy image aliases
+refer to these same quantities and add no independent field data.
 
 ## How Manual Setup Works
 
 The manual setup mirrors the YAML fields directly: `.geometry(...)` maps to `mesh`, `.material(...)` maps to `material`, `.analysis_step(...)` maps to `loading`, `.solver(...)` selects `solid_mechanics.linear_plate`, and `.outputs(...)` requests the response and field artifacts.
+
+The example uses a consistent SI convention: plate dimensions are `1.0 m`
+by `0.2 m`, Young's modulus is `2.1e11 Pa`, and the applied force is
+`-1000 N`. The fluent companion records `units="m"` as geometry metadata;
+it does not rescale the numeric mesh parameters. The recorded tip displacement
+and its `response.csv` label are in metres.
+
+The promoted runner clamps both displacement components on the left edge and
+applies the vertical point force at the mid-height node on the right edge.
+Those boundary conditions are built into this example. The Python `ProblemSpec`
+bridge accepts one full-domain material and one load step on the built-in
+structured grid. Explicit boundary conditions, imported meshes and additional
+materials or steps produce a validation error before execution.
 
 ## Reference Result
 

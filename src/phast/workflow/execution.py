@@ -15,7 +15,7 @@ import tempfile
 
 import yaml
 
-from ..solid_mechanics_runner import solid_example_id
+from ..solid_mechanics_runner import solid_example_id, _validate_solid_mechanics_config
 from ..config.config import OutputConfig as LegacyOutputConfig
 from ..config.config import SolverSettings as LegacySolverSettings
 from .capabilities import CapabilityIssue, validate_problem_spec_capabilities
@@ -41,6 +41,90 @@ class WorkflowExecutionPlan:
 _RUN_CONFIG_SOLVERS = {"explicit", "quasi_static", "quasi_static_legacy"}
 
 
+def _python_solid_mechanics_bridge_issues(spec: ProblemSpec) -> tuple[str, ...]:
+    """Reject Python inputs the published linear-plate runner would discard."""
+    issues: list[str] = []
+    example = _solid_mechanics_example_id_from_spec(spec)
+    if example != "solid_mechanics.linear_plate":
+        issues.append("only solid_mechanics.linear_plate is supported by this Python bridge")
+
+    if len(spec.materials) != 1:
+        issues.append("exactly one material is required")
+    if len(spec.analysis_steps) != 1:
+        issues.append("exactly one analysis step is required")
+    if spec.boundary_conditions:
+        issues.append("explicit boundary conditions cannot be lowered")
+    if spec.initial_conditions:
+        issues.append("initial conditions cannot be lowered")
+    if spec.mesh is not None:
+        issues.append("mesh file or explicit mesh inputs cannot be lowered")
+    if spec.geometry is None or spec.geometry.kind != "structured_grid":
+        issues.append("structured_grid geometry is required")
+    elif (
+        spec.geometry.primitives
+        or spec.geometry.domain
+        or spec.geometry.named_groups
+        or spec.geometry.units != "m"
+    ):
+        issues.append("custom geometry metadata cannot be lowered")
+
+    if len(spec.regions) > 1 or any(
+        region.kind != "domain" or region.selector for region in spec.regions
+    ):
+        issues.append("only one unselected domain region can be lowered")
+
+    if len(spec.materials) == 1:
+        material = spec.materials[0]
+        if material.model != "solid_mechanics":
+            issues.append("material model must be solid_mechanics")
+        expected_region = spec.regions[0].name if len(spec.regions) == 1 else None
+        if material.region != expected_region:
+            issues.append("material region must cover the full domain")
+        if set(material.parameters) - {"E", "nu"}:
+            issues.append("unsupported material parameters would be ignored")
+
+    if len(spec.analysis_steps) == 1:
+        step = spec.analysis_steps[0]
+        if step.kind != "solid_mechanics":
+            issues.append("analysis step kind must be solid_mechanics")
+        if step.active_boundary_conditions:
+            issues.append("active boundary conditions cannot be lowered")
+        if set(step.controls) - {"tip_force_y"}:
+            issues.append("unsupported load controls would be ignored")
+
+    if spec.geometry is not None and set(spec.geometry.parameters) - {
+        "nx", "ny", "length", "height"
+    }:
+        issues.append("unsupported geometry parameters would be ignored")
+    if _legacy_solid_solver(spec):
+        issues.append("nondefault solver settings cannot be lowered for linear_plate")
+    if set(_legacy_solid_output(spec)) - {"directory", "plots"}:
+        issues.append("unsupported output settings would be ignored")
+    if spec.outputs.parameters.get("plots") is not True:
+        issues.append("linear_plate requires plots=True for its fixed visual bundle")
+    if any(
+        field.name not in {"displacement", "von_mises", "strain_energy"}
+        or field.every != 1 or field.parameters
+        for field in spec.outputs.fields
+    ):
+        issues.append("unsupported field output request would be ignored")
+    if any(
+        history.name != "response" or history.every != 1 or history.region is not None
+        or history.component is not None or history.parameters
+        for history in spec.outputs.history
+    ):
+        issues.append("unsupported history output request would be ignored")
+    if any(
+        item.kind != "plots" or item.parameters for item in spec.outputs.postprocess
+    ):
+        issues.append("unsupported postprocess request would be ignored")
+
+    if not issues and example is not None:
+        payload = _schema_v2_solid_mechanics_legacy_yaml(spec)
+        issues.extend(_validate_solid_mechanics_config(payload, example))
+    return tuple(issues)
+
+
 def execution_plan_from_spec(spec: ProblemSpec) -> WorkflowExecutionPlan:
     """Return the internal compatibility route for a ``ProblemSpec``."""
     issues = tuple(validate_problem_spec_capabilities(spec))
@@ -49,6 +133,13 @@ def execution_plan_from_spec(spec: ProblemSpec) -> WorkflowExecutionPlan:
         raise WorkflowExecutionError(f"ProblemSpec has unsupported capabilities: {detail}")
 
     step_kinds = tuple(step.kind for step in spec.analysis_steps)
+    python_solid_issues = (
+        _python_solid_mechanics_bridge_issues(spec)
+        if spec.source == "python:Problem"
+        and spec.source_path is None
+        and spec.solver.kind == "solid_mechanics"
+        else ()
+    )
     direct_execution_supported = (
         spec.source != "yaml:v2"
         or (
@@ -57,6 +148,10 @@ def execution_plan_from_spec(spec: ProblemSpec) -> WorkflowExecutionPlan:
         )
         or _schema_v2_quasistatic_fracture_supported(spec)
     )
+    if spec.source == "python:Problem" and spec.source_path is None:
+        direct_execution_supported = (
+            spec.solver.kind == "solid_mechanics" and not python_solid_issues
+        )
     execution_boundary = "existing_runner" if direct_execution_supported else "validate_only"
     execution_note = (
         "Existing compatibility runner can execute this compiled workflow."
@@ -66,6 +161,12 @@ def execution_plan_from_spec(spec: ProblemSpec) -> WorkflowExecutionPlan:
             "until a safe ProblemSpec-to-runner execution adapter is designed."
         )
     )
+    if python_solid_issues:
+        execution_boundary = "unsupported"
+        execution_note = (
+            "Python solid-mechanics ProblemSpec cannot be lowered: "
+            + "; ".join(python_solid_issues)
+        )
     if spec.solver.kind == "solid_mechanics":
         return WorkflowExecutionPlan(
             route="solid_mechanics_runner",
@@ -110,14 +211,31 @@ def run_problem_spec(
     output_dir: str | os.PathLike | None = None,
     validate_only: bool = False,
 ) -> int:
-    """Run a YAML-backed ``ProblemSpec`` through PhAST's existing CLI.
+    """Run a YAML-backed or promoted Python ``ProblemSpec`` through the CLI.
 
-    This is intentionally a compatibility bridge, not a solver adapter. It only
-    invokes the public ``python -m phast run`` path for specs that remember the
-    YAML file they came from.
+    This is a compatibility bridge, not a new solver adapter. Python-built
+    solid-mechanics specs are lowered to the existing YAML runner.
     """
     plan = execution_plan_from_spec(spec)
     if spec.source_path is None:
+        if (
+            spec.source == "python:Problem"
+            and plan.route == "solid_mechanics_runner"
+        ):
+            if not plan.direct_execution_supported:
+                raise WorkflowExecutionError(plan.execution_note)
+            # The lowered YAML is temporary, but completed results must persist.
+            configured_directory = spec.outputs.directory
+            if configured_directory is None:
+                configured_directory = spec.outputs.parameters.get("directory")
+            destination = Path(
+                output_dir if output_dir is not None else configured_directory or "outputs"
+            )
+            if not destination.is_absolute():
+                destination = Path.cwd() / destination
+            return _run_schema_v2_solid_mechanics_spec(
+                spec, output_dir=destination, validate_only=validate_only
+            )
         raise WorkflowExecutionError(
             "ProblemSpec.run() requires an original YAML source_path. "
             "Use phast.Problem.run() for Python-built problems."
@@ -246,12 +364,15 @@ def _run_schema_v2_solid_mechanics_spec(
     spec: ProblemSpec,
     *,
     output_dir: str | os.PathLike | None = None,
+    validate_only: bool = False,
 ) -> int:
     payload = _schema_v2_solid_mechanics_legacy_yaml(spec)
     with tempfile.TemporaryDirectory(prefix="phast-schema-v2-solid-") as tmp:
         lowered = Path(tmp) / "config.yaml"
         lowered.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
         cmd = [sys.executable, "-m", "phast", "run", str(lowered)]
+        if validate_only:
+            cmd.append("--validate-only")
         if output_dir is not None:
             cmd.extend(["--output_dir", os.fspath(output_dir)])
         completed = subprocess.run(cmd, check=False)

@@ -88,9 +88,11 @@ class Problem:
     # Fluent setters (each returns self for chaining)
     # ------------------------------------------------------------------
 
-    def geometry(self, type, **params):
-        """Set the mesh generator and its parameters."""
-        self._config.geometry = GeometryConfig(type=type, parameters=params)
+    def geometry(self, type, *, units='mm', **params):
+        """Set generator parameters and units metadata without rescaling values."""
+        self._config.geometry = GeometryConfig(
+            type=type, parameters=params, units=units
+        )
         return self
 
     def mesh(self, path):
