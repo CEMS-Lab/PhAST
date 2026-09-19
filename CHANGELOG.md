@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+### Experimental tetrahedral geometry
+
+- Add validated TET4 connectivity, orientation repair, volumes and scalar
+  shape-function gradients for geometry experiments.
+- Add a small structured block generator and scale-aware plane selection.
+- Cover orientation, affine fields, translated coordinates and small element
+  scales with CPU float32 and float64 regressions.
+
+This module prepares geometry. Existing two-dimensional solver routes are
+unchanged and three-dimensional mechanics and fracture remain separate work.
+
 ### Python workflow execution
 
 - Run the supported linear-plate Python `ProblemSpec` through the existing
