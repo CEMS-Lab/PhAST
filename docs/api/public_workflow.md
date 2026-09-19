@@ -90,6 +90,15 @@ The linear-plate companion declares `units="m"` in `Problem.geometry(...)`
 to match its SI input values and metre-labelled displacement output. This is
 metadata for the built-in geometry path, not automatic unit conversion.
 
+For a Python-built spec, relative output directories resolve from the working
+directory. The default destination is `outputs`. Results remain available
+after the temporary YAML input is removed. The linear-plate runner produces
+a fixed visual bundle with displacement magnitude, von Mises stress and
+strain-energy density, plus a response CSV. This bridge requires `plots=True`
+and accepts the corresponding field names `displacement`, `von_mises` and
+`strain_energy`. Field selection validates compatibility with that bundle.
+It does not select individual files or store reloadable tensor fields.
+
 ## Output Boundary
 
 Every curated public example should expose a flat, predictable result bundle:

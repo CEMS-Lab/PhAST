@@ -2,7 +2,7 @@
 
 ## 1. Problem Description
 
-Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against an Euler-Bernoulli estimate, differentiates the tip displacement with respect to Young's modulus, and writes standard displacement, stress, strain, and energy visualisations.
+Plane-strain CST cantilever solved with PhAST's sparse autograd linear-solve path. The example compares the finite-element tip displacement against an Euler-Bernoulli estimate, differentiates the tip displacement with respect to Young's modulus, and writes displacement-magnitude, von Mises stress and strain-energy-density visualisations.
 
 
 ## Run The YAML Configuration
@@ -45,8 +45,15 @@ For advanced Python tooling, `build_problem().to_spec()` from the existing
 `phast.workflow.run_problem_spec(...)`. For this promoted linear-plate case,
 the spec is lowered to the same solid-mechanics YAML runner. Passing
 `validate_only=True` checks the configuration without producing result
-artifacts; `output_dir` selects a separate result directory. This bridge is
+artifacts. `output_dir` selects a separate result directory. This bridge is
 not a general executor for arbitrary Python-built problems.
+
+Relative result paths are resolved from the working directory, with `outputs`
+as the default. This runner always writes its fixed visual bundle and requires
+`plots=True` in the Python spec. Accepted field names are `displacement`,
+`von_mises` and `strain_energy`. These refer to the existing visualisations,
+not stored displacement, strain or stress tensor arrays. Legacy image aliases
+refer to these same quantities and add no independent field data.
 
 ## How Manual Setup Works
 

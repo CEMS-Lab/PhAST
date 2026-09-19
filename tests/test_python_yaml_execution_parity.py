@@ -2,6 +2,7 @@
 
 import csv
 import json
+import os
 from runpy import run_path
 import subprocess
 import sys
@@ -95,6 +96,27 @@ def test_python_spec_rejects_unknown_source_before_execution(tmp_path: Path) -> 
     assert not output_dir.exists()
 
 
+@pytest.mark.parametrize("directory", [None, "relative/results"])
+def test_python_spec_preserves_default_and_relative_results(
+    directory: str | None, tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    base = _problem().to_spec()
+    spec = replace(
+        base,
+        geometry=replace(base.geometry, parameters={"nx": 2, "ny": 2, "length": 1.0, "height": 0.2}),
+        outputs=replace(base.outputs, directory=directory),
+    )
+    monkeypatch.setenv("PYTHONPATH", os.pathsep.join([str(ROOT / "src"), str(ROOT)]))
+    monkeypatch.chdir(tmp_path)
+    destination = tmp_path / (directory or "outputs")
+    assert run_problem_spec(spec, validate_only=True) == 0
+    assert not destination.exists()
+    assert run_problem_spec(spec) == 0
+    assert (destination / "run_manifest.json").is_file()
+    assert (destination / "response.csv").is_file()
+    assert (destination / "displacement_magnitude.png").is_file()
+
+
 def test_problem_geometry_keeps_default_units_out_of_generator_parameters() -> None:
     geometry = Problem("Default geometry units").geometry("structured_grid", nx=2, ny=1)
     assert geometry.config.geometry.units == "mm"
@@ -119,6 +141,9 @@ def test_problem_geometry_keeps_default_units_out_of_generator_parameters() -> N
         ("load_option", "unsupported load controls"),
         ("solver_option", "nondefault solver settings"),
         ("output_option", "unsupported output settings"),
+        ("plots_disabled", "requires plots=True"),
+        ("strain_field", "unsupported field output"),
+        ("stress_field", "unsupported field output"),
         ("other_example", "only solid_mechanics.linear_plate"),
     ],
 )
@@ -180,6 +205,15 @@ def test_python_solid_bridge_rejects_unlowered_inputs(
         ),
         "output_option": replace(
             base, outputs=replace(base.outputs, parameters={**base.outputs.parameters, "trajectory": True})
+        ),
+        "plots_disabled": replace(
+            base, outputs=replace(base.outputs, parameters={**base.outputs.parameters, "plots": False})
+        ),
+        "strain_field": replace(
+            base, outputs=replace(base.outputs, fields=[replace(base.outputs.fields[0], name="strain")])
+        ),
+        "stress_field": replace(
+            base, outputs=replace(base.outputs, fields=[replace(base.outputs.fields[0], name="stress")])
         ),
         "other_example": replace(
             base,

@@ -100,8 +100,10 @@ def _python_solid_mechanics_bridge_issues(spec: ProblemSpec) -> tuple[str, ...]:
         issues.append("nondefault solver settings cannot be lowered for linear_plate")
     if set(_legacy_solid_output(spec)) - {"directory", "plots"}:
         issues.append("unsupported output settings would be ignored")
+    if spec.outputs.parameters.get("plots") is not True:
+        issues.append("linear_plate requires plots=True for its fixed visual bundle")
     if any(
-        field.name not in {"displacement", "strain", "stress", "von_mises", "strain_energy"}
+        field.name not in {"displacement", "von_mises", "strain_energy"}
         or field.every != 1 or field.parameters
         for field in spec.outputs.fields
     ):
@@ -222,8 +224,13 @@ def run_problem_spec(
         ):
             if not plan.direct_execution_supported:
                 raise WorkflowExecutionError(plan.execution_note)
+            # The lowered YAML is temporary, but completed results must persist.
+            destination = Path(output_dir if output_dir is not None else
+                               spec.outputs.directory or "outputs")
+            if not destination.is_absolute():
+                destination = Path.cwd() / destination
             return _run_schema_v2_solid_mechanics_spec(
-                spec, output_dir=output_dir, validate_only=validate_only
+                spec, output_dir=destination, validate_only=validate_only
             )
         raise WorkflowExecutionError(
             "ProblemSpec.run() requires an original YAML source_path. "
