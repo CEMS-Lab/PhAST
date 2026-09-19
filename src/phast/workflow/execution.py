@@ -225,8 +225,12 @@ def run_problem_spec(
             if not plan.direct_execution_supported:
                 raise WorkflowExecutionError(plan.execution_note)
             # The lowered YAML is temporary, but completed results must persist.
-            destination = Path(output_dir if output_dir is not None else
-                               spec.outputs.directory or "outputs")
+            configured_directory = spec.outputs.directory
+            if configured_directory is None:
+                configured_directory = spec.outputs.parameters.get("directory")
+            destination = Path(
+                output_dir if output_dir is not None else configured_directory or "outputs"
+            )
             if not destination.is_absolute():
                 destination = Path.cwd() / destination
             return _run_schema_v2_solid_mechanics_spec(

@@ -96,19 +96,31 @@ def test_python_spec_rejects_unknown_source_before_execution(tmp_path: Path) -> 
     assert not output_dir.exists()
 
 
-@pytest.mark.parametrize("directory", [None, "relative/results"])
+@pytest.mark.parametrize(
+    ("directory", "parameter_directory", "expected"),
+    [
+        (None, None, "outputs"),
+        ("relative/results", None, "relative/results"),
+        (None, "parameter/results", "parameter/results"),
+        ("field/results", "parameter/results", "field/results"),
+    ],
+)
 def test_python_spec_preserves_default_and_relative_results(
-    directory: str | None, tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+    directory: str | None, parameter_directory: str | None, expected: str,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     base = _problem().to_spec()
+    parameters = dict(base.outputs.parameters)
+    if parameter_directory is not None:
+        parameters["directory"] = parameter_directory
     spec = replace(
         base,
         geometry=replace(base.geometry, parameters={"nx": 2, "ny": 2, "length": 1.0, "height": 0.2}),
-        outputs=replace(base.outputs, directory=directory),
+        outputs=replace(base.outputs, directory=directory, parameters=parameters),
     )
     monkeypatch.setenv("PYTHONPATH", os.pathsep.join([str(ROOT / "src"), str(ROOT)]))
     monkeypatch.chdir(tmp_path)
-    destination = tmp_path / (directory or "outputs")
+    destination = tmp_path / expected
     assert run_problem_spec(spec, validate_only=True) == 0
     assert not destination.exists()
     assert run_problem_spec(spec) == 0
