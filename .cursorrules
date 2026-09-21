@@ -15,8 +15,11 @@ mechanics fidelity, differentiability boundaries, and reproducible examples.
 - Avoid in-place tensor mutations in autograd-sensitive code. Prefer
   out-of-place expressions, `torch.where`, `scatter_add`, sparse operators, and
   vectorized batch operations.
-- Do not add inverse, hybrid/deep-learning, paper-2, paper-4, private HPC, or
-  proprietary-solver artifacts to the public surface.
+- Keep paper-specific reproduction commands in `reproduction/paper1` with an
+  explicit input catalogue and separate replot and simulation-run status.
+  These commands preserve historical experiments rather than adding a general
+  inverse API. Keep unrelated inverse studies, hybrid/deep-learning research,
+  paper-2, paper-4, private HPC and proprietary-solver artifacts separate.
 - Keep public examples flat, runnable, and reproducible: `config.yaml`,
   optional fluent setup, standard manifests, CSV histories, lightweight visuals,
   and documented result bundles.

@@ -222,6 +222,7 @@ print(result.history_names())
 |---|---|
 | `src/phast/` | Core PyTorch solver packages, mechanics/damage kernels, and CLI entry points. |
 | `examples/` | Runnable examples, their YAML inputs, and lightweight reference outputs. |
+| [`reproduction/paper1/`](reproduction/paper1/README.md) | Manuscript and supplement catalogue, retained-data checks and figure reproduction commands. |
 | `configs/` | Runnable benchmark decks, the YAML reference template and schema, and explicitly labelled reproducibility contracts. |
 | `docs/` | Sphinx documentation, capability matrices, tutorials, and user guides. |
 | `assets/` | Lightweight visual assets for repository documentation. |

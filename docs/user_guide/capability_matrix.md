@@ -66,6 +66,12 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 | Public inverse-analysis examples | Scaffold | `examples/inverse_problems_beta/` is a README-only landing zone until promoted inverse examples include configs, losses, retained lightweight outputs, and validation notes. |
 | General-purpose inverse-calibration framework | Unsupported | The public release does not provide a turnkey inverse-problem framework for arbitrary observations, priors, or optimizers. |
 
+Selected paper-specific inverse figures have separate
+[retained-data reproduction commands](../paper-reproduction.md). Their
+catalogue distinguishes replotting saved results from running the inverse
+calculation. These utilities preserve the scope of the recorded studies while
+the complete companion archive is prepared.
+
 ## Declarative YAML Workflows
 
 | Capability | Status | Public Statement |

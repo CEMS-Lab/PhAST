@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Paper reproduction
+
+- Add a manuscript and supplement catalogue with separate records for figures,
+  tables and numerical statements.
+- Add portable retained-data checks and selected figure-generation commands.
+  Record data replotting separately from complete simulation reproduction.
+- Preserve the existing example folders and configuration schema. Large fields
+  and historical execution sources remain in the companion data archive.
+
 ### Experimental tetrahedral geometry
 
 - Add validated TET4 connectivity, orientation repair, volumes and scalar

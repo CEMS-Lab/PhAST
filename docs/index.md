@@ -172,6 +172,7 @@ user_guide/yaml_workflow
 user_guide/results_visualization
 user_guide/learned_damage
 performance-reproducibility
+paper-reproduction
 ```
 
 ```{toctree}

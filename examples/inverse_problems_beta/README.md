@@ -4,6 +4,11 @@
 possible future inverse-analysis example based on differentiable PhAST forward
 operations. It does not contain a runnable inverse benchmark.
 
+For the paper's selected inverse figures, use the separate
+[retained-data reproduction commands](../../reproduction/paper1/README.md).
+Their catalogue records plotting and simulation-rerun status individually.
+The companion numerical archive is being prepared.
+
 The current public release foregrounds forward phase-field fracture examples.
 Inverse workflows should be added here only when they include:
 

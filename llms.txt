@@ -29,9 +29,10 @@ derived documentation, examples, or release material.
 - Completed runs expose machine-readable artifacts such as `run_manifest.json`,
   `run_lockfile.json`, `run_metadata.json`, `summary.json`, and CSV telemetry.
 - Use `phast.load_result(path)` for read-only result inspection.
-- Advanced inverse, hybrid/deep-learning, future paper-specific workflows, raw
-  HPC logs, proprietary files, and heavy trajectory stores are not part of the
-  public release surface.
+- Selected paper-specific retained-data checks and inverse replots are
+  documented in `reproduction/paper1`. General inverse and hybrid research,
+  raw HPC logs, proprietary files and heavy trajectory stores stay separate
+  from the public solver release.
 
 ## Quick Start For Agents
 
@@ -75,6 +76,9 @@ python -m phast explain-config examples/quasistatic/notched_holed_plate/config.y
 - [`examples/`](examples/) - curated public YAML examples and retained visual
   result bundles.
 - [`examples/README.md`](examples/README.md) - public example overview.
+- [`reproduction/paper1/README.md`](reproduction/paper1/README.md) - manuscript
+  and supplement catalogue, retained-data verification and bounded replots.
+  Historical experiment sources and large fields use a separate data archive.
 - [`configs/`](configs/) - benchmark decks, schemas, reference templates, and
   reusable configuration material.
 - [`docs/`](docs/) - Sphinx/user documentation source.

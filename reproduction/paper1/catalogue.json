@@ -1,0 +1,714 @@
+{
+  "schema_version": 1,
+  "data_identity": {
+    "manifest_sha256": "1b174a73e0c4ae91574b033d652a18fc947d1e616581155a4e857ba441eb8f52",
+    "document_identity_sha256": "8a8121123d9c27f665252a31f661998ff98ba1bfae67e0a559875de6624e6b59"
+  },
+  "documents": {
+    "manuscript": {
+      "label": "Paper 1 manuscript",
+      "pdf_sha256": "4c56788d3f10ef76e6b201b401e070db67eba7b4afd83bf2425f194041e8be97",
+      "figure_count": 14,
+      "table_count": 8,
+      "identity_status": "Indexed PDF edition; later source changes require a final scope refresh."
+    },
+    "supplement": {
+      "label": "Paper 1 supplement",
+      "pdf_sha256": "d847c11a578564871c853f0a33c4a935f88b481e31b5ce7f3fe9423bedbbbd6d",
+      "figure_count": 14,
+      "table_count": 2,
+      "identity_status": "Indexed PDF edition; later source changes require a final scope refresh."
+    }
+  },
+  "items": [
+    {
+      "id": "manuscript.figure.1", "document": "manuscript", "kind": "figure", "number": "1",
+      "labels": ["fig:regularization_schematic"],
+      "studies": ["documentation/regularization_schematic"],
+      "archive_assets": ["illustrations/regularization/figures/journal/regularization_schematic.pdf"]
+    },
+    {
+      "id": "manuscript.table.1", "document": "manuscript", "kind": "table", "number": "1",
+      "labels": ["tab:damage_cadence"],
+      "studies": ["forward/B1_dynamic_sent/checks/subcycling"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.table.2", "document": "manuscript", "kind": "table", "number": "2",
+      "labels": ["tab:benchmark_overview"],
+      "studies": ["forward/B1_dynamic_sent", "forward/B2_kalthoff_winkler", "forward/B3_dynamic_branching", "forward/B4a_30holes", "forward/B4b_10holes", "forward/B4c_single_hole_near", "forward/B4d_single_hole_far", "forward/Q1_quasistatic_sent", "forward/Q2_holed_plate"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.table.3", "document": "manuscript", "kind": "table", "number": "3",
+      "labels": ["tab:sent_refinement"],
+      "studies": ["forward/B1_dynamic_sent/checks/mesh_refinement"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.figure.2", "document": "manuscript", "kind": "figure", "number": "2",
+      "labels": ["fig:dsent", "fig:b1_sent_kinematics"],
+      "studies": ["forward/B1_dynamic_sent"],
+      "archive_assets": ["forward/B1_dynamic_sent/figures/journal/b1_sent_kinematics_curves_compact.pdf", "forward/B1_dynamic_sent/figures/journal/dsent_damage_compact.pdf"]
+    },
+    {
+      "id": "manuscript.figure.3", "document": "manuscript", "kind": "figure", "number": "3",
+      "labels": ["fig:kalthoff_snapshots"],
+      "studies": ["forward/B2_kalthoff_winkler"],
+      "archive_assets": [],
+      "unresolved_gaps": ["Photograph-containing composite excluded pending reuse permission; numerical frames are separate inputs."]
+    },
+    {
+      "id": "manuscript.table.4", "document": "manuscript", "kind": "table", "number": "4",
+      "labels": ["tab:kalthoff"],
+      "studies": ["forward/B2_kalthoff_winkler", "forward/B2_kalthoff_winkler/checks/threshold"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.figure.4", "document": "manuscript", "kind": "figure", "number": "4",
+      "labels": ["fig:borden_branching_damage", "fig:b3_post_ramp_balance"],
+      "studies": ["forward/B3_dynamic_branching"],
+      "archive_assets": ["forward/B3_dynamic_branching/figures/version_2/b3_damage_evolution.pdf", "forward/B3_dynamic_branching/figures/version_2/b3_post_ramp_balance_manuscript.pdf"]
+    },
+    {
+      "id": "manuscript.figure.5", "document": "manuscript", "kind": "figure", "number": "5",
+      "labels": ["fig:perf_15holes"],
+      "studies": ["forward/B4e_offset_loading_matrix"],
+      "archive_assets": ["forward/B4e_offset_loading_matrix/figures/journal/perf_15h_off05_dU004_damage.pdf", "forward/B4e_offset_loading_matrix/figures/journal/perf_15h_off05_dU005_damage.pdf", "forward/B4e_offset_loading_matrix/figures/journal/perf_15h_off06_dU004_damage.pdf", "forward/B4e_offset_loading_matrix/figures/journal/perf_15h_off06_dU005_damage.pdf"]
+    },
+    {
+      "id": "manuscript.figure.6", "document": "manuscript", "kind": "figure", "number": "6",
+      "labels": ["fig:q1_quasistatic"],
+      "studies": ["forward/Q1_quasistatic_sent"],
+      "archive_assets": ["forward/Q1_quasistatic_sent/figures/journal/q1_certified_damage.pdf", "forward/Q1_quasistatic_sent/figures/journal/q1_certified_load_displacement.pdf"],
+      "unresolved_gaps": ["Reference-curve provenance and redistribution permission remain unresolved."]
+    },
+    {
+      "id": "manuscript.figure.7", "document": "manuscript", "kind": "figure", "number": "7",
+      "labels": ["fig:q2_quasistatic"],
+      "studies": ["forward/Q2_holed_plate"],
+      "archive_assets": ["forward/Q2_holed_plate/figures/q2_completed.pdf"]
+    },
+    {
+      "id": "manuscript.figure.8", "document": "manuscript", "kind": "figure", "number": "8",
+      "labels": ["fig:cross_code_sent", "fig:cross_code_sent_tip_speed"],
+      "studies": ["forward/B1_dynamic_sent/comparisons/cross_code"],
+      "archive_assets": ["forward/B1_dynamic_sent/comparisons/cross_code/figures/version_2/cross_code_sent_composite.pdf"]
+    },
+    {
+      "id": "manuscript.table.5", "document": "manuscript", "kind": "table", "number": "5",
+      "labels": ["tab:cross_code_sent_agreement"],
+      "studies": ["forward/B1_dynamic_sent/comparisons/cross_code"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.figure.9", "document": "manuscript", "kind": "figure", "number": "9",
+      "labels": ["fig:cross_code_kalthoff_fields", "fig:cross_code_kalthoff_tip"],
+      "studies": ["forward/B2_kalthoff_winkler/comparisons/cross_code"],
+      "archive_assets": ["forward/B2_kalthoff_winkler/comparisons/cross_code/figures/journal/kalthoff_four_route_final_damage.pdf", "forward/B2_kalthoff_winkler/comparisons/cross_code/figures/journal/kalthoff_four_route_tip_histories_manuscript.pdf"]
+    },
+    {
+      "id": "manuscript.table.6", "document": "manuscript", "kind": "table", "number": "6",
+      "labels": ["tab:cross_code_kalthoff_agreement"],
+      "studies": ["forward/B2_kalthoff_winkler/comparisons/cross_code"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.figure.10", "document": "manuscript", "kind": "figure", "number": "10",
+      "labels": ["fig:inversion", "fig:inversion_alumina", "fig:controlled_multistart_recovery"],
+      "studies": ["inverse/scalar_glass_alumina", "inverse/six_start"],
+      "archive_assets": ["inverse/scalar_gc/figures/scalar_recovery_protocol_comparison.pdf"]
+    },
+    {
+      "id": "manuscript.table.7", "document": "manuscript", "kind": "table", "number": "7",
+      "labels": ["tab:cross_mesh_ad_brent"],
+      "studies": ["inverse/cross_mesh"],
+      "archive_assets": []
+    },
+    {
+      "id": "manuscript.figure.11", "document": "manuscript", "kind": "figure", "number": "11",
+      "labels": ["fig:inverse_observations_meshes", "fig:prospective_dic_operator"],
+      "studies": ["inverse/cross_mesh"],
+      "archive_assets": ["inverse/cross_mesh_clean_sent/figures/inverse_observations_meshes.pdf"]
+    },
+    {
+      "id": "manuscript.figure.12", "document": "manuscript", "kind": "figure", "number": "12",
+      "labels": ["fig:cross_mesh_gc_recovery"],
+      "studies": ["inverse/cross_mesh"],
+      "archive_assets": ["inverse/cross_mesh_clean_sent/figures/cross_mesh_outcomes.pdf"]
+    },
+    {
+      "id": "manuscript.figure.13", "document": "manuscript", "kind": "figure", "number": "13",
+      "labels": ["fig:joint_gc_l0_damage_recovery"],
+      "studies": ["inverse/joint_gc_l0"],
+      "archive_assets": ["inverse/joint_gc_l0/figures/joint_gc_l0_recovery.pdf"]
+    },
+    {
+      "id": "manuscript.figure.14", "document": "manuscript", "kind": "figure", "number": "14",
+      "labels": ["fig:at2_backward_memory"],
+      "studies": ["inverse/implicit_memory"],
+      "archive_assets": ["verification/at2_memory/figures/r2_2_at2_isolated_memory_117684.pdf"]
+    },
+    {
+      "id": "manuscript.table.8", "document": "manuscript", "kind": "table", "number": "8",
+      "labels": ["tab:cross_code_sent_optimised_timing"],
+      "studies": ["forward/B1_dynamic_sent/comparisons/cpu_optimisation"],
+      "archive_assets": []
+    },
+    {
+      "id": "supplement.figure.S1", "document": "supplement", "kind": "figure", "number": "S1",
+      "labels": ["fig:standing_wave_verification"],
+      "studies": ["verification/standing_wave"],
+      "archive_assets": ["verification/standing_wave/figures/journal/standing_wave_verification.pdf"]
+    },
+    {
+      "id": "supplement.figure.S2", "document": "supplement", "kind": "figure", "number": "S2",
+      "labels": ["fig:gpu_repeatability"],
+      "studies": ["forward/B2_kalthoff_winkler/checks/repeatability"],
+      "archive_assets": ["forward/B2_kalthoff_winkler/checks/repeatability/figures/journal/kalthoff_repeatability_117675.pdf"]
+    },
+    {
+      "id": "supplement.figure.S3", "document": "supplement", "kind": "figure", "number": "S3",
+      "labels": ["fig:at2_bounds"],
+      "studies": ["forward/B1_dynamic_sent/checks/damage_bounds"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/damage_bounds/presentation/journal_20260904/retained_v2/at2_bounds.pdf"]
+    },
+    {
+      "id": "supplement.figure.S4", "document": "supplement", "kind": "figure", "number": "S4",
+      "labels": ["fig:damage_reaction_mass"],
+      "studies": ["forward/B1_dynamic_sent/checks/reaction_mass"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/reaction_mass/figures/version_2/reaction_mass.pdf"]
+    },
+    {
+      "id": "supplement.figure.S5", "document": "supplement", "kind": "figure", "number": "S5",
+      "labels": ["fig:damage_cadence"],
+      "studies": ["forward/B1_dynamic_sent/checks/subcycling"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/subcycling/presentation/journal/update_interval_20260907/damage_cadence.pdf"]
+    },
+    {
+      "id": "supplement.figure.S6", "document": "supplement", "kind": "figure", "number": "S6",
+      "labels": ["fig:sent_refinement_trends"],
+      "studies": ["forward/B1_dynamic_sent/checks/mesh_refinement"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/mesh_refinement/figures/journal/straight_sent_refinement_damage.pdf", "forward/B1_dynamic_sent/checks/mesh_refinement/figures/journal/straight_sent_refinement_metrics.pdf"]
+    },
+    {
+      "id": "supplement.figure.S7", "document": "supplement", "kind": "figure", "number": "S7",
+      "labels": ["fig:sent_traction_energy_audit"],
+      "studies": ["forward/B1_dynamic_sent/checks/energy_linear_traction"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/traction_work/figures/journal/sent_energy_balance_job111155.pdf"]
+    },
+    {
+      "id": "supplement.table.S1", "document": "supplement", "kind": "table", "number": "S1",
+      "labels": ["tab:supp_cross_mesh_criteria"],
+      "studies": ["inverse/cross_mesh"],
+      "archive_assets": []
+    },
+    {
+      "id": "supplement.figure.S8", "document": "supplement", "kind": "figure", "number": "S8",
+      "labels": ["fig:kalthoff_threshold_sensitivity"],
+      "studies": ["forward/B2_kalthoff_winkler/checks/threshold"],
+      "archive_assets": ["forward/B2_kalthoff_winkler/checks/threshold/figures/journal/reader_polish_20260907/kalthoff_threshold_sensitivity.pdf"]
+    },
+    {
+      "id": "supplement.figure.S9", "document": "supplement", "kind": "figure", "number": "S9",
+      "labels": ["fig:b1_full_energy"],
+      "studies": ["forward/B1_dynamic_sent/checks/energy_c2_displacement"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/c2_work/figures/journal/r1_9_full_boundary_energy_main.pdf"]
+    },
+    {
+      "id": "supplement.figure.S10", "document": "supplement", "kind": "figure", "number": "S10",
+      "labels": ["fig:b1_boundary_support"],
+      "studies": ["forward/B1_dynamic_sent/checks/energy_c2_displacement"],
+      "archive_assets": ["forward/B1_dynamic_sent/checks/c2_work/figures/journal/r1_9_full_boundary_energy_support.pdf"]
+    },
+    {
+      "id": "supplement.table.S2", "document": "supplement", "kind": "table", "number": "S2",
+      "labels": ["tab:perforated"],
+      "studies": ["forward/B4a_30holes", "forward/B4b_10holes", "forward/B4c_single_hole_near", "forward/B4d_single_hole_far", "forward/B4e_offset_loading_matrix"],
+      "archive_assets": []
+    },
+    {
+      "id": "supplement.figure.S11", "document": "supplement", "kind": "figure", "number": "S11",
+      "labels": ["fig:perf_constrained", "fig:perf_30holes_diag"],
+      "studies": ["forward/B4a_30holes", "forward/B4b_10holes"],
+      "archive_assets": ["forward/B4a_30holes/figures/journal/perf_30holes_velocity_compact.pdf", "forward/B4a_30holes/figures/perf_30holes_damage.png", "forward/B4b_10holes/figures/perf_10holes_damage.png"]
+    },
+    {
+      "id": "supplement.figure.S12", "document": "supplement", "kind": "figure", "number": "S12",
+      "labels": ["fig:perf_1hole"],
+      "studies": ["forward/B4c_single_hole_near", "forward/B4d_single_hole_far"],
+      "archive_assets": ["forward/B4c_single_hole_near/figures/journal/perf_1hole_near_damage_insets.pdf", "forward/B4d_single_hole_far/figures/journal/perf_1hole_far_damage_insets.pdf"]
+    },
+    {
+      "id": "supplement.figure.S13", "document": "supplement", "kind": "figure", "number": "S13",
+      "labels": ["fig:b4_energy_controls"],
+      "studies": ["forward/B4a_30holes/checks/at1_energy_restoration"],
+      "archive_assets": ["forward/B4a_30holes/checks/energy_controls/figures/version_2/b4_energy_controls.pdf"]
+    },
+    {
+      "id": "supplement.figure.S14", "document": "supplement", "kind": "figure", "number": "S14",
+      "labels": ["fig:alumina_fd_active_set"],
+      "studies": ["inverse/alumina_fd"],
+      "archive_assets": ["verification/alumina_fd/figures/alumina_fd_active_set_job111131.pdf"]
+    }
+  ],
+  "results": [
+    {
+      "id": "prose_P01", "studies": ["forward/B2_kalthoff_winkler/checks/repeatability"],
+      "description": "Five CUDA replicas: nodal and field agreement, thresholded overlap, angle percentiles and first extension.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P02", "studies": ["forward/B1_dynamic_sent/checks/damage_bounds"],
+      "description": "Two 6116-step AT2 bound-treatment runs: terminal fields, crack tip, energy, feasibility and irreversibility.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P03", "studies": ["forward/B1_dynamic_sent/checks/reaction_mass"],
+      "description": "Consistent versus row-sum-lumped damage reaction: terminal field differences and clipped support area.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P04", "studies": ["forward/B1_dynamic_sent/checks/subcycling"],
+      "description": "Damage cadences 1, 2 and 3: threshold-crossing delays, tips, energy differences and three CPU timing repeats per cadence.",
+      "status": "selected_metrics_checked_full_run_pending"
+    },
+    {
+      "id": "prose_P05", "studies": ["verification/standing_wave"],
+      "description": "Four joint space/time refinements: analytical standing-wave errors and observed orders recomputed from retained errors.",
+      "status": "selected_metrics_checked_full_run_pending"
+    },
+    {
+      "id": "prose_P06", "studies": ["forward/B1_dynamic_sent/checks/mesh_refinement"],
+      "description": "Fixed-length-scale SENT refinement: dissipation, speed, threshold and post-ramp interval sensitivity across three meshes.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P07", "studies": ["forward/B1_dynamic_sent"],
+      "description": "Linear-ramp SENT boundary arrival and median crack speeds from sampled tip histories.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P08", "studies": ["forward/B1_dynamic_sent/checks/energy_c2_displacement"],
+      "description": "C2 displacement-ramp work balance, boundary inertia and terminal damage; distinct from the linear-ramp benchmark.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P09", "studies": ["forward/B1_dynamic_sent/checks/energy_linear_traction"],
+      "description": "Separate 57482-step constant-traction SENT calculation and recorded normalised energy imbalance.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P10", "studies": ["forward/B2_kalthoff_winkler", "forward/B2_kalthoff_winkler/checks/threshold"],
+      "description": "Five-mesh half-plate impact: initiation, final orientation and threshold sensitivity.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P11", "studies": ["forward/B3_dynamic_branching"],
+      "description": "Branching energy accounting at 3676 saved post-ramp states, excluding the ramp, between-state extrema and final unsaved updates.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P12", "studies": ["forward/B4a_30holes", "forward/B4b_10holes", "forward/B4c_single_hole_near", "forward/B4d_single_hole_far"],
+      "description": "Historical perforated-plate geometry and qualitative crack interactions; the cited 10-hole velocity trace is external literature.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P13", "studies": ["forward/B4a_30holes"],
+      "description": "30-hole retained speed records and specified clipping/filtering; the filtered peak is not an unfiltered physical peak speed.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P14", "studies": ["forward/B4e_offset_loading_matrix"],
+      "description": "Four offset/loading combinations: 14 holes inside the plate despite legacy 15-hole filenames; selected morphology only.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P15", "studies": ["forward/B4a_30holes/checks/at1_energy_restoration"],
+      "description": "AT1 replay energy accounting over 1859 saved states, including the reported 9.9947% largest drift and -7.4893% final imbalance.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P16", "studies": ["forward/B4a_30holes/checks/at1_energy_restoration"],
+      "description": "Cadence, maximum-history and current-energy controls, including non-improving controls; not independent constitutive validation or one convergence order.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P17", "studies": ["forward/Q1_quasistatic_sent"],
+      "description": "Q1: 350 accepted targets, convergence measures and load peak comparison using a retrospectively recovered runtime mesh.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P18", "studies": ["forward/Q2_holed_plate"],
+      "description": "Q2: 200 accepted targets, force curve, residual and tangent-direction records. Replotting and saved-field checks do not independently recompute all these metrics.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P19", "studies": ["forward/B1_dynamic_sent/comparisons/cross_code"],
+      "description": "Matched SENT: three-code protocol and five-implementation field-parity extension; extension timing is outside the reported CPU timing study.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P20", "studies": ["forward/B2_kalthoff_winkler/comparisons/cross_code"],
+      "description": "Matched four-implementation Kalthoff fields, convergence, connected fronts, speed and threshold-dependent extension times.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P21", "studies": ["forward/B1_dynamic_sent/comparisons/cpu_optimisation"],
+      "description": "Five balanced single-thread CPU processes: operator counts, steady-state timing, compilation and full-run costs on the recorded host.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P22", "studies": ["forward/B1_dynamic_sent/comparisons/cpu_optimisation"],
+      "description": "Timing-run convergence and terminal field agreement, including compiled versus eager execution.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P23", "studies": ["inverse/scalar_glass_alumina"],
+      "description": "Scalar glass recovery, initial AD/FD comparison and accepted-state counts; pre-update closure losses are not post-update parameter losses.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P24", "studies": ["inverse/scalar_glass_alumina"],
+      "description": "Scalar alumina recovery and the unresolved 5.1% initial central-difference discrepancy; later sweeps do not replace the baseline.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P25", "studies": ["inverse/six_start"],
+      "description": "Six noisy bounded starts: five meet the criterion, the upper-bound start fails; separate scalar Brent reference.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P26", "studies": ["inverse/cross_mesh"],
+      "description": "Cross-mesh target and three inverse meshes, fitting/check observations, Brent scan and distinct AD initialisation.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P27", "studies": ["inverse/cross_mesh"],
+      "description": "Cross-mesh parameter and observation errors, evaluation counts and stopping outcomes, including fine-mesh AD line-search failure.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P28", "studies": ["inverse/joint_gc_l0"],
+      "description": "Joint toughness/length-scale protocol: four starts, 16 physical increments, observation weights and 200 optimiser updates.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P29", "studies": ["inverse/joint_gc_l0"],
+      "description": "Selected optimiser evaluation 26 and stored terminal outcomes; one of four starts meets the criterion. Final physical increment is not optimiser evaluation 200.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P30", "studies": ["inverse/joint_gc_l0"],
+      "description": "Selected-state AD/FD discrepancy of 93.005% and primal replay checks; relative 1e-8 projected-KKT convergence remains unverified.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P31", "studies": ["inverse/implicit_memory"],
+      "description": "Twelve isolated AT2 custom/unrolled CUDA pairs: incremental memory and numerical agreement, not whole-trajectory memory or active-set-transition validation.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P32", "studies": ["inverse/alumina_fd"],
+      "description": "All 15 historical tolerance/perturbation rows retained; five published-tolerance rows plotted. Original mesh and observations remain unresolved.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P33", "studies": ["inverse/alumina_fd"],
+      "description": "Separate history-derivative and adjoint-tolerance replay; it does not attribute the original 5.1% discrepancy to a specific cause.",
+      "status": "mapped_with_unresolved_inputs"
+    },
+    {
+      "id": "prose_P34", "studies": ["forward/B1_dynamic_sent/comparisons/cpu_optimisation", "forward/B1_dynamic_sent/comparisons/cross_code", "forward/B2_kalthoff_winkler/comparisons/cross_code", "forward/B2_kalthoff_winkler/checks/repeatability", "inverse/implicit_memory"],
+      "description": "Software/hardware statements and runtime configurations, not an additional numerical study.",
+      "status": "mapped_not_recomputed"
+    },
+    {
+      "id": "prose_P35", "studies": ["forward/B1_dynamic_sent/checks/amg"],
+      "description": "AMG eligibility, rebuild/fallback rules and algorithmic constants; no empirical AMG speedup study is claimed.",
+      "status": "implementation_check_pending"
+    },
+    {
+      "id": "prose_P36", "studies": ["documentation/algorithmic_explanations"],
+      "description": "Algorithmic cost illustrations and prospective observation operators, not additional measured results.",
+      "status": "explanatory_not_measured"
+    },
+    {
+      "id": "prose_at2_terminal_profile", "studies": ["forward/B1_dynamic_sent/checks/at2_terminal_profile"],
+      "description": "New source statement: terminal AT2 local and gradient crack-surface-density contributions of 1.53 and 0.26 per unit crack length within 2 mm of the crack plane, compared with 0.5 each for the static profile. No independent analysis is claimed.",
+      "status": "pending_analysis_inputs",
+      "source": {
+        "label": "manuscript.benchmarks.source",
+        "sha256": "7d27a3c42c6399b67bb555114b6faa49ed12d9f11ebd6f68f27b9030335e912f",
+        "observed_utc": "2026-09-21T22:03:30.345997+00:00",
+        "edition_relation": "Source changed after the original grouped audit; not an assertion of coverage by the indexed PDF edition."
+      }
+    }
+  ],
+  "studies": {
+    "documentation/algorithmic_explanations": {
+      "title": "Algorithmic cost and prospective observation illustrations",
+      "related_example": null,
+      "archive_paths": [],
+      "replot_group": null, "replot_status": "not_applicable", "rerun_status": "not_applicable",
+      "required_inputs": ["Indexed manuscript explanation of differentiation costs and prospective observation operators."],
+      "unresolved_gaps": ["Final source-to-document mapping needs refresh; these illustrations are not additional measured results."]
+    },
+    "documentation/regularization_schematic": {
+      "title": "Analytical AT1/AT2 regularization schematic",
+      "related_example": null,
+      "archive_paths": ["illustrations/regularization"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "not_applicable",
+      "required_inputs": ["Analytical profile definitions and selected schematic renderer."],
+      "unresolved_gaps": ["Isolated rendering and layout verification remain pending; this is not a simulation."]
+    },
+    "forward/B1_dynamic_sent": {
+      "title": "B1 linear-ramp dynamic SENT",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/linear_ramp", "forward/B1_dynamic_sent/shared_inputs", "forward/B1_dynamic_sent/figures"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["Recorded 1091-node mesh, AT2 spectral plane-strain configuration, trajectory, historical source and environment."],
+      "unresolved_gaps": ["Portable renderer and full execution remain unverified; execution source and later presentation source have different identities."]
+    },
+    "forward/B1_dynamic_sent/checks/mesh_refinement": {
+      "title": "Three-level fixed-length-scale SENT refinement",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/mesh_refinement"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["Exact 3252/10321/37671-node meshes and trajectories, per-level source receipts, separate analysis source and environment."],
+      "unresolved_gaps": ["Pinned campaign execution and complete trajectory metric recomputation remain pending; regenerated meshes are not substitutions."]
+    },
+    "forward/B1_dynamic_sent/checks/at2_terminal_profile": {
+      "title": "Terminal AT2 crack-surface-density decomposition",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/mesh_refinement"],
+      "replot_group": null, "replot_status": "pending_analysis_inputs", "rerun_status": "pending_analysis_inputs",
+      "required_inputs": ["Exact analysis script, mesh and terminal state, longitudinal integration region, quadrature and per-unit-crack-length normalisation."],
+      "unresolved_gaps": ["Selected refinement fields alone do not establish the reported 1.53/0.26 decomposition. Identify and archive the exact procedure, then refresh the frozen document mapping."]
+    },
+    "forward/B1_dynamic_sent/checks/damage_bounds": {
+      "title": "AT2 post-clamp versus projected-CG bounds",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/damage_bounds"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["Both complete 6116-step runs, fields, configurations, exact execution source and environment."],
+      "unresolved_gaps": ["Clean portable execution remains unverified; terminal forward agreement is not active-set derivative validation."]
+    },
+    "forward/B1_dynamic_sent/checks/reaction_mass": {
+      "title": "Consistent versus lumped damage reaction",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/reaction_mass"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["Current retained fields and metrics, exact execution source, configuration and environment."],
+      "unresolved_gaps": ["Full extracted execution remains pending; mechanical inertia is lumped in both routes."]
+    },
+    "forward/B1_dynamic_sent/checks/subcycling": {
+      "title": "SENT damage-update cadence and repeated timing",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/subcycling"],
+      "replot_group": "forward", "replot_status": "retained_data_checked", "rerun_status": "pending_full_run",
+      "required_inputs": ["Cadence 1/2/3 trajectories, submitted mesh, terminal metrics, nine timing records, pinned driver and recorded environment."],
+      "unresolved_gaps": ["Figure, terminal metrics and timing summaries were checked; complete trajectory metric recomputation and new repeated timing runs remain pending."]
+    },
+    "forward/B1_dynamic_sent/checks/energy_c2_displacement": {
+      "title": "C2 displacement-ramp boundary work balance",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/c2_work"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["6117 recorded states, full boundary inertia/work data, trusted legacy tensor inputs and exact source/environment."],
+      "unresolved_gaps": ["Portable execution remains pending; do not substitute the linear-ramp or traction histories."]
+    },
+    "forward/B1_dynamic_sent/checks/energy_linear_traction": {
+      "title": "Constant-traction SENT energy balance",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/checks/traction_work"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_inputs",
+      "required_inputs": ["762-node constant-traction configuration, 57482-step history, native displacement/damage states and historical source/environment."],
+      "unresolved_gaps": ["Retained CSVs support curve rendering; all-state native fields for independent energy reintegration are incomplete. The study identifier is historical; loading is constant traction."]
+    },
+    "forward/B1_dynamic_sent/comparisons/cross_code": {
+      "title": "Matched-code SENT fields and crack histories",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/comparisons/cross_code"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["Matched 9031-node mesh, baseline and selected extension trajectories, exact backend sources and separate environment locks."],
+      "unresolved_gaps": ["Portable backend launchers and extracted execution remain unverified. Preserve the precise Akantu build; the field-parity extension does not supply the CPU timing result."]
+    },
+    "forward/B1_dynamic_sent/comparisons/cpu_optimisation": {
+      "title": "Single-thread CPU operator and execution timing",
+      "related_example": "examples/dynamic/B3_dynamic_sent",
+      "archive_paths": ["forward/B1_dynamic_sent/comparisons/cpu_optimisation"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_inputs",
+      "required_inputs": ["Five balanced process records, per-step timing, convergence/iteration records, endpoint parity and exact compiler/library environment."],
+      "unresolved_gaps": ["Complete runtime environment and repeated extracted execution remain pending. Steady-state timings exclude the first 100 steps; full-run totals retain first-use compilation."]
+    },
+    "forward/B1_dynamic_sent/checks/amg": {
+      "title": "AMG implementation rules",
+      "related_example": null,
+      "archive_paths": [],
+      "replot_group": null, "replot_status": "not_applicable", "rerun_status": "not_applicable",
+      "required_inputs": ["Selected implementation source for eligibility, rebuild, fallback and retry constants."],
+      "unresolved_gaps": ["Source-level constant verification remains pending; no additional empirical timing campaign is required by the reported text."]
+    },
+    "forward/B2_kalthoff_winkler": {
+      "title": "Five-mesh half-plate Kalthoff-Winkler impact",
+      "related_example": "examples/dynamic/B2_kalthoff_winkler",
+      "archive_paths": ["forward/B2_kalthoff_winkler/mesh3_selected_fields"],
+      "replot_group": null, "replot_status": "rights_hold", "rerun_status": "pending_inputs",
+      "required_inputs": ["Five exact native meshes, final damage histories, first-extension data and original execution identities; photograph reuse permission for the composite."],
+      "unresolved_gaps": ["Selected mesh3 frames do not reproduce the five-mesh table. Complete execution inputs and a simulation-only portable renderer remain unresolved; photographs and embedding figures are excluded pending permission."]
+    },
+    "forward/B2_kalthoff_winkler/checks/threshold": {
+      "title": "Kalthoff final-field threshold sensitivity",
+      "related_example": "examples/dynamic/B2_kalthoff_winkler",
+      "archive_paths": ["forward/B2_kalthoff_winkler/checks/threshold"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_inputs",
+      "required_inputs": ["Retained threshold CSV, five native final fields, exact extractor and rendering environment."],
+      "unresolved_gaps": ["CSV rendering is not independent field recomputation; complete five-mesh field dependencies remain unresolved. These are final-field orientation percentiles, not instantaneous front angles."]
+    },
+    "forward/B2_kalthoff_winkler/checks/repeatability": {
+      "title": "Five-replica CUDA repeatability",
+      "related_example": "examples/dynamic/B2_kalthoff_winkler",
+      "archive_paths": ["forward/B2_kalthoff_winkler/checks/repeatability"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["Five native replica records, mesh hash, pinned source and public-safe software/hardware environment."],
+      "unresolved_gaps": ["New CUDA execution remains pending; deterministic algorithms were disabled and cross-hardware bitwise agreement is not claimed."]
+    },
+    "forward/B2_kalthoff_winkler/comparisons/cross_code": {
+      "title": "Four-route matched-code Kalthoff comparison",
+      "related_example": "examples/dynamic/B2_kalthoff_winkler",
+      "archive_paths": ["forward/B2_kalthoff_winkler/comparisons/cross_code"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_full_run",
+      "required_inputs": ["PhAST eager/compiled, legacy FEniCS and DOLFINx 0.11.0 trajectories, frozen source identities and backend environment locks."],
+      "unresolved_gaps": ["A clean four-route portable launcher and extracted execution remain pending; endpoint images alone cannot recover front/time histories."]
+    },
+    "forward/B3_dynamic_branching": {
+      "title": "AT1 dynamic branching and post-ramp balance",
+      "related_example": "examples/dynamic/B7_dynamic_crack_branching_comsol",
+      "archive_paths": ["forward/B3_dynamic_branching"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_inputs",
+      "required_inputs": ["Selected native fields and post-ramp records, exact execution source, full-run configuration and environment."],
+      "unresolved_gaps": ["Historical source identities conflict and full trajectory dependencies remain unresolved. Saved post-ramp accounting excludes initial ramp and unsaved states; proprietary model files are not distributed."]
+    },
+    "forward/B4a_30holes": {
+      "title": "Historical 30-hole perforated plate",
+      "related_example": "examples/dynamic/B6_perforated_30holes",
+      "archive_paths": ["forward/B4a_30holes/historical", "forward/B4a_30holes/figures"],
+      "replot_group": null, "replot_status": "raster_and_csv_only", "rerun_status": "pending_inputs",
+      "required_inputs": ["Original native mesh/plotted damage states, speed extraction inputs, exact configuration, execution source and environment."],
+      "unresolved_gaps": ["Original native fields were not recovered; rasters and CSVs do not recreate them. Historical AT2 energy diagnostics must not be relabelled as a corrected AT1 balance."]
+    },
+    "forward/B4b_10holes": {
+      "title": "Historical 10-hole perforated plate",
+      "related_example": "examples/dynamic/B6_perforated_10holes",
+      "archive_paths": ["forward/B4b_10holes"],
+      "replot_group": null, "replot_status": "raster_and_csv_only", "rerun_status": "pending_inputs",
+      "required_inputs": ["Original native mesh/plotted damage states, configuration, execution source and environment."],
+      "unresolved_gaps": ["Original native fields were not recovered; retained rasters are not a field-level reproduction. Historical AT2 energy diagnostics are not corrected AT1 accounting."]
+    },
+    "forward/B4c_single_hole_near": {
+      "title": "Historical near single-hole plate",
+      "related_example": "examples/dynamic/B6_perforated_1hole_near",
+      "archive_paths": ["forward/B4c_single_hole_near"],
+      "replot_group": null, "replot_status": "raster_and_csv_only", "rerun_status": "pending_inputs",
+      "required_inputs": ["Original native mesh/plotted damage states, configuration, execution source and environment."],
+      "unresolved_gaps": ["Original native fields were not recovered; retained rasters are not a field-level reproduction. Historical AT2 energy diagnostics are not corrected AT1 accounting."]
+    },
+    "forward/B4d_single_hole_far": {
+      "title": "Historical far single-hole plate",
+      "related_example": "examples/dynamic/B6_perforated_1hole_far",
+      "archive_paths": ["forward/B4d_single_hole_far"],
+      "replot_group": null, "replot_status": "raster_and_csv_only", "rerun_status": "pending_inputs",
+      "required_inputs": ["Original native mesh/plotted damage states, configuration, execution source and environment."],
+      "unresolved_gaps": ["Original native fields were not recovered; retained rasters are not a field-level reproduction. Historical AT2 energy diagnostics are not corrected AT1 accounting."]
+    },
+    "forward/B4e_offset_loading_matrix": {
+      "title": "Perforated-plate offset/loading matrix",
+      "related_example": null,
+      "archive_paths": ["forward/B4e_offset_loading_matrix"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_inputs",
+      "required_inputs": ["Four native selected-state bundles, exact geometry, extraction hashes and historical simulation inputs/environment."],
+      "unresolved_gaps": ["Portable native rendering and full-run provenance remain incomplete. Native topology has 14 holes despite legacy 15-hole names; selected snapshots do not reproduce full trajectories."]
+    },
+    "forward/B4a_30holes/checks/at1_energy_restoration": {
+      "title": "AT1 energy replay and seven controls",
+      "related_example": "examples/dynamic/B6_perforated_30holes",
+      "archive_paths": ["forward/B4a_30holes/checks/energy_controls"],
+      "replot_group": null, "replot_status": "pending_portable_replot", "rerun_status": "pending_inputs",
+      "required_inputs": ["Frozen parent mesh/source, all 1859 saved states for baseline integration, seven control records and exact environment."],
+      "unresolved_gaps": ["All-state baseline integration inputs and portable parent-dependent execution remain incomplete. Selected fields and controls do not replace the full baseline; retain deficits and non-improving controls."]
+    },
+    "forward/Q1_quasistatic_sent": {
+      "title": "Q1 quasi-static SENT",
+      "related_example": "examples/quasistatic/miehe_tension",
+      "archive_paths": ["forward/Q1_quasistatic_sent"],
+      "replot_group": null, "replot_status": "reference_provenance_hold", "rerun_status": "pending_inputs",
+      "required_inputs": ["350-target records, recovered 2423-node mesh, pinned source/environment and reference-curve provenance/permission."],
+      "unresolved_gaps": ["Runtime mesh recovery is retrospective. Reference-curve redistribution permission, study environment and isolated execution remain unresolved."]
+    },
+    "forward/Q2_holed_plate": {
+      "title": "Q2 quasi-static holed plate",
+      "related_example": "examples/quasistatic/notched_holed_plate",
+      "archive_paths": ["forward/Q2_holed_plate", "sources/q2"],
+      "replot_group": "q2", "replot_status": "retained_data_checked", "rerun_status": "pending_full_run",
+      "required_inputs": ["Completed 200-target run, all retained fields, reaction history, tangent records and selected source/environment."],
+      "unresolved_gaps": ["Reaction and three damage panels were regenerated and 200 saved fields checked; a complete new simulation from the extracted data remains unverified."]
+    },
+    "verification/standing_wave": {
+      "title": "Undamaged analytical standing wave",
+      "related_example": null,
+      "archive_paths": ["verification/standing_wave"],
+      "replot_group": "forward", "replot_status": "retained_data_checked", "rerun_status": "pending_full_run",
+      "required_inputs": ["Four refinement-level error records, summary, exact historical driver and environment."],
+      "unresolved_gaps": ["Figure and observed orders were recomputed from retained errors; new mechanics simulations remain pending. This does not verify fracture evolution."]
+    },
+    "inverse/scalar_glass_alumina": {
+      "title": "Scalar glass and alumina toughness recovery",
+      "related_example": null,
+      "archive_paths": ["inverse/scalar_gc/glass", "inverse/scalar_gc/alumina", "inverse/scalar_gc/figures"],
+      "replot_group": "inverse", "replot_status": "retained_data_checked", "rerun_status": "pending_inputs",
+      "required_inputs": ["Exact retained result JSONs, original meshes/targets, executed source/patches, commands and environments."],
+      "unresolved_gaps": ["Figure regeneration does not recover original execution inputs. Producer geometry and baseline description differ; glass overrides remain unresolved. Preserve glass pre-update closure alignment and the unresolved alumina baseline discrepancy."]
+    },
+    "inverse/six_start": {
+      "title": "Six-start noisy scalar recovery",
+      "related_example": null,
+      "archive_paths": ["inverse/scalar_gc/six_start", "inverse/scalar_gc/target_dependency", "sources/six_start"],
+      "replot_group": "inverse", "replot_status": "retained_data_checked", "rerun_status": "pending_inputs",
+      "required_inputs": ["Six objective histories, fixed-seed target, original mesh or verified regenerated ordering, pinned driver and mesher/runtime environment."],
+      "unresolved_gaps": ["Mesh ordering must match the retained 2842-entry observations; clean full execution remains pending. Preserve the failed upper-bound start."]
+    },
+    "inverse/cross_mesh": {
+      "title": "Cross-mesh toughness recovery and observations",
+      "related_example": null,
+      "archive_paths": ["inverse/cross_mesh_clean_sent", "sources/cross_mesh_clean_sent"],
+      "replot_group": "inverse", "replot_status": "retained_data_checked", "rerun_status": "pending_full_run",
+      "required_inputs": ["Target/inverse meshes, observation operator, six selected fields, evaluation histories, frozen source and study-specific environment."],
+      "unresolved_gaps": ["Full extracted execution remains unverified. Selected fields and histories support the figures, not field-level recomputation of every intermediate objective; retain failed stopping outcomes."]
+    },
+    "inverse/joint_gc_l0": {
+      "title": "Joint toughness and length-scale recovery",
+      "related_example": null,
+      "archive_paths": ["inverse/joint_gc_l0", "sources/joint_gc_l0"],
+      "replot_group": "inverse", "replot_status": "retained_data_checked", "rerun_status": "pending_full_run",
+      "required_inputs": ["Four-start histories, target and evaluation-26 fields, protocol, primal replay records and exact source/environment."],
+      "unresolved_gaps": ["Full extracted execution remains pending. Displayed evaluation 26 differs from terminal evaluation 200; relative projected-KKT normalisation is absent and the 93.005% AD/FD discrepancy remains unresolved."]
+    },
+    "inverse/implicit_memory": {
+      "title": "Isolated AT2 implicit-backward memory",
+      "related_example": null,
+      "archive_paths": ["verification/at2_memory", "sources/at2_memory"],
+      "replot_group": "inverse", "replot_status": "retained_data_checked", "rerun_status": "pending_inputs",
+      "required_inputs": ["Twelve paired records across four meshes, archived worker and compatible recorded CUDA/PyTorch/GPU environment."],
+      "unresolved_gaps": ["CUDA environment completion and new worker execution remain pending. Measurements concern one interior damage solve, not whole trajectories or active-set transitions."]
+    },
+    "inverse/alumina_fd": {
+      "title": "Alumina finite-difference sweep and backward replay",
+      "related_example": null,
+      "archive_paths": ["verification/alumina_fd", "sources/alumina_fd", "sources/alumina_backward_replay"],
+      "replot_group": "inverse", "replot_status": "retained_data_checked", "rerun_status": "pending_inputs",
+      "required_inputs": ["All 15 sweep rows, original mesh/observations, exact source/environment and separately identified later replay inputs."],
+      "unresolved_gaps": ["Historical sweep mesh and observations remain unresolved; later backward replay is a distinct calculation, not a replacement for the original baseline or sweep."]
+    }
+  }
+}
