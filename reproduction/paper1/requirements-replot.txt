@@ -1,0 +1,11 @@
+# Retained-data plotting checks on macOS arm64, Python 3.10.18
+# Separate from historical simulation and timing environments
+numpy==2.2.6
+scipy==1.14.1
+matplotlib==3.10.9
+h5py==3.16.0
+meshio==5.3.5
+PyYAML==6.0.3
+torch==2.14.0
+Pillow==12.3.0
+PyMuPDF==1.27.1
