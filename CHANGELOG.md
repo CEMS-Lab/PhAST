@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Quasi-static rigid connectors
+
+- Forward active rotation-free rigid connectors from the staggered
+  `quasi_static` path to the existing reduced mechanics solve.
+- Add CPU float64 elastic checks for connector kinematics, reaction and moment
+  balance, alongside dispatch and non-connector regression tests. Damage
+  stopping rules, solver defaults and example configurations are unchanged.
+
 ### Paper reproduction
 
 - Add a manuscript and supplement catalogue with separate records for figures,

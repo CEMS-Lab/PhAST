@@ -51,6 +51,7 @@ For the current plasticity, cohesive interface, and PF-CZM technical-preview bou
 |---|---|---|
 | Explicit dynamics, Velocity Verlet | Supported | Principal documented pathway for dynamic impact and fracture simulations. |
 | Staggered quasi-static/static solve | Supported | Principal documented implicit brittle-fracture pathway, using `jacobi` as the conservative damage preconditioner. Matrix-free CG and sparse-direct mechanics backends are available. |
+| Rotation-free connectors in `quasi_static` | Beta | The staggered call forwards active connectors to the existing reduced mechanics solve. CPU float64 isotropic elastic tests check connector kinematics, reaction and moment balance. Nonlinear fracture trajectories require separate case-specific verification. |
 | `quasi_static_legacy` secant path | Beta | Retained strictly for compatibility and selected MPC/frozen-secant workflows. |
 | SciPy SuperLU sparse direct baseline | Supported | Portable sparse-direct baseline when SciPy is installed. |
 | PETSc/MUMPS | Optional backend | Runtime-guarded. When available, `backend='auto'` prioritizes this for CPU sparse-direct mechanics. |
