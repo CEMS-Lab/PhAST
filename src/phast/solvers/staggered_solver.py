@@ -612,12 +612,10 @@ class StaggeredSolver:
             self._mirror_mechanics_diagnostics()
 
         elif self.config.solver_type == 'quasi_static':
-            # QuasiStaticSolver.solve signature: (d, f_ext, bc_mask, bc_vals, u_init)
-            # Returns (u, converged, n_iter). Supports all energy splits since #114
-            # (spectral/amor/star_convex use the secant tangent re-frozen each NR
-            # step). 'quasi_static_legacy' kept for backwards compatibility.
+            # Forward active connectors to the reduced mechanics solve.
             u_new, _conv, _nit = self.mechanics.solve(
-                self.d, self.f_ext, bc_mask, bc_vals, u_init=self.u)
+                self.d, self.f_ext, bc_mask, bc_vals, u_init=self.u,
+                rigid_connectors=(rcs or None))
             self._mirror_mechanics_diagnostics()
             if not _conv and self.config.fail_on_mechanics_nonconvergence:
                 raise RuntimeError(
