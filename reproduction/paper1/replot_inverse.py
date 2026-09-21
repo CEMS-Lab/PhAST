@@ -93,26 +93,27 @@ class Inputs:
         self.by_legacy: dict[str, list[dict[str, Any]]] = {}
         names = set()
         for row in self.rows:
-            name = str(safe_relative(row["path"]))
+            name = safe_relative(row["path"]).as_posix()
             if name in names:
                 raise ValueError(f"Duplicate archive path: {name}")
             names.add(name)
             # Pinned source variants must never collide with the plotting layout.
             if row.get("kind") != "copy":
                 continue
-            legacy = str(safe_relative(row["legacy_path"]))
+            legacy = safe_relative(row["legacy_path"]).as_posix()
             self.by_legacy.setdefault(legacy, []).append(row)
         self.used: dict[str, dict[str, Any]] = {}
         self.adaptations: list[dict[str, Any]] = []
 
     def row(self, legacy: str) -> dict[str, Any]:
-        matches = self.by_legacy.get(str(legacy), [])
+        legacy = safe_relative(legacy).as_posix()
+        matches = self.by_legacy.get(legacy, [])
         if not matches or len({(r["bytes"], r["sha256"]) for r in matches}) != 1:
             raise ValueError(f"Missing or conflicting copy mapping for {legacy}")
         chosen = sorted(matches, key=lambda r: (
             "renderers_and_checks" not in r.get("groups", []), r["path"]))[0]
         if len(matches) > 1:
-            alias = {"kind": "identical_manifest_aliases", "legacy_path": str(legacy),
+            alias = {"kind": "identical_manifest_aliases", "legacy_path": legacy,
                      "chosen": chosen["path"], "sha256": chosen["sha256"],
                      "aliases": sorted(r["path"] for r in matches)}
             if alias not in self.adaptations:
@@ -120,6 +121,7 @@ class Inputs:
         return chosen
 
     def take(self, legacy: str, expected: str | None = None) -> Path:
+        legacy = safe_relative(legacy).as_posix()
         row = self.row(legacy)
         if expected is not None and row["sha256"] != expected:
             raise ValueError(f"Recorded scientific input hash differs: {legacy}")
@@ -144,6 +146,8 @@ class Inputs:
         return json.loads(self.take(legacy).read_text())
 
     def old_to_legacy(self, value: str) -> str:
+        # Historical records may contain native separators; manifests may not.
+        value = value.replace("\\", "/")
         if value in self.by_legacy:
             return value
         matches = [name for name in self.by_legacy if value.endswith("/" + name)]
@@ -168,9 +172,9 @@ class Inputs:
         adapted = self.output / "adapted" / name
         adapted.parent.mkdir(parents=True, exist_ok=True)
         adapted.write_text(ast.unparse(tree) + "\n")
-        self.adaptations.append({"source": str(source.relative_to(self.layout)),
+        self.adaptations.append({"source": source.relative_to(self.layout).as_posix(),
                                  "source_sha256": digest(source),
-                                 "adapted_source": str(adapted.relative_to(self.output)),
+                                 "adapted_source": adapted.relative_to(self.output).as_posix(),
                                  "adapted_sha256": digest(adapted)})
         namespace = {"__file__": str(source), "__name__": "_portable_inverse_plotter",
                      **(additions or {})}
@@ -327,15 +331,16 @@ def cross_mesh(inputs: Inputs, figures: Path) -> dict[str, Any]:
 
     relocations = {}
     relocation_candidates = set(inputs.used)
-    relocation_candidates.update(str(Path(name).parent) for name in inputs.used)
+    relocation_candidates.update(PurePosixPath(name).parent.as_posix() for name in inputs.used)
     relocation_candidates.discard(".")
     def relocate(value: Any) -> Any:
         if isinstance(value, dict):
             return {key: relocate(item) for key, item in value.items()}
         if isinstance(value, list):
             return [relocate(item) for item in value]
-        if isinstance(value, str) and value.startswith("/"):
-            matches = [name for name in relocation_candidates if value.endswith("/" + name)]
+        if isinstance(value, str) and (value.startswith("/") or PureWindowsPath(value).is_absolute()):
+            normalized = value.replace("\\", "/")
+            matches = [name for name in relocation_candidates if normalized.endswith("/" + name)]
             if len(matches) == 1:
                 mapped = str(inputs.layout / matches[0])
                 relocations[value] = mapped
@@ -363,9 +368,9 @@ def cross_mesh(inputs: Inputs, figures: Path) -> dict[str, Any]:
         adapted = inputs.output / "adapted/contracts.py"
         adapted.parent.mkdir(parents=True, exist_ok=True)
         adapted.write_text(ast.unparse(tree) + "\n")
-        inputs.adaptations.append({"source": str(Path(source).relative_to(inputs.layout)),
+        inputs.adaptations.append({"source": Path(source).relative_to(inputs.layout).as_posix(),
                                   "source_sha256": digest(source),
-                                  "adapted_source": str(adapted.relative_to(inputs.output)),
+                                  "adapted_source": adapted.relative_to(inputs.output).as_posix(),
                                   "adapted_sha256": digest(adapted),
                                   "omitted_archive_sha256": omitted_hash,
                                   "equivalent_recorded_input_hashes_checked": 315,
@@ -429,11 +434,11 @@ def visual_checks(figures: Path, output: Path) -> list[dict[str, Any]]:
                 raise ValueError(f"Blank PDF or absent labels: {pdf}")
             png = previews / (pdf.stem + ".png")
             pix.save(png)
-            records.append({"pdf": str(pdf.relative_to(output)), "pages": 1,
+            records.append({"pdf": pdf.relative_to(output).as_posix(), "pages": 1,
                             "pixel_standard_deviation": float(pixels.std()),
                             "width_inches": page.rect.width / 72,
                             "height_inches": page.rect.height / 72,
-                            "preview": str(png.relative_to(output))})
+                            "preview": png.relative_to(output).as_posix()})
             with Image.open(png) as original:
                 tile = Image.new("RGB", (760, 650), "white")
                 view = original.convert("RGB")
@@ -499,7 +504,7 @@ def main() -> None:
                "runtime": {"python": platform.python_version(), **{
                    name: importlib.metadata.version(name) for name in
                    ("numpy", "matplotlib", "h5py", "meshio", "PyMuPDF", "Pillow")}},
-               "products": [{"path": str(path.relative_to(output)), "bytes": path.stat().st_size,
+               "products": [{"path": path.relative_to(output).as_posix(), "bytes": path.stat().st_size,
                              "sha256": digest(path)} for path in sorted(figures.iterdir()) if path.is_file()]}
     (output / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
     print(json.dumps({"status": receipt["status"], "cases": {key: value["status"] for key, value in reports.items()},

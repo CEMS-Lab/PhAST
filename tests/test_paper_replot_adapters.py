@@ -6,10 +6,10 @@ import ast
 import hashlib
 import importlib.util
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import subprocess
 import sys
-from types import ModuleType
+from types import ModuleType, SimpleNamespace
 from typing import Any
 
 import pytest
@@ -199,6 +199,114 @@ def test_inverse_exact_lock_and_identical_aliases(tmp_path: Path) -> None:
     assert inputs.finish()["archive_and_disposable_inputs_unchanged"] is True
 
 
+def test_inverse_simulated_windows_mapping_keys(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    module = load_adapter("inverse")
+    row = entry()
+    root = make_archive(tmp_path / "archive", [row])
+    safe_relative = module.safe_relative
+
+    def windows_relative(value: str) -> PureWindowsPath:
+        return PureWindowsPath(safe_relative(value).as_posix())
+
+    # Exercise Windows stringification without changing the host filesystem.
+    with monkeypatch.context() as patch:
+        patch.setattr(module, "safe_relative", windows_relative)
+        inputs = module.Inputs(root, tmp_path / "output")
+        assert set(inputs.by_legacy) == {row["legacy_path"]}
+        assert inputs.row(row["legacy_path"]) == row
+    copied = inputs.take("./" + row["legacy_path"], row["sha256"])
+    assert copied.read_bytes() == b"data"
+    assert set(inputs.used) == {row["legacy_path"]}
+    assert inputs.finish()["verified_files"] == 1
+    mapping = json.loads((inputs.output / "verified_inputs.json").read_text())
+    assert mapping == [{key: row[key] for key in ("path", "legacy_path", "bytes", "sha256")}]
+
+
+@pytest.mark.parametrize("old_path", [r"C:\retained\results\field.bin",
+                                      "C:/retained/results/field.bin", r"results\field.bin"])
+def test_inverse_windows_record_separators(tmp_path: Path, old_path: str) -> None:
+    module = load_adapter("inverse")
+    row = entry()
+    inputs = module.Inputs(make_archive(tmp_path / "archive", [row]), tmp_path / "output")
+    assert inputs.old_to_legacy(old_path) == row["legacy_path"]
+    copied = inputs.locked_record({"path": old_path, "sha256": row["sha256"]})
+    assert copied.read_bytes() == b"data"
+    with pytest.raises(ValueError, match="Recorded scientific input hash"):
+        inputs.locked_record({"path": old_path, "sha256": "0" * 64})
+    with pytest.raises(ValueError, match="Invalid relative path"):
+        inputs.take(r"results\field.bin")
+    assert inputs.finish()["archive_and_disposable_inputs_unchanged"] is True
+
+
+def test_inverse_windows_record_ambiguous_suffix_rejected(tmp_path: Path) -> None:
+    module = load_adapter("inverse")
+    rows = [entry(), entry("other/field.bin", "nested/results/field.bin")]
+    inputs = module.Inputs(make_archive(tmp_path / "archive", rows), tmp_path / "output")
+    with pytest.raises(ValueError, match="unambiguous"):
+        inputs.old_to_legacy(r"C:\retained\nested\results\field.bin")
+
+
+def test_inverse_renderer_simulated_windows_receipt_paths(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = load_adapter("inverse")
+
+    class WindowsRelativePath(type(Path())):
+        def relative_to(self, *other: Any) -> PureWindowsPath:
+            return PureWindowsPath(super().relative_to(*other).as_posix())
+
+    root = tmp_path / "archive"
+    root.mkdir()
+    rows = []
+    for name in ("fixture.py", "journal_figure_style.py"):
+        row = entry(f"code/{name}", f"{module.SCRIPTS}/{name}")
+        path = root / row["path"]
+        path.parent.mkdir(exist_ok=True)
+        path.write_text("VALUE = 7\n")
+        row.update(bytes=path.stat().st_size, sha256=module.digest(path))
+        rows.append(row)
+    (root / "manifest.json").write_text(json.dumps({"files": rows}))
+    inputs = module.Inputs(root, WindowsRelativePath(tmp_path / "output"))
+    monkeypatch.setattr(sys, "path", sys.path.copy())
+
+    def unchanged(tree: ast.Module) -> ast.Module:
+        return tree
+
+    assert inputs.renderer("fixture.py", unchanged)["VALUE"] == 7
+    adaptation = inputs.adaptations[0]
+    assert adaptation["source"] == f"{module.SCRIPTS}/fixture.py"
+    assert adaptation["adapted_source"] == "adapted/fixture.py"
+    assert inputs.finish()["verified_files"] == 2
+
+
+def test_cross_relocation_simulated_windows_keys(tmp_path: Path) -> None:
+    module = load_adapter("inverse")
+    tree = ast.parse(Path(module.__file__).read_text())
+    function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "cross_mesh")
+    first = next(i for i, node in enumerate(function.body)
+                 if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name)
+                 and node.targets[0].id == "relocations")
+    last = next(i for i, node in enumerate(function.body)
+                if isinstance(node, ast.FunctionDef) and node.name == "relocate")
+    # Run only the actual path-translation block, not the scientific renderer.
+    block = ast.Module(body=function.body[first:last + 1], type_ignores=[])
+    layout = tmp_path / "legacy"
+    namespace = {"inputs": SimpleNamespace(used={"runs/results/field.bin": entry()}, layout=layout),
+                 "Path": PureWindowsPath, "PurePosixPath": PurePosixPath,
+                 "PureWindowsPath": PureWindowsPath, "Any": Any}
+    exec(compile(block, module.__file__, "exec"), namespace)
+    relocate = namespace["relocate"]
+    for prefix in ("/retained/", "C:\\retained\\"):
+        separator = "\\" if prefix.startswith("C:") else "/"
+        file = prefix + separator.join(("runs", "results", "field.bin"))
+        directory = prefix + separator.join(("runs", "results"))
+        assert relocate({"file": file, "directories": [directory]}) == {
+            "file": str(layout / "runs/results/field.bin"), "directories": [str(layout / "runs/results")],
+        }
+        assert namespace["relocations"][file] == str(layout / "runs/results/field.bin")
+    assert relocate(r"C:\unverified\field.bin") == r"C:\unverified\field.bin"
+
+
 def test_inverse_conflicting_aliases_rejected(tmp_path: Path) -> None:
     module = load_adapter("inverse")
     first = entry()
@@ -209,11 +317,12 @@ def test_inverse_conflicting_aliases_rejected(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize("field", ["path", "legacy_path"])
-def test_inverse_unsafe_manifest_mapping_rejected(tmp_path: Path, field: str) -> None:
+@pytest.mark.parametrize("value", ["../escape", r"results\field.bin"])
+def test_inverse_unsafe_manifest_mapping_rejected(tmp_path: Path, field: str, value: str) -> None:
     module = load_adapter("inverse")
     root = make_archive(tmp_path / "archive", [])
-    (root / "manifest.json").write_text(json.dumps({"files": [{**entry(), field: "../escape"}]}))
-    with pytest.raises(ValueError, match="Unsafe"):
+    (root / "manifest.json").write_text(json.dumps({"files": [{**entry(), field: value}]}))
+    with pytest.raises(ValueError, match="Unsafe|Invalid"):
         module.Inputs(root, tmp_path / "output")
 
 
