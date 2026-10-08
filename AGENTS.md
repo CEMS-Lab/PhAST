@@ -114,3 +114,16 @@ generated artifacts and must not be committed.
 - **No Development Slang**: Do not use release or development slang such as "ships with", "hack", "epic", or "fix this later".
 - **No Process-Derived Claims**: Do not use issue numbers, pull-request numbers, ticket identifiers, or private workflow phases as scientific explanation. Describe the implemented behavior and evidence directly.
 - **No Emoticons**: Do not use emojis or emoticons in the documentation or source code.
+
+## Default Trajectory Storage
+
+- Default new trajectory and dataset output to HDF5 (`training_data.h5`).
+  Keep trajectory saving opt-in where it is currently opt-in.
+- Do not create directory-based Zarr stores unless the user or configuration
+  explicitly requests `zarr` or `both`. Never use Zarr as a silent fallback.
+- Apply this convention to runtime defaults, schema defaults, examples,
+  notebooks, READMEs, documentation, and generated output manifests.
+- Preserve existing Zarr readers and results. Do not convert, rename, or
+  delete previous result stores without a separate request.
+- Follow the trajectory storage section of
+  `docs/user_guide/example_contract.md` when introducing a writer.

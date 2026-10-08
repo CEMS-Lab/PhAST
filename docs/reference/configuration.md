@@ -30,7 +30,7 @@ validity.
 
 `solver.solver_type` selects the analysis family. `solver.backend` controls linear-solver backend dispatch where supported; `solver.preconditioner` selects a preconditioning choice where supported. `solver.time_integrator` accepts the implemented central-difference route and documented aliases; reserved routes remain bounded by their implementation.
 
-`output.trajectory: true` enables snapshots, with `output.trajectory_format: zarr` preferred and `h5` retained for legacy compatibility. `output.plots`, `gif`, `vtu`, and `viz_format` control visual products where the selected route supports them. These settings do not make a field reloadable unless the corresponding trajectory or stored field exists.
+`output.trajectory: true` enables snapshots, with `output.trajectory_format: h5` as the default single-file format; `zarr` and `both` require explicit selection. `output.plots`, `gif`, `vtu`, and `viz_format` control visual products where the selected route supports them. These settings do not make a field reloadable unless the corresponding trajectory or stored field exists.
 
 `device.device` can request `cpu`, `cuda`, or `mps` when supported. A material-aware or backend-aware fallback may change the runtime route; inspect the run metadata and manifest rather than inferring it from the request.
 

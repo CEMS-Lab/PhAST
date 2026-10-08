@@ -37,7 +37,7 @@ metadata, lockfile, CSV histories, and visuals kept together.
 2. Run with an explicit `--output_dir`.
 3. Keep `run_manifest.json`, `run_metadata.json`, `run_lockfile.json`, CSVs,
    visuals, and `visual_manifest.json` together.
-4. Store `training_data.zarr` trajectories outside git unless they are
+4. Store `training_data.h5` trajectories outside git unless they are
    intentionally published as external release artifacts.
 5. Inspect outputs with `phast.load_result(path)`.
 

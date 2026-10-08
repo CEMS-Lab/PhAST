@@ -10,9 +10,9 @@ PETSc/MUMPS, GPU direct solvers, and other HPC backends remain optional.
 
 | Platform | Python | Public CI status | Recommended first route |
 |---|---:|---|---|
-| Ubuntu | 3.10, 3.11, 3.12 | Package and public tests | CPU float64 |
-| macOS | 3.11 | Package and public tests | CPU float64; inspect MPS separately |
-| Windows | 3.11 | Package and public tests | CPU float64 |
+| Ubuntu | 3.10, 3.11, 3.12 | Package and repository tests | CPU float64 |
+| macOS | 3.11 | Package and repository tests | CPU float64; evaluate MPS separately |
+| Windows | 3.11 | Package and repository tests | CPU float64 |
 | CUDA Linux | Environment-dependent | Not part of the portable CI matrix | Run `doctor`, sanitizer, then a bounded case |
 | HPC optional backends | Site-dependent | Not part of the portable CI matrix | Validate against the site module and scheduler environment |
 
@@ -68,8 +68,8 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ## Docker
 
-The repository image is a portable CPU route for the bounded installation
-check. It does not start a fracture simulation:
+The repository image provides a portable CPU environment for the small
+installation check. It does not start a fracture simulation:
 
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
@@ -114,12 +114,13 @@ docker run --rm -it --cpus 2 --memory 4g --entrypoint /bin/sh phast:local
 
 ## Verify before running a simulation
 
-Use the [verification ladder](verify-install.md): doctor, sanitizer,
-`--validate-only`, then a deliberately selected completed run. Use an explicit
-output directory for completed runs and inspect the resulting manifest and
-metadata. A preflight pass does not establish runtime or scientific validity.
+Use the [installation verification sequence](verify-install.md): run `doctor`,
+the sanitizer, `--validate-only`, and then a deliberately selected example.
+Use an explicit output directory and inspect the resulting manifest and
+metadata. Configuration validation alone does not establish numerical accuracy
+or physical validity.
 
-If installation fails, retain the first traceback and consult
+If installation fails, record the complete first traceback and consult
 [Troubleshooting](troubleshooting.md). Optional backend installation should be
 deferred until the doctor shows that the intended workflow needs it.
 
@@ -134,5 +135,5 @@ deferred until the doctor shows that the intended workflow needs it.
 | Example path not found | Run repository-relative commands from the repository root. |
 | Permission denied for output | Select a writable `--output_dir`; do not write into the installed package directory. |
 
-Preserve the first traceback. Opening a question issue is appropriate whenever
+Preserve the complete first traceback. Opening a question issue is appropriate whenever
 the documented recovery step does not resolve it.

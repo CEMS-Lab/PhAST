@@ -725,7 +725,7 @@
         },
         "trajectory_format": {
           "type": "string",
-          "default": "zarr"
+          "default": "h5"
         },
         "h5_every": {
           "type": "integer",

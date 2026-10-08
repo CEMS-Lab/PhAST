@@ -421,8 +421,9 @@ class OutputConfig:
     h5: bool = False
     # Public spelling for enabling trajectory snapshots.
     trajectory: bool = False
-    # Preferred trajectory backend is Zarr; H5 is legacy compatibility.
-    trajectory_format: str = 'zarr'
+    # HDF5 keeps each trajectory in one file, including on synced storage.
+    # Directory-based Zarr output requires an explicit format selection.
+    trajectory_format: str = 'h5'
     # Snapshot cadence for trajectory outputs.
     h5_every: int = 20
     vtu: bool = False

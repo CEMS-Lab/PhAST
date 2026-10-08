@@ -91,7 +91,7 @@ output:
   output_dir: null
   h5: true
   trajectory: true
-  trajectory_format: zarr
+  trajectory_format: h5
   h5_every: 1
   plots: true
   profile: true

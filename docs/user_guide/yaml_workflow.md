@@ -1,178 +1,185 @@
-# Declarative YAML Workflows
+# Declarative YAML workflows
 
-YAML is the primary configuration format for reproducible simulations in
-PhAST. Declarative configurations record the geometric, physical, numerical,
-and output choices needed to review and repeat an academic simulation.
+YAML records the geometry, mesh, materials, constraints, loading, numerical
+controls, and outputs needed to share a PhAST model. Start with the
+[standard simulation tutorial](../tutorial/07_standard_simulation_workflow.md)
+for source installation and the three-problem student route: small
+quasi-static SENT, small dynamic SENT, and full layered DCB.
 
-The fluent `phast.Problem` API is useful for programmatic model construction;
-YAML is preferred when a complete setup must be shared and reviewed.
+The fluent `phast.Problem` API remains useful for programmatic authoring.
+Neither a common input format nor a Python object makes unsupported physics
+available.
 
-YAML is the public reproduction format because it is explicit, machine-readable,
-and stable across reruns. A validated configuration makes it possible to
-recreate the same geometry, material parameters, loading history, and output
-contract without reinterpreting interactive Python state.
+## Explain, check, run
 
-## Configuration Scope
-
-A declarative YAML configuration explicitly defines:
-- **Geometry**: Built-in generators or paths to external meshes. The
-  declarative primitive DSL is a beta capability with limited supported
-  combinations; it is not an arbitrary geometry compiler.
-- **Constitutive Models**: Material definitions, physics presets, and specific parameters.
-- **Boundary Conditions**: Kinematic constraints and loading protocols.
-- **Solver Execution**: Mathematical backend, temporal discretization, tolerances, and hardware device.
-- **Artifact Generation**: Desired volumetric fields, CSV histories, visualization rendering, and trajectory storage formats.
-
-## Execution Workflow
-
-PhAST provides three primary CLI entry points for interacting with YAML configurations:
+Run from the installed repository root. Replace `CONFIG` with a complete
+YAML path and `RUN` with a new result directory.
 
 ```bash
-# 1. Validate schema and workflow-contract constraints only; do not solve
-python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --validate-only
-
-# 2. Inspect the parsed configuration graph and hardware placement
-python -m phast explain-config examples/quasistatic/notched_holed_plate/config.yaml
-
-# 3. Execute the simulation and specify an artifact output directory
-python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate
+python -m phast explain-config CONFIG
+python -m phast run CONFIG --validate-only
+python -m phast run CONFIG --output_dir RUN
 ```
 
-`--validate-only` parses the YAML and applies the available schema/workflow
-checks, then exits before configuration resolution, factory imports, checkpoint
-loading, mesh generation, or solving. It is a preflight check, not runtime,
-mathematical, or scientific validation.
+The first command explains the input, the second checks the implemented
+schema/workflow constraints without solving, and the third executes it.
+Schema-2 explanation dispatch and the new single-material adapters require
+combined CLI checks before the new sequences are labelled verified.
+Legacy `precheck --config` is not a universal schema-2 replacement.
 
-This matters because the same configuration file can be shared across local
-development, continuous integration, and HPC submission workflows without
-changing the physics definition.
+For the full DCB reference:
 
-## Schema Structure
-
-```yaml
-problem:
-  name: notched_holed_plate
-
-geometry:
-  mesh_path: mesh.msh
-
-material:
-  preset: miehe_tension
-  overrides:
-    l0: 0.015
-    pf_model: AT2
-
-boundary_conditions:
-  - {nodes: bottom, type: fix, component: 0}
-  - {nodes: bottom, type: fix, component: 1}
-  - {nodes: top, type: prescribe, component: 1, value: 0.001}
-
-loading:
-  protocol: simple
-  num_steps: 10
-
-solver:
-  solver_type: quasi_static
-  backend: auto
-  preconditioner: jacobi
-
-output:
-  plots: true
-  trajectory: true
-  trajectory_format: zarr
+```bash
+python -m phast explain-config examples/two_material_dcb_beta/config.yaml
+python -m phast run examples/two_material_dcb_beta/config.yaml --validate-only
+python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference
 ```
 
-Public examples contain the keys required by their documented execution
-pathways. Begin with the nearest example and modify one physical or numerical
-choice at a time.
+Preflight stops before meshing and solving. It does not establish non-empty
+mesh selections, numerical convergence, crack growth, mesh independence, or
+experimental agreement. Use the selected runner's documented scope.
 
-## Runnable Decks, Templates, And Contracts
+## Schema-2 order
 
-Not every YAML file in the repository represents one solver problem:
+New standard-workflow inputs must follow the
+{download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`:
 
-| File class | Directly runnable? | Interpretation |
+| Order | Key | Contents |
 |---|---|---|
-| `examples/<family>/<case>/config.yaml` | Yes | Complete example-local solver input. |
-| `configs/benchmarks/<family>/<case>.yaml` | Yes | Complete benchmark solver input. |
-| `configs/REFERENCE.yaml` | No | Annotated field reference and template. |
-| `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` | No | Example documentation and artifact inventory. |
-| `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml` | Only with `--validation-id` | Dispatcher manifest for beta validation programs. |
+| 1 | `schema_version` | `2` for this layout. |
+| 2 | `name` | Descriptive problem name. |
+| 3 | `reference` | Source or teaching scope, when applicable. |
+| 4 | `geometry` | Generator and supported mesh parameters. |
+| 5 | `regions` | Named node and element selections. |
+| 6 | `materials` | Named models and material parameters. |
+| 7 | `assignments` | Material-to-element-region mapping. |
+| 8 | `initial_conditions` | Initial fields or route-specific maintained damage. |
+| 9 | `boundary_conditions` | Named constraints and prescribed values. |
+| 10 | `analysis_steps` | Physical analysis, active conditions, loading controls. |
+| 11 | `solver` | Numerical algorithm, tolerances, iteration limits. |
+| 12 | `outputs` | Directory, fields, histories, visuals. |
 
-Contracts and manifests describe a collection of programs or expected
-artifacts. They are not interchangeable with a single fracture `config.yaml`.
+Use the {download}`complete DCB input <../../examples/two_material_dcb_beta/config.yaml>`
+or {download}`heterogeneous SENT input <../../examples/heterogeneous_sent_beta/config.yaml>`,
+not a mixture of unrelated partial examples. The companion single-material
+inputs under `examples/standard_workflow/` require their documented adapter
+checks before promotion.
 
-## External Meshes and Provenance
+### Geometry and regions
 
-For built-in examples, structural geometry can be declared directly in YAML and
-PhAST can generate the underlying computational mesh via Gmsh. The
-declarative primitive DSL is beta and only selected combinations are supported;
-consult the capability matrix before using boolean operations. For custom
-domains, generate a format-compliant mesh (e.g., `.msh`) and reference it:
+The documented multi-material route uses `geometry.type: structured_rectangle`
+with `length`, `height`, `origin`, `nx`, and `ny` in
+`geometry.parameters`. Cells are divided into T3 triangles. Material regions
+select element centroids; crack constraints and supports select nodes.
+
+Changing dimensions does not automatically move boundaries, cracks, layers,
+or complementary disk selectors. Update those dependencies together and
+cover every element exactly once. Mesh changes can make a narrow node
+selection empty or alter an inclusion's discrete boundary.
+
+### Materials and analysis
+
+`materials.<name>.parameters.E` controls stiffness;
+`materials.<name>.parameters.Gc` controls fracture resistance. Vary them
+independently before attributing a response change to one property.
+Use a coherent unit system; `geometry.units` does not convert arbitrary
+bare material/loading numbers.
+
+Quasi-static analysis omits inertia. The DCB
+`analysis_steps[0].controls.number_of_steps: 121` gives 121 nominal levels
+including zero: 120 nominal increments, with more possible after cutbacks.
+`solver` separately controls convergence.
+
+Dynamics includes density and physical time. Explicit integration needs a
+CFL-limited time step. Final time, maximum steps, solver iterations, and
+saved-output cadence are different controls; use the actual adapter keys.
+Neither a smaller step nor one `h/l0` ratio establishes validation.
+
+## Compatibility layouts and capability limits
+
+Schema-1 benchmarks retain singular `material`, `loading`, and `output`
+sections and `solver.solver_type`. Schema 2 uses `materials`,
+`assignments`, `analysis_steps`, `outputs`, and `solver.type`.
+Do not mix layouts or migrate by changing only the version number.
+
+The documented multi-material scope is structured T3 rectangles, CPU float64,
+quasi-static Amor AT2, elementwise `E`/`Gc`, shared `nu`/`l0` and
+constitutive settings, and Dirichlet conditions. It does not cover dynamic
+multi-material execution or independent interface laws. Other legacy
+generators and imported meshes belong to their specific documented routes,
+not automatically to this one. Consult the [capability matrix](capability_matrix.md).
+
+Frozen course inputs and separate 3D research remain separate until adapters
+and evidence exist. A common writing style is not a migration instruction.
+
+## Inputs, templates, and complete comparison decks
+
+| File class | Interpretation |
+|---|---|
+| Example `config.yaml` | Solver input for its documented adapter/status, not proof of a completed run. |
+| DCB `comparisons/tough_region.yaml` and `uniform_layer.yaml` | Complete coarse inputs for the same CLI; only disk `Gc` differs between the pair. |
+| Benchmark input under `configs/benchmarks/` | Follow its exact schema and example command. |
+| `configs/REFERENCE.yaml` | Annotated compatibility reference, not a universal schema-2 input. |
+| `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` | Artifact inventory, not a solver problem. |
+| Plasticity/interface reproduction contract | Dispatcher manifest; follow its documented `--validation-id` route. |
+
+Compact complete comparison decks duplicate model data, not solver code.
+The [standard tutorial](../tutorial/07_standard_simulation_workflow.md)
+provides exact coarse-pair commands and distinguishes their results from
+the fine DCB reference. Use separate output directories.
+
+## HDF5 trajectories
+
+This **partial schema-2 excerpt** adds a trajectory request to the existing
+`outputs.fields` list; preserve the other outputs:
 
 ```yaml
-geometry:
-  mesh_path: meshes/custom_domain.msh
+outputs:
+  fields:
+    - {name: trajectory, format: h5, every: 1}
 ```
 
-External meshes must preserve named physical groups for every boundary or domain referenced in the YAML configuration. You can inspect parsed mesh groups programmatically:
+HDF5 writes `training_data.h5`. The multi-material runner supports HDF5
+only and refuses to overwrite an existing trajectory. DCB requests it;
+heterogeneous SENT leaves it opt-in.
 
-```python
-import phast
-
-summary = phast.inspect_mesh("meshes/custom_domain.msh")
-print(summary["named_groups"])
-```
-
-## High-Fidelity Volumetric Storage
-
-PhAST defaults to chunked, parallel-friendly `zarr` stores for recording volumetric field trajectories. The legacy `h5` format is maintained strictly for compatibility with older external post-processing scripts.
+The **legacy schema-1** equivalent uses different keys:
 
 ```yaml
 output:
   trajectory: true
-  trajectory_format: zarr  # Options: zarr, h5, both
+  trajectory_format: h5
   h5_every: 5
 ```
 
-Trajectory formats can also be dynamically overridden via the CLI without modifying the underlying configuration file:
+Legacy routes that support `zarr` or `both` require explicit selection;
+do not assume those formats work in every schema-2 adapter. No format is a
+silent fallback. Existing stores remain unchanged. Close a file before
+transferring it; a single file does not make concurrent synchronised writes
+safe. Keep large raw stores out of public example payloads.
 
-```bash
-python -m phast run config.yaml --trajectory --trajectory-format zarr
-```
+## Inspect results
 
-## Standardized Artifact Directory
-
-A successfully executed configuration writes an artifact directory such as
-`runs/notched_holed_plate/`. Depending on the selected output settings and
-runner, the directory may include:
-- The exact `config.yaml` used for execution.
-- `run_lockfile.json` capturing the parsed state, Git hashes, and dependencies.
-- CSV histories (response, kinetic energy, nonlinear convergence).
-- High-fidelity Zarr trajectories when trajectory output is enabled.
-- Visual manifests and pre-rendered plots.
-
-## Result Inspection
-
-The public `Result` interface treats the existing artifact directory as
-read-only and can be queried programmatically:
+A successful run writes requested artifacts to `RUN`: configuration and
+provenance, manifests, histories, lightweight visuals, and requested fields,
+as supported by the route. Inspect the manifest rather than assuming every
+small exercise produces a propagating crack.
 
 ```python
 import phast
 
-result = phast.load_result("runs/notched_holed_plate")
+result = phast.load_result("runs/dcb_fine_reference")
 print(result.metadata())
 print(result.history_names())
-
+print(result.visuals())
 if result.has_field("damage"):
     damage = result.field("damage", step=-1)
 ```
 
-The `Result` object exposes only quantities that were explicitly written during the simulation; it does not silently synthesize derived fields.
+The result interface reads stored quantities. A PNG is not a field
+trajectory; retained evidence is not a new run. See the
+[example contract](example_contract.md).
 
-## Extensibility Boundary
-
-YAML configurations route to explicitly implemented PhAST execution pathways.
-They do not compile arbitrary weak-form PDEs. The capability matrix defines the
-documented support boundary. Schema validation detects unsupported combinations
-that are represented in the validator, but it is not a substitute for checking
-the numerical evidence associated with a model.
+If a documented step fails,
+[open a GitHub issue](https://github.com/CEMS-Lab/PhAST/issues/new/choose)
+with the configuration, exact command, OS, Python/PhAST version, and full error.

@@ -26,6 +26,6 @@
 
 **Tangent**  A local derivative of a residual or constitutive update with respect to an increment.
 
-**Trajectory**  A stored sequence of field snapshots, in the preferred Zarr or legacy H5 format when enabled.
+**Trajectory**  A stored sequence of field snapshots, in HDF5 format by default when enabled; Zarr requires explicit selection.
 
 **Weak form**  An integral statement obtained by testing the strong form and integrating by parts.

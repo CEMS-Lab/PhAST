@@ -1,19 +1,36 @@
 # Tutorials
 
+## Main configuration route
+
+Use [One configuration workflow for student simulations](07_standard_simulation_workflow.md)
+for source installation and the common schema-2 layout. Its teaching sequence
+is small quasi-static SENT, small dynamic SENT, and the full layered DCB
+example. It explains editable geometry/mesh/materials, identifies pending
+adapter checks, and shows retained DCB PNG/GIF evidence without claiming
+calibrated inclusion bypass.
+
+The notebooks below are a separate learning route. Existing notebooks and
+frozen course assets retain their inputs; the writing convention does not
+silently migrate them or add 3D fracture support.
+
 ## Student Notebook Sequence
 
-1. [Dynamic SENT: inspect a complete public example](notebook_dynamic_sent.ipynb)
+1. [Square-plate SENT: geometry to crack animation](notebook_square_plate_fracture.ipynb)
+   performs a fresh, laptop-scale calculation: generate the mesh, inspect named
+   boundaries, define material and loading data, select the supported dynamic
+   solver route, follow progress, and plot displacement, strain, stress, and damage.
+2. [Dynamic SENT: inspect a complete public example](notebook_dynamic_sent.ipynb)
    connects an existing mesh, named regions, boundary conditions, YAML,
    explicit solver route, retained energy history, and visible crack-growth
    animation. It does not rerun the full dynamic calculation by default.
-2. [SENT setup and two-step CPU workflow check](notebook_setup.ipynb)
+3. [SENT setup and two-step CPU workflow check](notebook_setup.ipynb)
    teaches geometry, meshing, named regions, boundary conditions, material,
    solver selection, and retained outputs. Its default run is not crack-growth
    validation.
-3. [Mesh-resolution diagnostic](notebook_mesh_resolution.ipynb)
+4. [Mesh-resolution diagnostic](notebook_mesh_resolution.ipynb)
    samples an AT2 profile at several $h/\ell_0$ ratios. It is not a solved
    convergence study.
-4. [Retained Miehe SENT results](notebook_retained_results.ipynb)
+5. [Retained Miehe SENT results](notebook_retained_results.ipynb)
    examines checked-in load-displacement and damage evidence and states the
    current post-processing boundary.
 
@@ -37,7 +54,9 @@ checkout, and prints the resolved commit before installation.
 
 | Tutorial | Time | What you learn |
 |---|---:|---|
+| [Standard simulation workflow](07_standard_simulation_workflow.md) | Self-paced; full DCB runtime is machine-dependent | Use one schema-2 layout across the small SENT exercises and full DCB, edit inputs, and distinguish numerical and physical evidence. |
 | [Getting started](../getting-started.md) | 10-20 min on a fresh machine | Create an environment, install PyTorch and PhAST, run `doctor`, validate a shipped example, and inspect a result. A prepared teaching environment is faster. |
+| [Square-plate fracture: complete workflow](notebook_square_plate_fracture.ipynb) | 25-40 min including installation; about 15-60 s for the solve on a prepared laptop | Generate the B3 square-plate mesh, inspect named boundaries, assemble a CFL-safe teaching configuration, run explicit mechanics with an implicit damage update, and create fresh field plots and a crack animation. Runtime is machine-dependent. |
 | [Dynamic SENT example](notebook_dynamic_sent.ipynb) | 20-30 min | Inspect the existing B3 mesh, named regions, loading, explicit solver route, retained histories, and crack-growth animation without presenting retained evidence as a new run. |
 | [Phase-field primer](01_phase_field_primer.md) | 15 min | Connect Griffith fracture energy, regularization, degradation, energy splits, history, and the staggered solve. |
 | [Problem setup notebook](notebook_setup.ipynb) | 35-50 min | Predict the setup, create and inspect the geometry and named regions, apply conditions and solver settings, run a short solve, change one parameter, and interpret the artifacts. A rendered fallback supports sessions without a working runtime. |
@@ -55,10 +74,13 @@ checkout, and prints the resolved commit before installation.
 ## Recommended Learning Path
 
 1. Install the package (`git clone` + `pip install -e .`) and run `python -m phast doctor`.
-2. Validate a public YAML configuration with `--validate-only`.
-3. Inspect the [B3 dynamic SENT notebook](notebook_dynamic_sent.ipynb) to connect
-   a complete public configuration with visible retained crack propagation.
-4. Run one small public example into `runs/<case>`.
+2. Read the [standard simulation workflow](07_standard_simulation_workflow.md),
+   then explain and check a supported input with `--validate-only`.
+3. Run the [square-plate fracture notebook](notebook_square_plate_fracture.ipynb)
+   to connect geometry, meshing, model data, solver selection, execution, and
+   post-processing in one fresh calculation.
+4. Inspect the [B3 dynamic SENT notebook](notebook_dynamic_sent.ipynb) to compare
+   the fresh teaching calculation with the separately retained public evidence.
 5. Inspect the completed run with `phast.load_result(...)`.
 6. Build a small model with `phast.Problem`.
 7. Read the [visual glossary](02_visual_glossary.md) if the terminology feels abstract.
@@ -89,7 +111,7 @@ the solver.
 | 5-12 min | Inspect geometry, mesh, and named physical groups. | Setup figure and group table. |
 | 12-20 min | Identify material, phase-field, loading, and solver choices. | Completed modelling-decision table. |
 | 20-25 min | Run `--validate-only` and explain what it does not verify. | Configuration preflight record. |
-| 25-33 min | Inspect the retained B3 propagation sequence, or execute the bounded two-step setup workflow when the environment is prepared. | A clearly labelled retained animation or a newly generated result directory. |
+| 25-33 min | Execute the square-plate tutorial, or use its rendered fresh-run output when execution is unavailable. | A newly generated result directory or clearly labelled rendered fallback. |
 | 33-39 min | Change one parameter and predict the consequence before rerunning. | Before/after observation. |
 | 39-45 min | Inspect manifests, histories, and fields; state one limitation and one next test. | Exit statement suitable for a lab notebook. |
 
@@ -101,6 +123,8 @@ record and to distinguish execution evidence from scientific evidence.
 
 | Workflow | Entry point | Typical output |
 |---|---|---|
+| Full layered DCB teaching model, beta | `python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference` | HDF5 trajectory, CSV, PNG/GIF, and manifests; retained evidence is qualitative, not a validated bypass result. |
+| Complete square-plate teaching workflow | `jupyter lab docs/tutorial/notebook_square_plate_fracture.ipynb` | Fresh mesh, resolved YAML, histories, stored fields, final-field figure, and crack animation. |
 | Dynamic-fracture preflight | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only` | Configuration acceptance report only; no simulation fields are generated. |
 | Dynamic-branching preflight | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only` | Configuration acceptance report only; retained artifacts are separate evidence. |
 | Quasi-static fracture | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | Final damage, response histories, comparison artifacts, and result manifests. |

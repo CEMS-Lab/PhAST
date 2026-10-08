@@ -4,10 +4,54 @@ This page explains the pieces of a PhAST forward model: geometry or mesh,
 regions, materials, initial conditions, boundary conditions, analysis steps,
 solver controls, outputs, validation, and result inspection.
 
-Use the fluent `phast.Problem` API while designing a new setup. Use YAML configurations
-for reproducible public examples, shared runs, CI, and HPC submission.
+Start with the [standard simulation tutorial](../tutorial/07_standard_simulation_workflow.md)
+for the student YAML route: small quasi-static SENT, small dynamic SENT, then
+full layered DCB. Use `phast.Problem` for programmatic construction and a
+complete YAML for shared runs. New adapter checks remain a promotion gate.
 
-## FEM Workflow Map
+## Standard schema-2 setup
+
+Use the order `schema_version`, `name`, `reference`, `geometry`,
+`regions`, `materials`, `assignments`, `initial_conditions`,
+`boundary_conditions`, `analysis_steps`, `solver`, `outputs`.
+The {download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`
+are mandatory for new YAML/README/tutorial contributions.
+
+| Edit | Input location | Dependency or interpretation |
+|---|---|---|
+| Rectangle dimensions | `geometry.parameters.length`, `height`, `origin` | Update coordinate-based boundaries, layer/disk regions, and crack selectors. |
+| Structured mesh | `geometry.parameters.nx`, `ny` | Check non-empty selections and material-boundary resolution, not only `h/l0`. |
+| Inclusion geometry | `regions` | Match circle and complementary selectors; assignments cover all elements without overlap. |
+| Stiffness | `materials.<name>.parameters.E` | Changes elastic response and energy; it is not toughness. |
+| Fracture resistance | `materials.<name>.parameters.Gc` | Vary separately from `E` for a controlled comparison. |
+| Material placement | `assignments` | Refer to declared element regions, not support node sets. |
+| Starter crack | `initial_conditions` and its region | Maintained prescribed damage on this route, not a prescribed future path. |
+| Loading | `boundary_conditions`, `analysis_steps[].active_boundary_conditions` | Check selected nodes, directions, values, signs, and active names. |
+| Quasi-static increments | `analysis_steps[].controls.number_of_steps` | Includes zero on the multi-material route; cutbacks can increase the accepted count. |
+| Numerical acceptance | `solver` | Tolerances and iteration limits, not experimental validity. |
+| Saved fields | `outputs.fields` | Use a trajectory request with `format: h5`; PNG/GIF alone is not reloadable field data. |
+
+The documented multi-material route is structured T3 rectangles, CPU float64,
+quasi-static Amor AT2, elementwise `E`/`Gc`, common `nu`/`l0`,
+shared constitutive settings, and Dirichlet conditions. It is not dynamic
+multi-material or an independent interface law. The other geometry recipes
+below belong to their own documented adapters, not automatically to this one.
+
+Quasi-static analysis omits inertia. Dynamics includes density and physical
+time; explicit integration additionally needs a CFL-limited time step.
+Final time, maximum steps, iteration limits, and output cadence are different
+controls. Smaller steps or a particular `h/l0` are not validation guarantees.
+A short setup exercise may not propagate a crack; seeded `damage = 1`
+is not evidence of new growth.
+
+Frozen course inputs and separate 3D research retain their own scope until
+adapters and evidence exist.
+
+## Fluent and legacy FEM workflow map
+
+The YAML column below describes the compatibility layout used by existing
+schema-1 examples. Use the mapping above for new standard schema-2 inputs;
+do not mix singular and plural sections.
 
 If you are coming from Abaqus, COMSOL, FEniCS, deal.II, or another FEM code,
 the PhAST workflow is the same sequence with different names:
@@ -19,7 +63,7 @@ the PhAST workflow is the same sequence with different names:
 | Imported mesh | Mesh file / imported mesh | `.mesh("mesh.msh")` | `geometry.mesh_path` |
 | Named selections | Sets / physical groups / boundaries | `.region(...)` | geometry groups and node sets |
 | Material definition | Material card | `.material(...)` | `material:` |
-| Material assignment | Section assignment / domain material | `.material(..., region="body")` | material plus region/node-set references |
+| Material assignment | Section assignment / domain material | `.material(..., region="body")` | schema 1 is single-material; schema 2 uses `assignments` above |
 | Initial crack/notch state | Initial field / predefined field | `.initial_condition("damage", ...)` | `initial_conditions:` |
 | Supports | Dirichlet BC / fixed constraint | `.fix(...)` or `.boundary_condition("fix", ...)` | `boundary_conditions:` |
 | Prescribed displacement | Displacement BC | `.prescribe(...)` or `.boundary_condition("displacement", ...)` | `boundary_conditions:` |
@@ -36,9 +80,10 @@ workflows. It does not compile arbitrary weak forms from user text.
 
 ## Units
 
-For bare numerical values, PhAST uses the documented reference convention
-shown below. Supported quoted unit strings are converted at the configuration
-boundary, but all values in one model must still be dimensionally consistent:
+Use a dimensionally consistent system for all values. Unit-string conversion
+is route-specific: the schema-2 teaching inputs use bare numbers, and
+`geometry.units` does not convert arbitrary material/loading values.
+Common coherent conventions are:
 
 | Quantity | SI example | mm-N-MPa style example |
 |---|---|---|
@@ -53,6 +98,10 @@ Before running a new case, check that geometry dimensions, material properties,
 loads, density, fracture energy, and time-step controls are all expressed in
 the same system. The result manifests record the inputs; they do not infer or
 repair inconsistent units.
+
+The quasi-static density is illustrative because inertia is omitted. Do not
+reuse it as measured density in dynamics. State out-of-plane thickness and
+reaction conventions when comparing forces.
 
 ## Setup Checklist
 
@@ -404,7 +453,7 @@ comparison artifact.
 
 ## What Makes a Good Public Example?
 
-Each public example should be boringly predictable:
+Each public example should have a consistent, inspectable structure:
 
 - one `config.yaml` declarative configuration,
 - one optional `run_fluent.py` companion when the fluent path is promoted,
@@ -418,3 +467,7 @@ Each public example should be boringly predictable:
 Examples that still need large raw trajectories, unpublished HPC provenance, or
 custom one-off scripts should stay out of the public examples tree until they
 are promoted.
+
+If an input choice or documented command is unclear,
+[open a GitHub issue](https://github.com/CEMS-Lab/PhAST/issues/new/choose)
+with the configuration, command, OS, Python/PhAST version, and full error.

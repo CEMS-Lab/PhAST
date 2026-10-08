@@ -28,6 +28,70 @@ tiers:
   contract: Developer evidence only; do not promote as a public example without a manifest update.
   public_gallery: false
 families:
+- id: standard_workflow
+  tier: yaml_first
+  examples:
+  - id: quasistatic_sent_setup
+    path: examples/standard_workflow/quasistatic_sent
+    tutorial_ready: true
+    role: Small schema-v2 quasi-static setup exercise, not crack-growth validation.
+    required_artifacts:
+    - README.md
+    - config.yaml
+  - id: dynamic_sent_setup
+    path: examples/standard_workflow/dynamic_sent
+    tutorial_ready: true
+    role: Small schema-v2 explicit-dynamic setup exercise, not crack-growth validation.
+    required_artifacts:
+    - README.md
+    - config.yaml
+- id: heterogeneous_fracture
+  tier: yaml_first
+  examples:
+  - id: heterogeneous_sent_setup
+    path: examples/heterogeneous_sent_beta
+    tutorial_ready: false
+    role: Beta multi-material setup; retained DCB results do not validate this geometry.
+    required_artifacts:
+    - README.md
+    - config.yaml
+  - id: two_material_dcb_phase_field
+    path: examples/two_material_dcb_beta
+    kind: heterogeneous_phase_field_teaching
+    tutorial_ready: true
+    tutorial_blockers: []
+    workflow_entrypoint: examples/two_material_dcb_beta/config.yaml
+    workflow_command: python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/two_material_dcb
+    retained_result: examples/two_material_dcb_beta/results
+    role: Executed beta bulk-layer crack-interaction illustration with HDF5 output and a matched toughness comparison; not completed bypass, penetration, interface debonding, or a validated fracture benchmark.
+    required_artifacts:
+    - README.md
+    - config.yaml
+    - comparisons/tough_region.yaml
+    - comparisons/uniform_layer.yaml
+    - compare_results.py
+    - results/README.md
+    - results/summary.json
+    - results/numerical_review.json
+    - results/history.csv
+    - results/material_fields.png
+    - results/initial_conditions.png
+    - results/damage_final.png
+    - results/displacement_final.png
+    - results/strain_final.png
+    - results/stress_final.png
+    - results/damage_evolution.gif
+    - results/load_displacement.png
+    - results/matched_control_comparison.png
+    - results/matched_control_damage.png
+    - results/matched_control_review.json
+    - results/coarse_tough_history.csv
+    - results/uniform_layer_history.csv
+    - results/matched_control_fields.csv.gz
+    - results/matched_control_elements.csv.gz
+    - results/comparison_provenance.json
+    - results/run_manifest.json
+    - results/visual_manifest.json
 - id: dynamic
   tier: yaml_first
   examples:

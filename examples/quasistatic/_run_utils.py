@@ -18,7 +18,7 @@ from phast.io_utils import (
 
 @dataclass
 class TrajectoryWriter:
-    """Small adapter hiding legacy H5 vs Zarr trajectory writers."""
+    """Small adapter for HDF5 and explicitly selected Zarr trajectories."""
 
     root: object
     kind: str
@@ -38,16 +38,17 @@ class TrajectoryWriter:
             self.root.attrs["num_steps"] = int(num_steps)
 
 
-def open_trajectory_writers(output_dir, mesh, material, enabled, fmt="zarr"):
+def open_trajectory_writers(output_dir, mesh, material, enabled, fmt="h5"):
     """Open requested trajectory stores.
 
     The public benchmark flag is ``--trajectory``. The old ``--h5`` spelling
-    remains as a backwards-compatible alias, but the default archived store is
-    Zarr. Use ``--trajectory_format h5`` or ``both`` only for explicit legacy
-    needs.
+    remains as a backwards-compatible alias. HDF5 is the default; choose
+    ``zarr`` or ``both`` explicitly when a directory-based store is required.
     """
     if not enabled:
         return []
+    if fmt not in ("h5", "zarr", "both"):
+        raise ValueError("trajectory format must be one of: h5, zarr, both")
     writers = []
     if fmt in ("zarr", "both"):
         path = os.path.join(output_dir, "training_data.zarr")

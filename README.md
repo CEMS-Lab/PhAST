@@ -6,9 +6,7 @@
 
 <p align="center">
   <strong>Phase-field Autograd Solver in Torch</strong><br>
-  A matrix-free, differentiable PyTorch solver for phase-field fracture and FEM benchmarks.
-  <br><br>
-  <strong>PhAST is a matrix-free, differentiable PyTorch solver for phase-field fracture.</strong>
+  A matrix-free, differentiable PyTorch finite-element solver for two-dimensional phase-field fracture.
 </p>
 
 <p align="center">
@@ -55,9 +53,10 @@ controls, and requested outputs in one reviewable file.
   with PyTorch autograd where documented, enabling carefully interpreted
   sensitivity studies.
 - **Phase-Field Fracture Focus:** Dynamic impact, crack branching, and quasi-static fracture workflows share a consistent mechanics/damage formulation and output schema.
-- **Public Benchmark Bundles:** Public examples provide `config.yaml`, setup figures, final field plots, response histories, manifests, and compact animations. Numerical fields are reloadable only when the result bundle retains a trajectory store.
+- **Documented Examples:** Examples provide `config.yaml`, setup figures, final field plots, response histories, manifests, and compact animations. Numerical fields can be reloaded when the result directory contains a trajectory store.
 - **YAML Plus Fluent API:** Use declarative YAML for reproducible runs and `phast.Problem` for programmatic model authoring.
-- **Standardized Post-Processing:** `phast.load_result` handles stored manifests, CSV histories, visuals, and retained trajectory fields.
+- **Standardised Post-Processing:** `phast.load_result` reads stored manifests, CSV histories, visualisations, and available trajectory fields.
+- **Single-File Trajectories:** When enabled, trajectory output defaults to HDF5 (`training_data.h5`). Zarr remains available by explicit selection.
 
 ## How The Solver Works
 
@@ -65,8 +64,8 @@ controls, and requested outputs in one reviewable file.
 
 For a phase-field fracture run, PhAST constructs or imports a two-dimensional
 finite-element mesh, evaluates the mechanical state, updates the tensile
-history field, solves the regularized damage problem, enforces damage bounds
-and irreversibility, and writes fields, histories, manifests, and provenance.
+history field, solves the regularised damage problem, enforces damage bounds
+and irreversibility, and writes fields, histories, manifests, and run metadata.
 Explicit dynamics and quasi-static fracture use different mechanics updates;
 the [solver overview](docs/user_guide/overview.md) and
 [formulation guide](docs/user_guide/physics.md) describe both pathways.
@@ -77,19 +76,25 @@ If you are new to PhAST, follow this sequence:
 
 1. Read the [phase-field primer](docs/tutorial/01_phase_field_primer.md) if the
    formulation is new to you.
-2. Follow the [installation and first-run guide](docs/getting-started.md).
-3. Validate a fracture YAML before allocating a full simulation.
-4. Run the small linear-elastic example to verify end-to-end execution and
-   result loading.
+2. Follow the [standard simulation tutorial](docs/tutorial/07_standard_simulation_workflow.md)
+   for source installation and the common editable YAML layout.
+3. Explain and check a fracture input before allocating a full simulation.
+4. Run the small linear-elastic example to check solver execution and result
+   loading on the current machine.
 5. Consult the [capability matrix](docs/user_guide/capability_matrix.md) before
    selecting a model for research use.
 
 ## Quickstart
 
+Install Python 3.10 or newer and Git first. These commands install the source
+checkout you clone; they do not assert that it is the latest release.
+
+On macOS or Linux:
+
 ```bash
 git clone https://github.com/CEMS-Lab/PhAST.git
 cd PhAST
-python3.11 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
@@ -97,10 +102,36 @@ python -m pip install -e .
 python -m phast doctor
 ```
 
-PhAST requires Python 3.10 or newer; Python 3.11 is recommended for a first
-source installation. Continuous integration currently verifies Python
-3.10-3.12, so later Python versions are permitted but not yet part of the
-regular test matrix.
+On Windows PowerShell:
+
+```powershell
+git clone https://github.com/CEMS-Lab/PhAST.git
+cd PhAST
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\Activate.ps1
+python -m phast doctor
+```
+
+Ensure `python3` or `py -3` selects Python 3.10 or newer. If activation
+is blocked on Windows, use `.\.venv\Scripts\python.exe` instead of
+`python` in subsequent commands; do not change system policy.
+
+Editable installation already installs runtime dependencies. To install
+them separately in the same environment, use:
+
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -e .
+```
+
+The main student route is the small single-material quasi-static SENT,
+small single-material dynamic SENT, and full layered DCB example in the
+[standard tutorial](docs/tutorial/07_standard_simulation_workflow.md).
+The new adapters and schema-2 explanation command require combined checks
+before those sequences are labelled verified. Existing compatibility
+examples below provide a separate established first-check route.
 
 Validate a public fracture configuration without launching a full solve:
 
@@ -146,6 +177,14 @@ first workflow.
 
 ## Reproducible Workflows
 
+The [standard simulation workflow](docs/tutorial/07_standard_simulation_workflow.md)
+uses one schema-2 layout for editable geometry, mesh, materials, and loading.
+It includes retained DCB PNG/GIF evidence and complete coarse comparison
+inputs using the same CLI, not new solver drivers. The DCB result is
+qualitative layered-material interaction, not calibrated inclusion bypass.
+Its multi-material route is limited to CPU float64, structured-T3,
+quasi-static Amor AT2, and prescribed-displacement conditions.
+
 <table>
   <tr>
     <td align="center" width="33%">
@@ -178,6 +217,7 @@ Browse the full [example gallery](docs/example-gallery.md) for the complete list
 
 | Objective | Interface | Documentation Link |
 |---|---|---|
+| Learn one editable input layout | Schema-2 student workflow | [Standard Simulation Workflow](docs/tutorial/07_standard_simulation_workflow.md) |
 | Author a forward model | Fluent `phast.Problem` API | [Python API](docs/user_guide/python_api.md) |
 | Execute public benchmarks | Declarative `config.yaml` | [YAML Workflow](docs/user_guide/yaml_workflow.md) |
 | Post-process simulation data | `phast.load_result(path)` | [Public API Reference](docs/user_guide/public_api_reference.md) |
@@ -238,6 +278,10 @@ with [CONTRIBUTING.md](CONTRIBUTING.md), then use the [capability matrix](docs/u
 and [example contract](docs/user_guide/example_contract.md) to keep public
 claims, examples, and artifacts consistent.
 
+New YAML examples and their READMEs/tutorials must follow
+[CONFIGURATION_STYLE.md](CONFIGURATION_STYLE.md) alongside
+[DOCUMENTATION_STYLE.md](DOCUMENTATION_STYLE.md).
+
 Students, researchers, scientific-software developers, and users evaluating
 PhAST are invited to review the code and documentation, propose reproducible
 examples, and report unclear instructions. If you become stuck at any point,
@@ -292,4 +336,4 @@ Official code for the manuscript is hosted in this repository:
 
 The theoretical formulations, phase-field continuum equations, constitutive assumptions, and numerical discretization choices in PhAST are derived from the established computational solid mechanics literature and were selected, interpreted, and validated by the human authors, as described in the associated article and documentation. AI coding assistants, including Codex, Claude, Gemini, and GitHub Copilot, were used as auxiliary software-engineering tools for repository organization, documentation editing, boilerplate generation, and code-review support; they did not define the physics, benchmark claims, validation criteria, or scientific conclusions. The authors reviewed and verified the computational mechanics kernels, benchmark configurations, and validation artifacts, and take full responsibility for the correctness, limitations, and scientific content of the codebase.
 
-PhAST is organized with reproducible scientific computing in mind. Machine-readable manifests, structured result metadata, headless CLI/API entry points, and repository-level guidance files are provided so researchers can inspect, reproduce, and extend simulations without relying on hidden local state. These files are engineering aids; the scientific claims and solver validity remain governed by the documented formulations, tests, and validation artifacts above.
+PhAST is organised to support reproducible scientific computing. Machine-readable manifests, structured result metadata, command-line and Python interfaces, and repository guidance allow researchers to inspect, reproduce, and extend simulations without relying on undocumented local settings. Scientific claims remain limited to the formulations, tests, and validation cases described in the documentation.

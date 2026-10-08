@@ -27,7 +27,8 @@ machine:
 pip install -e ".[dataset]"
 ```
 
-PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional backend checks and are not required for the default CPU confidence suite.
+PETSc, MUMPS, cuDSS, AmgX, and vendor solvers are optional. They are not
+required for the standard CPU test suite.
 
 ## 2. First Contribution
 
@@ -45,9 +46,9 @@ All participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## 3. Coding Standards
 
-- **Type Hinting**: All new Python functions must use strict type hints.
-- **Device Safety**: Ensure tensor operations are device-agnostic (`cpu`/`cuda`).
-- **Autograd Compatibility**: Preserve and document autograd compatibility for
+- **Type hinting**: All new Python functions must use strict type hints.
+- **Device safety**: Ensure tensor operations are device-agnostic (`cpu`/`cuda`).
+- **Autograd compatibility**: Preserve and document autograd compatibility for
   supported smooth tensor pathways. Identify nonsmooth history updates,
   projections, bounds, active sets, and external sparse-backend boundaries.
 
@@ -57,8 +58,10 @@ All participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
   welcome, but public changes are merged only after maintainer review and
   approval.
 - Run the relevant validation commands locally.
-- Keep high-fidelity volumetric datasets (Zarr/H5), local diagnostic logs, and generated heavy media out of git.
-- Provide parity checks against established analytical or commercial benchmarks when modifying physics kernels.
+- Keep large volumetric datasets (Zarr/H5), local debugging logs, and generated
+  media out of git.
+- Compare changes to physics kernels against an appropriate analytical,
+  numerical, or published reference problem.
 - Update relevant documentation, such as `README.md`, YAML schemas, example
   READMEs, and capability pages, with user-facing changes.
 
@@ -78,7 +81,7 @@ For changed YAML examples or benchmark configs, also run:
 PYTHONPATH=src python -m phast run <config.yaml> --validate-only
 ```
 
-For generated visuals or retained example artifacts, inspect the output folder
+For generated visualisations or example results, inspect the output folder
 and update the relevant README or public contract file. The public repository
 includes the tests intended for public review. Run any additional,
 project-specific checks documented in the pull request or issue that motivated
@@ -90,6 +93,19 @@ Documentation source lives in `docs/` and is built with Sphinx/MyST. Example
 folders also contain public-facing `README.md` files, so changes to example
 commands, inputs, outputs, or visuals usually require both docs and example
 README updates.
+
+All documentation, README, tutorial, and notebook prose must follow
+[`DOCUMENTATION_STYLE.md`](DOCUMENTATION_STYLE.md). The guide defines the
+project's academic tone, terminology, capability labels, command conventions,
+and checks for avoiding internal development language in public text.
+
+New YAML inputs, example READMEs, and tutorials must additionally follow
+[`CONFIGURATION_STYLE.md`](CONFIGURATION_STYLE.md). Keep the same schema-2
+section order across supported student problems, define units and editable
+choices, and use the explain/check/run sequence. A common layout does not
+imply an execution adapter: require adapter and command checks before
+promotion. Preserve numerical inputs in documentation-only edits. Frozen
+course assets and separate 3D research are not migration targets.
 
 Install the documentation dependencies:
 
@@ -118,7 +134,8 @@ When editing curated examples, use `docs/user_guide/example_contract.md` as
 the source of truth for required files, README content, visuals, and artifact
 conventions.
 
-AI-assisted contributions are welcome when they follow `AGENTS.md`, `llms.txt`,
+AI-assisted contributions are welcome when they follow `DOCUMENTATION_STYLE.md`,
+`AGENTS.md`, `llms.txt`,
 `.cursorrules`, and `docs/agent-contribution-guide.md`. Agents should verify
 commands where possible and must not invent solver capabilities, benchmark
 results, paper metadata, or local/HPC provenance.
@@ -132,13 +149,21 @@ available, manifests, lightweight CSV outputs, setup/final-state visuals, and
 an evolution animation appropriate to the physics.
 
 The README should document the problem definition, exact run command, expected
-artifacts, evidence boundary, and result-inspection snippet. Do not commit raw
+results, scope of validation, and result-inspection snippet. Do not commit raw
 HPC run trees, large H5/Zarr stores, or unpublished diagnostic archives.
 
-## 8. Asking For Help
+## 8. Trajectory Storage Convention
+
+New trajectory and dataset writers, example configurations, notebooks, and
+documentation must use HDF5 (`training_data.h5`) by default. Zarr is an explicit
+opt-in, not a fallback. Keep existing Zarr readers and previously generated
+artifacts intact. Match the selected format in output manifests and follow
+the [example contract](docs/user_guide/example_contract.md).
+
+## 9. Asking For Help
 
 Open an issue if you are unsure how to install PhAST, interpret a configuration,
 run an example, or contribute a change. A useful help request includes the
-command, configuration path, operating system, PyTorch version, and the first
-warning or traceback. It is acceptable to open an issue before diagnosing the
-solver internals.
+command, configuration path, PhAST version or commit, operating system, Python
+and PyTorch versions, and the complete first warning or traceback. It is
+acceptable to open an issue before diagnosing the solver internals.

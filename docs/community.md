@@ -28,17 +28,20 @@ you do not need to identify the underlying code defect first.
 
 When opening bugs or documentation gaps, include:
 
-- exact command and config file (if any),
-- reproducibility details (PyTorch/CUDA/OS),
-- minimal output snippet or traceback,
-- the first failing file or assertion.
+- the exact command and configuration file, if applicable;
+- the PhAST version or Git commit;
+- the operating system and Python, PyTorch, and CUDA versions;
+- the complete first warning or traceback; and
+- the first failing file or assertion, if known.
 
 Questions and partial reports are welcome. Maintainers can request additional
-reproducibility information during triage.
+information when investigating the issue.
 
 ## Contributing
 
 - Use `CONTRIBUTING.md` for workflow expectations and code review requirements.
+- Follow `DOCUMENTATION_STYLE.md` for README, documentation, tutorial, and
+  notebook prose.
 - Keep new capability claims aligned with
   [capability matrix](user_guide/capability_matrix.md).
 - Add or update docs pages in one commit with any user-facing behavior change.

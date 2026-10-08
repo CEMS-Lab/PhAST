@@ -35,7 +35,7 @@ def build_problem(num_steps: int | None = None) -> phast.Problem:
         "required_outputs": [
             "run_lockfile.json",
             "config.yaml",
-            "training_data.zarr",
+            "training_data.h5",
             "energy.csv",
             "crack_tip.csv",
             "compare_report.txt",
@@ -124,7 +124,7 @@ def build_problem(num_steps: int | None = None) -> phast.Problem:
     problem.config.output = OutputConfig(
         trajectory=True,
         h5=True,
-        trajectory_format="zarr",
+        trajectory_format="h5",
         h5_every=50,
         fast=True,
         print_every=200,

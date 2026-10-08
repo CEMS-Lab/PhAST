@@ -406,7 +406,7 @@ output:
   # output_dir: null  # str or null
   # h5: false  # bool
   # trajectory: false  # bool
-  # trajectory_format: zarr  # str
+  # trajectory_format: h5  # str
   # h5_every: 20  # int, range: [1, +inf]
   # vtu: false  # bool
   # vtu_every: 10  # int, range: [1, +inf]

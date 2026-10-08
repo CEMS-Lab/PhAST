@@ -41,7 +41,7 @@ the implementation.
 
 - [ ] No raw HPC result bundles, unpublished meeting material, or heavy generated
       media were added to git.
-- [ ] New trajectory output is Zarr-first, or legacy H5 use is explicitly
-      compatibility-only.
+- [ ] New trajectory output defaults to HDF5 (`training_data.h5`); any Zarr
+      output is explicitly requested and documented, not an automatic fallback.
 - [ ] New/changed benchmark configs are documented in the relevant README or
       contract.

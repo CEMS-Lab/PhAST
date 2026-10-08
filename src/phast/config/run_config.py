@@ -127,14 +127,14 @@ def main():
     parser.add_argument('--device', type=str, default=None)
     parser.add_argument('--h5', action='store_true', default=None)
     parser.add_argument('--trajectory', action='store_true', default=None,
-                        help='Enable trajectory snapshots (Zarr). Alias for the '
+                        help='Enable trajectory snapshots (HDF5 by default). Alias for the '
                              'output.trajectory / legacy --h5.')
     parser.add_argument('--trajectory-format',
                         choices=['zarr', 'h5', 'both'],
                         default=None,
                         help='Trajectory backend for snapshots. Default is '
                              'output.trajectory_format from YAML, normally '
-                             'zarr. H5 is legacy compatibility.')
+                             'h5. Zarr and both require explicit selection.')
     parser.add_argument('--plots', action='store_true', default=None)
     parser.add_argument('--gif', action='store_true', default=None)
     parser.add_argument('--fast', action='store_true', default=None)
@@ -180,6 +180,9 @@ def main():
             raw_for_workflow = yaml.safe_load(fh) or {}
     except OSError:
         raw_for_workflow = {}
+    except yaml.YAMLError as exc:
+        print(f"error: cannot parse YAML: {exc}", file=sys.stderr)
+        sys.exit(2)
     if isinstance(raw_for_workflow, dict) and raw_for_workflow.get("schema_version", 1) in (2, "2"):
         from ..workflow import (
             execution_plan_from_spec,
@@ -189,12 +192,24 @@ def main():
         )
         from ..workflow.execution import WorkflowExecutionError
 
+        # Do not silently discard legacy CLI overrides at the v2 boundary.
+        unsupported_overrides = [
+            key for key, value in vars(args).items()
+            if key not in {"config", "output_dir", "validate_only"} and value is not None
+        ]
+        if unsupported_overrides:
+            print(
+                "error: schema-v2 supports only --output_dir as a runtime override; "
+                "put these settings in the YAML: " + ", ".join(unsupported_overrides),
+                file=sys.stderr,
+            )
+            sys.exit(2)
         try:
             spec = problem_spec_from_yaml(args.config)
+            issues = validate_problem_spec(spec)
         except Exception as exc:
             print(f"error: cannot compile schema-v2 workflow contract: {exc}", file=sys.stderr)
             sys.exit(2)
-        issues = validate_problem_spec(spec)
         if issues:
             for issue in issues:
                 print(f"error: {issue.category}: {issue.message}", file=sys.stderr)
@@ -211,7 +226,7 @@ def main():
                 print(
                     "error: schema_version 2 workflow decks are currently "
                     "executable only for promoted solid_mechanics examples "
-                    "and supported quasi_static fracture specs; "
+                    "and supported explicit/single-material or quasi_static fracture specs; "
                     "use --validate-only or run an equivalent v1 compatibility YAML.",
                     file=sys.stderr,
                 )
@@ -471,9 +486,8 @@ def main():
     plot_initial_conditions(mesh, mat, bcs, solver_cfg,
                             save_path=os.path.join(output_dir, 'initial_conditions.png'))
 
-    # Trajectory snapshots. Zarr is the public default; H5 remains available
-    # for legacy postprocessors and paper artifacts.
-    trajectory_format = getattr(cfg.output, 'trajectory_format', 'zarr')
+    # HDF5 is the default. Zarr stores are created only on explicit request.
+    trajectory_format = getattr(cfg.output, 'trajectory_format', 'h5')
     if trajectory_format not in ('zarr', 'h5', 'both'):
         raise ValueError(
             "output.trajectory_format must be one of: zarr, h5, both")
@@ -487,7 +501,7 @@ def main():
         if trajectory_format in ('h5', 'both'):
             h5_path = os.path.join(output_dir, 'training_data.h5')
             h5f = init_h5(h5_path, mesh, mat)
-            print(f"H5 snapshots: {h5_path} (legacy compatibility)")
+            print(f"HDF5 snapshots: {h5_path}")
 
     # Determine step count. ``num_steps`` (YAML or --num_steps CLI) takes
     # precedence; only fall back to the CFL-derived n_steps = t_total/dt

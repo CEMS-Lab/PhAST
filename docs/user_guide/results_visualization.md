@@ -10,8 +10,8 @@ A run directory can contain:
 | `run_metadata.json` | Run, mesh, device, and provenance metadata when written. |
 | `run_manifest.json` | Artifact-oriented manifest; older runs may use metadata. |
 | CSV histories | Scalar response, energy, telemetry, or timing rows. |
-| Zarr trajectory | Preferred reloadable field snapshots when requested. |
-| H5 trajectory | Legacy-compatible trajectory format when requested. |
+| HDF5 trajectory | Default reloadable field snapshots in `training_data.h5` when requested. |
+| Zarr trajectory | Directory-based trajectory format, available by explicit selection. |
 | PNG/VTU/MP4 and visual manifest | Human-facing visual outputs and their descriptions. |
 
 The exact contents depend on the configuration and execution route. An output request is not a guarantee that an unsupported field or postprocessor will be created.

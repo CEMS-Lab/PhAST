@@ -1,8 +1,8 @@
 # Verify Install
 
-## Verification ladder
+## Verification sequence
 
-Use the checks in this order. Each rung is stronger and more expensive than
+Use the checks in this order. Each check exercises more of the software than
 the previous one:
 
 1. **Doctor** reports what the current environment can provide.
@@ -10,9 +10,9 @@ the previous one:
 3. **Validate-only** checks a public YAML configuration without solving it.
 4. **Completed run** executes the selected example and produces a result bundle.
 
-Passing a lower rung does not certify the next one. In particular,
-`--validate-only` is schema and path preflight; it is not runtime or scientific
-validation.
+Passing one check does not guarantee that the next check will pass. In
+particular, `--validate-only` checks the schema and referenced paths; it does
+not test solver execution or establish scientific validity.
 
 ## Quick single-element sanitizer
 
@@ -32,9 +32,9 @@ wall-clock guarantee: Python and PyTorch cold imports vary across operating
 systems and machines. The reported kernel-and-plot time excludes imports.
 
 Use this page after installation, on a new workstation, or after loading a new
-HPC environment. The goal is to confirm that PhAST can import, see the expected
-optional backends, and validate a public configuration before launching a full
-solve.
+HPC environment. The goal is to confirm that PhAST imports correctly, detects
+the expected optional backends, and accepts an example configuration before a
+full simulation.
 
 ## Environment Doctor
 
@@ -99,7 +99,7 @@ python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
 ```
 
 Use this output to confirm the material, geometry, solver type, output settings,
-and `device.compile` policy before running a costly simulation.
+and `device.compile` setting before running a larger simulation.
 
 ## Common Outcomes
 

@@ -19,6 +19,11 @@ its capability boundary. This page supersedes the older scattered checklists in
 Those files remain machine-readable manifests, but this page is the
 human-facing source of truth.
 
+New YAML examples, READMEs, and tutorials must follow the mandatory
+{download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`.
+The [standard simulation tutorial](../tutorial/07_standard_simulation_workflow.md)
+is the student-facing companion, not a claim that every adapter is verified.
+
 ## Example tiers
 
 | Tier | Command shape | Public meaning |
@@ -89,7 +94,7 @@ release checks without reverse-engineering a solver scratch directory.
 | `energy.csv` | fracture/dynamic runners | energy plots, validation review | Required when an energy plot or claim is presented. |
 | `solver_telemetry.csv` | iterative solvers | convergence review | Required when convergence behavior is part of the example. |
 | `timing_per_step.csv` | runner/profiler | performance review | Required when timing claims are made. |
-| `training_data.zarr` | trajectory writer | restart, postprocess, ML consumers | Keep out of git unless published as an external release artifact. |
+| `training_data.h5` | trajectory writer | restart, postprocess, ML consumers | Default single-file format; keep out of git unless published as an external release artifact. |
 | PNG/GIF visuals | plot/postprocess layer | docs gallery, review packets | Governed by `visual_manifest.json` and this contract. |
 
 Inspect completed runs through `phast.load_result(path)`. Stored raw fields are
@@ -125,9 +130,27 @@ For public YAML examples, `config.yaml` is the exact declarative configuration. 
 checked in and runnable from the repository root:
 
 ```bash
+python -m phast explain-config examples/<family>/<case>/config.yaml
 python -m phast run examples/<family>/<case>/config.yaml --validate-only
 python -m phast run examples/<family>/<case>/config.yaml --output_dir runs/<case>
 ```
+
+Replace bracketed path components with real names and check all three commands
+for the selected schema/adapter before promotion. Legacy `precheck --config`
+is not a universal schema-2 substitute.
+
+New standard inputs use schema 2 in the order `schema_version`, `name`,
+`reference`, `geometry`, `regions`, `materials`, `assignments`,
+`initial_conditions`, `boundary_conditions`, `analysis_steps`, `solver`,
+`outputs`. Omit unused optional sections rather than adding placeholders.
+Preserve numerical values during writing-only changes; do not migrate
+schema-1 benchmarks or frozen course inputs merely for style consistency.
+
+Complete compact comparison YAMLs are allowed under an example's
+`comparisons/` directory. They duplicate model data, not solver code.
+Use the common CLI with different output directories and state precisely
+what changes and what stays fixed. The DCB coarse matched pair is separate
+from its fine reference; no comparison-specific driver is needed.
 
 The YAML must document or encode:
 
@@ -145,6 +168,13 @@ The YAML must document or encode:
 
 Use the fluent `phast.Problem` API to author new models when convenient, but
 the curated example is reproduced through the saved YAML configuration.
+
+Explain geometry/mesh/selector dependencies, independent `E` and `Gc`
+edits, units, and the meaning of `h/l0` without a universal convergence
+guarantee. Separate analysis physics from integration, final time from a
+step cap, and solver iterations from saved-output cadence. Label a short
+setup exercise separately from a completed crack-growth calculation;
+seeded `damage = 1` alone is not new growth.
 
 ## Script-contract rules
 
@@ -292,6 +322,18 @@ or the comparison. It should not be decoration.
 - Include enough frames to show setup, crack initiation, crack interaction,
   and final state.
 
+Online retained results must use MyST image/figure paths that Sphinx can
+collect from the repository, with alternative text, the displayed time/load
+interval, and a static fallback. Do not use an HTML image path outside the
+copied asset tree or an unverified public raw URL. Check the built page before
+publication; a local README preview is not proof of a working hosted image.
+
+Keep essential scientific limitations in captions. The DCB images demonstrate
+qualitative layered-material interaction, not completed inclusion bypass.
+A matched control, stored-field audit, independent review, and physical
+validation are distinct evidence. Do not add large raw HDF5 stores to make
+an online tutorial self-contained.
+
 ### Curves and diagnostics
 
 - `load_displacement.png` or `response.png` when loading is controlled;
@@ -326,8 +368,11 @@ reason to differ.
 Use trajectory stores only when they are needed for replay, ML, restart,
 derived fields, or high-fidelity post-processing.
 
-- New trajectory/dataset workflows should prefer Zarr.
-- Legacy H5 remains compatibility input/output for old artifacts.
+- New trajectory/dataset workflows must default to HDF5 (`training_data.h5`).
+- Zarr is an explicit opt-in for workflows that require directory-based stores;
+  existing Zarr artifacts remain supported and must not be renamed or deleted.
+- Example configurations, notebooks, and output manifests must agree on the
+  selected format. Do not fall back silently from HDF5 to Zarr.
 - Tutorial-ready examples should document how to regenerate trajectory stores
   locally when field-level replay is needed.
 - VTU/PVD remains the ParaView-native visualization path.

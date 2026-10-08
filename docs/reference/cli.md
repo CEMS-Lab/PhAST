@@ -36,7 +36,7 @@ python -m phast precheck examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast explain-config examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast precheck --config examples/dynamic/B2_kalthoff_winkler/config.yaml
 python -m phast run config.yaml --validate-only
-python -m phast run config.yaml --device cuda --trajectory-format zarr
+python -m phast run config.yaml --device cuda --trajectory --trajectory-format h5
 python -m phast schema --output configs/phast.schema.json
 python -m phast doctor
 python -m phast postprocess runs/example --dpi 300

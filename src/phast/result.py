@@ -183,7 +183,11 @@ class Result:
                 if isinstance(value, dict) and value:
                     return dict(value)
 
-        trajectory_mesh = self._zarr_mesh_metadata() or self._h5_mesh_metadata()
+        trajectory_mesh = (
+            self._h5_mesh_metadata()
+            if (self.path / "training_data.h5").is_file()
+            else self._zarr_mesh_metadata()
+        )
         if trajectory_mesh:
             return trajectory_mesh
 
@@ -356,16 +360,18 @@ class Result:
     def _field_sources(self) -> dict[str, tuple[str, set[str]]]:
         if self._field_source_cache is None:
             sources: dict[str, tuple[str, set[str]]] = {}
-            for source_kind, names in (
-                ("zarr", self._discover_zarr_fields()),
-                ("h5", self._discover_h5_fields()),
-            ):
-                for raw_name in names:
-                    reference = _reference_field_name(raw_name)
-                    if reference not in sources:
-                        sources[reference] = (source_kind, {raw_name})
-                    elif sources[reference][0] == source_kind:
-                        sources[reference][1].add(raw_name)
+            # Select one store, rather than mixing current HDF5 fields with
+            # potentially older Zarr fields or requiring both backends.
+            if (self.path / "training_data.h5").is_file():
+                source_kind, names = "h5", self._discover_h5_fields()
+            else:
+                source_kind, names = "zarr", self._discover_zarr_fields()
+            for raw_name in names:
+                reference = _reference_field_name(raw_name)
+                if reference not in sources:
+                    sources[reference] = (source_kind, {raw_name})
+                else:
+                    sources[reference][1].add(raw_name)
             self._field_source_cache = sources
         return self._field_source_cache
 

@@ -1,6 +1,6 @@
 """
-Output utilities: VTU (ParaView), Zarr trajectory stores, CSV (history),
-and legacy H5 compatibility helpers.
+Output utilities: HDF5 trajectories, VTU (ParaView), CSV (history),
+and explicitly selected Zarr trajectory stores.
 
 Includes helpers for GNO (Graph Neural Operator) training data export:
 - ``compute_edge_index`` converts triangle connectivity to PyG edge_index.
@@ -461,11 +461,10 @@ def _write_snapshot_attrs(group, mesh, d, reaction_force=None, energies=None,
 
 
 def init_zarr(zarr_path: str, mesh, material):
-    """Create and initialize a Zarr trajectory store.
+    """Create and initialize an explicitly requested Zarr trajectory store.
 
-    The group/dataset hierarchy mirrors legacy ``training_data.h5`` so
-    existing field contracts stay stable while new runs use a chunked,
-    directory-backed store.
+    The group/dataset hierarchy mirrors ``training_data.h5`` so existing
+    field contracts remain compatible across the two storage formats.
     """
     import zarr
 
@@ -788,6 +787,9 @@ def init_h5(h5_path: str, mesh, material):
     import h5py
     h5f = h5py.File(h5_path, 'w')
     try:
+        h5f.attrs['format'] = 'phast.trajectory.h5'
+        h5f.attrs['writer'] = 'phast.io_utils.init_h5'
+        h5f.attrs['layouts'] = 'legacy_step_groups'
         mesh_grp = h5f.create_group('simulation_data/mesh')
         mesh_grp.create_dataset('node_coordinates',
                                 data=mesh.nodes.cpu().numpy())

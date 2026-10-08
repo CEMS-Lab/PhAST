@@ -1,0 +1,71 @@
+[
+  {
+    "path": "initial_conditions.png",
+    "size_bytes": 38653,
+    "artifact_type": "image",
+    "width_px": 1440,
+    "height_px": 630
+  },
+  {
+    "path": "material_fields.png",
+    "size_bytes": 39255,
+    "artifact_type": "image",
+    "width_px": 1800,
+    "height_px": 684
+  },
+  {
+    "path": "damage_final.png",
+    "size_bytes": 81916,
+    "artifact_type": "image",
+    "width_px": 1440,
+    "height_px": 630
+  },
+  {
+    "path": "displacement_final.png",
+    "size_bytes": 91897,
+    "artifact_type": "image",
+    "width_px": 1440,
+    "height_px": 630
+  },
+  {
+    "path": "strain_final.png",
+    "size_bytes": 29247,
+    "artifact_type": "image",
+    "width_px": 1440,
+    "height_px": 630
+  },
+  {
+    "path": "stress_final.png",
+    "size_bytes": 73039,
+    "artifact_type": "image",
+    "width_px": 1440,
+    "height_px": 630
+  },
+  {
+    "path": "load_displacement.png",
+    "size_bytes": 51739,
+    "artifact_type": "image",
+    "width_px": 1152,
+    "height_px": 720
+  },
+  {
+    "path": "convergence_and_crack_front.png",
+    "size_bytes": 106734,
+    "artifact_type": "image",
+    "width_px": 1800,
+    "height_px": 720
+  },
+  {
+    "path": "damage_evolution.gif",
+    "size_bytes": 1673734,
+    "artifact_type": "animation"
+  },
+  {
+    "path": "matched_control_comparison.png",
+    "artifact_type": "image"
+  },
+  {
+    "path": "matched_control_damage.png",
+    "artifact_type": "image"
+  }
+]

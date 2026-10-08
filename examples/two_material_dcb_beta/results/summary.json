@@ -1,0 +1,28 @@
+{
+  "schema_version": 2,
+  "problem": "DCB-style opening with a tough inclusion inside a weak bulk layer",
+  "solver_path": "schema-v2 heterogeneous staggered quasi-static AT2",
+  "materials": [
+    "material_1",
+    "weak_midline",
+    "material_2"
+  ],
+  "n_nodes": 7889,
+  "n_elements": 15360,
+  "l0": 0.1,
+  "maximum_element_size": 0.017430609056700283,
+  "maximum_element_size_over_l0": 0.17430609056700283,
+  "maximum_element_edge_length": 0.04506939094330038,
+  "maximum_element_edge_length_over_l0": 0.4506939094330038,
+  "trajectory_format": "h5",
+  "accepted_steps": 120,
+  "cutbacks": 0,
+  "final_opening": 0.3,
+  "final_reaction_force": 0.6149522713694282,
+  "final_connected_crack_front_x": 2.0625,
+  "final_maximum_damage": 1.0,
+  "maximum_projected_damage_residual": 6.910926739149559e-06,
+  "all_steps_converged": true,
+  "runtime_seconds": 968.4388255419999,
+  "scope": "heterogeneous E/Gc AT2 teaching calculation; not ASTM D5528 or a calibrated bimaterial benchmark"
+}

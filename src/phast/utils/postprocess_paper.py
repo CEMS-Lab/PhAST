@@ -348,8 +348,7 @@ class BenchmarkPostProcessor:
         log(f"Material: E={self.E}, nu={self.nu}, Gc={self.Gc}, l0={self.l0}, "
             f"split={self.energy_split}")
 
-        # Load trajectory store. Zarr is the current default; H5 remains
-        # supported for historical runs.
+        # Prefer HDF5. Continue to read explicitly selected or existing Zarr stores.
         h5_path = os.path.join(run_dir, 'training_data.h5')
         zarr_path = os.path.join(run_dir, 'training_data.zarr')
         self._h5 = None

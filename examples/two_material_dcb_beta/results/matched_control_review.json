@@ -1,0 +1,22 @@
+{
+  "matched_physical_inputs_except_material_2_Gc": true,
+  "mesh": [
+    120,
+    48
+  ],
+  "total_opening_mm": 0.3,
+  "Gc_layer": 0.04,
+  "Gc_inclusion_case": 0.12,
+  "Gc_control": 0.04,
+  "inclusion_case_final_front_mm": 2.1,
+  "control_final_front_mm": 2.4000000000000004,
+  "inclusion_case_final_reaction": 0.6093834373135423,
+  "control_final_reaction": 0.4584674467512238,
+  "relative_reaction_increase": 0.3291749318991657,
+  "inclusion_case_converged": true,
+  "control_converged": true,
+  "control_accepted_steps": 123,
+  "control_cutbacks": 3,
+  "control_maximum_projected_damage_residual": 5.160024657651502e-06,
+  "scope": "Controlled comparison of discrete teaching models, not experimental validation"
+}

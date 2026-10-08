@@ -168,7 +168,7 @@ def build_problem(num_steps: int) -> phast.Problem:
     problem.config.output = OutputConfig(
         h5=True,
         trajectory=True,
-        trajectory_format="zarr",
+        trajectory_format="h5",
         h5_every=5,
         gif=False,
         gif_frames=200,

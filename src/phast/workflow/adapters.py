@@ -91,6 +91,8 @@ def _component_from_entry(entry: dict[str, Any]) -> int | None:
         component = entry.get("dof")
     if component is None:
         return None
+    if isinstance(component, bool):
+        raise ValueError("dof/component must not be a boolean")
     if isinstance(component, int):
         return component
     key = str(component).lower().strip()
@@ -178,6 +180,15 @@ def _analysis_step_spec(loading: LoadingConfig, solver: SolverSettings) -> Analy
         dict(getattr(loading, "_workflow_controls", None) or _plain(loading))
     )
     kind = solver.solver_type
+    if not getattr(loading, "_workflow_controls", None):
+        defaults = LoadingConfig()
+        controls = {
+            key: value for key, value in controls.items()
+            if key in {"protocol", "num_steps", "dt"}
+            or getattr(defaults, key, object()) != value
+        }
+        if kind == "explicit" and loading.num_steps == 0 and loading.t_total > 0:
+            controls.pop("dt", None)
     name = getattr(loading, "_workflow_step_name", None) or loading.protocol or kind
     return AnalysisStepSpec(
         name=name,
@@ -204,7 +215,11 @@ def _output_spec(config: OutputConfig) -> OutputSpec:
     workflow_fields = list(getattr(config, "_workflow_fields", []) or [])
     workflow_history = list(getattr(config, "_workflow_history", []) or [])
 
-    if config.trajectory and not workflow_fields:
+    has_trajectory = any(
+        item == "trajectory" if isinstance(item, str) else item.get("name") == "trajectory"
+        for item in workflow_fields
+    )
+    if (config.trajectory or config.h5) and not has_trajectory:
         fields.append(
             FieldOutputSpec(
                 name="trajectory",
@@ -222,7 +237,7 @@ def _output_spec(config: OutputConfig) -> OutputSpec:
         )
     for field in workflow_fields:
         if isinstance(field, str):
-            fields.append(FieldOutputSpec(name=field))
+            fields.append(FieldOutputSpec(name=field, every=1))
         else:
             item = dict(field or {})
             name = item.pop("name")
@@ -415,7 +430,7 @@ def _schema_v2_geometry(raw: dict[str, Any]) -> tuple[GeometrySpec | None, MeshS
         parameters = {
             key: value
             for key, value in geometry.items()
-            if key not in {"mesh_path", "type", "kind"}
+            if key not in {"mesh_path", "mesh_type", "type", "kind"}
         }
         return None, MeshSpec(
             kind=geometry.get("mesh_type", "file"),
@@ -423,6 +438,8 @@ def _schema_v2_geometry(raw: dict[str, Any]) -> tuple[GeometrySpec | None, MeshS
             parameters=_drop_empty(parameters),
         )
     kind = geometry.get("type") or geometry.get("kind")
+    if kind is None and geometry.get("primitives"):
+        kind = "primitive_dsl"
     if not kind:
         raise ValueError("schema_version 2 geometry requires type, kind, or mesh_path")
     parameters = dict(geometry.get("parameters") or {})
@@ -439,7 +456,7 @@ def _schema_v2_geometry(raw: dict[str, Any]) -> tuple[GeometrySpec | None, MeshS
             parameters[key] = value
     return GeometrySpec(
         kind=kind,
-        parameters=_drop_empty(parameters),
+        parameters=parameters,
         units=geometry.get("units", "mm"),
         primitives=geometry.get("primitives"),
         domain=geometry.get("domain"),
@@ -484,12 +501,13 @@ def _schema_v2_materials(
         for name, entry in raw_materials.items():
             data = dict(entry or {})
             model = data.pop("model", "phase_field")
+            region = data.pop("region", None)
             params = data.pop("parameters", data)
             spec = MaterialSpec(
                 name=name,
                 model=model,
-                parameters=_drop_empty(dict(params or {})),
-                region=data.get("region"),
+                parameters=dict(params or {}),
+                region=region,
             )
             materials_by_name[name] = spec
             material_entries.append(spec)
@@ -503,7 +521,7 @@ def _schema_v2_materials(
             spec = MaterialSpec(
                 name=name,
                 model=model,
-                parameters=_drop_empty(dict(params or {})),
+                parameters=dict(params or {}),
                 region=region,
             )
             materials_by_name.setdefault(name, spec)
@@ -539,7 +557,7 @@ def _schema_v2_initial_conditions(raw: dict[str, Any]) -> list[InitialConditionS
                 field=field_name,
                 region=region,
                 value=value,
-                parameters=_drop_empty(data),
+                parameters=data,
             )
         )
     return specs
@@ -562,7 +580,7 @@ def _schema_v2_boundary_conditions(raw: dict[str, Any]) -> list[BoundaryConditio
                 region=region,
                 component=component,
                 value=value,
-                parameters=_drop_empty(data),
+                parameters=data,
                 name=name,
             )
         )
@@ -577,12 +595,12 @@ def _schema_v2_analysis_steps(raw: dict[str, Any]) -> list[AnalysisStepSpec]:
         kind = data.pop("type", data.pop("kind", None))
         controls = dict(data.pop("controls", {}) or {})
         active_bcs = tuple(data.pop("active_boundary_conditions", ()) or ())
-        controls.update(_drop_empty(data))
+        controls.update(data)
         steps.append(
             AnalysisStepSpec(
                 name=name,
                 kind=kind,
-                controls=_drop_empty(controls),
+                controls=controls,
                 active_boundary_conditions=active_bcs,
             )
         )
@@ -594,7 +612,15 @@ def _schema_v2_solver(raw: dict[str, Any], steps: list[AnalysisStepSpec]) -> Sol
     kind = data.pop("type", data.pop("kind", None))
     if kind is None and steps:
         kind = steps[0].kind
-    return SolverSpec(kind=kind or "explicit", parameters=_drop_empty(data))
+    return SolverSpec(kind=kind or "explicit", parameters=data)
+
+
+def _schema_v2_cadence(value: Any) -> int:
+    if isinstance(value, str) and value.isdecimal():
+        value = int(value)
+    if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+        raise ValueError("output every must be a positive integer")
+    return value
 
 
 def _schema_v2_outputs(raw: dict[str, Any]) -> OutputSpec:
@@ -602,8 +628,8 @@ def _schema_v2_outputs(raw: dict[str, Any]) -> OutputSpec:
     fields = [
         FieldOutputSpec(
             name=entry["name"],
-            every=int(entry.get("every", 1)),
-            parameters=_drop_empty(
+            every=_schema_v2_cadence(entry.get("every", 1)),
+            parameters=dict(
                 {key: value for key, value in entry.items() if key not in {"name", "every"}}
             ),
         )
@@ -613,7 +639,7 @@ def _schema_v2_outputs(raw: dict[str, Any]) -> OutputSpec:
     for entry in data.get("history", []) or []:
         item = dict(entry or {})
         name = item.pop("name")
-        every = int(item.pop("every", 1))
+        every = _schema_v2_cadence(item.pop("every", 1))
         region = item.pop("region", None)
         component = _component_from_entry(item)
         item.pop("component", None)
@@ -624,7 +650,7 @@ def _schema_v2_outputs(raw: dict[str, Any]) -> OutputSpec:
                 every=every,
                 region=region,
                 component=component,
-                parameters=_drop_empty(item),
+                parameters=item,
             )
         )
     postprocess: list[PostprocessSpec] = []
@@ -640,7 +666,7 @@ def _schema_v2_outputs(raw: dict[str, Any]) -> OutputSpec:
             kind = item.pop("kind", None)
             if kind is None:
                 kind = item.pop("name")
-            postprocess.append(PostprocessSpec(kind=kind, parameters=_drop_empty(item)))
+            postprocess.append(PostprocessSpec(kind=kind, parameters=item))
     params = {
         key: value
         for key, value in data.items()
@@ -651,8 +677,84 @@ def _schema_v2_outputs(raw: dict[str, Any]) -> OutputSpec:
         fields=fields,
         history=history,
         postprocess=postprocess,
-        parameters=_drop_empty(params),
+        parameters=params,
     )
+
+
+def _validate_schema_v2_shape(raw: dict[str, Any]) -> None:
+    """Check containers and discarded envelope keys before normalisation."""
+    allowed = {
+        "schema_version", "name", "reference", "geometry", "regions",
+        "materials", "assignments", "initial_conditions", "boundary_conditions",
+        "analysis_steps", "solver", "outputs",
+    }
+    unknown = set(raw) - allowed
+    if unknown:
+        raise ValueError(f"Unknown schema-v2 top-level keys: {sorted(unknown)}")
+    for key in ("geometry", "solver", "outputs"):
+        if key in raw and not isinstance(raw[key], dict):
+            raise ValueError(f"{key} must be a mapping")
+    for key in ("regions", "materials"):
+        if key in raw and not isinstance(raw[key], (dict, list)):
+            raise ValueError(f"{key} must be a mapping or list")
+    for key in ("assignments", "initial_conditions", "boundary_conditions", "analysis_steps"):
+        if key in raw and (
+            not isinstance(raw[key], list)
+            or any(not isinstance(item, dict) for item in raw[key])
+        ):
+            raise ValueError(f"{key} must be a list of mappings")
+    for section in ("geometry", "solver"):
+        data = raw.get(section, {})
+        if "type" in data and "kind" in data:
+            raise ValueError(f"{section}: specify type or kind, not both")
+    geometry = raw.get("geometry", {})
+    if "mesh_path" in geometry and any(
+        key in geometry for key in ("type", "kind", "primitives", "domain", "named_groups", "parameters")
+    ):
+        raise ValueError("geometry.mesh_path cannot be combined with a generator or primitive geometry")
+    if "parameters" in geometry and not isinstance(geometry["parameters"], dict):
+        raise ValueError("geometry.parameters must be a mapping")
+    materials = raw.get("materials", {})
+    entries = list(materials.values()) if isinstance(materials, dict) else materials
+    for entry in entries:
+        if not isinstance(entry, dict):
+            raise ValueError("materials must contain mappings")
+        if "parameters" in entry:
+            extra = set(entry) - {"name", "model", "region", "parameters"}
+            if extra or not isinstance(entry["parameters"], dict):
+                raise ValueError("material parameters must be a mapping without sibling parameters")
+    for entry in raw.get("assignments", []):
+        if set(entry) != {"material", "region"} or not entry.get("region"):
+            raise ValueError("assignments require only material and a nonempty region")
+    if raw.get("assignments"):
+        names = set(materials) if isinstance(materials, dict) else {e.get("name") for e in entries}
+        assigned = {entry["material"] for entry in raw["assignments"]}
+        if names != assigned:
+            raise ValueError("assignments must reference every declared material and no unknown material")
+    for entry in raw.get("analysis_steps", []):
+        if "type" in entry and "kind" in entry:
+            raise ValueError("analysis step: specify type or kind, not both")
+        if "controls" in entry and not isinstance(entry["controls"], dict):
+            raise ValueError("analysis step controls must be a mapping")
+        active = entry.get("active_boundary_conditions", [])
+        if not isinstance(active, list) or any(not isinstance(name, str) for name in active):
+            raise ValueError("active_boundary_conditions must be a list of names")
+        if set(entry.get("controls", {})) & (set(entry) - {"controls"}):
+            raise ValueError("analysis step controls must not be repeated as flat keys")
+    for entry in raw.get("boundary_conditions", []):
+        for first, second in (("type", "kind"), ("region", "nodes"), ("component", "dof")):
+            if first in entry and second in entry:
+                raise ValueError(f"boundary condition: specify {first} or {second}, not both")
+    outputs = raw.get("outputs", {})
+    for key in ("fields", "history"):
+        value = outputs.get(key, [])
+        if not isinstance(value, list) or any(not isinstance(item, dict) for item in value):
+            raise ValueError(f"outputs.{key} must be a list of mappings")
+    visuals = outputs.get("visuals", {})
+    if not isinstance(visuals, (dict, list)):
+        raise ValueError("outputs.visuals must be a mapping or list")
+    if isinstance(visuals, dict) and any(not isinstance(v, (bool, dict)) for v in visuals.values()):
+        raise ValueError("visual requests must be booleans or parameter mappings")
 
 
 def _schema_v2_spec(
@@ -660,6 +762,7 @@ def _schema_v2_spec(
     *,
     source_path: str | None = None,
 ) -> ProblemSpec:
+    _validate_schema_v2_shape(raw)
     assignments = [dict(entry or {}) for entry in raw.get("assignments") or []]
     geometry, mesh = _schema_v2_geometry(raw)
     regions = _schema_v2_regions(raw, assignments)
@@ -803,6 +906,8 @@ def problem_spec_to_schema_v2_dict(spec: ProblemSpec) -> dict[str, Any]:
             geometry = {"type": spec.mesh.kind}
         else:
             geometry = {"mesh_path": spec.mesh.path, "mesh_type": spec.mesh.kind}
+            if spec.source == "python:Problem":
+                geometry["mesh_path"] = str(Path(spec.mesh.path).expanduser().resolve())
         geometry.update(spec.mesh.parameters)
         payload["geometry"] = _drop_empty(geometry)
     elif spec.geometry is not None:
@@ -924,6 +1029,22 @@ def problem_spec_to_schema_v2_dict(spec: ProblemSpec) -> dict[str, Any]:
             for item in spec.outputs.postprocess
         ]
     outputs.update(spec.outputs.parameters)
+    if spec.solver.kind in {"explicit", "quasi_static"} and spec.source != "yaml:v2":
+        # Fluent builders contain legacy dataclass defaults. Export the actual
+        # requests, not a second set of aliases that can contradict them.
+        defaults = SolverSettings(solver_type=spec.solver.kind)
+        payload["solver"] = {
+            key: value for key, value in payload["solver"].items()
+            if key == "type" or getattr(defaults, key, object()) != value
+        }
+        consumed = {"output_dir", "h5", "trajectory", "trajectory_format", "h5_every",
+                    "vtu", "vtu_every", "viz_format", "reaction_node_set", "reaction_component",
+                    "plots", "gif", "gif_frames", "gif_fields", "animation_format"}
+        defaults_output = OutputConfig()
+        outputs = {
+            key: value for key, value in outputs.items()
+            if key not in consumed and getattr(defaults_output, key, object()) != value
+        }
     if outputs:
         payload["outputs"] = outputs
     return payload
@@ -932,6 +1053,8 @@ def problem_spec_to_schema_v2_dict(spec: ProblemSpec) -> dict[str, Any]:
 def problem_specs_from_yaml(path: str | Path) -> list[ProblemSpec]:
     yaml_path = Path(path)
     raw = yaml.safe_load(yaml_path.read_text()) or {}
+    if not isinstance(raw, dict):
+        raise ValueError("top-level YAML must be a mapping")
     source_path = str(yaml_path)
     if raw.get("manifest_type") == "reproducibility_contract":
         return _validation_contract_specs(raw, source_path=source_path)
