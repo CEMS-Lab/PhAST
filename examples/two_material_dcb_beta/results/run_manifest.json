@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "example": "two_material_dcb_phase_field",
+  "command": "python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/two_material_dcb",
+  "config_sha256": "d781c4d858f3cc1295f2e871012cffd13a2baee73e32042810001001db37fe1e",
+  "status": "Executed qualitative beta teaching calculation; not a validated fracture benchmark",
+  "trajectory": {
+    "format": "h5",
+    "filename": "training_data.h5",
+    "retained_in_repository": false,
+    "regeneration": "Run the command above to generate the float64 field trajectory."
+  },
+  "files": [
+    "README.md",
+    "initial_conditions.png",
+    "material_fields.png",
+    "damage_final.png",
+    "displacement_final.png",
+    "strain_final.png",
+    "stress_final.png",
+    "load_displacement.png",
+    "convergence_and_crack_front.png",
+    "damage_evolution.gif",
+    "summary.json",
+    "numerical_review.json",
+    "history.csv",
+    "matched_control_comparison.png",
+    "matched_control_damage.png",
+    "matched_control_review.json",
+    "visual_manifest.json",
+    "run_manifest.json"
+  ]
+}

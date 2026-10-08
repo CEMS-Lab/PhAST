@@ -1,7 +1,7 @@
 # Getting Started
 
-This is the canonical installation and first-run route. The README and tutorial
-index summarize this page rather than defining separate installation contracts.
+This page defines the recommended installation and first-run sequence. The
+README and tutorial index provide shorter summaries of the same procedure.
 
 ## Installation Route Selector
 
@@ -19,9 +19,9 @@ conda activate phast
 python run_sanitizer.py
 ```
 
-The supplied environment is a portable Python 3.11 CPU baseline. PETSc/MUMPS,
+The supplied environment is a portable Python 3.11 CPU configuration. PETSc/MUMPS,
 CUDA, AmgX, and site-specific MPI stacks remain optional installations and are
-not implied by this environment.
+not included in this environment.
 
 ### CPU Docker image
 
@@ -120,9 +120,9 @@ OK: examples/dynamic/B2_kalthoff_winkler/config.yaml passes schema validation.
 ```
 
 This message means that the YAML satisfies the schema and the implemented
-semantic preflight checks. It does not run a fracture solve and does not prove
+consistency checks. It does not run a fracture solve and does not prove
 mesh convergence, benchmark reproduction, or physical validity. Review the
-example README, `explain-config` warnings, retained comparison evidence, and
+example README, `explain-config` warnings, published comparison results, and
 mesh-to-length-scale ratio before making a scientific claim.
 
 For a readable summary of the model before execution:
@@ -147,8 +147,8 @@ PhAST contains several kinds of YAML file:
 | `examples/<family>/<case>/config.yaml` | `python -m phast run <path>` | Recommended starting point; a complete example-local solver input. |
 | `configs/benchmarks/<family>/<case>.yaml` | `python -m phast run <path>` | Complete benchmark solver input. |
 | `configs/REFERENCE.yaml` | Not intended for execution | Field-by-field reference and template. |
-| `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` | Not a solver input | Documentation and artifact inventory for public examples. |
-| `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml` | Requires `--validation-id` | Dispatcher manifest for beta validation scripts, not a single fracture deck. |
+| `examples/PUBLIC_EXAMPLES_CONTRACT.yaml` | Not a solver input | Documentation and file inventory for published examples. |
+| `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml` | Requires `--validation-id` | Index for beta validation scripts, not a single fracture input. |
 | `configs/phast.schema.json` | Not YAML and not executable | JSON Schema for editors and external validation. |
 
 If a file is not named `config.yaml` and is described as a contract, manifest,
@@ -166,9 +166,9 @@ python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
 ```
 
 The example is a supporting solid-mechanics check rather than a phase-field
-fracture validation case. It is used here because it provides a compact first
-execution. It writes response data, metadata, manifests, and field plots; it
-does not retain reloadable displacement or stress arrays in a trajectory store.
+fracture validation case. It is used here because it provides a small first
+simulation. It writes response data, metadata, manifests, and field plots; it
+does not store reloadable displacement or stress arrays in a trajectory store.
 The expected finite-element tip displacement is approximately
 `-2.024e-6 m`, about `-14.98%` relative to the documented Euler-Bernoulli
 estimate. Reproducing that recorded value indicates that the compact example
@@ -220,7 +220,7 @@ For a fracture simulation, PhAST:
 5. updates the tensile history field used to enforce crack irreversibility;
 6. solves the AT1, AT2, or documented beta damage formulation;
 7. enforces damage bounds and configured boundary conditions; and
-8. writes fields, histories, manifests, configuration provenance, and visuals.
+8. writes fields, histories, manifests, resolved configuration data, and visualisations.
 
 Read [User Guide Overview](user_guide/overview.md) for the software pathway and
 [Physics, Units, and Formulation](user_guide/physics.md) for the governing
@@ -268,8 +268,9 @@ the problem remains or the instructions are unclear. Include:
 - the exact command;
 - the YAML path;
 - operating system and Python/PyTorch versions;
+- the PhAST version or Git commit;
 - relevant `python -m phast doctor` output; and
-- the first warning or traceback.
+- the complete first warning or traceback.
 
 Students and first-time users are explicitly welcome to ask installation and
 usage questions. An unclear step is a documentation defect worth reporting.

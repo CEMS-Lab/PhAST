@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "purpose": "Compact numerical data for replotting the retained coarse DCB toughness comparison",
+  "mesh": {
+    "nx": 120,
+    "ny": 48,
+    "nodes": 5929,
+    "elements": 11520,
+    "element_family": "T3",
+    "coordinate_units": "mm"
+  },
+  "data_sources": {
+    "tough": "Original coarse inclusion run: accepted-step history and final nodal CSV",
+    "uniform": "Original uniform-layer control: accepted-step history and final nodal CSV; connectivity from its HDF5 mesh"
+  },
+  "checks": [
+    "Matching node numbering and coordinates in both final CSVs",
+    "Coordinates match control HDF5 mesh",
+    "Finite final fields and damage in [0, 1]",
+    "Original element connectivity retained without remeshing"
+  ],
+  "history_alignment": "The prescribed load schedule is the same, but accepted openings differ because the control required cutbacks. Plot against each run's own opening; do not subtract by row index.",
+  "generating_source_revision": null,
+  "generating_source_identity": "Not recorded at run time; exact historical source identity cannot be independently attested.",
+  "available_source_snapshot": {
+    "path": "src/phast/workflow/multimaterial_fracture.py",
+    "sha256": "842cbf56edba462d0a2177b67fbe71e507af2b0e3c31700869c90c1e6d8cf2b5",
+    "scope": "Available development source inspected before input-validation repairs on 2026-10-08, not a runtime source attestation."
+  },
+  "replot_command": "python examples/two_material_dcb_beta/compare_results.py --output-dir runs/dcb_comparison_replot",
+  "files": {
+    "coarse_tough_history.csv": {
+      "sha256": "e2bdf7ddf6fc8a6a4fdf79255a7e30d63a447ba535cce8fd22145031c6161a07",
+      "bytes": 26971
+    },
+    "uniform_layer_history.csv": {
+      "sha256": "a95695a7a761d45ab2a5558af96cdee99969f441a8c8ba9010a06eb745097a33",
+      "bytes": 27314
+    },
+    "matched_control_fields.csv.gz": {
+      "sha256": "c2138d1149b78cc28ed11948d13b87f09be933fe7018e99d7088ee205f3d9bfc",
+      "bytes": 151289
+    },
+    "matched_control_elements.csv.gz": {
+      "sha256": "7b4f2a9be47c569762f8b85bd4441213f2de3f275c807cd6bfd3827f81061f17",
+      "bytes": 44958
+    }
+  },
+  "scientific_scope": "Numerical teaching comparison; not experimental validation, mesh independence, penetration, or completed bypass."
+}

@@ -29,7 +29,7 @@ from PIL import Image
 from examples.plasticity_interface_beta._promoted_result_utils import (
     merge_run_manifest_artifacts,
     write_csv_rows,
-    write_zarr_trajectory,
+    write_trajectory,
 )
 from phast.cohesive_elements import (
     BilinearCohesiveLaw,
@@ -694,7 +694,7 @@ def run_benchmark(
         {"step": row["step"], "elapsed_s": row["elapsed_s"]}
         for row in rows
     ])
-    write_zarr_trajectory(
+    write_trajectory(
         output_dir,
         nodes=nodes,
         elements=mesh.elements.cpu().numpy(),
@@ -720,7 +720,7 @@ def run_benchmark(
         output_dir / "energy.csv",
         output_dir / "solver_telemetry.csv",
         output_dir / "timing_per_step.csv",
-        output_dir / "training_data.zarr",
+        output_dir / "training_data.h5",
         *image_paths,
         output_dir / "visual_manifest.json",
     ]

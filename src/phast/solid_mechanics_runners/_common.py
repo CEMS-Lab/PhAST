@@ -136,13 +136,30 @@ def write_run_lockfile(
     *,
     config: dict[str, Any],
     command: str,
+    trajectory_paths: list[Path] | None = None,
 ) -> None:
-    """Write the resolved public example config used for this run."""
+    """Record the config and trajectories actually written by this run.
+
+    Pass paths returned by this run's writers. Existing stores in a reused
+    output directory are not evidence that this run wrote a trajectory.
+    """
+    paths = [Path(path) for path in (trajectory_paths or [])]
+    formats = set()
+    for path in paths:
+        if path.name == "training_data.h5" and path.is_file():
+            formats.add("h5")
+        elif path.name == "training_data.zarr" and path.is_dir():
+            formats.add("zarr")
+        else:
+            raise ValueError(f"Trajectory output is missing or unsupported: {path}")
+    actual_format = "both" if len(formats) == 2 else next(iter(formats), None)
     lockfile = {
         "schema_version": 1,
         "command": os.environ.get("PHAST_SOLID_MECH_COMMAND", command),
         "resolved_config": config,
-        "trajectory_format": "zarr",
+        "trajectory_format": actual_format,
+        "requested_trajectory_format": config.get("output", {}).get("trajectory_format", "h5"),
+        "trajectory_files": [path.name for path in paths],
     }
     (out_dir / "run_lockfile.json").write_text(json.dumps(lockfile, indent=2))
 
@@ -156,6 +173,59 @@ def _zarr_array(group: Any, name: str, data: Any) -> None:
     group.create_dataset(name, data=arr, shape=arr.shape, dtype=arr.dtype)
 
 
+def write_solid_trajectory(
+    out_dir: Path,
+    *,
+    mesh: Any,
+    steps: list[dict[str, Any]],
+    fields: dict[str, Any],
+    trajectory_format: str = "h5",
+) -> Path:
+    """Write stored solid histories to HDF5, or explicitly requested Zarr.
+
+    Fields are step-major arrays with one entry per row in ``steps``. HDF5
+    uses the per-step layout understood by the public Result reader.
+    """
+    if trajectory_format == "zarr":
+        return write_solid_zarr(out_dir, mesh=mesh, steps=steps, fields=fields)
+    if trajectory_format != "h5":
+        raise ValueError("trajectory_format must be h5 or zarr")
+
+    import h5py
+
+    arrays = {}
+    for name, value in fields.items():
+        if hasattr(value, "detach"):
+            value = value.detach().cpu().numpy()
+        array = np.asarray(value)
+        if array.ndim == 0 or array.shape[0] != len(steps):
+            raise ValueError(f"Field {name!r} must contain one entry per trajectory step")
+        arrays[name] = array
+
+    path = out_dir / "training_data.h5"
+    with h5py.File(path, "w") as root:
+        root.attrs["format"] = "phast.solid_mechanics.trajectory.h5"
+        root.attrs["schema_version"] = 1
+        root.attrs["num_steps"] = len(steps)
+        sim = root.create_group("simulation_data")
+        mesh_group = sim.create_group("mesh")
+        mesh_group.create_dataset("node_coordinates", data=mesh.nodes.detach().cpu().numpy())
+        mesh_group.create_dataset("element_connectivity", data=mesh.elements.detach().cpu().numpy())
+        step_group = sim.create_group("steps")
+        for index, row in enumerate(steps):
+            group = step_group.create_group(f"step_{int(row.get('step', index)):04d}")
+            for key, value in row.items():
+                group.attrs[key] = value
+            for name, array in arrays.items():
+                data = array[index]
+                compression = (
+                    {"compression": "gzip", "compression_opts": 4}
+                    if data.ndim > 0 else {}
+                )
+                group.create_dataset(name, data=data, **compression)
+    return path
+
+
 def write_solid_zarr(
     out_dir: Path,
     *,
@@ -163,7 +233,7 @@ def write_solid_zarr(
     steps: list[dict[str, Any]],
     fields: dict[str, Any],
 ) -> Path:
-    """Write a compact tutorial trajectory store for solid-mechanics examples."""
+    """Write a compact solid trajectory when Zarr is explicitly requested."""
     import zarr
 
     path = out_dir / "training_data.zarr"

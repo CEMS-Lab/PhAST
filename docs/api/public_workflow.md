@@ -103,7 +103,7 @@ It does not select individual files or store reloadable tensor fields.
 
 Every curated public example should expose a flat, predictable result bundle:
 `config.yaml`, `run_manifest.json`, `visual_manifest.json`, representative
-PNG/MP4 artifacts, CSV histories where relevant, and Zarr-first trajectory
+PNG/MP4 artifacts, CSV histories where relevant, and HDF5 trajectory (the default)
 outputs when the run stores fields. See
 [Curated example contract](../user_guide/example_contract.md) for the artifact
 contract.

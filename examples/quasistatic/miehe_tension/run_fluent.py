@@ -91,7 +91,7 @@ def build_problem(num_steps: int) -> phast.Problem:
             eta_residual=1.0e-07,
         )
         .outputs(
-            fields=[{"name": "trajectory", "every": 1, "format": "zarr"}],
+            fields=[{"name": "trajectory", "every": 1, "format": "h5"}],
             histories=[{"name": "reaction_force", "region": "bottom", "dof": "y"}],
             plots=True,
             profile=True,

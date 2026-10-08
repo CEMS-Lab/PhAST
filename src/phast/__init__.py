@@ -31,7 +31,7 @@ damage_solver       : AT1/AT2 damage CG solver
 mechanics_solver    : Displacement solvers (explicit, static, quasi-static, L-BFGS)
 staggered_solver    : Orchestrator coupling mechanics + damage
 device              : Device management and profiling
-io_utils            : VTU / Zarr / legacy H5 / CSV output
+io_utils            : HDF5 / VTU / CSV output; explicit Zarr support
 problem             : Fluent Problem builder API
 adaptive            : Adaptive mesh refinement (newest vertex bisection)
 """

@@ -27,3 +27,11 @@ PYTHONPATH=src python -m phast run <config.yaml> --validate-only
 ```
 
 - When changing solver code, preserve autograd, dtype, and device semantics.
+
+## Trajectory storage
+
+- Use HDF5 (`training_data.h5`, `trajectory_format: h5`) by default for new
+  trajectory/dataset writers, configurations, notebooks, and documentation.
+- Zarr requires explicit selection; do not add automatic Zarr fallbacks.
+- Preserve existing Zarr readers and artifacts. Follow
+  `docs/user_guide/example_contract.md` for output conventions.

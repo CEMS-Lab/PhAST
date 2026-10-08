@@ -32,7 +32,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from examples.plasticity_interface_beta._promoted_result_utils import write_zarr_trajectory
+from examples.plasticity_interface_beta._promoted_result_utils import write_trajectory
 from phast.damage_solver import PhaseFieldDamageSolver
 from phast.fem_operators import FEMOperators
 from phast.material import Material
@@ -517,7 +517,7 @@ def run_validation(output_dir: Path, *,
         for r in rows
     ])
     visual_manifest = _write_plots(output_dir, nodes, elements, rows, frames)
-    write_zarr_trajectory(
+    write_trajectory(
         output_dir,
         nodes=nodes,
         elements=elements,
@@ -546,7 +546,7 @@ def run_validation(output_dir: Path, *,
     manifest_paths = [
         "summary.json", "config.yaml", "run_lockfile.json",
         "run_metadata.json", "run_manifest.json", "run.log", "mesh.geo",
-        "mesh.msh", "training_data.zarr", "results.csv", "history.csv", "energy.csv",
+        "mesh.msh", "training_data.h5", "results.csv", "history.csv", "energy.csv",
         "solver_telemetry.csv", "timing_per_step.csv", "damage_final.png",
         "initial_conditions.png", "load_displacement.png", "damage_history.png",
         "energy_split.png", "convergence.png", "mesh_deformed.png",

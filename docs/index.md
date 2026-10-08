@@ -26,6 +26,7 @@
     </p>
     <p class="phast-hero-links">
       <a class="phast-button" href="getting-started.html">Get started</a>
+      <a class="phast-button phast-button-secondary" href="tutorial/07_standard_simulation_workflow.html">Standard simulation workflow</a>
       <a class="phast-button phast-button-secondary" href="example-gallery.html">View examples</a>
       <a class="phast-button phast-button-secondary" href="user_guide/capability_matrix.html">Capability matrix</a>
       <a class="phast-button phast-button-secondary" href="https://github.com/CEMS-Lab/PhAST">Source on GitHub</a>
@@ -83,6 +84,7 @@ python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --out
 |---|---|
 | [Install](install.md) | Recommended source, Conda, and Docker routes. |
 | [Getting started](getting-started.md) | Installation, `phast doctor`, validation, first run, and result inspection. |
+| [Standard simulation workflow](tutorial/07_standard_simulation_workflow.md) | One student-readable schema-2 layout, editable geometry/mesh/materials, short SENT exercises, and full retained DCB evidence. |
 | [Verify install](verify-install.md) | Environment discovery, sanitizer, configuration preflight, and completed-run checks. |
 | [User guide](user_guide/overview.md) | Problem setup, YAML, Python API, physics, meshes, sparse solves, and result APIs. |
 | [Example gallery](example-gallery.md) | Runnable fracture, solid-mechanics, and beta validation examples with visual outputs. |
@@ -97,9 +99,9 @@ If you are new to PhAST, follow one continuous route:
 1. **Install and diagnose the environment:** Use [Install](install.md), then run the sanitizer and `python -m phast doctor`.
 2. **Complete a bounded solve:** Run the linear-plate example and inspect its result directory.
 3. **Learn the formulation:** Read the [Phase-Field Primer](tutorial/01_phase_field_primer.md) and [Visual Glossary](tutorial/02_visual_glossary.md).
-4. **Construct a model:** Work through the [problem-setup notebook](tutorial/notebook_setup.ipynb) and the [Python API](user_guide/python_api.md).
+4. **Run a complete fracture workflow:** Work through the [square-plate fracture notebook](tutorial/notebook_square_plate_fracture.ipynb), then use the [problem-setup notebook](tutorial/notebook_setup.ipynb) and [Python API](user_guide/python_api.md) when constructing a new model.
 5. **Check the capability boundary:** Review the [Capability Matrix](user_guide/capability_matrix.md) before selecting a fracture, beta, or experimental route.
-6. **Progress to fracture and heterogeneity:** Use the tutorial sequence and example-local READMEs, which state runtime and evidence boundaries.
+6. **Use the common student route:** Follow the [standard simulation workflow](tutorial/07_standard_simulation_workflow.md): small quasi-static SENT, small dynamic SENT, then the full layered DCB. It distinguishes pending adapter checks, setup exercises, and retained crack-growth evidence.
 
 ## Which Path Should I Use?
 
@@ -108,6 +110,7 @@ If you are new to PhAST, follow one continuous route:
 | Install and run a first case | [Install](install.md) and [Getting started](getting-started.md) | `python run_sanitizer.py` followed by `python -m phast doctor` |
 | Author new models | [Python API](user_guide/python_api.md) and [Setting up problems](user_guide/setup_problems.md) | `phast.Problem` |
 | Reproduce or batch-run examples | [YAML workflow](user_guide/yaml_workflow.md) | `python -m phast run config.yaml` |
+| Edit a standard student problem | [Standard simulation workflow](tutorial/07_standard_simulation_workflow.md) | Schema-2 sections with route-specific capability checks |
 | Inspect completed runs | [Public API reference](user_guide/public_api_reference.md) | `phast.load_result(path)` |
 | Browse runnable examples | [Example gallery](example-gallery.md) | flat public example folders |
 | Diagnose failed runs | [Troubleshooting](troubleshooting.md) | units, mesh, backend, and output checks |
@@ -139,6 +142,7 @@ troubleshooting
 tutorial/index
 tutorial/01_phase_field_primer
 tutorial/02_visual_glossary
+tutorial/notebook_square_plate_fracture
 tutorial/notebook_dynamic_sent
 tutorial/notebook_setup
 tutorial/notebook_mesh_resolution
@@ -147,6 +151,7 @@ tutorial/03_modular_fem_and_learned_damage
 tutorial/04_exploration_experiments
 tutorial/05_heterogeneous_material_fields
 tutorial/06_first_research_study
+tutorial/07_standard_simulation_workflow
 ```
 
 ```{toctree}

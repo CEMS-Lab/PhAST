@@ -167,7 +167,7 @@ result = (
             preconditioner="jacobi", backend="auto",
             fail_on_mechanics_nonconvergence=False)
     .outputs(
-        fields=[{"name": "trajectory", "every": 1, "format": "zarr"}],
+        fields=[{"name": "trajectory", "every": 1, "format": "h5"}],
         histories=[{"name": "reaction_force", "region": "bottom", "dof": "y"}],
         plots=True,
         gif=True,

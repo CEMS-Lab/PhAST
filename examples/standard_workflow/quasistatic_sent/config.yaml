@@ -1,0 +1,86 @@
+# 1. Identify a short, editable single-edge-notched tension (SENT) calculation.
+# Run from the repository root: python -m phast run examples/standard_workflow/quasistatic_sent/config.yaml
+# This is a setup exercise, not a benchmark or evidence of crack propagation.
+schema_version: 2
+name: Educational quasi-static SENT
+reference: Small phase-field precrack variant with symmetric displacement-controlled opening
+
+# 2. Generate an 8 by 8 grid, split into 128 linear triangles; no Gmsh needed.
+# Coordinates are mm. The internal crack occupies x = 0..2 at y = 2 mm.
+# The deliberately broad length scale gives h/l0 = 0.5 on this teaching mesh.
+geometry:
+  type: rectangular_sent_liu_structured
+  units: mm
+  parameters: {W: 4.0, H: 4.0, a: 2.0, l0: 1.0, h_crack: 0.5}
+
+# 3. Name the full material domain and aliases for the generated mesh groups.
+regions:
+  body: {kind: domain}
+  left_edge: {kind: node_set, from_mesh: left}
+  right_edge: {kind: node_set, from_mesh: right}
+  upper_edge: {kind: node_set, from_mesh: top}
+  lower_edge: {kind: node_set, from_mesh: bottom}
+  initial_crack: {kind: node_set, from_mesh: crack}
+
+# 4. Set a single brittle material: E in N/mm^2, Gc in N/mm, l0 in mm,
+# rho in tonne/mm^3. Density is retained for shared input style, not QS inertia.
+# The isotropic split follows the existing small-strain quasi-static pathway.
+materials:
+  glass:
+    model: phase_field
+    parameters: {E: 32000.0, nu: 0.20, Gc: 0.003, l0: 1.0, rho: 2.45e-9, eta_residual: 1.0e-7, energy_split: isotropic, pf_model: AT2, plane_stress: false}
+assignments:
+  - {material: glass, region: body}
+
+# 5. Initialise damage and retain the pre-existing crack through a damage BC.
+initial_conditions:
+  - {field: damage, region: initial_crack, value: 1.0}
+
+# 6. Prevent lateral displacement; open the upper and lower edges symmetrically.
+# Prescribed values are mm, multiplied by the dimensionless loading factor.
+boundary_conditions:
+  - {name: restrain_left, type: fix, region: left_edge, dof: x}
+  - {name: restrain_right, type: fix, region: right_edge, dof: x}
+  - {name: open_upper, type: prescribe, region: upper_edge, dof: y, value: 2.0e-6}
+  - {name: open_lower, type: prescribe, region: lower_edge, dof: y, value: -2.0e-6}
+  - {name: retain_crack, type: pf_dirichlet, region: initial_crack, value: 1.0}
+
+# 7. Use four equilibrium increments at load factors 0.25, 0.50, 0.75, and 1.
+# Here dt is a dimensionless load-factor increment, not a physical time step.
+analysis_steps:
+  - name: opening
+    type: quasi_static
+    active_boundary_conditions: [restrain_left, restrain_right, open_upper, open_lower, retain_crack]
+    controls: {protocol: simple, num_steps: 4, dt: 0.25}
+
+# 8. Select existing staggered equilibrium/damage solves with SciPy mechanics.
+# Tolerances control the existing solvers; no dynamics or learned model is used.
+solver:
+  type: quasi_static
+  device: cpu
+  backend: scipy
+  preconditioner: jacobi
+  bounds_method: projected_cg
+  static_tol: 1.0e-8
+  static_max_iter: 50
+  stagger_tol: 1.0e-6
+  max_stagger: 100
+  damage_tol: 1.0e-8
+  damage_max_iter: 500
+
+# 9. Save one HDF5 trajectory plus the existing per-step CSV histories.
+# Fields share trajectory cadence. Setup and final-damage images are automatic.
+# The retained DCB example, rather than this low-load setup, demonstrates growth.
+outputs:
+  directory: runs/standard_quasistatic_sent
+  fields:
+    - {name: trajectory, format: h5, every: 1}
+    - {name: displacement, every: 1}
+    - {name: damage, every: 1}
+    - {name: strain, every: 1}
+  history:
+    - {name: reaction_force, region: upper_edge, dof: y}
+    - {name: energy}
+    - {name: solver_telemetry}
+    - {name: timing_per_step}
+  visuals: {initial_conditions: true, damage_final: true}

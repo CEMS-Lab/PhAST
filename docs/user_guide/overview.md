@@ -87,7 +87,7 @@ workflows use two-dimensional triangulated meshes.
 |---|---|
 | Forward solver | Run explicit dynamic or staggered static/quasistatic phase-field fracture simulations from YAML. |
 | Quasistatic benchmarks | Reproduce and compare benchmark cases using standard configs, compare scripts, and documented output conventions. |
-| Trajectory datasets | Write Zarr-first trajectory and visualization outputs from reproducible forward runs. |
+| Trajectory datasets | Write single-file HDF5 trajectories by default, alongside visualization outputs from reproducible forward runs. |
 
 ## Solver Coupling
 

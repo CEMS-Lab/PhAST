@@ -56,3 +56,11 @@ contract should be committed.
 - **No Development Slang**: Do not use release or development slang such as "ships with", "hack", "epic", or "fix this later".
 - **No Process-Derived Claims**: Do not use issue numbers, pull-request numbers, ticket identifiers, or private workflow phases as scientific explanation. Describe the implemented behavior and evidence directly.
 - **No Emoticons**: Do not use emojis or emoticons in the documentation or source code.
+
+## Trajectory storage
+
+Default new trajectory/dataset writers and sample configurations to HDF5
+(`training_data.h5`; `trajectory_format: h5`). Zarr or both formats must be
+explicitly requested, never selected as a silent fallback. Preserve existing
+Zarr readers/results. Apply the same convention to notebooks and documentation;
+see `docs/user_guide/example_contract.md`.

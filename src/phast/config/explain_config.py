@@ -122,14 +122,84 @@ def _yaml_declared_node_sets(cfg: Any) -> set[str]:
     return names
 
 
+def _build_workflow_explanation(config_path: str) -> tuple[str, int]:
+    """Describe a schema-2 input without resolving geometry or running a solve."""
+    from ..workflow import problem_spec_from_yaml
+
+    try:
+        spec = problem_spec_from_yaml(config_path)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return f"Error in {config_path}: {exc}", 2
+
+    lines = [f"Config: {config_path}", f"Schema version: {spec.schema_version}",
+             f"Problem: {spec.name}"]
+    if spec.reference:
+        lines.append(f"Reference: {spec.reference}")
+    lines.extend(["", "Geometry and mesh"])
+    if spec.geometry is not None:
+        lines.append(f"  type: {spec.geometry.kind}; units: {spec.geometry.units}")
+        for key, value in spec.geometry.parameters.items():
+            lines.append(f"  {key}: {value}")
+    if spec.mesh is not None:
+        lines.append(f"  mesh: {spec.mesh.path or spec.mesh.kind}")
+        for key, value in spec.mesh.parameters.items():
+            lines.append(f"  {key}: {value}")
+
+    lines.extend(["", "Regions (declared selections, not resolved node/element sets)"])
+    for region in spec.regions:
+        lines.append(f"  {region.name}: {region.kind}; {region.selector}")
+    lines.extend(["", "Materials and assignments"])
+    for material in spec.materials:
+        lines.append(f"  {material.name}: {material.model}; region={material.region or '<unassigned>'}")
+        for key, value in material.parameters.items():
+            lines.append(f"    {key}: {value}")
+    lines.extend(["", "Initial conditions"])
+    for initial in spec.initial_conditions:
+        lines.append(f"  {initial.field}: region={initial.region}; value={initial.value}")
+    lines.extend(["", "Boundary conditions"])
+    for boundary in spec.boundary_conditions:
+        lines.append(
+            f"  {boundary.name or boundary.kind}: {boundary.kind}; "
+            f"region={boundary.region}; component={boundary.component}; value={boundary.value}"
+        )
+    lines.extend(["", "Analysis steps"])
+    for step in spec.analysis_steps:
+        lines.append(f"  {step.name}: {step.kind}; controls={step.controls}")
+        lines.append(f"    active boundary conditions: {', '.join(step.active_boundary_conditions) or '<none>'}")
+    lines.extend(["", "Solver (requested)", f"  type: {spec.solver.kind}"])
+    for key, value in spec.solver.parameters.items():
+        lines.append(f"  {key}: {value}")
+    lines.extend(["", "Outputs", f"  output_dir: {spec.outputs.directory or '<auto>'}"])
+    for field in spec.outputs.fields:
+        lines.append(f"  field {field.name}: every={field.every}; {field.parameters}")
+    for history in spec.outputs.history:
+        lines.append(
+            f"  history {history.name}: every={history.every}; "
+            f"region={history.region}; component={history.component}"
+        )
+    for visual in spec.outputs.postprocess:
+        lines.append(f"  visual {visual.kind}: {visual.parameters}")
+    lines.extend([
+        "", "Scope",
+        "  Declared settings only: no mesh, solver, or output directory was created.",
+        "  This summary does not confirm execution support, convergence, or physical accuracy.",
+        f'  Check the requested execution route with: python -m phast run "{config_path}" --validate-only',
+        "  Multi-material validation resolves the geometric mesh to check selections and assignments.",
+    ])
+    return "\n".join(lines), 0
+
+
 def build_explanation(config_path: str) -> tuple[str, int]:
     """Return ``(report, exit_code)`` for a YAML config path.
 
-    The command intentionally stops at ``load_config``. It does not call
+    Legacy inputs stop at ``load_config``; schema-2 inputs stop at the
+    declarative ``ProblemSpec``. The command does not call
     ``resolve_config`` because that may generate/load meshes and allocate
     solver objects, which is too heavy for a dry-run explanation command.
     """
     raw, errors = validate_config_file(config_path)
+    if isinstance(raw, dict) and raw.get("schema_version", 1) in (2, "2"):
+        return _build_workflow_explanation(config_path)
     if errors:
         return format_errors(errors, config_path), 2
 

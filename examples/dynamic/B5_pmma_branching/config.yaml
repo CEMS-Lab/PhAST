@@ -70,7 +70,7 @@ solver:
   damage_every: 1
 output:
   trajectory: true
-  trajectory_format: zarr
+  trajectory_format: h5
   h5_every: 20
   fast: true
   print_every: 100

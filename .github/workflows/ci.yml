@@ -39,6 +39,12 @@ jobs:
         run: |
           python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
           python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --validate-only
+          python -m phast run examples/standard_workflow/quasistatic_sent/config.yaml --validate-only
+          python -m phast run examples/standard_workflow/dynamic_sent/config.yaml --validate-only
+          python -m phast run examples/two_material_dcb_beta/config.yaml --validate-only
+
+      - name: Replot the retained DCB comparison
+        run: python examples/two_material_dcb_beta/compare_results.py --output-dir runs/public_comparison_check
 
   supported-python-range:
     name: Python ${{ matrix.python-version }} / Ubuntu

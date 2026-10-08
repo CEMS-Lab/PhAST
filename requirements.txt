@@ -23,11 +23,11 @@ Pillow>=9.0
 #   apt install ffmpeg            (Ubuntu/Debian)
 # If ffmpeg is not installed, animations fall back to GIF automatically.
 
-# HDF5 output (GNO training data)
+# HDF5 output (default single-file trajectory storage)
 h5py>=3.7
 
-# Zarr trajectory stores. Keep pinned to the v2 API until the reader/writer
-# stack is migrated to Zarr v3.
+# Explicit Zarr output and existing-store compatibility. Keep pinned to the
+# v2 API until the reader/writer stack is migrated to Zarr v3.
 zarr>=2.18,<3
 numcodecs>=0.13
 

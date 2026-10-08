@@ -1,0 +1,97 @@
+# Standard order: CONFIGURATION_STYLE.md at the repository root.
+# 1. Identity and evidence boundary; beta teaching input, not physical validation.
+schema_version: 2
+name: Heterogeneous single-edge-notched tension with a tough inclusion
+reference: Adapted teaching calculation based on the Miehe single-edge-notched tension topology
+# 2. Geometry [mm] and mesh: nx/ny count cells split into T3 triangles.
+# Dimension changes require corresponding boundary/crack/material-selector edits.
+geometry:
+  type: structured_rectangle
+  units: mm
+  parameters: {length: 1.0, height: 1.0, origin: [0.0, 0.0], nx: 40, ny: 40}
+# 3. Materials select element centroids; constraints select nodes.
+# Keep circle and all complementary outside_circle selectors consistent.
+# Crack thickness is a selection distance, not a physical opening.
+regions:
+  matrix_region: {kind: element_region, type: outside_circle, center: [0.65, 0.50], radius: 0.12}
+  inclusion_region: {kind: element_region, type: circle, center: [0.65, 0.50], radius: 0.12}
+  initial_crack: {kind: node_region, type: line_segment, from: [0.0, 0.50], to: [0.40, 0.50], thickness: 0.013}
+  bottom: {kind: node_region, type: boundary, axis: y, value: 0.0, tolerance: 1.0e-8}
+  bottom_left: {kind: node_region, type: boundary_segment, axis: x, value: 0.0, bounds: {y: [0.0, 0.0]}, tolerance: 1.0e-8}
+  top: {kind: node_region, type: boundary, axis: y, value: 1.0, tolerance: 1.0e-8}
+  damage_exclusion:
+    kind: node_region
+    type: any_of
+    selectors:
+      - {type: boundary, axis: y, value: 0.0, tolerance: 1.0e-8}
+      - {type: boundary, axis: y, value: 1.0, tolerance: 1.0e-8}
+# 4. E [MPa] is stiffness; Gc [N/mm] is fracture resistance; l0 [mm].
+# Equal E isolates toughness contrast. This route varies elementwise E/Gc only.
+# Keep nu/l0/model/split/plane-stress and shared settings consistent.
+# rho is illustrative: quasi-static equilibrium omits inertia.
+materials:
+  matrix:
+    model: phase_field
+    parameters: {E: 210.0, nu: 0.30, Gc: 0.0027, l0: 0.05, rho: 1.0, eta_residual: 1.0e-6, energy_split: amor, pf_model: AT2, plane_stress: true}
+  tough_inclusion:
+    model: phase_field
+    parameters: {E: 210.0, nu: 0.30, Gc: 0.0081, l0: 0.05, rho: 1.0, eta_residual: 1.0e-6, energy_split: amor, pf_model: AT2, plane_stress: true}
+# 5. Every element receives one material: no gaps or overlaps.
+assignments:
+  - {material: matrix, region: matrix_region}
+  - {material: tough_inclusion, region: inclusion_region}
+# 6. Prescribed damage values are maintained; no future crack path is imposed.
+initial_conditions:
+  - {field: damage, region: initial_crack, value: 1.0}
+  - {field: damage, region: damage_exclusion, value: 0.0}
+# 7. Dirichlet conditions prescribe displacements [mm] or fix components.
+boundary_conditions:
+  - {name: bottom_x, type: fix, region: bottom_left, dof: x}
+  - {name: bottom_y, type: fix, region: bottom, dof: y}
+  - {name: top_y, type: prescribe, region: top, dof: y, value: 0.012}
+# 8. Quasi-static load levels, not physical time; the count includes zero.
+analysis_steps:
+  - name: tension
+    type: quasi_static
+    active_boundary_conditions: [bottom_x, bottom_y, top_y]
+    # 61 levels include zero: 60 nominal increments before any cutbacks.
+    controls: {number_of_steps: 61}
+# 9. CPU float64 staggered Amor AT2 controls. Iterations are not load steps.
+# Algebraic convergence and h/l0 alone do not establish physical validation.
+solver:
+  type: quasi_static
+  mechanics_backend: auto
+  mechanics_tolerance: 1.0e-9
+  mechanics_relative_tolerance: 1.0e-8
+  mechanics_max_iterations: 30
+  damage_tolerance: 1.0e-8
+  damage_max_iterations: 500
+  damage_bounds_method: projected_cg
+  maximum_staggered_iterations: 500
+  staggered_damage_tolerance: 1.0e-5
+  projected_residual_tolerance: 1.0e-5
+  damage_relaxation: 0.70
+  automatic_cutback: true
+  minimum_load_increment: 0.0005
+  maximum_cutbacks: 20
+  crack_front_threshold: 0.80
+# 10. Output requests. Use a fresh directory for every comparison.
+# HDF5 is the default when a trajectory is requested; keep raw stores local.
+outputs:
+  # No trajectory is requested in this input; PNG/GIF is not stored field history.
+  directory: runs/heterogeneous_sent
+  fields:
+    - {name: displacement}
+    - {name: strain}
+    - {name: stress}
+    - {name: damage}
+    - {name: vtu}
+  history:
+    - {name: reaction_force, region: top, dof: y}
+    - {name: max_damage}
+    - {name: solver_telemetry}
+    - {name: timing_per_step}
+  visuals:
+    initial_conditions: true
+    plots: true
+    animation: {field: damage}

@@ -26,7 +26,7 @@ from PIL import Image
 from examples.plasticity_interface_beta._promoted_result_utils import (
     merge_run_manifest_artifacts,
     write_csv_rows,
-    write_zarr_trajectory,
+    write_trajectory,
 )
 from phast.material import Material
 from phast.plasticity import J2Plasticity, J2State
@@ -401,7 +401,7 @@ def run_validation(output_dir: Path, *, n_load: int = 48,
         {"step": r["step"], "elapsed_s": r["elapsed_s"]}
         for r in rows
     ])
-    write_zarr_trajectory(
+    write_trajectory(
         output_dir,
         nodes=nodes,
         elements=elements,
@@ -434,7 +434,7 @@ def run_validation(output_dir: Path, *, n_load: int = 48,
     merge_run_manifest_artifacts(output_dir, [
         "summary.json", "config.yaml", "run_lockfile.json",
         "run_metadata.json", "run_manifest.json", "run.log",
-        "training_data.zarr", "j2_stress_strain.csv", "j2_stress_strain.png",
+        "training_data.h5", "j2_stress_strain.csv", "j2_stress_strain.png",
         "stress_strain.png", "results.csv", "history.csv",
         "solver_telemetry.csv", "timing_per_step.csv",
         "initial_conditions.png", "equivalent_plastic_strain.png",

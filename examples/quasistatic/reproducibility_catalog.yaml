@@ -5,7 +5,7 @@ source: examples/quasistatic
 defaults:
   mode: direct_yaml
   working_dir: repository_root
-  trajectory_format: zarr
+  trajectory_format: h5
 
 runs:
   - id: miehe_tension

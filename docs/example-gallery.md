@@ -16,6 +16,12 @@ today.
 Each example-local README is authoritative for its exact command, runtime,
 outputs, limitations, and evidence boundary.
 
+For the main student route, use the
+[standard simulation workflow](tutorial/07_standard_simulation_workflow.md):
+small quasi-static SENT, small dynamic SENT, and full layered DCB with one
+schema-2 section order. New adapter checks remain a promotion gate; a short
+setup exercise is not automatically a crack-growth benchmark.
+
 ## Representative results
 
 The panels below are lightweight documentation thumbnails, not raw benchmark
@@ -30,6 +36,8 @@ archives. They point to the same workflows listed in the sections that follow.
 | Linear plate | Supported | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` |
 | Kalthoff-Winkler | Supported | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` |
 | Heterogeneous fields | Teaching example | Script contract | `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields` | elementwise `E`/`Gc` CSV, nodal damage CSV, field plots, manifests | `phast.load_result("runs/heterogeneous_fields")` |
+| Layered DCB with tough disk | Beta; retained qualitative evidence | Schema-2 YAML | `python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference` | HDF5, CSV, PNG/GIF, VTU, manifests | `phast.load_result("runs/dcb_fine_reference")` |
+| Heterogeneous SENT | Beta configuration | Schema-2 YAML | `python -m phast run examples/heterogeneous_sent_beta/config.yaml --output_dir runs/heterogeneous_sent` | CSV, PNG/GIF, VTU, manifests; trajectory opt-in | `phast.load_result("runs/heterogeneous_sent")` |
 
 Use the [capability matrix](user_guide/capability_matrix.md) before assuming a
 workflow status. Use the
@@ -126,6 +134,50 @@ The quasi-static family provides documented pathways for selected literature com
 - It is not a coupled equilibrium benchmark, cohesive interface model, or
   validated microstructure-fracture study. See the example README before
   adapting image or segmentation data.
+
+### DCB-style layered fracture (beta)
+
+- `python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/two_material_dcb`
+  runs the standard schema-v2 staggered quasi-static AT2 workflow in which a
+  mid-plane crack in a weak bulk layer approaches a circular Material 2
+  inclusion between fracture-resistant outer regions.
+- The example uses elementwise `E(x)` and `Gc(x)`, records the crack-front
+  coordinate and material-region damage measures, and writes a damage
+  animation with material boundaries and a single-file HDF5 trajectory.
+- This is a beta teaching example, not ASTM D5528 calibration or
+  a validated bimaterial crack-deflection benchmark. The inclusion is tougher
+  than the weak layer, not the outer regions; its confinement is part of this
+  teaching model.
+
+```{figure} ../examples/two_material_dcb_beta/results/damage_final.png
+:alt: Retained DCB final damage showing a forked crack in a weak layer near a circular tougher region.
+:width: 100%
+
+Retained state at 0.30 mm total opening. No seed-connected nodes with
+`d >= 0.80` enter the disk. Neither penetration nor completed bypass is
+demonstrated; this is qualitative layered-material interaction.
+```
+
+The fine `160 x 48` reference has 120 accepted increments, no cutbacks,
+maximum projected damage residual `6.91e-6`, and reaction `0.61495`
+in the recorded unit-thickness convention. The separate `120 x 48` matched
+pair changes only disk `Gc`: reactions are `0.60938` (tough region) and
+`0.45847` (uniform-layer control), with shorter final advance for the tough
+region. Both fork early; the disk cannot be credited with causing branching.
+The control retains the weak layer and outer regions.
+
+Complete inputs are `examples/two_material_dcb_beta/comparisons/tough_region.yaml`
+and `examples/two_material_dcb_beta/comparisons/uniform_layer.yaml`.
+The [standard tutorial](tutorial/07_standard_simulation_workflow.md) gives
+exact commands with separate output directories, a retained animation, and
+numerical records. These inputs reuse the common runner. Independent fixed-field
+review is not a solver rerun; input guards and combined execution checks
+remain separate. Historical generating source identity is unknown, and the
+coarse historical runs did not write HDF5.
+
+The documented multi-material route is structured T3 rectangles, CPU float64,
+quasi-static Amor AT2, elementwise `E`/`Gc`, common `nu`/`l0`, and
+Dirichlet conditions, not dynamic multi-material or independent-interface physics.
 
 ### Beta plasticity, cohesive, and PF-CZM validation
 

@@ -1,0 +1,2 @@
+# Preserve the recorded CSV checksums across platform checkout defaults.
+*.csv text eol=lf

@@ -187,7 +187,7 @@ output:
   output_dir: null
   h5: true
   trajectory: true
-  trajectory_format: zarr
+  trajectory_format: h5
   h5_every: 5
   gif: false
   gif_frames: 200

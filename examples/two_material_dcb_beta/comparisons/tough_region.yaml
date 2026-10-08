@@ -1,0 +1,109 @@
+# Complete coarse matched input: full reference physics/settings, nx reduced to 120.
+# Use --output_dir runs/dcb_coarse_tough_region, not the inherited default.
+# Standard order: CONFIGURATION_STYLE.md at the repository root.
+# 1. Identity and evidence boundary; beta teaching input, not physical validation.
+schema_version: 2
+name: DCB-style opening with a tough inclusion inside a weak bulk layer
+reference: Qualitative confined-layer AT2 teaching model; not experimental calibration or a cohesive-interface model
+# 2. Geometry [mm] and mesh: nx/ny count cells split into T3 triangles.
+# Dimension changes require corresponding boundary/crack/material-selector edits.
+geometry:
+  type: structured_rectangle
+  units: mm
+  parameters: {length: 6.0, height: 1.2, origin: [0.0, -0.6], nx: 120, ny: 48}
+# 3. Materials select element centroids; constraints select nodes.
+# Keep circle and all complementary outside_circle selectors consistent.
+# Crack thickness is a selection distance, not a physical opening.
+regions:
+  material_1_region:
+    kind: element_region
+    type: all_of
+    selectors:
+      - {type: outside_circle, center: [2.2, 0.0], radius: 0.20}
+      - type: not
+        selector: {type: rectangle, origin: [0.0, -0.30], size: [6.0, 0.60]}
+  weak_midline_region:
+    kind: element_region
+    type: all_of
+    selectors:
+      - {type: rectangle, origin: [0.0, -0.30], size: [6.0, 0.60]}
+      - {type: outside_circle, center: [2.2, 0.0], radius: 0.20}
+  material_2_region: {kind: element_region, type: circle, center: [2.2, 0.0], radius: 0.20}
+  initial_crack: {kind: node_region, type: line_segment, from: [0.0, 0.0], to: [1.5, 0.0], thickness: 0.012}
+  right_clamp: {kind: node_region, type: boundary, side: right, tolerance: 1.0e-8}
+  upper_load: {kind: node_region, type: boundary_segment, axis: x, value: 0.0, bounds: {y: [0.30, 0.60]}, tolerance: 1.0e-8}
+  lower_load: {kind: node_region, type: boundary_segment, axis: x, value: 0.0, bounds: {y: [-0.60, -0.30]}, tolerance: 1.0e-8}
+# 4. E [MPa] is stiffness; Gc [N/mm] is fracture resistance; l0 [mm].
+# Equal E isolates toughness contrast. This route varies elementwise E/Gc only.
+# Keep nu/l0/model/split/plane-stress and shared settings consistent.
+# rho is illustrative: quasi-static equilibrium omits inertia.
+materials:
+  material_1:
+    model: phase_field
+    parameters: {E: 5000.0, nu: 0.30, Gc: 1.0, l0: 0.10, rho: 1.0, eta_residual: 1.0e-6, energy_split: amor, pf_model: AT2, plane_stress: true}
+  weak_midline:
+    model: phase_field
+    parameters: {E: 5000.0, nu: 0.30, Gc: 0.04, l0: 0.10, rho: 1.0, eta_residual: 1.0e-6, energy_split: amor, pf_model: AT2, plane_stress: true}
+  material_2:
+    model: phase_field
+    parameters: {E: 5000.0, nu: 0.30, Gc: 0.12, l0: 0.10, rho: 1.0, eta_residual: 1.0e-6, energy_split: amor, pf_model: AT2, plane_stress: true}
+# 5. Every element receives one material: no gaps or overlaps.
+assignments:
+  - {material: material_1, region: material_1_region}
+  - {material: weak_midline, region: weak_midline_region}
+  - {material: material_2, region: material_2_region}
+# 6. Prescribed damage values are maintained; no future crack path is imposed.
+initial_conditions:
+  - {field: damage, region: initial_crack, value: 1.0}
+# 7. Dirichlet conditions prescribe displacements [mm] or fix components.
+boundary_conditions:
+  - {name: clamp_x, type: fix, region: right_clamp, dof: x}
+  - {name: clamp_y, type: fix, region: right_clamp, dof: y}
+  - {name: open_upper, type: prescribe, region: upper_load, dof: y, value: 0.15}
+  - {name: open_lower, type: prescribe, region: lower_load, dof: y, value: -0.15}
+# 8. Quasi-static load levels, not physical time; the count includes zero.
+analysis_steps:
+  - name: opening
+    type: quasi_static
+    active_boundary_conditions: [clamp_x, clamp_y, open_upper, open_lower]
+    # 121 levels include zero: 120 nominal increments before any cutbacks.
+    controls: {number_of_steps: 121}
+# 9. CPU float64 staggered Amor AT2 controls. Iterations are not load steps.
+# Algebraic convergence and h/l0 alone do not establish physical validation.
+solver:
+  type: quasi_static
+  mechanics_backend: auto
+  mechanics_tolerance: 1.0e-9
+  mechanics_relative_tolerance: 1.0e-8
+  mechanics_max_iterations: 30
+  damage_tolerance: 1.0e-8
+  damage_max_iterations: 500
+  damage_bounds_method: projected_cg
+  maximum_staggered_iterations: 500
+  staggered_damage_tolerance: 1.0e-5
+  projected_residual_tolerance: 1.0e-5
+  damage_relaxation: 0.70
+  automatic_cutback: true
+  minimum_load_increment: 0.00025
+  maximum_cutbacks: 40
+  crack_front_threshold: 0.80
+# 10. Output requests. Use a fresh directory for every comparison.
+# HDF5 is the default when a trajectory is requested; keep raw stores local.
+outputs:
+  directory: runs/two_material_dcb
+  fields:
+    - {name: trajectory, format: h5, every: 1}
+    - {name: displacement}
+    - {name: strain}
+    - {name: stress}
+    - {name: damage}
+    - {name: vtu}
+  history:
+    - {name: reaction_force, region: upper_load, dof: y}
+    - {name: max_damage}
+    - {name: solver_telemetry}
+    - {name: timing_per_step}
+  visuals:
+    initial_conditions: true
+    plots: true
+    animation: {field: damage}
