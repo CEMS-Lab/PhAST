@@ -143,6 +143,7 @@ tutorial/index
 tutorial/01_phase_field_primer
 tutorial/02_visual_glossary
 tutorial/notebook_square_plate_fracture
+tutorial/notebook_layered_dcb
 tutorial/notebook_dynamic_sent
 tutorial/notebook_setup
 tutorial/notebook_mesh_resolution

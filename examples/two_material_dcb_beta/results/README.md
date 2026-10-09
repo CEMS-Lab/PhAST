@@ -12,6 +12,27 @@ public documentation dependency. The generating source fingerprint was not
 recorded at runtime and remains unknown. A later public-availability
 fingerprint does not establish which source generated historical outputs.
 
+## Material Regions And Input Conditions
+
+![Reference input diagram with three coloured bulk regions, a black starter crack, a fixed right edge, and opposite vertical displacements at the left edge.](material_regions_and_loading.png)
+
+This new diagram represents the reference YAML inputs, not a new fracture
+calculation. Blue is the outer Material 1, grey is the weak bulk layer, and
+ochre is the circular Material 2. All regions have $E = 5{,}000$ MPa; their
+fracture toughnesses are $1.00$, $0.04$, and $0.12$ N/mm, respectively.
+Material 2 is tougher than the weak layer but has the same elastic modulus.
+
+The right edge has $u_x = u_y = 0$. The upper and lower loading segments
+on the left edge reach $u_y = +0.15$ mm and $u_y = -0.15$ mm, respectively.
+Their horizontal displacement remains free. The final relative opening is
+$0.30$ mm. Black marks on the centreline identify the prescribed initial
+crack, not newly propagated damage. Other tractions are zero.
+
+Colours show bulk assignments, not a cohesive interface or a computed damage
+field. The [example instructions](../README.md#material-regions-and-input-conditions)
+explain how to regenerate the diagram after editing the geometry, materials,
+or boundary conditions. Retained simulation figures below remain unchanged.
+
 ## What The Calculation Demonstrates
 
 At a total opening of 0.30 mm, the seeded crack bifurcates within the weak

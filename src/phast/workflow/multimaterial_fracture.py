@@ -28,6 +28,7 @@ from ..mechanics_solver import QuasiStaticSolver
 from ..mesh import FEMMesh
 from ..io_utils import init_h5, write_h5_snapshot
 from .specs import ProblemSpec
+from .setup_plot import save_material_setup
 
 
 class MultimaterialWorkflowError(RuntimeError):
@@ -870,7 +871,11 @@ def run_multimaterial_fracture_spec(spec: ProblemSpec, *, output_dir=None) -> in
         "config_sha256": hashlib.sha256(config_text.encode()).hexdigest(),
         "source_config": spec.source_path,
         "solver_parameters": dict(spec.solver.parameters)}, indent=2) + "\n", encoding="utf-8")
-    visuals = ["initial_conditions.png", "material_fields.png", "damage_final.png",
+    save_material_setup(
+        spec, nodes_np, elements_np, material_ids, material_names, node_regions,
+        resolved_bcs, output / "material_regions_and_loading.png",
+    )
+    visuals = ["initial_conditions.png", "material_regions_and_loading.png", "material_fields.png", "damage_final.png",
                "displacement_final.png", "strain_final.png", "stress_final.png",
                "load_displacement.png", "convergence_and_crack_front.png",
                "damage_evolution.gif"]
