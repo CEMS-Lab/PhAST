@@ -108,7 +108,50 @@ The initial crack is maintained by a damage constraint. No damaged path is
 prescribed through or around Material 2. Penetration, deflection, branching,
 or arrest must be identified from the computed fields rather than assumed.
 
+## Material Regions And Input Conditions
+
+![Input diagram showing blue outer material, grey weak layer, ochre circular Material 2, the starter crack, right clamp, and prescribed opening displacements.](results/material_regions_and_loading.png)
+
+The example contains **three bulk material regions**, despite its historical
+folder name. Blue denotes the outer Material 1, grey denotes the weak layer,
+and ochre denotes the circular Material 2. All three have the same Young's
+modulus, $E = 5{,}000$ MPa. Their fracture toughnesses are respectively
+$G_c = 1.00$, $0.04$, and $0.12$ N/mm. Material 2 is therefore tougher than
+the weak layer, not stiffer. The colours describe the input assignments;
+they are not the red damage scale used in the result figures.
+
+The plate measures $6.0 \times 1.2$ mm. The weak layer is $0.6$ mm high,
+the circular region has radius $0.20$ mm, and the initial crack is $1.5$ mm
+long. The right edge is fixed in both directions. The upper and lower
+left-edge loading segments receive vertical displacements of $+0.15$ mm
+and $-0.15$ mm at the final load factor, giving a relative opening of
+$0.30$ mm. Horizontal displacement is not prescribed on these loading
+segments. Other tractions are zero. The material boundaries do not have
+an independent cohesive or interface law.
+
+After installing PhAST, run this command from the repository root to draw
+the setup before solving:
+
+```bash
+# Read the YAML, build its mesh and selections, and draw the inputs only.
+python examples/two_material_dcb_beta/plot_setup.py \
+  --config examples/two_material_dcb_beta/config.yaml \
+  --output-dir runs/dcb_setup
+```
+
+The output is `runs/dcb_setup/material_regions_and_loading.png`. Use
+`--config` with your edited YAML to inspect a modified setup. This command
+uses the same PhAST mesh, material assignments, and node selections as the
+solver; it neither solves the fracture problem nor establishes convergence.
+New full calculations also write `material_regions_and_loading.png`.
+
 ## Standard Results
+
+For a step-by-step explanation, use the
+[layered DCB student notebook](../../docs/tutorial/notebook_layered_dcb.ipynb).
+It connects the equations to editable geometry, materials, loads, solver
+settings, and result interpretation. Retained images and animation are the
+default; running a new simulation is an explicit choice.
 
 Retained lightweight evidence is in [results/README.md](results/README.md).
 It is not a new run of the documentation commands:

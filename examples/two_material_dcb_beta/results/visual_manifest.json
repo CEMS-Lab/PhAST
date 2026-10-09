@@ -67,5 +67,14 @@
   {
     "path": "matched_control_damage.png",
     "artifact_type": "image"
+  },
+  {
+    "path": "material_regions_and_loading.png",
+    "artifact_type": "image",
+    "source": "../config.yaml",
+    "width_px": 1800,
+    "height_px": 1200,
+    "generation_command": "python examples/two_material_dcb_beta/plot_setup.py --config examples/two_material_dcb_beta/config.yaml --output-dir examples/two_material_dcb_beta/results",
+    "claim_role": "Input representation only; no new fracture calculation."
   }
 ]

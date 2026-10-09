@@ -33,6 +33,10 @@ silently migrate them or add 3D fracture support.
 5. [Retained Miehe SENT results](notebook_retained_results.ipynb)
    examines checked-in load-displacement and damage evidence and states the
    current post-processing boundary.
+6. [Layered DCB: understand, edit, and interpret a fracture model](notebook_layered_dcb.ipynb)
+   explains material regions, the initial crack, boundary conditions, the
+   implicit staggered solution, and result interpretation. It displays retained
+   evidence by default and makes a new simulation an explicit choice.
 
 Asymmetric three-point bending and L-shaped panel notebooks are not presented
 as public benchmarks because the current repository does not retain the
@@ -55,6 +59,7 @@ checkout, and prints the resolved commit before installation.
 | Tutorial | Time | What you learn |
 |---|---:|---|
 | [Standard simulation workflow](07_standard_simulation_workflow.md) | Self-paced; full DCB runtime is machine-dependent | Use one schema-2 layout across the small SENT exercises and full DCB, edit inputs, and distinguish numerical and physical evidence. |
+| [Layered DCB student notebook](notebook_layered_dcb.ipynb) | Self-paced; full solve optional | Connect the physical model and equations to editable YAML, view a geometry schematic, inspect retained fields and animation, and design a material-contrast comparison. |
 | [Getting started](../getting-started.md) | 10-20 min on a fresh machine | Create an environment, install PyTorch and PhAST, run `doctor`, validate a shipped example, and inspect a result. A prepared teaching environment is faster. |
 | [Square-plate fracture: complete workflow](notebook_square_plate_fracture.ipynb) | 25-40 min including installation; about 15-60 s for the solve on a prepared laptop | Generate the B3 square-plate mesh, inspect named boundaries, assemble a CFL-safe teaching configuration, run explicit mechanics with an implicit damage update, and create fresh field plots and a crack animation. Runtime is machine-dependent. |
 | [Dynamic SENT example](notebook_dynamic_sent.ipynb) | 20-30 min | Inspect the existing B3 mesh, named regions, loading, explicit solver route, retained histories, and crack-growth animation without presenting retained evidence as a new run. |
