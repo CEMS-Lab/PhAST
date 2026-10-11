@@ -217,7 +217,7 @@ def damage_kkt_metrics(
 
 
 def make_gamma_corrected_Gc_field(solver, Gc_scalar):
-    """Build a per-element Gc field from a scalar, baking in gamma correction.
+    """Apply the elementwise gamma correction to nominal ``Gc`` values.
 
     The phase-field solver (when built with ``material.gamma_correction=True``)
     uses an effective ``Gc_eff_e = Gc * gamma_factor_e`` per element, where
@@ -235,13 +235,14 @@ def make_gamma_corrected_Gc_field(solver, Gc_scalar):
         Must have been constructed with ``gamma_correction=True`` so that
         the element sizes and ``c_w`` coefficient are available.
     Gc_scalar : torch.Tensor
-        0-d tensor (optionally ``requires_grad=True``) for the nominal Gc.
+        A scalar or per-element tensor (optionally ``requires_grad=True``)
+        containing nominal physical toughness values.
 
     Returns
     -------
     Gc_field : torch.Tensor, shape ``(n_elems,)``
         ``Gc_scalar * gamma_factor_e`` on the solver's compute device/dtype.
-        Differentiable wrt ``Gc_scalar`` via autograd.
+        Differentiable with respect to the supplied nominal values.
 
     Example
     -------
@@ -785,7 +786,7 @@ class _AdjointDamageSolveScalar(torch.autograd.Function):
             lam_node = lam.to(d_sol.device, d_sol.dtype)
             elements = solver.fem.mesh.elements
             areas = solver.fem.mesh.areas
-            d_e = d_sol[elements]
+            d_e = d_unc.to(d_sol.device, d_sol.dtype)[elements]
             lam_e = lam_node[elements]
             d_sum = d_e.sum(dim=1, keepdim=True)
             per_node = 2.0 * areas.unsqueeze(1) * (
@@ -998,7 +999,7 @@ class _AdjointDamageSolveField(torch.autograd.Function):
             lam_node = lam.to(d_sol.device, d_sol.dtype)
             elements = solver.fem.mesh.elements
             areas = solver.fem.mesh.areas
-            d_e = d_sol[elements]
+            d_e = d_unc.to(d_sol.device, d_sol.dtype)[elements]
             lam_e = lam_node[elements]
             d_sum = d_e.sum(dim=1, keepdim=True)
             per_node = 2.0 * areas.unsqueeze(1) * (
@@ -1076,11 +1077,19 @@ class _AdjointDamageSolve(torch.autograd.Function):
                 solver, pf_mask, pf_vals)
 
             # Adjoint RHS: grad_output (upstream gradient dL/dd_new)
-            g, _grad_d_prev_unused = _masked_adjoint_inputs(
+            g, grad_d_prev = _masked_adjoint_inputs(
                 solver, grad_output, d_sol, d_prev, fixed, vals)
             if need_transfer:
                 g = g.to(
                     dtype=solver._cg_dtype, device=solver._cg_device)
+
+            init = None
+            if fixed is not None:
+                init = torch.zeros_like(b)
+                init[fixed] = vals[fixed]
+            d_unc = _pcg_solve_adjoint_system(
+                solver, b, reaction_coeff, M_inv, fixed, vals,
+                initial=init, rel_tol=1e-24)
 
             # Solve A lambda = g using simple Jacobi-preconditioned CG
             # (reuse the same _Ax operator with same reaction_coeff)
@@ -1111,7 +1120,7 @@ class _AdjointDamageSolve(torch.autograd.Function):
         lam_np = lam.to(d_sol.device, d_sol.dtype)
         elements = solver.fem.mesh.elements
         areas = solver.fem.mesh.areas
-        d_e = d_sol[elements]      # (E, 3)
+        d_e = d_unc.to(d_sol.device, d_sol.dtype)[elements]  # (E, 3)
         lam_e = lam_np[elements]   # (E, 3)
         d_sum = d_e.sum(dim=1, keepdim=True)  # (E, 1)
 
@@ -1123,8 +1132,7 @@ class _AdjointDamageSolve(torch.autograd.Function):
             1.0/3.0 - (d_e + d_sum) / 12.0)  # (E, 3)
         grad_H = (lam_e * per_node).sum(dim=1)  # (E,)
 
-        # No gradient for solver itself or d_prev
-        grads = (None, grad_H, None, None, None)
+        grads = (None, grad_H, grad_d_prev, None, None)
         return grads[:ctx.n_inputs]
 
 
@@ -2566,7 +2574,13 @@ class PhaseFieldDamageSolver:
                                       "(per-element), not both.")
                 if l0 is None:
                     l0 = torch.tensor(self._l0, dtype=torch.float64)
-                if not Gc_field_needs_grad and not l0_needs_grad:
+                if not (
+                    getattr(self, 'differentiable', False)
+                    or Gc_field_needs_grad
+                    or l0_needs_grad
+                    or self._tensor_needs_grad(H_input)
+                    or self._tensor_needs_grad(d_prev)
+                ):
                     return self._solve_forward_with_material_overrides(
                         H_input, d_prev, l0=l0, Gc_field=Gc_field,
                         pf_dirichlet_mask=pf_dirichlet_mask,
@@ -2581,7 +2595,13 @@ class PhaseFieldDamageSolver:
                     Gc = torch.tensor(self._Gc, dtype=torch.float64)
                 if l0 is None:
                     l0 = torch.tensor(self._l0, dtype=torch.float64)
-                if not Gc_needs_grad and not l0_needs_grad:
+                if not (
+                    getattr(self, 'differentiable', False)
+                    or Gc_needs_grad
+                    or l0_needs_grad
+                    or self._tensor_needs_grad(H_input)
+                    or self._tensor_needs_grad(d_prev)
+                ):
                     return self._solve_forward_with_material_overrides(
                         H_input, d_prev, Gc=Gc, l0=l0,
                         pf_dirichlet_mask=pf_dirichlet_mask,
