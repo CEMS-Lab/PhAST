@@ -495,9 +495,8 @@ class BenchmarkPostProcessor:
     def _savefig(self, fig, name, max_px=2000):
         """Save figure to figures directory, capped at max_px on the
         larger dimension. Publication figures need >= ~200 dpi at
-        column width; this cap keeps PNGs reviewable in Claude Code
-        (2000-px ceiling per feedback_image_size memory) without
-        dropping below that dpi on single/double-column layouts."""
+        column width; this cap keeps PNGs at a size that is easy to review
+        without dropping below that dpi on single/double-column layouts."""
         path = os.path.join(self.figures_dir, f'{name}.{self.fmt}')
         fig.savefig(path, dpi=self.dpi, bbox_inches='tight',
                     facecolor=THEME['background'])
