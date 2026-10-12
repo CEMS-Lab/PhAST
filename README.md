@@ -267,7 +267,6 @@ print(result.history_names())
 | `assets/` | Lightweight visual assets for repository documentation. |
 | `tools/` | Maintenance utilities for documentation and release checks. |
 | `.github/` | Issue templates, Pull Request guidelines, and CI/CD Action workflows. |
-| `AGENTS.md`, `llms.txt`, `.cursorrules` | Agent-facing contribution guidance and repository orientation. |
 
 ## Contributing
 
@@ -287,12 +286,6 @@ examples, and report unclear instructions. If you become stuck at any point,
 [open an issue](https://github.com/CEMS-Lab/PhAST/issues/new/choose). A question
 about installation or usage is a valid issue and helps improve the documentation
 for subsequent users.
-
-Agent-assisted contributions are also supported. Guidance lives in
-[AGENTS.md](AGENTS.md), [llms.txt](llms.txt), [.cursorrules](.cursorrules), and
-[docs/agent-contribution-guide.md](docs/agent-contribution-guide.md). These
-files are intended to help contributors improve the solver and documentation
-without inventing benchmark results, capabilities, or paper metadata.
 
 ## Build The Docs
 
@@ -333,6 +326,6 @@ Official code for the manuscript is hosted in this repository:
 
 ## Acknowledgments
 
-The theoretical formulations, phase-field continuum equations, constitutive assumptions, and numerical discretization choices in PhAST are derived from the established computational solid mechanics literature and were selected, interpreted, and validated by the human authors, as described in the associated article and documentation. AI coding assistants, including Codex, Claude, Gemini, and GitHub Copilot, were used as auxiliary software-engineering tools for repository organization, documentation editing, boilerplate generation, and code-review support; they did not define the physics, benchmark claims, validation criteria, or scientific conclusions. The authors reviewed and verified the computational mechanics kernels, benchmark configurations, and validation artifacts, and take full responsibility for the correctness, limitations, and scientific content of the codebase.
+The theoretical formulations, phase-field continuum equations, constitutive assumptions, and numerical discretization choices in PhAST are derived from the established computational solid mechanics literature and were selected, interpreted, and validated by the human authors, as described in the associated article and documentation. AI coding assistants were used as auxiliary software-engineering tools for repository organization, documentation editing, boilerplate generation, and code-review support; they did not define the physics, benchmark claims, validation criteria, or scientific conclusions. The authors reviewed and verified the computational mechanics kernels, benchmark configurations, and validation artifacts, and take full responsibility for the correctness, limitations, and scientific content of the codebase.
 
 PhAST is organised to support reproducible scientific computing. Machine-readable manifests, structured result metadata, command-line and Python interfaces, and repository guidance allow researchers to inspect, reproduce, and extend simulations without relying on undocumented local settings. Scientific claims remain limited to the formulations, tests, and validation cases described in the documentation.
