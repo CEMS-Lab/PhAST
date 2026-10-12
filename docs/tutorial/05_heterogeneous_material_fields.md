@@ -81,5 +81,5 @@ See the public [`examples/heterogeneous_fields/README.md`](https://github.com/CE
 for parameters, outputs, and adaptation guidance.
 
 Next, use the [mesh-resolution diagnostic](notebook_mesh_resolution.ipynb) to
-interpret `h/l0`, or return to [Modular fracture problems](03_modular_fem_and_learned_damage.md)
-before introducing a learned damage proposal.
+interpret `h/l0`, or return to [Modular fracture problems](03_modular_fem.md)
+to review how the problem components fit together.

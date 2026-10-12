@@ -55,7 +55,7 @@ analysis_steps:
     controls: {protocol: simple, num_steps: 4, dt: 1.0e-8, ramp_type: smooth_step, t_ramp: 2.0e-8}
 
 # 8. Select existing Velocity-Verlet mechanics and the classical AT2 damage solve.
-# No quasi-static Newton backend, learned model, or three-dimensional route is used.
+# No quasi-static Newton backend or three-dimensional route is used.
 solver:
   type: explicit
   device: cpu

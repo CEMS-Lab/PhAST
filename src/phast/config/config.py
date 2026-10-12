@@ -379,16 +379,6 @@ class SolverSettings:
     softmax_H_beta: Optional[float] = None
     H_update_method: str = 'hard_max'
     enable_damage: bool = True
-    # Damage-subproblem route. ``classical`` is the default. Learned routes
-    # require a user-supplied ``module:factory`` predictor.
-    damage_update: str = 'classical'
-    damage_predictor: Optional[str] = None
-    damage_checkpoint: Optional[str] = None
-    damage_predictor_options: dict = field(default_factory=dict)
-    damage_residual_rtol: float = 1.0e-3
-    damage_residual_atol: float = 1.0e-8
-    damage_bound_tolerance: float = 1.0e-8
-    damage_fallback: bool = True
     fail_on_mechanics_nonconvergence: bool = True
     fail_on_stagger_nonconvergence: bool = True
     adaptive_dt: bool = False
@@ -1085,14 +1075,6 @@ def resolve_config(config: ProblemConfig) -> dict:
         softmax_H_beta=s.softmax_H_beta,
         H_update_method=s.H_update_method,
         enable_damage=s.enable_damage,
-        damage_update=s.damage_update,
-        damage_predictor=s.damage_predictor,
-        damage_checkpoint=s.damage_checkpoint,
-        damage_predictor_options=s.damage_predictor_options,
-        damage_residual_rtol=s.damage_residual_rtol,
-        damage_residual_atol=s.damage_residual_atol,
-        damage_bound_tolerance=s.damage_bound_tolerance,
-        damage_fallback=s.damage_fallback,
         fail_on_mechanics_nonconvergence=s.fail_on_mechanics_nonconvergence,
         fail_on_stagger_nonconvergence=s.fail_on_stagger_nonconvergence,
         adaptive_dt=s.adaptive_dt,

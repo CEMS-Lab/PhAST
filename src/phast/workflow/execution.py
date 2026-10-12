@@ -558,10 +558,6 @@ def _fracture_bridge_issues(spec: ProblemSpec) -> tuple[str, ...]:
 
     solver = spec.solver.parameters
     defaults = LegacySolverSettings(solver_type=spec.solver.kind)
-    if solver.get("damage_update", "classical") != "classical" or any(
-        solver.get(key) for key in ("damage_predictor", "damage_checkpoint", "damage_predictor_options")
-    ):
-        issues.append("learned damage execution is not supported by this schema-v2 adapter")
     if solver.get("adaptive_dt", False):
         issues.append("adaptive_dt is unsupported by the fixed-time CLI loading/output schedule")
     try:

@@ -2352,8 +2352,8 @@ class PhaseFieldDamageSolver:
             pf_dirichlet_mask=None, pf_dirichlet_values=None):
         """Forward-only solve with temporary material overrides.
 
-        This path is used by no-grad dataset generation and live hybrid
-        audits. It temporarily installs the per-element material arrays, runs
+        This path is used by no-grad dataset generation and forward-only
+        residual checks. It temporarily installs the per-element material arrays, runs
         the normal constrained solver, and restores the cached scalar or
         gamma-corrected arrays afterwards.
         """

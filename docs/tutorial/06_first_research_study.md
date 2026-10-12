@@ -101,7 +101,6 @@ choice, retained histories, and animation back to one public configuration.
 | Quasi-static fracture | `examples/quasistatic/notched_holed_plate/config.yaml` or the example identified as closest to the target problem | Requires convergence, mesh, parameter, and comparison evidence for a new claim. |
 | Explicit dynamic fracture | `examples/dynamic/B2_kalthoff_winkler/config.yaml` or another curated dynamic example | Requires stable time-step and output-cost assessment. |
 | Elementwise heterogeneous properties | `examples/heterogeneous_fields/parameters.yaml` with its script-contract runner | A bounded teaching route, not a general heterogeneous YAML adapter or validated microstructure study. |
-| Learned damage proposal | The experimental interface described in [Modular FEM and learned damage](03_modular_fem_and_learned_damage.md) | Replaces only the damage proposal; no trained checkpoint is distributed and classical acceptance/fallback remains authoritative. |
 
 Do not construct a new configuration by combining options from unrelated
 examples unless the capability matrix and schema identify that combination as
@@ -252,8 +251,7 @@ A suitable first milestone is:
 > mesh, solver, and evidence limitations.
 
 New constitutive laws, unsupported interface formulations, automatic image-to-
-mesh pipelines, three-dimensional fracture, a new learned architecture, or a
-new execution adapter are software-development projects. They should be scoped
+mesh pipelines, three-dimensional fracture, or a new execution adapter are software-development projects. They should be scoped
 separately from the first modelling milestone.
 
 ## Requesting review or assistance
