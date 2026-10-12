@@ -172,7 +172,7 @@ def _exclude_secondary_pages_from_sitemap(app, pagename, templatename, context, 
         pagename.startswith("_modules/")
         or pagename.startswith("_sources/")
         or pagename.startswith("maintainer/")
-        or pagename in {"agent-contribution-guide", "genindex", "py-modindex", "search"}
+        or pagename in {"genindex", "py-modindex", "search"}
     )
     if excluded and app.sitemap_links:
         app.sitemap_links.pop()
