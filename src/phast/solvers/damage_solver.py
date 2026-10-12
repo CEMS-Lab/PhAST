@@ -266,6 +266,21 @@ def make_gamma_corrected_Gc_field(solver, Gc_scalar):
     return Gc_scalar * gamma_factor_e
 
 
+def _history_pullback_damage(solver, d_unc, d_sol):
+    """Damage at which dA/dH is evaluated in the history pullback.
+
+    Solve-then-clamp routes ('post_clamp', 'direct') differentiate the linear
+    solve A(H) d_unc = b(H), so the matrix derivative is taken at the
+    unconstrained solution d_unc. The projected-CG route solves a
+    bound-constrained problem; its exact sensitivity needs a reduced
+    active-set system that is not implemented, and it keeps the projected
+    damage here (an approximation).
+    """
+    if getattr(solver, '_bounds_method', 'post_clamp') in ('post_clamp', 'direct'):
+        return d_unc
+    return d_sol
+
+
 def _adjoint_quadratic_forms_perelem(solver, lam, d_sol):
     """Per-element version of _adjoint_quadratic_forms for spatial Gc(x).
 
@@ -786,7 +801,8 @@ class _AdjointDamageSolveScalar(torch.autograd.Function):
             lam_node = lam.to(d_sol.device, d_sol.dtype)
             elements = solver.fem.mesh.elements
             areas = solver.fem.mesh.areas
-            d_e = d_unc.to(d_sol.device, d_sol.dtype)[elements]
+            d_e = _history_pullback_damage(solver, d_unc, d_sol).to(
+                d_sol.device, d_sol.dtype)[elements]
             lam_e = lam_node[elements]
             d_sum = d_e.sum(dim=1, keepdim=True)
             per_node = 2.0 * areas.unsqueeze(1) * (
@@ -999,7 +1015,8 @@ class _AdjointDamageSolveField(torch.autograd.Function):
             lam_node = lam.to(d_sol.device, d_sol.dtype)
             elements = solver.fem.mesh.elements
             areas = solver.fem.mesh.areas
-            d_e = d_unc.to(d_sol.device, d_sol.dtype)[elements]
+            d_e = _history_pullback_damage(solver, d_unc, d_sol).to(
+                d_sol.device, d_sol.dtype)[elements]
             lam_e = lam_node[elements]
             d_sum = d_e.sum(dim=1, keepdim=True)
             per_node = 2.0 * areas.unsqueeze(1) * (
@@ -1120,7 +1137,8 @@ class _AdjointDamageSolve(torch.autograd.Function):
         lam_np = lam.to(d_sol.device, d_sol.dtype)
         elements = solver.fem.mesh.elements
         areas = solver.fem.mesh.areas
-        d_e = d_unc.to(d_sol.device, d_sol.dtype)[elements]  # (E, 3)
+        d_e = _history_pullback_damage(solver, d_unc, d_sol).to(
+                d_sol.device, d_sol.dtype)[elements]  # (E, 3)
         lam_e = lam_np[elements]   # (E, 3)
         d_sum = d_e.sum(dim=1, keepdim=True)  # (E, 1)
 
