@@ -14,7 +14,7 @@ defects broke the reverse pass of that composition:
 Tests 1 and 2 drive the production ``_AdjointDamageSolve`` on a two-triangle
 operator assembled independently from linear basis functions and compare
 against a dense solve-and-project reference differentiated by autograd and
-against central differences. Test 3 uses the full solver on a small mesh.
+against central differences. Test 3 uses the full solver on a small structured mesh.
 """
 
 from types import SimpleNamespace
@@ -121,19 +121,29 @@ def test_previous_damage_receives_gradient_where_irreversibility_is_active():
     torch.testing.assert_close(grad_prev, reference, rtol=1e-12, atol=1e-12)
 
 
-def test_history_gradient_is_not_detached_with_fixed_material(tmp_path):
-    pytest.importorskip("gmsh")
+def _unit_square_mesh(n=8):
+    """Structured T3 mesh of the unit square (no mesh generator needed)."""
+    from phast.mesh import FEMMesh
+
+    xs = torch.linspace(0.0, 1.0, n + 1, dtype=torch.float64)
+    yy, xx = torch.meshgrid(xs, xs, indexing="ij")
+    nodes = torch.stack([xx.reshape(-1), yy.reshape(-1)], dim=1)
+    tris = []
+    for j in range(n):
+        for i in range(n):
+            a = j * (n + 1) + i
+            b, c, d = a + 1, a + n + 2, a + n + 1
+            tris += [[a, b, c], [a, c, d]]
+    return FEMMesh.from_tensors(nodes, torch.tensor(tris, dtype=torch.long), device="cpu")
+
+
+def test_history_gradient_is_not_detached_with_fixed_material():
     from phast.device import DeviceContext
     from phast.fem_operators import FEMOperators
     from phast.material import Material
-    from phast.mesh import FEMMesh
-    from phast.mesh_generator import rectangular_sent
     from phast.damage_solver import PhaseFieldDamageSolver
 
-    path = tmp_path / "mesh.msh"
-    rectangular_sent(str(path), W=1.0, H=1.0, a=0.5, l0=0.1, h_crack=0.2, h_coarse=0.4, verbose=False)
-    mesh = FEMMesh(str(path), device="cpu", dtype=torch.float64)
-    mesh.identify_boundaries()
+    mesh = _unit_square_mesh()
     material = Material(E=210000.0, nu=0.3, Gc=2.7, l0=0.1, rho=7.8e-9,
                         energy_split="spectral", pf_model="AT2", eta_residual=1e-7)
     ctx = DeviceContext(device="cpu", profile=False, compile_solvers=False)
