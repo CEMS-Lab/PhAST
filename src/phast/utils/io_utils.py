@@ -2,8 +2,8 @@
 Output utilities: HDF5 trajectories, VTU (ParaView), CSV (history),
 and explicitly selected Zarr trajectory stores.
 
-Includes helpers for GNO (Graph Neural Operator) training data export:
-- ``compute_edge_index`` converts triangle connectivity to PyG edge_index.
+Includes mesh-graph and run-bookkeeping helpers:
+- ``compute_edge_index`` converts triangle connectivity to a COO edge list.
 - ``write_profiler_csv`` exports solver profiling data.
 - ``generate_run_tag`` creates informative output directory names.
 - ``save_run_metadata`` writes a JSON with full run context.
@@ -127,7 +127,7 @@ def plot_energy_history(rows, path: str, xlabel: str = "Step") -> None:
 
 
 def compute_edge_index(elements):
-    """Compute PyG-style edge_index from triangle connectivity.
+    """Compute a ``(2, n_edges)`` COO edge index from triangle connectivity.
 
     For each triangle (i, j, k), creates bidirectional edges:
     (i,j), (j,i), (j,k), (k,j), (i,k), (k,i).
@@ -777,7 +777,7 @@ def load_state_from_zarr(zarr_path: str, step: Optional[int] = None) -> Dict:
 def init_h5(h5_path: str, mesh, material):
     """Create and initialize an H5 file with mesh and metadata.
 
-    Stores node coordinates, element connectivity, PyG-compatible
+    Stores node coordinates, element connectivity, the COO-format mesh
     ``edge_index``, and mesh size attributes (``n_nodes``, ``n_elements``).
 
     Returns
@@ -796,7 +796,7 @@ def init_h5(h5_path: str, mesh, material):
         mesh_grp.create_dataset('element_connectivity',
                                 data=mesh.elements.cpu().numpy())
 
-        # PyG-compatible edge_index for GNO training
+        # Undirected mesh edges in COO (2, n_edges) layout
         edge_index = compute_edge_index(mesh.elements)
         mesh_grp.create_dataset('edge_index', data=edge_index)
 

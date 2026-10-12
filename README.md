@@ -223,7 +223,6 @@ Browse the full [example gallery](docs/example-gallery.md) for the complete list
 | Post-process simulation data | `phast.load_result(path)` | [Public API Reference](docs/user_guide/public_api_reference.md) |
 | Review supported physics | Capability matrix | [Capability Matrix](docs/user_guide/capability_matrix.md) |
 | Learn step-by-step setup | Tutorial notebook | [Problem Setup Walkthrough](docs/tutorial/problem_setup_walkthrough.ipynb) |
-| Add an audited learned damage model | Predictor plug-in protocol | [Modular FEM and Learned Damage](docs/tutorial/03_modular_fem_and_learned_damage.md) |
 | Learn elementwise `E(x)` and `Gc(x)` fields | Script-contract teaching example | [Heterogeneous Material Fields](docs/tutorial/05_heterogeneous_material_fields.md) |
 | Diagnose failed runs | Troubleshooting guide | [Troubleshooting](docs/troubleshooting.md) |
 

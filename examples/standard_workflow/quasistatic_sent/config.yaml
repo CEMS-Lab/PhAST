@@ -54,7 +54,7 @@ analysis_steps:
     controls: {protocol: simple, num_steps: 4, dt: 0.25}
 
 # 8. Select existing staggered equilibrium/damage solves with SciPy mechanics.
-# Tolerances control the existing solvers; no dynamics or learned model is used.
+# Tolerances control the existing solvers; no dynamics is used.
 solver:
   type: quasi_static
   device: cpu

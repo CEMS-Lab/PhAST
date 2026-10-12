@@ -106,8 +106,6 @@ def build_report() -> str:
         "  spectral/Amor QS on CPU/HPC: install PETSc/MUMPS so backend=auto can select mumps",
         "  cohesive contact: sparse quasi-static backend, backend=auto, normal-contact penalty only when configured",
         "  J2 plasticity: sparse quasi-static backend, backend=auto, guarded supported material combinations",
-        "  dataset/deep learning: Zarr trajectory stores; MP4/raster visualisation when animations are requested",
-        "  learned damage: classical is default; learned_proposal keeps exact correction; learned_replacement is audited experimental inference",
         "",
         "Install guidance:",
         "  Start with: pip install -e .",

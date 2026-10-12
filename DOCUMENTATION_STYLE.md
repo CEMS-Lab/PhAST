@@ -340,8 +340,6 @@ Prefer a more specific term whenever one exists.
 | AT1 bound treatment | projected conjugate gradients, then projected CG |
 | Explicit route | explicit dynamics with the integrator named |
 | Quasi-static route | implicit equilibrium solve within the staggered scheme |
-| Learned proposal | learned damage proposal followed by the documented checks |
-| Learned replacement | audited learned damage replacement with classical fallback |
 | Subcycling | damage subcycling with interval `$N$` |
 | Fracture toughness | `$G_c$`, with units defined |
 | Regularisation length | `$\ell_0$`, with units defined |
@@ -384,7 +382,7 @@ When comparing performance, report:
 
 Do not describe one backend as universally fastest.
 
-## 10. Differentiability and learned models
+## 10. Differentiability
 
 Avoid unqualified statements that PhAST differentiates every fracture
 calculation. Prefer:
@@ -392,18 +390,6 @@ calculation. Prefer:
 > Supported tensor operations can participate in PyTorch autograd. History
 > updates, bounds, active-set changes, remeshing decisions, and other
 > non-smooth operations require case-specific interpretation.
-
-For learned damage updates, state who remains responsible for the physical
-solution:
-
-- A learned proposal supplies an initial damage estimate.
-- PhAST checks bounds, irreversibility, phase-field boundary conditions, and
-  the projected residual where the selected route provides those checks.
-- The classical damage solver remains available as the fallback.
-- No trained model is implied unless a checkpoint is distributed and linked.
-
-Do not call a learned model faster without measuring its complete inference,
-checking, rejection, and fallback cost against the matched classical solve.
 
 ## 11. Commands and configurations
 

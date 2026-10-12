@@ -148,7 +148,7 @@ tutorial/notebook_dynamic_sent
 tutorial/notebook_setup
 tutorial/notebook_mesh_resolution
 tutorial/notebook_retained_results
-tutorial/03_modular_fem_and_learned_damage
+tutorial/03_modular_fem
 tutorial/04_exploration_experiments
 tutorial/05_heterogeneous_material_fields
 tutorial/06_first_research_study
@@ -176,7 +176,6 @@ user_guide/setup_problems
 user_guide/python_api
 user_guide/yaml_workflow
 user_guide/results_visualization
-user_guide/learned_damage
 performance-reproducibility
 paper-reproduction
 ```

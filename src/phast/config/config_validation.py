@@ -78,9 +78,6 @@ ENUMS = {
     # several anisotropic-PF papers since (issue #244).
     'solver.stagger_norm': ['l2', 'linf'],
     'solver.bounds_method': ['post_clamp', 'projected_cg'],
-    'solver.damage_update': [
-        'classical', 'learned_proposal', 'learned_replacement',
-    ],
     # Issue #360 — H-update operator dispatcher. ``hard_max`` (default)
     # is byte-identical to ``torch.maximum``; the other methods are
     # opt-in differentiable alternatives.
@@ -139,9 +136,6 @@ RANGES = {
     'solver.H_cap_factor': (0.0, None),
     'solver.stagger_tol': (0.0, None),
     'solver.damage_tol': (0.0, None),
-    'solver.damage_residual_rtol': (0.0, None),
-    'solver.damage_residual_atol': (0.0, None),
-    'solver.damage_bound_tolerance': (0.0, None),
     'solver.static_tol': (0.0, None),
     'material.sigma_ts': (0.0, None),
     'material.pfczm_p': (2, None),
@@ -800,8 +794,6 @@ def _validate_cross_field_compatibility(raw: dict, line_map: dict,
 
     solver_type = solver.get('solver_type', 'explicit')
     time_integrator = solver.get('time_integrator')
-    damage_update = solver.get('damage_update', 'classical')
-    damage_predictor = solver.get('damage_predictor')
     pf_model = str(_raw_material_value(raw, 'pf_model') or '').upper()
     degradation_type = str(
         _raw_material_value(raw, 'degradation_type') or 'standard'
@@ -850,32 +842,6 @@ def _validate_cross_field_compatibility(raw: dict, line_map: dict,
                 "Use degradation_type: standard or rational_at2. Other "
                 "mechanical degradation laws are not yet a supported coupled "
                 "damage-update route."
-            ),
-        ))
-    if damage_update != 'classical' and not damage_predictor:
-        errors.append(ValidationError(
-            path='solver.damage_predictor',
-            message=(
-                f"damage_update={damage_update!r} requires a predictor factory"
-            ),
-            line_no=line_map.get('solver.damage_update',
-                                 line_map.get('solver', 0)),
-            suggestion=(
-                "Set solver.damage_predictor to 'module:factory', or use "
-                "solver.damage_update: classical."
-            ),
-        ))
-    if damage_update == 'classical' and damage_predictor:
-        errors.append(ValidationError(
-            path='solver.damage_predictor',
-            message=(
-                "damage_predictor is configured but damage_update is classical"
-            ),
-            line_no=line_map.get('solver.damage_predictor',
-                                 line_map.get('solver', 0)),
-            suggestion=(
-                "Remove solver.damage_predictor or select "
-                "learned_proposal/learned_replacement explicitly."
             ),
         ))
     if solver_type != 'explicit' and time_integrator is not None:

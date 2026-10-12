@@ -161,7 +161,7 @@ def test_automatic_cfl_loading_and_hdf5_default(tmp_path: Path) -> None:
 @pytest.mark.parametrize("case", [
     "multiple_steps", "step_mismatch", "multimaterial_dynamic", "partial_material",
     "geometric_region", "initial_velocity", "initial_damage_range", "unknown_solver",
-    "learned", "implicit_integrator", "adaptive_dt", "unused_backend", "unknown_control",
+    "implicit_integrator", "adaptive_dt", "unused_backend", "unknown_control",
     "missing_dt", "both_time_limits", "fixed_dt_and_cfl", "unknown_geometry", "3d",
     "higher_order", "material_typo", "negative_density", "nonfinite_material",
     "unknown_output", "vtu", "field_without_trajectory", "field_cadence",
@@ -185,9 +185,9 @@ def test_unsupported_choices_fail_before_execution(case: str, tmp_path: Path, mo
         raw["initial_conditions"][0]["field"] = "velocity"
     elif case == "initial_damage_range":
         raw["initial_conditions"][0]["value"] = 2.0
-    elif case in {"unknown_solver", "learned", "implicit_integrator", "adaptive_dt", "unused_backend"}:
+    elif case in {"unknown_solver", "implicit_integrator", "adaptive_dt", "unused_backend"}:
         key, value = {
-            "unknown_solver": ("damage_toll", 1.0e-6), "learned": ("damage_update", "learned_proposal"),
+            "unknown_solver": ("damage_toll", 1.0e-6),
             "implicit_integrator": ("time_integrator", "generalized_alpha"),
             "adaptive_dt": ("adaptive_dt", True), "unused_backend": ("backend", "scipy"),
         }[case]

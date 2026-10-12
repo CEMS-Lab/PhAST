@@ -69,7 +69,7 @@ checkout, and prints the resolved commit before installation.
 | [Retained-results notebook](notebook_retained_results.ipynb) | 10 min | Inspect checked-in Miehe result evidence without rerunning the full calculation. |
 | [Python API](../user_guide/python_api.md) | 10-15 min | Author a model with `phast.Problem` and understand the fluent method map. |
 | [Visual glossary](02_visual_glossary.md) | 10 min | Read the picture-first guide to AT1/AT2, energy splits, and `l0`. |
-| [Modular FEM and learned damage](03_modular_fem_and_learned_damage.md) | 20 min | Assemble geometry, material, boundary conditions, fracture choices, solver routes, and an audited learned-damage plug-in. |
+| [Modular fracture problems](03_modular_fem.md) | 20 min | Assemble geometry, material, boundary conditions, fracture choices, and solver routes. |
 | [Heterogeneous material fields](05_heterogeneous_material_fields.md) | 15 min | Define element-ordered `E(x)` and `Gc(x)` arrays and solve a bounded AT2 damage teaching problem. |
 | [From tutorial to first research study](06_first_research_study.md) | 20 min | Convert a modelling question into a bounded PhAST study with explicit decisions, preflight checks, pilot execution, outputs, and validation evidence. |
 | [YAML workflow](../user_guide/yaml_workflow.md) | 10 min | Run a public declarative configuration and understand the standard result directory. |
@@ -89,8 +89,8 @@ checkout, and prints the resolved commit before installation.
 5. Inspect the completed run with `phast.load_result(...)`.
 6. Build a small model with `phast.Problem`.
 7. Read the [visual glossary](02_visual_glossary.md) if the terminology feels abstract.
-8. Read [Modular FEM and learned damage](03_modular_fem_and_learned_damage.md)
-   before introducing a learned damage proposal.
+8. Read [Modular fracture problems](03_modular_fem.md)
+   before changing one problem component at a time.
 9. Run [Heterogeneous material fields](05_heterogeneous_material_fields.md)
    before adapting a segmented or multiphase material map.
 10. Use [From tutorial to first research study](06_first_research_study.md) to
