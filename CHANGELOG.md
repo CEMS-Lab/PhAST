@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+### Adaptive time stepping
+
+- Change: with `solver.adaptive_dt: true`, the YAML runner (explicit dynamics) now
+  derives the time of each step from the accumulated time, the sum of the steps
+  already taken, instead of `step * dt`. The load factor, the time-dependent
+  tractions (`ramp_type` of a traction condition), the time columns of
+  `energy.csv`, `solver_telemetry.csv` and `results.csv`, the snapshot time and the
+  time handed to the result file follow that time. The `dt` column of
+  `solver_telemetry.csv` is the step used by the row, not the next one.
+- Who is affected: only runs with `adaptive_dt: true`. Before, the load factor and
+  the tractions followed the nominal time `step * dt`, so the stored `load_factor`
+  differed from the `history/time` of the same file once the step size changed; a
+  rerun of such a deck gives a different load history and different results.
+  Runs with a constant time step, and all quasi-static runs, are unchanged and
+  give identical histories.
+- `compute_load_factor` takes an optional time `t`; without it the value is still
+  computed from `step * dt`.
+
 ### Result file
 
 - Add the result file `result.vtkhdf`: one HDF5 file per run in the VTKHDF
