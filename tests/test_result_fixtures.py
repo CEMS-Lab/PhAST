@@ -168,6 +168,6 @@ def test_interrupted_files_keep_their_complete_steps(built):
         exp = expected[f"interrupted_{stage}"]
         with h5py.File(out / exp["file"], "r") as f:
             assert f.attrs["status"] == "running"
-            assert int(f["VTKHDF/Steps"].attrs["NSteps"]) == 2
+            assert int(f["VTKHDF/Steps"].attrs["NSteps"]) == exp["nsteps"], stage
             for p in exp["probes"]:
                 assert read_probe(f, exp, p) == pytest.approx(p["value"], rel=1e-6, abs=1e-9)

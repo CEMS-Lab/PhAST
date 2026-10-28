@@ -81,6 +81,7 @@ def test_optional_groups_are_reported_as_info(built):
 def test_recover_trims_interrupted_fixture(built, tmp_path, stage):
     out, expected = built
     src = out / expected[f"interrupted_{stage}"]["file"]
+    n = expected[f"interrupted_{stage}"]["nsteps"]
     before = sha256(src)
     with h5py.File(src, "r") as f:
         n_cells = int(f["VTKHDF/NumberOfCells"][0])
@@ -93,13 +94,14 @@ def test_recover_trims_interrupted_fixture(built, tmp_path, stage):
     assert result.flag_cleared_with == "h5py"
     with h5py.File(result.output, "r") as f:
         assert f.attrs["status"] == "recovered"
-        assert int(f.attrs["recovered_from_steps"]) == 2 and "finished" in f.attrs
+        assert int(f.attrs["recovered_from_steps"]) == n and "finished" in f.attrs
         st = f["VTKHDF/Steps"]
-        assert int(st.attrs["NSteps"]) == 2 == result.nsteps
-        assert st["Values"].shape[0] == 2 and st["CellDataOffsets/H"].shape[0] == 2
-        assert f["VTKHDF/CellData/H"].shape[0] == 2 * n_cells
-        # the row of increment 3 (no fields stored) follows the last kept step and is dropped
+        assert int(st.attrs["NSteps"]) == n == result.nsteps
+        assert st["Values"].shape[0] == n and st["CellDataOffsets/H"].shape[0] == n
+        assert f["VTKHDF/CellData/H"].shape[0] == n * n_cells
         assert hist_before == [0, -1, 1, -1]
+        # the row of increment 3 (no fields stored) follows the last row that has a step and is dropped;
+        # with NSteps already at 3 the file keeps step 2, whose own history row was never written
         assert f["history/step_index"][...].tolist() == [0, -1, 1]
         assert f["history/time"].shape[0] == f["history/reaction/top"].shape[0] == 3
     if stage == "after_rows":

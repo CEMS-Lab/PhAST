@@ -194,7 +194,7 @@ def write_fixture(path, desc, kill=None):
             st.attrs["NSteps"] = s + 1                           # 3. step count
             stored = s + 1
             if kill == (s, "after_nsteps"):
-                os._exit(0)
+                f.flush(); os._exit(0)
         for name, (ds, col) in hcols.items():                    # 4. history row
             ds.resize(inc + 1, axis=0); ds[inc] = col[inc]
         f.flush()                                                # 5. flush
@@ -517,8 +517,11 @@ def build_all(out_dir):
                         "import sys; sys.path[:0] = sys.argv[3:]; from result_v2.fixtures import t3_notched_plate, write_fixture;"
                         " write_fixture(sys.argv[1], t3_notched_plate()[0], kill=(2, sys.argv[2]))",
                         str(out / fname), stage, *sys.path], check=True)
-        probes = [p for p in base_exp["probes"] if p["step"] is not None and p["step"] < 2]
-        expected[f"interrupted_{stage}"] = dict(base_exp, file=fname, nsteps=2, probes=probes, status="running")
+        # NSteps is the commit point of a step: killed before it is written the file keeps steps 0 and 1,
+        # killed after it the file counts step 2 as well, and only its history row is missing
+        nsteps = 3 if stage == "after_nsteps" else 2
+        probes = [p for p in base_exp["probes"] if p["step"] is not None and p["step"] < nsteps]
+        expected[f"interrupted_{stage}"] = dict(base_exp, file=fname, nsteps=nsteps, probes=probes, status="running")
     try:
         desc, _ = t3_notched_plate(); desc["root"]["mesh_varies"] = True
         write_fixture(out / "refused.vtkhdf", desc)

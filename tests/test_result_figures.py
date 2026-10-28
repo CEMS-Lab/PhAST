@@ -153,7 +153,7 @@ def test_steps_first_peak_last_and_integers(built):
     assert [s for s, _ in run.choose_steps("0,-2,-1")] == [0, 1, 2]
     with pytest.raises(ValueError, match="not stored"):
         run.choose_steps("7")
-    interrupted = RunData(phast.load_result(files["interrupted_after_nsteps"][0]))
+    interrupted = RunData(phast.load_result(files["interrupted_after_offsets"][0]))
     assert [s for s, _ in interrupted.choose_steps("first,peak,last")] == [0, 1]
 
 

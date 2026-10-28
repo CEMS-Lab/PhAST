@@ -208,14 +208,15 @@ def test_interrupted_files_load_their_complete_steps(built):
     for stage in KILL_STAGES:
         exp = expected[f"interrupted_{stage}"]
         result = phast.load_result(out / exp["file"])
-        assert result.n_steps() == 2, stage
+        n = exp["nsteps"]
+        assert result.n_steps() == n, stage
         assert result.metadata()["status"] == "running"
         for probe in exp["probes"]:
             assert _probe(result, exp, probe) == pytest.approx(probe["value"], rel=1e-6, abs=1e-9)
         assert result.field("displacement", -1).shape == (exp["n_points"], 2)
-        with pytest.raises(phast.ResultLoadError, match="Step 2 not found"):
-            result.field("damage", 2)
-        assert result.step_index().max() < 2
+        with pytest.raises(phast.ResultLoadError, match=f"Step {n} not found"):
+            result.field("damage", n)
+        assert result.step_index().max() < n
 
 
 def test_mesh_arrays_of_an_unstructured_run(built):
