@@ -1,4 +1,4 @@
-"""Public read-only access to existing PhAST result directories."""
+"""Public read-only access to PhAST results: layout-2.x files and existing run directories."""
 from __future__ import annotations
 
 import csv
@@ -86,6 +86,9 @@ def _reference_field_name(name: str) -> str:
     return _FIELD_ALIASES.get(name, name)
 
 
+RESULT_FILE_NAME = "result.vtkhdf"
+
+
 def _step_key_sort(name: str) -> int:
     try:
         return int(name.split("_")[-1])
@@ -94,11 +97,26 @@ def _step_key_sort(name: str) -> int:
 
 
 class Result:
-    """Read-only handle for a PhAST run/output directory.
+    """Read-only handle for a PhAST run/output directory or result file.
 
-    The initial public surface is intentionally conservative: it reads existing
-    manifests, metadata, CSV histories, and visual artifacts without changing
-    output formats or invoking postprocessors.
+    ``load_result`` accepts:
+
+    - a run directory containing ``result.vtkhdf`` (layout 2.x, which wins over
+      any older store in the same directory; ``run_manifest.json`` and
+      ``run_metadata.json`` are optional because the file carries its own
+      metadata);
+    - a run directory with ``run_manifest.json`` or ``run_metadata.json`` and
+      the older trajectory stores (``training_data.zarr``, ``training_data.h5``);
+    - a direct path to a layout-2.x file of any name.
+
+    It reads existing manifests, metadata, CSV histories, visual artifacts and
+    stored fields without changing output formats or invoking postprocessors.
+
+    ``step`` in :meth:`field` is the index of a stored step for layout 2.x
+    (negative values count from the end); for the older stores it is the step
+    label they keep. ``-1`` is always the last stored step. The methods that
+    describe the mesh, the stored steps and the layout (:meth:`mesh_arrays`,
+    :meth:`steps`, :meth:`materials`, ...) need a layout-2.x file.
     """
 
     _CSV_FILES = (
@@ -111,14 +129,35 @@ class Result:
     )
 
     def __init__(self, path: str | Path):
-        self.path = Path(path).resolve()
-        if not self.path.is_dir():
-            raise FileNotFoundError(f"Result directory does not exist: {self.path}")
+        given = Path(path).resolve()
+        self.file: Path | None = None
+        self._result_file = None
+        if given.is_file():
+            from .io.result.reader import ResultFile, is_result_file
+
+            if not is_result_file(given):
+                raise ResultLoadError(f"{given} is not a layout-2.x PhAST result file")
+            self.file = given
+            self.path = given.parent
+            self._result_file = ResultFile(given)
+        else:
+            self.path = given
+            if not self.path.is_dir():
+                raise FileNotFoundError(f"Result directory does not exist: {self.path}")
+            if (self.path / RESULT_FILE_NAME).is_file():
+                from .io.result.reader import ResultFile
+
+                self.file = self.path / RESULT_FILE_NAME
+                self._result_file = ResultFile(self.file)
 
         self._run_manifest_path = self.path / "run_manifest.json"
         self._run_metadata_path = self.path / "run_metadata.json"
         self._visual_manifest_path = self.path / "visual_manifest.json"
-        if not self._run_manifest_path.exists() and not self._run_metadata_path.exists():
+        if (
+            self._result_file is None
+            and not self._run_manifest_path.exists()
+            and not self._run_metadata_path.exists()
+        ):
             raise ResultLoadError(
                 f"{self.path} is missing run_manifest.json or run_metadata.json"
             )
@@ -135,18 +174,44 @@ class Result:
         if self._manifest_cache is None:
             if self._run_manifest_path.exists():
                 self._manifest_cache = _read_json(self._run_manifest_path)
-            else:
+            elif self._run_metadata_path.exists():
                 self._manifest_cache = dict(self.metadata())
+            else:
+                self._manifest_cache = self._file_metadata()
         return dict(self._manifest_cache)
 
     def metadata(self) -> dict[str, Any]:
-        """Return run metadata where available, otherwise manifest metadata."""
+        """Return run metadata where available, otherwise manifest metadata.
+
+        Without either JSON file (a layout-2.x directory or a file given
+        directly), the metadata are the root attributes of the file, with the
+        attributes of ``/meta`` under ``"meta"``.
+        """
         if self._metadata_cache is None:
             if self._run_metadata_path.exists():
                 self._metadata_cache = _read_json(self._run_metadata_path)
-            else:
+            elif self._run_manifest_path.exists():
                 self._metadata_cache = dict(self.manifest())
+            else:
+                self._metadata_cache = self._file_metadata()
         return dict(self._metadata_cache)
+
+    def _file_metadata(self) -> dict[str, Any]:
+        return {**self._result_file.attributes(), "meta": self._result_file.meta()}
+
+    def file_metadata(self) -> dict[str, Any]:
+        """Root attributes of the layout-2.x file, with the attributes of ``/meta`` under ``"meta"``.
+
+        Unlike :meth:`metadata`, this reads the file even when ``run_metadata.json`` or ``run_manifest.json`` is
+        present. It is empty for the older stores.
+        """
+        return self._file_metadata() if self._result_file is not None else {}
+
+    def layouts(self) -> list[str]:
+        """Layout read: ``["2.0"]`` (``["2.1"]`` for a layout-2.1 file), or an empty list for the older stores."""
+        if self._result_file is None:
+            return []
+        return [".".join(self._result_file.schema_version().split(".")[:2]) or "2.0"]
 
     def history_names(self) -> list[str]:
         """List available CSV history names and supported aliases."""
@@ -159,6 +224,12 @@ class Result:
         response tables, ``energy``, ``history``, ``solver_telemetry``,
         ``timing_per_step``, and ``reaction_force`` when a history CSV exposes
         that column.
+
+        For layout 2.x the CSV files keep their names; tables built from
+        ``/history`` are added for names no CSV provides: ``history`` (one row
+        per increment; grouped columns joined with ``_``, vector columns split
+        by component, for example ``reaction_top_y``), ``energy``,
+        ``crack_tips`` and ``substeps``.
         """
         histories = self._histories()
         try:
@@ -170,8 +241,55 @@ class Result:
             ) from exc
         return [dict(row) for row in rows]
 
+    def history_columns(self) -> dict[str, Any]:
+        """Per-increment columns of a layout-2.x file as arrays, by path of the dataset in ``/history``
+        (for example ``reaction/top`` with shape ``(n_increments, 3)``); empty for the older stores."""
+        if self._result_file is not None:
+            return self._result_file.history_columns()
+        return {}
+
+    def history_attributes(self) -> dict[str, dict[str, Any]]:
+        """Attributes of the ``/history`` datasets of a layout-2.x file, by path (``units``, energy ``method``,
+        ``codes`` of categorical columns); empty for the older stores, which store none."""
+        if self._result_file is not None:
+            return self._result_file.history_attributes()
+        return {}
+
+    def field_attributes(self, name: str) -> dict[str, Any]:
+        """Attributes of a stored field (``location``, ``components``, ``units``, ``kind``, ...) for layout 2.x;
+        empty for the older stores, which store none. Aliases are resolved as in :meth:`field`."""
+        reference = _reference_field_name(name)
+        sources = self._field_sources()
+        if reference not in sources:
+            available = ", ".join(self.field_names())
+            raise ResultLoadError(f"Unknown field {name!r}. Available fields: {available}")
+        source_kind, raw_names = sources[reference]
+        if source_kind != "v2":
+            return {}
+        raw_name = name if name in raw_names else sorted(raw_names)[0]
+        return self._result_file.field_attributes(raw_name)
+
+    def source_files(self) -> list[Path]:
+        """Files this result is read from: the layout-2.x file when there is one, followed by the CSV files that
+        :meth:`history` reads."""
+        files: list[Path] = []
+        if self._result_file is not None:
+            files.append(self._result_file.path)
+        for filename in self._CSV_FILES:
+            path = self.path / filename
+            if path.is_file():
+                files.append(path)
+        return files
+
     def mesh(self) -> dict[str, Any]:
-        """Return read-only mesh metadata or provenance for this result."""
+        """Return read-only mesh metadata or provenance for this result.
+
+        Layout 2.x: ``n_nodes``, ``n_elements`` and ``source`` from the file,
+        plus ``dim``, ``type``, ``cell_types``, ``node_sets`` and ``grid``.
+        """
+        if self._result_file is not None:
+            return self._result_file.mesh()
+
         metadata_mesh = self.metadata().get("mesh")
         if isinstance(metadata_mesh, dict) and metadata_mesh:
             return dict(metadata_mesh)
@@ -193,6 +311,78 @@ class Result:
 
         raise ResultLoadError(f"No mesh metadata found in result directory: {self.path}")
 
+    def mesh_arrays(self, step: int | None = None) -> dict[str, Any]:
+        """Mesh arrays of a layout-2.x file: ``points``, ``cells``, ``node_sets`` and, where stored, ``cell_types``,
+        ``face_sets``, ``edge_index``, ``quadrature`` and ``grid``.
+
+        Points are returned in the native dimension and ``cells`` per block.
+        ``step`` selects the mesh of a stored step when the mesh changes
+        during the run (layout 2.1; default the last step); it is not used for
+        fixed meshes.
+        """
+        return self._require_v2("mesh_arrays").mesh_arrays(step)
+
+    def grid(self) -> dict[str, Any]:
+        """Voxel grid of an ImageData result.
+
+        ``shape`` is (nx, ny, nz); point arrays are returned with shape
+        ``point_shape`` = (nz + 1, ny + 1, nx + 1) and cell arrays with
+        ``cell_shape`` = (nz, ny, nx), x varying fastest.
+        """
+        return self._require_v2("grid").grid()
+
+    def materials(self) -> dict[str, Any]:
+        """Materials of a layout-2.x file: ``phases`` {id: attributes}, ``phase_id`` and ``orientation``."""
+        return self._require_v2("materials").materials()
+
+    def boundary_conditions(self) -> dict[str, Any]:
+        """Layout 2.x ``/loading``: ``bc`` {name: attributes} and ``periodic``."""
+        return self._require_v2("boundary_conditions").boundary_conditions()
+
+    def step_index(self):
+        """Layout 2.x ``history/step_index``: stored step of each increment, -1 when none."""
+        return self._require_v2("step_index").step_index()
+
+    def step_mesh(self):
+        """Layout 2.1: mesh version of each stored step (zeros while the mesh does not change)."""
+        return self._require_v2("step_mesh").step_mesh()
+
+    def mesh_versions(self) -> list[dict[str, Any]]:
+        """Layout 2.1: one entry per mesh version with its sizes, the maps to the previous mesh and hanging nodes."""
+        return self._require_v2("mesh_versions").mesh_versions()
+
+    def crack_tips(self) -> dict[str, Any]:
+        """Layout 2.1 crack-tip table (``increment``, ``tip_id``, ``position``, ``threshold``, ``time``, ``speed``)."""
+        return self._require_v2("crack_tips").crack_tips()
+
+    def validation(self) -> list[dict[str, Any]]:
+        """Layout 2.1 validation results of ``meta/validation`` as rows (empty when the file has none)."""
+        return self._require_v2("validation").validation()
+
+    def initial_conditions(self) -> dict[str, Any]:
+        """Layout 2.1 ``initial_conditions/`` arrays by name (empty when the file has none)."""
+        return self._require_v2("initial_conditions").initial_conditions()
+
+    def quadrature(self, name: str, step: int = -1, *, block: str | None = None):
+        """Layout 2.x per-point array ``(E_block, n_qp[, c])`` at stored step ``step``.
+
+        Reads ``/quadrature/<block>/<name>``, or the per-point array in
+        ``/VTKHDF`` (history at Q4 or H8 points) when it is kept there.
+        """
+        return self._require_v2("quadrature").quadrature(name, step, block=block)
+
+    def n_steps(self) -> int:
+        """Number of stored steps of a layout-2.x file."""
+        return self._require_v2("n_steps").n_steps()
+
+    def steps(self) -> list[int]:
+        """Values accepted by ``field(name, step)`` for a layout-2.x file, in storage order."""
+        return list(range(self._require_v2("steps").n_steps()))
+
+    def times(self):
+        """Time of each stored step of a layout-2.x file."""
+        return self._require_v2("times").times()
+
     def field_names(self) -> list[str]:
         """List reference trajectory field names discovered read-only."""
         return sorted(self._fields().keys())
@@ -202,7 +392,14 @@ class Result:
         return _reference_field_name(name) in self._fields()
 
     def field(self, name: str, step: int = -1):
-        """Load a directly stored trajectory field as a NumPy array."""
+        """Load a directly stored trajectory field as a NumPy array.
+
+        Layout-2.x arrays are returned in the native dimension (2D vectors
+        with 2 components), per-point history as ``(E, n_qp)``, and ImageData
+        arrays on the grid as ``(nz + 1, ny + 1, nx + 1[, c])`` for points or
+        ``(nz, ny, nx[, c])`` for cells, x fastest. The older stores return
+        arrays as stored.
+        """
         reference = _reference_field_name(name)
         sources = self._field_sources()
         if reference not in sources:
@@ -218,6 +415,8 @@ class Result:
             )
         source_kind, raw_names = sources[reference]
         raw_name = name if name in raw_names else sorted(raw_names)[0]
+        if source_kind == "v2":
+            return self._result_file.field(raw_name, step)
         if source_kind == "zarr":
             return self._load_zarr_field(raw_name, step=step)
         if source_kind == "h5":
@@ -346,6 +545,9 @@ class Result:
                     ]
                 if filename == "results.csv" and any("reaction_kN" in row for row in rows):
                     histories.setdefault("reaction", rows)
+            if self._result_file is not None:
+                for name, rows in self._result_file.history_tables().items():
+                    histories.setdefault(name, rows)
             self._history_cache = histories
         return self._history_cache
 
@@ -362,7 +564,9 @@ class Result:
             sources: dict[str, tuple[str, set[str]]] = {}
             # Select one store, rather than mixing current HDF5 fields with
             # potentially older Zarr fields or requiring both backends.
-            if (self.path / "training_data.h5").is_file():
+            if self._result_file is not None:
+                source_kind, names = "v2", set(self._result_file.field_names())
+            elif (self.path / "training_data.h5").is_file():
                 source_kind, names = "h5", self._discover_h5_fields()
             else:
                 source_kind, names = "zarr", self._discover_zarr_fields()
@@ -630,12 +834,19 @@ class Result:
             metadata["source"] = source
         return metadata
 
+    def _require_v2(self, method: str):
+        if self._result_file is None:
+            raise ResultLoadError(
+                f"Result.{method}() needs a layout-2.x result file; {self.path} holds an older store"
+            )
+        return self._result_file
+
     def __repr__(self) -> str:
         return f"Result(path={str(self.path)!r})"
 
 
 def load_result(path: str | Path) -> Result:
-    """Load a read-only :class:`Result` from an existing run directory."""
+    """Load a read-only :class:`Result` from a run directory or a layout-2.x result file."""
     return Result(path)
 
 

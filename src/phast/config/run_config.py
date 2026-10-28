@@ -27,6 +27,7 @@ from .config_validation import (
 )
 from ..utils.provenance import write_run_lockfile
 from ..solvers.staggered_solver import StaggeredSolver
+from .result_output import make_recorder
 from ..utils.io_utils import (
     init_zarr, write_zarr_snapshot, init_h5, write_h5_snapshot, CSVHistory,
     generate_run_tag, save_run_metadata, write_solver_telemetry_csv,
@@ -119,6 +120,17 @@ def _print_precheck_summary(mesh, mat, solver_cfg, cfg) -> None:
 
 
 def main():
+    """Run the YAML runner; a failure closes the result file with status ``failed``."""
+    recorders = []
+    try:
+        _main(recorders)
+    except BaseException as exc:
+        for recorder in recorders:
+            recorder.fail(exc)
+        raise
+
+
+def _main(recorders):
     parser = argparse.ArgumentParser(
         prog="python -m phast run",
         description='Run phase-field fracture from YAML config')
@@ -518,6 +530,16 @@ def main():
         loading = objs['loading']
         print(f"\nRunning {n_steps} quasi-static steps, du={dt}\n")
 
+    # Result file (output.result, on by default): one row per converged increment.
+    recorder = make_recorder(
+        cfg, output_dir=output_dir, mesh=mesh, mat=mat, solver=solver,
+        solver_cfg=solver_cfg, n_steps=n_steps,
+        reaction_node_set=getattr(cfg.output, 'reaction_node_set', None),
+        config_path=args.config)
+    if recorder is not None:
+        recorders.append(recorder)
+    time_limited = False
+
     # Main loop
     t_start = time.time()
     crack_step = None
@@ -597,6 +619,9 @@ def main():
 
     for step in range(n_steps):
         t0 = time.time()
+        # time step this increment uses (adaptive dt changes solver.dt between steps)
+        dt_inc = (float(solver.dt) if solver_cfg.solver_type == 'explicit'
+                  else 1.0)
 
         if solver_cfg.solver_type != 'explicit' and objs['loading']:
             bcs.load_factor = objs['loading'][step]
@@ -722,10 +747,24 @@ def main():
             crack_step = step
             print(f"  ** Crack at step {step} **", flush=True)
 
+        if recorder is not None:
+            recorder.record(
+                step=step, dt_inc=dt_inc, load_factor=bcs.load_factor,
+                energies=energies, last=step == n_steps - 1,
+                load_time=(step * dt if solver_cfg.solver_type == 'explicit'
+                           else 0.0))
+            if recorder.stop_requested:
+                time_limited = True
+                print(f"  Time-limit signal: stopped after step {step}",
+                      flush=True)
+                break
+
     t_total = time.time() - t_start
     n_done = step + 1
     print(f"\nTotal: {t_total:.1f}s ({n_done} steps, "
           f"{t_total/max(n_done,1)*1000:.1f} ms/step)")
+    if recorder is not None:
+        recorder.close('time_limited' if time_limited else 'complete')
 
     # Flush timing CSV
     with open(timing_csv_path, 'w') as fh:
@@ -888,6 +927,9 @@ def main():
     # Post-processing
     print(f"\nRun: python -m phast postprocess {output_dir}")
     print(f"All outputs in: {output_dir}/")
+    if time_limited:
+        from ..io.result import TIME_LIMIT_EXIT_CODE
+        sys.exit(TIME_LIMIT_EXIT_CODE)
 
 
 if __name__ == '__main__':

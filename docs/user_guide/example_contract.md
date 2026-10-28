@@ -94,6 +94,7 @@ release checks without reverse-engineering a solver scratch directory.
 | `energy.csv` | fracture/dynamic runners | energy plots, validation review | Required when an energy plot or claim is presented. |
 | `solver_telemetry.csv` | iterative solvers | convergence review | Required when convergence behavior is part of the example. |
 | `timing_per_step.csv` | runner/profiler | performance review | Required when timing claims are made. |
+| `result.vtkhdf` | 2D YAML runner | ParaView, `phast.load_result`, `phast result validate` | Written for full solver runs when `output.result` is set (off by default); keep out of git unless published as an external release artifact. See [Result files](result_file.md). |
 | `training_data.h5` | trajectory writer | restart, postprocess, ML consumers | Default single-file format; keep out of git unless published as an external release artifact. |
 | PNG/GIF visuals | plot/postprocess layer | docs gallery, review packets | Governed by `visual_manifest.json` and this contract. |
 

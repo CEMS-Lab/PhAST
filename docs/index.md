@@ -163,6 +163,7 @@ user_guide/overview
 user_guide/physics
 user_guide/numerical_methods
 user_guide/configuration
+user_guide/result_file_layout
 user_guide/meshes
 user_guide/geometry_gallery
 user_guide/sparse_solve
@@ -176,6 +177,7 @@ user_guide/setup_problems
 user_guide/python_api
 user_guide/yaml_workflow
 user_guide/results_visualization
+user_guide/result_file
 performance-reproducibility
 paper-reproduction
 ```

@@ -32,6 +32,8 @@ validity.
 
 `output.trajectory: true` enables snapshots, with `output.trajectory_format: h5` as the default single-file format; `zarr` and `both` require explicit selection. `output.plots`, `gif`, `vtu`, and `viz_format` control visual products where the selected route supports them. These settings do not make a field reloadable unless the corresponding trajectory or stored field exists.
 
+`output.result` controls the result file `result.vtkhdf`. It is `false` by default, `true` writes the file with the defaults of the solver type, and a mapping sets `every`, `fields`, `derived_location`, `derived_every`, `size_limit_gb`, `layout` and `crack_tips`. Only the two-dimensional phase-field routes of the YAML runner write the file; other routes ignore the key. [Result files](../user_guide/result_file.md) explains each key and [Result file layout](../user_guide/result_file_layout.md) specifies the file.
+
 `device.device` can request `cpu`, `cuda`, or `mps` when supported. A material-aware or backend-aware fallback may change the runtime route; inspect the run metadata and manifest rather than inferring it from the request.
 
 ## Precedence and units

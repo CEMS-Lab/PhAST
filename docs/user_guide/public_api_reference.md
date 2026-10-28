@@ -207,7 +207,7 @@ Use the load API for inspection:
 result = phast.load_result("runs/notched_holed_plate")
 ```
 
-It returns a read-only result handle with provenance, history, and discovered artifacts.
+It returns a read-only result handle with provenance, history, and discovered artifacts. `path` is a run directory or a layout-2.x result file (`result.vtkhdf`); a run directory that contains `result.vtkhdf` is read from that file. The methods that describe the stored steps, the mesh and the materials (`steps()`, `times()`, `mesh_arrays()`, `materials()`, `boundary_conditions()`, `history_columns()` and others) are documented in [Result files](result_file.md) and need a layout-2.x file.
 
 ## Exceptions
 

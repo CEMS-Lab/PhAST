@@ -10,6 +10,8 @@ Subcommands:
     doctor      Report environment and solver backend status
     postprocess Generate plots from a completed run directory
     new         Scaffold a starter YAML config for a new benchmark
+    result      Check, recover or archive a result file (validate, recover, finalize)
+    figures     Draw the standard figures of a stored run
 
 Usage:
     python -m phast run configs/benchmarks/dynamic/B2_kalthoff_winkler.yaml
@@ -19,6 +21,9 @@ Usage:
     python -m phast doctor
     python -m phast postprocess path/to/run_dir --dpi 300
     python -m phast new my_benchmark --type quasi_static --material pmma_bleyer
+    python -m phast result validate path/to/result.vtkhdf
+    python -m phast result recover path/to/result.vtkhdf -o recovered.vtkhdf
+    python -m phast figures path/to/run_dir
 """
 
 import sys
@@ -27,7 +32,7 @@ import sys
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ('-h', '--help'):
         print(__doc__.strip())
-        print("\nAvailable subcommands: run, precheck, explain-config, schema, doctor, postprocess, new")
+        print("\nAvailable subcommands: run, precheck, explain-config, schema, doctor, postprocess, new, result, figures")
         sys.exit(0)
 
     cmd = sys.argv[1]
@@ -55,9 +60,15 @@ def main():
     elif cmd == 'new':
         from .scaffolder import main as new_main
         new_main()
+    elif cmd == 'result':
+        from .io.result.cli import main as result_main
+        raise SystemExit(result_main())
+    elif cmd == 'figures':
+        from .io.result.figures import main as figures_main
+        raise SystemExit(figures_main())
     else:
         print(f"Unknown subcommand: '{cmd}'")
-        print("Available: run, precheck, explain-config, schema, doctor, postprocess, new")
+        print("Available: run, precheck, explain-config, schema, doctor, postprocess, new, result, figures")
         sys.exit(1)
 
 

@@ -10,6 +10,7 @@ A run directory can contain:
 | `run_metadata.json` | Run, mesh, device, and provenance metadata when written. |
 | `run_manifest.json` | Artifact-oriented manifest; older runs may use metadata. |
 | CSV histories | Scalar response, energy, telemetry, or timing rows. |
+| `result.vtkhdf` | One file per run with the fields, the load history, the mesh, the materials and the resolved input; opens in ParaView. See [Result files](result_file.md). |
 | HDF5 trajectory | Default reloadable field snapshots in `training_data.h5` when requested. |
 | Zarr trajectory | Directory-based trajectory format, available by explicit selection. |
 | PNG/VTU/MP4 and visual manifest | Human-facing visual outputs and their descriptions. |
@@ -28,7 +29,9 @@ if result.has_field("damage"):
     final_damage = result.field("damage", step=-1)
 ```
 
-`field()` reads a stored raw field from the trajectory store and returns a NumPy array. It does not derive stress, strain, or other quantities that were not stored. `history()` reads CSV-backed history rows. `metadata()`, `manifest()`, and `mesh()` provide run context and provenance.
+For a run directory that contains `result.vtkhdf`, `load_result` reads that file in preference to the trajectory stores, and a path to a `.vtkhdf` file works as well. [Result files](result_file.md) describes the additional methods (`steps()`, `times()`, `mesh_arrays()`, `materials()`, `history_columns()` and others) that need this file.
+
+`field()` reads a stored raw field from the trajectory store or the result file and returns a NumPy array. It does not derive stress, strain, or other quantities that were not stored. `history()` reads CSV-backed history rows. `metadata()`, `manifest()`, and `mesh()` provide run context and provenance.
 
 ## Visualization
 
