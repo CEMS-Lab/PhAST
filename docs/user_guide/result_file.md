@@ -1,7 +1,7 @@
 # Result files
 
-A two-dimensional phase-field run of the YAML runner writes one `result.vtkhdf`
-by default. The file is HDF5 and a valid VTKHDF file at the same
+A single-material two-dimensional phase-field run of the YAML runner writes one
+`result.vtkhdf` by default (the multi-material route does not write it). The file is HDF5 and a valid VTKHDF file at the same
 time. ParaView 5.13 or later opens it directly,
 and `phast.load_result` reads it on macOS, Linux and Windows with h5py and
 NumPy only. The layout is specified in [Result file layout](result_file_layout.md).

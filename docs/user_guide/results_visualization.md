@@ -10,7 +10,7 @@ A run directory can contain:
 | `run_metadata.json` | Run, mesh, device, and provenance metadata when written. |
 | `run_manifest.json` | Artifact-oriented manifest; older runs may use metadata. |
 | CSV histories | Scalar response, energy, telemetry, or timing rows. |
-| `result.vtkhdf` | One file per run with the fields, the load history, the mesh, the materials and the resolved input; opens in ParaView. The YAML runner writes it by default for two-dimensional phase-field runs. See [Result files](result_file.md). |
+| `result.vtkhdf` | One file per run with the fields, the load history, the mesh, the materials and the resolved input; opens in ParaView. The YAML runner writes it by default for single-material two-dimensional phase-field runs; the multi-material route does not write it. See [Result files](result_file.md). |
 | HDF5 trajectory | Default reloadable field snapshots in `training_data.h5` when requested. |
 | Zarr trajectory | Directory-based trajectory format, available by explicit selection. |
 | PNG/VTU/MP4 and visual manifest | Human-facing visual outputs and their descriptions. |

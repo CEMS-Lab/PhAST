@@ -10,8 +10,9 @@
 - Add the writer, the validator, the recovery and archive commands
   (`python -m phast result`), the standard figures (`python -m phast figures`)
   and the layout specification and guide under `docs/user_guide/`.
-- The YAML runner writes the file for two-dimensional T3 and Q4 runs by default
-  (`output.result: true`); `output.result: false` writes no file and a mapping
+- The YAML runner writes the file for single-material two-dimensional T3 and Q4
+  runs by default (`output.result: true`; the multi-material route does not write
+  it); `output.result: false` writes no file and a mapping
   sets the options. `phast.load_result` reads the file and the existing run
   directories. A run directory that holds both `result.vtkhdf` and
   `training_data.h5` is read from the result file, where `step` counts stored
