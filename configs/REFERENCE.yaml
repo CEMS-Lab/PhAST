@@ -415,6 +415,7 @@ output:
   # print_every: 100  # int, range: [1, +inf]
   # reaction_node_set: null  # str or null
   # reaction_component: 1  # int, range: [0, 1]
+  # result: true  # bool or mapping; false writes no result.vtkhdf
 
 # ---------- Device ----------
 device:

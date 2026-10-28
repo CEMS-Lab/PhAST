@@ -218,15 +218,62 @@ def test_traction_run_records_work_and_ramp_factors(runs):
         assert work[0] == 0.0 and h["energy/balance_residual"][0] == 0.0     # the ramp starts at zero
 
 
-def test_no_result_file_is_written_unless_output_result_is_set(tmp_path):
-    from phast.config.config import OutputConfig
+def _short_default_deck(tmp_path, **output):
+    """Three increments of the T3 deck with the ``result`` key left out and the trajectory store on."""
+    cfg = R.t3_qs(tmp_path, h5=True, h5_every=2, **output)
+    cfg["output"].pop("result", None)
+    cfg["loading"]["num_steps"] = 3
+    return cfg
 
-    assert OutputConfig().result is False
-    cfg = R.t3_qs(tmp_path)
-    cfg["output"].pop("result")
-    cfg["loading"]["num_steps"] = 1
+
+def test_the_result_file_is_written_by_default_beside_the_legacy_files(tmp_path):
+    from phast.config.config import OutputConfig
+    import phast
+
+    assert OutputConfig().result is True
+    assert resolve_result_settings(OutputConfig().result, explicit=False, h5_every=1) is not None
+    cfg = _short_default_deck(tmp_path)
+    assert "result" not in cfg["output"]
     _, out = R.run(tmp_path, cfg, name="default")
-    assert not (out / "result.vtkhdf").exists() and (out / "energy.csv").exists()
+    R.validate_file(out / "result.vtkhdf")
+    for name in ("result.vtkhdf.sha256", "training_data.h5", "energy.csv", "results.csv", "run_metadata.json",
+                 "run_lockfile.json"):
+        assert (out / name).is_file(), name
+    with h5py.File(out / "training_data.h5", "r") as store:
+        labels = sorted(store["simulation_data/steps"])
+    assert labels == ["step_0000", "step_0002"]                      # legacy labels follow output.h5_every
+    r = phast.load_result(out)                                       # the result file wins in the directory
+    assert r.steps() == [0, 1, 2] and r.has_field("damage") and r.field("damage", step=-1).ndim == 1
+    assert [float(x) for x in r.history_columns()["increment"]] == [0.0, 1.0, 2.0]
+    assert r.history("results") and r.history("energy")              # the CSV histories keep their names
+
+
+def test_an_explicit_false_writes_no_result_file_and_keeps_the_legacy_files(tmp_path):
+    import phast
+
+    cfg = _short_default_deck(tmp_path)
+    cfg["output"]["result"] = False
+    _, out = R.run(tmp_path, cfg, name="off")
+    assert not (out / "result.vtkhdf").exists() and not (out / "result.vtkhdf.sha256").exists()
+    assert not (out / "result.vtkhdf.partial").exists()
+    for name in ("training_data.h5", "energy.csv", "results.csv"):
+        assert (out / name).is_file(), name
+    r = phast.load_result(out)                                       # the trajectory store keeps its step labels
+    assert r.field("damage", step=2).ndim == 1
+    with pytest.raises(phast.ResultLoadError):
+        r.steps()
+
+
+def test_a_synchronised_folder_warns_and_still_writes_the_result_file(tmp_path):
+    """The writer's rule 1 is advice: the run is not aborted and the file is written and valid."""
+    base = tmp_path / "CloudStorage" / "OneDrive-test" / "run"
+    cfg = _short_default_deck(base)
+    cfg["loading"]["num_steps"] = 2
+    proc, out = R.run(base, cfg, name="synced")
+    assert proc.returncode == 0 and "looks like a synchronised folder" in proc.stderr
+    R.validate_file(out / "result.vtkhdf")
+    with h5py.File(out / "result.vtkhdf", "r") as f:
+        assert f.attrs["status"] == "complete"
 
 
 def test_invalid_result_settings_are_rejected_when_the_configuration_is_validated():

@@ -1,9 +1,9 @@
 """Layout-2.0 result file for the 2D YAML runner (``config/run_config.py``).
 
 The runner writes ``<output_dir>/result.vtkhdf`` through
-:class:`phast.io.result.ResultWriter` when ``output.result`` is ``true`` or a
-mapping; it writes nothing when it is ``false`` (the default). Settings (``docs/user_guide/result_file_layout.md``,
-section 3)::
+:class:`phast.io.result.ResultWriter` unless ``output.result`` is ``false``
+(``true``, a mapping, or an omitted key all write it). Settings
+(``docs/user_guide/result_file_layout.md``, section 3)::
 
     output:
       result:
@@ -712,7 +712,7 @@ def _config_dict(cfg, result_settings: dict) -> dict:
 def make_recorder(cfg: Any, **kwargs: Any) -> Optional[RunResultRecorder]:
     """Recorder for this run, or ``None`` when ``output.result`` is false."""
     solver_cfg = kwargs["solver_cfg"]
-    settings = resolve_result_settings(getattr(cfg.output, "result", False),
+    settings = resolve_result_settings(getattr(cfg.output, "result", True),
                                        explicit=solver_cfg.solver_type == "explicit",
                                        h5_every=int(getattr(cfg.output, "h5_every", 1) or 1))
     if settings is None:
