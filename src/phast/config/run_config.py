@@ -541,7 +541,7 @@ def _main(recorders):
     time_limited = False
 
     # Main loop
-    t_start = time.time()
+    t_loop_start = time.time()
     crack_step = None
     fast = cfg.output.fast
     print_every = cfg.output.print_every
@@ -617,16 +617,31 @@ def _main(recorders):
     neumann_ref = (solver.f_ext.clone() if (
         bcs.get_neumann_forces(mesh) is not None) else None)
 
+    # Explicit time at the start of each step, accumulated over the steps
+    # actually taken (adaptive dt changes solver.dt between steps). With a
+    # constant dt this is exactly step * dt.
+    explicit = solver_cfg.solver_type == 'explicit'
+    t_base, k_base = 0.0, 0
+    dt_cur = float(dt) if explicit else None
+    t_start = 0.0
+    dt_inc = 1.0
+
     for step in range(n_steps):
         t0 = time.time()
-        # time step this increment uses (adaptive dt changes solver.dt between steps)
-        dt_inc = (float(solver.dt) if solver_cfg.solver_type == 'explicit'
-                  else 1.0)
+        if explicit:
+            # time step this increment uses (adaptive dt changes solver.dt between steps)
+            dt_now = float(solver.dt)
+            if dt_now != dt_cur:
+                t_base += (step - k_base) * dt_cur
+                k_base, dt_cur = step, dt_now
+            t_start = t_base + (step - k_base) * dt_cur
+            dt_inc = dt_cur
 
         if solver_cfg.solver_type != 'explicit' and objs['loading']:
             bcs.load_factor = objs['loading'][step]
         elif solver_cfg.solver_type == 'explicit':
-            bcs.load_factor = compute_load_factor(step, dt, cfg.loading)
+            bcs.load_factor = compute_load_factor(step, dt, cfg.loading,
+                                                  t=t_start)
 
         # Update Neumann (traction) external force for this step.
         # Per-BC ramp_type takes precedence over the global load_factor
@@ -635,7 +650,7 @@ def _main(recorders):
         # scale the cached one-shot assembly by the Dirichlet load_factor
         # (so a global ``loading.ramp_type: smooth`` still ramps tractions).
         if has_time_traction and solver_cfg.solver_type == 'explicit':
-            t_now = step * dt
+            t_now = t_start
             global_factor = bcs.load_factor
             bcs.load_factor = 1.0
             try:
@@ -657,7 +672,7 @@ def _main(recorders):
             getattr(solver, 'v', None),
             psi_plus=psi)
         if solver_cfg.solver_type == 'explicit':
-            energy_time = step * dt
+            energy_time = t_start
         else:
             energy_time = objs['loading'][step] if objs.get('loading') else step * dt
         energy_rows.append({
@@ -675,8 +690,10 @@ def _main(recorders):
         # CG counters, plus the very first step before any solver internal
         # has populated ``last_iter``.
         if solver_cfg.solver_type == 'explicit':
-            t_now = step * dt
-            dt_used = float(getattr(solver, '_last_dt_used', dt) or dt)
+            # dt of this step: solver._last_dt_used already holds the next
+            # step's dt after an adaptive cutback or growth.
+            t_now = t_start
+            dt_used = dt_inc
         else:
             t_now = (objs['loading'][step]
                      if objs.get('loading') else step * dt)
@@ -709,7 +726,7 @@ def _main(recorders):
 
         if step % print_every == 0 or step < 5:
             if solver_cfg.solver_type == 'explicit':
-                t_now = step * dt
+                t_now = t_start
                 print(f"  Step {step:5d} | t={t_now*1e6:6.2f}us | "
                       f"max(d)={max_d:.5f} | {elapsed:.1f}ms", flush=True)
             else:
@@ -730,7 +747,7 @@ def _main(recorders):
                 velocity=getattr(solver, 'v', None),
                 acceleration=getattr(solver, 'a', None),
                 energies=energies,
-                time_s=(step * dt if solver_cfg.solver_type == 'explicit'
+                time_s=(t_start if solver_cfg.solver_type == 'explicit'
                         else float(t_now)),
             )
             if zarr_root:
@@ -751,7 +768,7 @@ def _main(recorders):
             recorder.record(
                 step=step, dt_inc=dt_inc, load_factor=bcs.load_factor,
                 energies=energies, last=step == n_steps - 1,
-                load_time=(step * dt if solver_cfg.solver_type == 'explicit'
+                load_time=(t_start if solver_cfg.solver_type == 'explicit'
                            else 0.0))
             if recorder.stop_requested:
                 time_limited = True
@@ -759,7 +776,7 @@ def _main(recorders):
                       flush=True)
                 break
 
-    t_total = time.time() - t_start
+    t_total = time.time() - t_loop_start
     n_done = step + 1
     print(f"\nTotal: {t_total:.1f}s ({n_done} steps, "
           f"{t_total/max(n_done,1)*1000:.1f} ms/step)")
