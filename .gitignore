@@ -20,6 +20,10 @@ outputs/
 *.hdf5
 *.zarr/
 training_data.zarr/
+*.vtkhdf
+*.vtkhdf.partial
+*.vtkhdf.sha256
+*.vtkhdf.pre-resume-*.bak
 qs_hpc_results/
 *.vtu
 *.vtk
