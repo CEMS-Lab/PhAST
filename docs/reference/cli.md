@@ -13,6 +13,10 @@ The module entry point is `python -m phast`. Run it without a subcommand or with
 | `doctor` | Report environment and solver-backend status. |
 | `postprocess RUN_DIR` | Generate supported products from a completed run. |
 | `new NAME` | Scaffold a starter YAML configuration. |
+| `result validate FILE` | Check a `result.vtkhdf` file against its layout and report ERROR, WARN and INFO findings. |
+| `result recover FILE` | Write a trimmed, validated copy of an interrupted result file. |
+| `result finalize --archive FILE` | Rewrite a closed result file with gzip, shuffle and fletcher32 and check it. |
+| `figures RUN` | Draw the standard figures of a result file. |
 
 `explain` is accepted as an alias for `explain-config`; `json-schema` is an alias for `schema`.
 
@@ -27,6 +31,8 @@ Do not supply both forms together. It also accepts material and mesh
 parameters such as `--preset`, `--h_min`, and `--t_total`. Run
 `python -m phast precheck --help` for all options.
 
+`result validate` accepts `--json` and `--running-ok`, `result recover` accepts `-o` and `--force`, and `figures` accepts `-o`, `--steps`, `--dpi`, `--fields`, `--deform-scale` and `--kinds`. [Result files](../user_guide/result_file.md) describes them.
+
 `schema` accepts `--output`, `--check`, and `--indent`. `postprocess` accepts a run directory and post-processing options such as `--dpi`. `new` accepts a name and starter options including `--type` and `--material`; consult the command help for the complete local option set.
 
 ## Examples
@@ -40,4 +46,6 @@ python -m phast run config.yaml --device cuda --trajectory --trajectory-format h
 python -m phast schema --output configs/phast.schema.json
 python -m phast doctor
 python -m phast postprocess runs/example --dpi 300
+python -m phast result validate runs/example/result.vtkhdf
+python -m phast figures runs/example
 ```

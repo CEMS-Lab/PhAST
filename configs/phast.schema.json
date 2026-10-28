@@ -772,6 +772,9 @@
           "default": 1,
           "minimum": 0,
           "maximum": 1
+        },
+        "result": {
+          "default": true
         }
       }
     },

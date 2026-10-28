@@ -31,7 +31,7 @@ dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
     "matplotlib>=3.6",
-    "h5py>=3.7",
+    "h5py>=3.13",
     "meshio>=5.0",
     "gmsh>=4.10",
     "Pillow>=9.0",
@@ -125,6 +125,9 @@ include-package-data = false
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["phast*"]
+
+[tool.setuptools.package-data]
+"phast.io.result" = ["schema/*.yaml"]
 
 
 [tool.cibuildwheel]

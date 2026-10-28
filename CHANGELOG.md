@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+### Result file
+
+- Add the result file `result.vtkhdf`: one HDF5 file per run in the VTKHDF
+  layout, so that ParaView opens it directly, with float64 state, the load
+  history, the mesh, the materials, the loading and the resolved input.
+- Add the writer, the validator, the recovery and archive commands
+  (`python -m phast result`), the standard figures (`python -m phast figures`)
+  and the layout specification and guide under `docs/user_guide/`.
+- The YAML runner writes the file for two-dimensional T3 and Q4 runs when
+  `output.result` is `true` or a mapping (off by default). `phast.load_result`
+  reads the file and the existing run directories. A run directory that holds both
+  `result.vtkhdf` and `training_data.h5` is read from the result file, where `step`
+  counts stored steps.
+- Layout 2.1 adds crack tips and crack speed, initial conditions, wave speeds,
+  velocity conditions, validation records and meshes that change during a run.
+- `ResultWriter.resume` continues an interrupted file from a checkpoint increment
+  (the cut, the backup and the record of the resume are described in the layout
+  guide); `phast.io.result.interface_connectivity` builds the rows of cohesive
+  interface cells in the stored order, the solver's `top` side first.
+
 ### Quasi-static rigid connectors
 
 - Forward active rotation-free rigid connectors from the staggered

@@ -1,0 +1,136 @@
+# PhAST result file schema, machine-readable form of
+# docs/user_guide/result_file_layout.md (layout 2.0.0).
+# Writers embed this text in meta/schema_yaml; the validator checks files against it.
+schema: phast.result
+version: 2.0.0
+specification: docs/user_guide/result_file_layout.md
+
+conventions:
+  extension: .vtkhdf
+  compression_while_running: none
+  archive_filters: [gzip4, shuffle, fletcher32]
+  derived_in_view_size_limit_gb: 4
+  result_file_is_checkpoint: false
+
+profiles: [setup, run]
+profile_rules:
+  setup: {nsteps: 0, steps_group: required}   # a setup file is a run file before its first increment
+
+file:
+  libver: [earliest, v114]
+  allowed_filters: [gzip, shuffle, fletcher32]
+  forbidden: [virtual_dataset, plugin_filter, absolute_path_reference, scale_offset_filter]
+  links: soft links point into /VTKHDF only
+  write_order: [field_rows, steps_offsets, steps_values, nsteps, history_rows, flush]
+
+root_attributes:
+  required:
+    phast_schema: {value: phast.result}
+    phast_schema_version: {pattern: "^2\\.\\d+\\.\\d+$"}
+    profile: {values: [setup, run]}
+    dim: {values: [2, 3]}
+    analysis: {values: [plane_strain, plane_stress, 3d]}
+    unit_system: {value: mm-MPa-N-s}
+    status: {values: [running, complete, time_limited, failed, recovered]}
+    created: {format: iso8601_with_zone}
+    run_id: {type: str}
+    history_coupling: {values: [fresh, lagged]}
+    history_update: {values: [hard_max, softmax, smooth_max, log_smooth, custom_subgrad]}
+    kinematics: {values: [small, finite]}
+    mesh_varies: {value: false}
+    index_basis: {value: increment}
+  optional:
+    finished: {format: iso8601_with_zone}
+    parent_run_id: {type: str}
+    history_update_beta: {type: float}
+    recovered_from_steps: {type: int}         # set by phast result recover: NSteps before trimming
+
+vtkhdf:
+  version: [2, 2]
+  types: [UnstructuredGrid, ImageData]
+  unstructured_required: [NumberOfPoints, NumberOfCells, NumberOfConnectivityIds, Points, Connectivity, Offsets, Types]
+  imagedata_attributes: [WholeExtent, Origin, Spacing, Direction]
+  steps_required: [Values, PartOffsets, NumberOfParts, PointOffsets, CellOffsets, ConnectivityIdOffsets]
+  points_components: 3
+  vector_components: 3
+  shared_time_axis: true          # an array is inside /VTKHDF only if it exists at every stored step
+  static_arrays_repeat_offsets: true
+  imagedata_static_time_axis_length: 1
+
+groups:
+  required: [VTKHDF, mesh, materials, loading, history, state, meta]
+  optional: [interfaces, quadrature, derived]
+  meta_required: [config_resolved_yaml, schema_yaml]
+  meta_optional: []
+  meta_attributes: [software, software_version, dependencies, machine, slurm_job_id, command_line, solver_dtype, tolerances]
+
+field_attributes:
+  required: [location, components, units, kind]
+  location: [node, cell, quadrature_point, interface_point]
+  kind: [state, history, derived]
+  derived_method: [exact, qp_mean_volume_weighted, qp_mean_unweighted, recomputed]
+  shear: [engineering]
+  measure: [cauchy, pk1, pk2, green_lagrange, log]
+
+dtypes:
+  float64_required: [state, history, coordinates, materials, history_columns]
+  float32_allowed: [derived]
+  index: int64
+  phase_id: uint8
+
+components:
+  vector_3d: [x, y, z]
+  vector_2d_stored: [x, y, z]       # z = 0 in 2D; readers return native dimension
+  tensor_3d: [xx, yy, zz, yz, xz, xy]
+  tensor_2d: [xx, yy, xy]
+  plane_strain_extra: stress_zz
+  strain_shear: engineering
+
+cell_types:
+  T3:    {vtk: 5,  dim: 2, quadrature_points: [1]}
+  T6:    {vtk: 22, dim: 2, quadrature_points: [3, 6]}
+  Q4:    {vtk: 9,  dim: 2, quadrature_points: [4]}
+  Q8:    {vtk: 23, dim: 2, quadrature_points: [9]}
+  Q9:    {vtk: 28, dim: 2, quadrature_points: [9]}
+  H8:    {vtk: 12, dim: 3, quadrature_points: [8, 1]}
+  TET4:  {vtk: 10, dim: 3, quadrature_points: [1]}
+  TET10: {vtk: 24, dim: 3, quadrature_points: [4, 5]}
+  COH2:  {vtk: null, dim: 2, interface: true}
+  COH4:  {vtk: null, dim: 3, interface: true}
+
+state_fields: [displacement, damage, H, velocity, acceleration, damage_lower_bound, external_force]
+
+history_variables:
+  storage: where_the_solver_keeps_them   # per quadrature point when kept per point
+  per_point_in_vtkhdf: multi_component_cell_array
+  damage_input: {name: H_damage_input, required_when: [lagged, damage_subcycled]}
+
+history_columns:
+  rows: one row per converged increment
+  required: [increment, time, dt, load_parameter, step_index, damage_solved]
+  optional: [load_factor, cutbacks, stagger_iterations, mechanics_iterations, residual]
+  grouped: [reaction, macro_stress, macro_strain, mean_strain, energy]
+  units_required: true
+  reaction: {shape: [n_increments, 3], signed: true, attributes: [components, units, sign_convention]}
+  energy_terms: [external_work, elastic, fracture, kinetic, plastic_work, cohesive_dissipation, total, balance_residual, balance_relative]
+  energy_attribute: method
+
+categorical_encoding: {dtype: int8, attribute: codes, attribute_format: json_object_code_to_name}
+
+sidecars: [history.csv, energy.csv, results.csv, solver_telemetry.csv, damage_solver_telemetry.csv, timing_per_step.csv,
+           crack_tip.csv, progress.json, run_manifest.json, run_metadata.json, run_lockfile.json, visual_manifest.json]
+
+validator:
+  severities: [ERROR, WARN, INFO]
+  versioning: minor versions only add optional items; readers accept any minor version of their major
+  # time-indexed arrays may hold rows beyond the NSteps stored steps (an interrupted append);
+  # they must not hold fewer than offset[NSteps-1] + N (or + E; ImageData: + 1 along time)
+  array_length: at_least_offsets
+  # history/ columns: floating columns float64; integer dtype allowed only for these counters,
+  # indices and flags, and for categorical columns carrying a codes attribute
+  integer_history_columns: [increment, step_index, damage_solved, cutbacks, stagger_iterations, mechanics_iterations]
+  phase_id_dtypes: [uint8, int8]
+  # string attributes or datasets whose names end with these suffixes are file references and must not be absolute
+  reference_attribute_suffixes: [path, manifest, file]
+  status_running: error unless the caller states the file is on scratch (allow_running, --running-ok)
+

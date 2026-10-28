@@ -785,6 +785,28 @@ def _validate_file_context(raw: dict, line_map: dict, yaml_path: str,
     _validate_external_mesh_node_sets(raw, line_map, existing, errors)
 
 
+def _validate_result_settings(raw: dict, line_map: dict,
+                              errors: List[ValidationError]) -> None:
+    """Reject an invalid ``output.result`` before any mesh is generated."""
+    output = raw.get('output')
+    if not isinstance(output, dict) or 'result' not in output:
+        return
+    from .result_output import resolve_result_settings
+
+    solver = raw.get('solver')
+    solver_type = (solver.get('solver_type', 'explicit')
+                   if isinstance(solver, dict) else 'explicit')
+    try:
+        resolve_result_settings(
+            output['result'], explicit=solver_type == 'explicit', h5_every=1)
+    except ValueError as exc:
+        errors.append(ValidationError(
+            path='output',
+            message=str(exc),
+            line_no=line_map.get('output.result', line_map.get('output', 0)),
+        ))
+
+
 def _validate_cross_field_compatibility(raw: dict, line_map: dict,
                                         errors: List[ValidationError]) -> None:
     """Reject known unsupported combinations across YAML sections."""
@@ -1249,6 +1271,7 @@ def validate_config(raw: dict, line_map: Optional[dict] = None
     # mutually exclusive fields
     _validate_mutex(raw, line_map, errors)
     _validate_cross_field_compatibility(raw, line_map, errors)
+    _validate_result_settings(raw, line_map, errors)
 
     return errors
 

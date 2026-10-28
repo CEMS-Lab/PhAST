@@ -2540,6 +2540,7 @@ class PhaseFieldDamageSolver:
         -------
         d_new : (N,) updated damage field on same device/dtype as d_prev.
         """
+        self.n_solves = getattr(self, 'n_solves', 0) + 1   # solves so far, read by the result file
         self._cg_initial_guess = initial_guess
         try:
             Gc_needs_grad = self._tensor_needs_grad(Gc)
