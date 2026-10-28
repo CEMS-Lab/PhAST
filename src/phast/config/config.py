@@ -269,14 +269,18 @@ class LoadingConfig:
     cyclic_phases: str = ''
 
 
-def compute_load_factor(step: int, dt: float, loading: LoadingConfig) -> float:
+def compute_load_factor(step: int, dt: float, loading: LoadingConfig,
+                        t: Optional[float] = None) -> float:
     """Compute the BC load_factor for a given time step.
 
     For explicit dynamics, this scales all prescribed displacement BCs.
     For constant Neumann (traction) problems, use ramp_type='constant'.
+    ``t`` is the physical time at the start of the step; when omitted it is
+    ``step * dt``, which is exact only for a constant time step.
     """
     import math
-    t = step * dt
+    if t is None:
+        t = step * dt
     rt = loading.ramp_type
 
     if rt == 'constant':
