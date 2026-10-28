@@ -100,3 +100,12 @@ def test_square_plate_preserves_compatibility_and_stress_meaning(notebooks):
     assert '"Von Mises stress [MPa]"' not in code
     assert "damage_frames" in code
     assert 'cmap="magma"' not in code
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_notebooks_read_the_result_file_by_stored_step(notebooks, name):
+    """The runner writes ``result.vtkhdf`` by default, so fields are addressed by stored step."""
+    code = "\n".join(sources(notebooks[name], "code"))
+    assert "h5py" not in code and "simulation_data" not in code
+    assert "result.steps()" in code and "history_columns()" in code
+    assert '"result.vtkhdf"' in code
