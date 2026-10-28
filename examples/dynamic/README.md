@@ -63,6 +63,7 @@ visual_manifest.json
 history.csv
 energy.csv
 crack_tip.csv
+result.vtkhdf
 damage_final.png
 damage_evolution.gif
 ```

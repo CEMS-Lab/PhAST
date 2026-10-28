@@ -111,7 +111,7 @@ into the public schema; their adapters and evidence must exist first.
 
 | Capability | Status | Public Statement |
 |---|---|---|
-| Result file `result.vtkhdf` | Beta | Written by the YAML runner for two-dimensional T3 and Q4 runs (layout 2.x) when `output.result` is set (off by default), opens in ParaView, and is checked by `python -m phast result validate`. The per-solve table of layout 2.1 and refinement of the mesh during a run are not written by the runner. See [Result files](result_file.md). |
+| Result file `result.vtkhdf` | Beta | Written by the YAML runner for two-dimensional T3 and Q4 runs (layout 2.x) by default (`output.result: false` turns it off), opens in ParaView, and is checked by `python -m phast result validate`. The per-solve table of layout 2.1 and refinement of the mesh during a run are not written by the runner. See [Result files](result_file.md). |
 | HDF5 snapshots | Supported | Default single-file format for new trajectory workflows. |
 | Zarr trajectory stores | Supported | Explicit opt-in for directory-based trajectory storage; existing stores remain readable. |
 | VTU / PyVista-style visualization | Beta | Available via declarative output settings; format fidelity relies on optional visualization dependencies. |

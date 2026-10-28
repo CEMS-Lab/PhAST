@@ -387,6 +387,10 @@ problem.outputs(
 )
 ```
 
+The runner also writes the result file `result.vtkhdf` for two-dimensional
+phase-field runs (see [Result files](result_file.md)); `phast.load_result` reads
+it in preference to a trajectory store in the same directory.
+
 A promoted example result directory should include the declarative configuration, lockfile,
 metadata, history CSVs, standard figures, and a visual manifest. See
 [Example result contract](example_contract.md) for output conventions.

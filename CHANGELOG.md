@@ -10,11 +10,17 @@
 - Add the writer, the validator, the recovery and archive commands
   (`python -m phast result`), the standard figures (`python -m phast figures`)
   and the layout specification and guide under `docs/user_guide/`.
-- The YAML runner writes the file for two-dimensional T3 and Q4 runs when
-  `output.result` is `true` or a mapping (off by default). `phast.load_result`
-  reads the file and the existing run directories. A run directory that holds both
-  `result.vtkhdf` and `training_data.h5` is read from the result file, where `step`
-  counts stored steps.
+- The YAML runner writes the file for two-dimensional T3 and Q4 runs by default
+  (`output.result: true`); `output.result: false` writes no file and a mapping
+  sets the options. `phast.load_result` reads the file and the existing run
+  directories. A run directory that holds both `result.vtkhdf` and
+  `training_data.h5` is read from the result file, where `step` counts stored
+  steps and the field names are those of the file. The CSV files and the
+  trajectory store are written as before.
+- The tutorial notebooks `notebook_setup`, `problem_setup_walkthrough` and
+  `notebook_square_plate_fracture` read the result file through
+  `phast.load_result` with stored-step indices, and take the mesh from
+  `mesh_arrays()`, instead of step labels from `training_data.h5`.
 - Layout 2.1 adds crack tips and crack speed, initial conditions, wave speeds,
   velocity conditions, validation records and meshes that change during a run.
 - `ResultWriter.resume` continues an interrupted file from a checkpoint increment

@@ -253,8 +253,8 @@ by 48 by 48 voxel cell with H at 8 points stores 10.8 MB and 10.6 MB.
 The 2D YAML runner (`phast run`, implemented in
 `src/phast/config/result_output.py`) uses the settings as follows.
 
-- `output.result` is `false` by default. `true` writes `<output_dir>/result.vtkhdf`
-  with the defaults above, and a mapping overrides the keys above. Unknown keys, and `fields` lists that omit `displacement`, `damage`,
+- `output.result` is `true` by default and writes `<output_dir>/result.vtkhdf`
+  with the defaults above. A mapping overrides the keys above, and `false` writes no file. Unknown keys, and `fields` lists that omit `displacement`, `damage`,
   `H` (and, for explicit dynamics, `velocity` and `acceleration`), are
   refused.
 - `every`: the quasi-static default is 1 and the explicit-dynamics default is
