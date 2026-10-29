@@ -1,7 +1,7 @@
 # Result files
 
-A two-dimensional phase-field run of the YAML runner writes one `result.vtkhdf`
-when `output.result` is set. The file is HDF5 and a valid VTKHDF file at the same
+A single-material two-dimensional phase-field run of the YAML runner writes one
+`result.vtkhdf` by default (the multi-material route does not write it). The file is HDF5 and a valid VTKHDF file at the same
 time. ParaView 5.13 or later opens it directly,
 and `phast.load_result` reads it on macOS, Linux and Windows with h5py and
 NumPy only. The layout is specified in [Result file layout](result_file_layout.md).
@@ -12,20 +12,22 @@ its CSV files and, where configured, the trajectory store (`training_data.h5`),
 so that existing scripts keep working. Older run directories load through the
 same reader.
 
-The runner writes no result file unless `output.result` is `true` or a mapping.
-A run directory that holds both `result.vtkhdf` and `training_data.h5` is read
-from the result file, so `step` in `field()` then counts stored steps and the
-field names are those of the result file (section "Reading"). Switch the file on
-for new work, and keep existing scripts that read step labels of the trajectory
-store on a run directory without it.
+The runner writes the result file unless `output.result` is `false`. A run
+directory that holds both `result.vtkhdf` and `training_data.h5` is read from the
+result file, so `step` in `field()` counts stored steps and the field names are
+those of the result file (section "Reading"). A script that reads step labels or
+field names of the trajectory store (`step_0020`, `H_nodal`, `eps_xx`) from
+such a directory changes to the stored-step convention, or reads the store
+directly with h5py. Setting `output.result: false` restores the former output
+set, which holds no result file.
 
 ## Writing
 
 ### The YAML runner
 
-`python -m phast run <config.yaml>` writes `<output_dir>/result.vtkhdf` when the
-configuration sets `output.result: true` or a mapping of the settings below, which
-are all optional:
+`python -m phast run <config.yaml>` writes `<output_dir>/result.vtkhdf` with the
+defaults of the solver type. The configuration can set `output.result` to a
+mapping of the settings below, which are all optional:
 
 ```yaml
 output:
@@ -39,7 +41,8 @@ output:
     crack_tips: false            # true or {threshold: 0.5, direction: x}; implies layout 2.1
 ```
 
-`output.result: false`, the default, writes no file. The defaults of the settings
+`output.result: true`, or leaving the key out, uses the defaults and
+`output.result: false` writes no file. The defaults of the settings
 depend on the solver type: a quasi-static run stores every increment, and an explicit run stores
 every `output.h5_every` increments and also stores velocity and acceleration.
 When the estimated size of the stored state exceeds `size_limit_gb`, the runner
@@ -94,7 +97,10 @@ increment, closes with `status = time_limited` and exits with code 11
 (`TIME_LIMIT_EXIT_CODE`).
 
 The writer creates `result.vtkhdf.partial` and writes it on local disk, not in a
-synchronised folder. After the file closes, the writer validates it, renames it
+synchronised folder. A run whose output
+directory lies under a synchronised folder (a path component `CloudStorage`,
+`OneDrive`, `Dropbox`, `Mobile Documents` or `Google Drive`) issues a warning and
+still writes the file; keep run directories on local disk and copy them afterwards. After the file closes, the writer validates it, renames it
 to `result.vtkhdf` and writes `result.vtkhdf.sha256`. A `.partial` file that
 remains belongs to a run that was killed. It still opens with all its complete
 steps.

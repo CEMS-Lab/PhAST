@@ -455,11 +455,11 @@ class OutputConfig:
     reaction_node_set: Optional[str] = None
     reaction_component: int = 1
     # Result file ``result.vtkhdf`` (docs/user_guide/result_file_layout.md,
-    # section 3). ``false`` (default) writes no result file, ``true`` writes it
-    # with the defaults of the simulation type, and a mapping with the keys
-    # every, fields, derived_location, derived_every, size_limit_gb, layout and
-    # crack_tips overrides the defaults.
-    result: Any = False
+    # section 3). ``true`` (default) writes it with the defaults of the
+    # simulation type, ``false`` writes no result file, and a mapping with the
+    # keys every, fields, derived_location, derived_every, size_limit_gb, layout
+    # and crack_tips overrides the defaults.
+    result: Any = True
 
 
 @dataclass

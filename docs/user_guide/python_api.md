@@ -281,6 +281,14 @@ if result.has_field("damage"):
 artifacts, mesh metadata, and stored trajectory fields. It does not silently
 derive missing fields.
 
+The YAML runner, which also executes a single-material two-dimensional
+phase-field problem authored with `phast.Problem`, writes the result file
+`result.vtkhdf` by default (the multi-material route, with `regions` and
+`assignments`, does not write it). `load_result` then reads that file, and `step` counts stored steps
+(0, 1, 2, ..., with -1 the last), not the labels of a trajectory store. See
+[Result files](result_file.md). `outputs(..., trajectory=True)` still writes the
+trajectory store beside it.
+
 ## Capability Boundaries
 
 The fluent API is the recommended Python authoring surface, but execution is

@@ -53,9 +53,9 @@ controls, and requested outputs in one reviewable file.
   with PyTorch autograd where documented, enabling carefully interpreted
   sensitivity studies.
 - **Phase-Field Fracture Focus:** Dynamic impact, crack branching, and quasi-static fracture workflows share a consistent mechanics/damage formulation and output schema.
-- **Documented Examples:** Examples provide `config.yaml`, setup figures, final field plots, response histories, manifests, and compact animations. Numerical fields can be reloaded when the result directory contains a trajectory store.
+- **Documented Examples:** Examples provide `config.yaml`, setup figures, final field plots, response histories, manifests, and compact animations. Numerical fields can be reloaded when the result directory contains a result file (`result.vtkhdf`, written by default by the YAML runner) or a trajectory store.
 - **YAML Plus Fluent API:** Use declarative YAML for reproducible runs and `phast.Problem` for programmatic model authoring.
-- **Standardised Post-Processing:** `phast.load_result` reads stored manifests, CSV histories, visualisations, and available trajectory fields.
+- **Standardised Post-Processing:** `phast.load_result` reads stored manifests, CSV histories, visualisations, and available stored fields from the result file or a trajectory store.
 - **Single-File Trajectories:** When enabled, trajectory output defaults to HDF5 (`training_data.h5`). Zarr remains available by explicit selection.
 
 ## How The Solver Works
