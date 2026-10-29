@@ -2,7 +2,14 @@
 J-integral and stress intensity factor (SIF) computation for phase-field fracture.
 
 Implements the equivalent domain integral (EDI) method on unstructured
-triangular meshes with mode decomposition via the interaction integral.
+triangular meshes with mode decomposition via the interaction integral
+(Yau, Wang and Corten, J. Appl. Mech. 47 (1980) 335-341,
+doi:10.1115/1.3153665).
+
+Both integrals leave out the cells whose mean damage reaches
+``d_process_threshold`` (default 0.9). A smaller cutoff also removes the
+damage halo that a regularised crack face carries inside the weight
+function, and J then depends on the domain radius.
 
 Usage::
 
@@ -210,7 +217,7 @@ def compute_j_integral(
     alpha: Optional[float] = None,
     r_inner_factor: float = 5.0,
     r_outer_factor: float = 10.0,
-    d_process_threshold: float = 0.01,
+    d_process_threshold: float = 0.9,
 ) -> float:
     """Compute J-integral using the equivalent domain integral method.
 
@@ -224,7 +231,14 @@ def compute_j_integral(
     tip : (2,) crack tip coordinates, or None to auto-detect
     alpha : crack tangent angle [rad], or None to auto-detect
     r_inner_factor, r_outer_factor : q-function radii as multiples of l0
-    d_process_threshold : elements with d_avg > this are excluded
+    d_process_threshold : cells whose mean damage is at least this value are
+        left out of the integral (default 0.9). A cell with d = 0.9 keeps
+        (1 - d)^2 = 1 % of its stiffness, so the cells above the cutoff carry
+        no load; a much smaller value (the former default was 0.01) also
+        removes the damage halo of a regularised crack face, which is 4 to 5
+        l0 wide and lies inside the weight ramp, and J then changes with the
+        domain radius. Pass a small value only to restrict the integral to
+        undamaged material.
 
     Returns
     -------
@@ -284,11 +298,76 @@ def compute_j_integral(
         - W * dq_dx1
     )
 
-    # Mask: exclude process zone
+    # Mask: exclude the cells that carry no stiffness (d_avg >= threshold)
     mask = d_avg < d_process_threshold
     J = (integrand * areas * mask.float()).sum().item()
 
     return J
+
+
+def _williams_unit_fields(r: torch.Tensor, theta: torch.Tensor, mu: float,
+                          kappa: float, mode: str):
+    """Williams auxiliary field of unit stress intensity factor, crack frame.
+
+    The crack tip is the origin, the crack lies on theta = +-pi, ``r`` and
+    ``theta`` are the polar coordinates of the evaluation points (``theta``
+    in (-pi, pi]). ``mode`` is ``'I'`` or ``'II'``; ``kappa`` is the Kolosov
+    constant, ``3 - 4 nu`` in plane strain and ``(3 - nu)/(1 + nu)`` in plane
+    stress (not the bulk modulus ``Material.kappa``).
+
+    Returns ``(stress, grad_u)``: ``stress = (sxx, syy, sxy)`` and
+    ``grad_u = (dux_dx, dux_dy, duy_dx, duy_dy)``, all in the crack frame and
+    for K = 1 [MPa mm^0.5], so they scale with 1/sqrt(r).
+
+    The stresses are those of Williams, J. Appl. Mech. 24 (1957) 109-114,
+    doi:10.1115/1.4011454. The displacement is
+    ``u_i = K/(2 mu) sqrt(r/(2 pi)) f_i(theta)`` with::
+
+        mode I   f_x =  cos(t/2) (kappa - 1 + 2 sin^2(t/2))
+                 f_y =  sin(t/2) (kappa + 1 - 2 cos^2(t/2))
+        mode II  f_x =  sin(t/2) (kappa + 1 + 2 cos^2(t/2))
+                 f_y = -cos(t/2) (kappa - 1 - 2 sin^2(t/2))
+
+    and its gradient follows from ``u = A sqrt(r) f(theta)``::
+
+        du/dx = A r^(-1/2) (cos(t) f/2 - sin(t) f')
+        du/dy = A r^(-1/2) (sin(t) f/2 + cos(t) f'),   A = 1/(2 mu sqrt(2 pi)).
+
+    The auxiliary strain is the symmetric part of ``grad_u``, so it is
+    compatible with the displacement by construction; ``sxx, syy, sxy`` are
+    the textbook Williams stresses, which satisfy Hooke's law for the plane
+    law that ``kappa`` belongs to (checked in ``tests/test_fracture_sif.py``).
+    """
+    inv_sqrt_2pir = 1.0 / torch.sqrt(2.0 * math.pi * r)
+    h = 0.5 * theta
+    c, sn = torch.cos(h), torch.sin(h)
+    c3, s3 = torch.cos(1.5 * theta), torch.sin(1.5 * theta)
+    if mode == 'I':
+        sxx = inv_sqrt_2pir * c * (1.0 - sn * s3)
+        syy = inv_sqrt_2pir * c * (1.0 + sn * s3)
+        sxy = inv_sqrt_2pir * c * sn * c3
+        fx = c * (kappa - 1.0 + 2.0 * sn ** 2)
+        fy = sn * (kappa + 1.0 - 2.0 * c ** 2)
+        dfx = 0.5 * sn * (-(kappa - 1.0) - 2.0 * sn ** 2 + 4.0 * c ** 2)
+        dfy = 0.5 * c * (kappa + 1.0 - 2.0 * c ** 2 + 4.0 * sn ** 2)
+    elif mode == 'II':
+        sxx = -inv_sqrt_2pir * sn * (2.0 + c * c3)
+        syy = inv_sqrt_2pir * sn * c * c3
+        sxy = inv_sqrt_2pir * c * (1.0 - sn * s3)
+        fx = sn * (kappa + 1.0 + 2.0 * c ** 2)
+        fy = -c * (kappa - 1.0 - 2.0 * sn ** 2)
+        dfx = 0.5 * c * (kappa + 1.0 + 2.0 * c ** 2 - 4.0 * sn ** 2)
+        dfy = 0.5 * sn * (kappa - 1.0 - 2.0 * sn ** 2 + 4.0 * c ** 2)
+    else:
+        raise ValueError(f"mode must be 'I' or 'II', got {mode!r}")
+
+    a = inv_sqrt_2pir / (2.0 * mu)           # = A / sqrt(r)
+    ct, st = torch.cos(theta), torch.sin(theta)
+    dux_dx = a * (0.5 * ct * fx - st * dfx)
+    dux_dy = a * (0.5 * st * fx + ct * dfx)
+    duy_dx = a * (0.5 * ct * fy - st * dfy)
+    duy_dy = a * (0.5 * st * fy + ct * dfy)
+    return (sxx, syy, sxy), (dux_dx, dux_dy, duy_dx, duy_dy)
 
 
 def compute_sif(
@@ -298,10 +377,34 @@ def compute_sif(
     alpha: Optional[float] = None,
     r_inner_factor: float = 5.0,
     r_outer_factor: float = 10.0,
+    d_process_threshold: float = 0.9,
 ) -> Tuple[float, float, float]:
-    """Compute stress intensity factors K_I, K_II via interaction integral.
+    """Compute stress intensity factors K_I, K_II via the interaction integral.
 
-    Uses Williams auxiliary fields for mode decomposition.
+    The interaction integral of the actual state with the Williams field of
+    unit K_I (resp. unit K_II) is::
+
+        M = int [ sigma_ij u^a_i,1 + sigma^a_ij u_i,1 - sigma_ij eps^a_ij delta_1j ] q_,j dA,
+        K = E'/2 M,      E' = E (plane stress), E/(1 - nu^2) (plane strain),
+
+    where ``1`` is the crack direction ``alpha`` and ``q`` is the weight
+    function of ``compute_j_integral``. The auxiliary stress and displacement
+    gradient are built in the crack frame and rotated to the global axes, so
+    ``alpha != 0`` is supported. Signs: K_I > 0 opens the crack (sigma_yy > 0
+    ahead of the tip), K_II > 0 for sigma_xy > 0 ahead of the tip, both in the
+    crack frame (x along ``alpha``, y 90 degrees counter-clockwise from it).
+
+    ``find_crack_tip`` returns a tangent angle in [-pi/2, pi/2] without an
+    orientation. For a crack that runs towards -x (or any direction that is
+    not within 90 degrees of +x), pass ``alpha`` along the direction the crack
+    points from its mouth to the tip, otherwise the crack frame is reversed and
+    both K change sign or mix.
+
+    Parameters
+    ----------
+    tip, alpha, r_inner_factor, r_outer_factor : as in ``compute_j_integral``
+    d_process_threshold : cells whose mean damage is at least this value are
+        left out of both integrals (default 0.9, see ``compute_j_integral``).
 
     Returns (K_I, K_II, J) in consistent units [MPa*sqrt(mm), MPa*sqrt(mm), N/mm].
     """
@@ -315,17 +418,16 @@ def compute_sif(
     J = compute_j_integral(mesh, u, d, material, fem_ops,
                            tip=tip, alpha=alpha,
                            r_inner_factor=r_inner_factor,
-                           r_outer_factor=r_outer_factor)
+                           r_outer_factor=r_outer_factor,
+                           d_process_threshold=d_process_threshold)
 
-    E = material.E
     nu = material.nu
     if material.plane_stress:
-        E_prime = E
+        E_prime = material.E
         kappa = (3.0 - nu) / (1.0 + nu)
     else:
-        E_prime = E / (1.0 - nu**2)
+        E_prime = material.E / (1.0 - nu ** 2)
         kappa = 3.0 - 4.0 * nu
-
     mu = material.mu
 
     q = _build_q_function(mesh, tip, material.l0, r_inner_factor, r_outer_factor)
@@ -339,7 +441,7 @@ def compute_sif(
     c, s = math.cos(alpha), math.sin(alpha)
     dq_dx1 = dq_dx * c + dq_dy * s
 
-    # Actual stress and displacement gradient
+    # Actual stress and displacement gradient (global axes)
     strain = fem_ops.compute_strain(u)
     sxx, syy, sxy = fem_ops.compute_stress(u, d, strain=strain)
     u_e = u[elems]
@@ -350,55 +452,44 @@ def compute_sif(
     du_x_dx1 = du_x_dx * c + du_x_dy * s
     du_y_dx1 = du_y_dx * c + du_y_dy * s
 
-    # Element centroids in local crack coordinates
+    # Element centroids in the crack frame
     centroids = mesh.nodes[elems].mean(dim=1)  # (E, 2)
     dx = centroids[:, 0] - tip[0]
     dy = centroids[:, 1] - tip[1]
     x_loc = dx * c + dy * s
     y_loc = -dx * s + dy * c
-    r = torch.sqrt(x_loc**2 + y_loc**2 + 1e-30)
+    r = torch.sqrt(x_loc ** 2 + y_loc ** 2 + 1e-30)
     theta = torch.atan2(y_loc, x_loc)
 
     d_avg = d[elems].mean(dim=1)
-    mask = (d_avg < 0.01).float()
+    mask = (d_avg < d_process_threshold).to(r.dtype)
 
-    inv_sqrt_2pir = 1.0 / torch.sqrt(2.0 * math.pi * r)
-    ct2 = torch.cos(theta / 2)
-    st2 = torch.sin(theta / 2)
-    c3t2 = torch.cos(1.5 * theta)
-    s3t2 = torch.sin(1.5 * theta)
+    # R maps crack-frame components to global ones: v_g = R v_l
+    R = torch.stack([torch.stack([torch.full_like(r, c), torch.full_like(r, -s)], -1),
+                     torch.stack([torch.full_like(r, s), torch.full_like(r, c)], -1)], -2)   # (E, 2, 2)
+    Rt = R.transpose(-1, -2)
 
     K_values = []
     for mode in ('I', 'II'):
-        if mode == 'I':
-            # Williams Mode I auxiliary stress (K_I^aux = 1)
-            s_xx_a = inv_sqrt_2pir * ct2 * (1 - st2 * s3t2)
-            s_yy_a = inv_sqrt_2pir * ct2 * (1 + st2 * s3t2)
-            s_xy_a = inv_sqrt_2pir * ct2 * st2 * c3t2
-            # Auxiliary strain (Hooke's law inverse)
-            e_xx_a = (s_xx_a - nu * s_yy_a) / E
-            e_yy_a = (s_yy_a - nu * s_xx_a) / E
-            g_xy_a = s_xy_a / mu
-            # Auxiliary du/dx_1 (symmetric + rotation for mode I)
-            omega_xy = -0.5 * inv_sqrt_2pir * st2
-            du_x_dx1_a = e_xx_a * c - (0.5 * g_xy_a - omega_xy) * s
-            du_y_dx1_a = (0.5 * g_xy_a + omega_xy) * c + e_yy_a * s
-        else:
-            # Williams Mode II auxiliary stress (K_II^aux = 1)
-            s_xx_a = -inv_sqrt_2pir * st2 * (2 + ct2 * c3t2)
-            s_yy_a = inv_sqrt_2pir * st2 * ct2 * c3t2
-            s_xy_a = inv_sqrt_2pir * ct2 * (1 - st2 * s3t2)
-            e_xx_a = (s_xx_a - nu * s_yy_a) / E
-            e_yy_a = (s_yy_a - nu * s_xx_a) / E
-            g_xy_a = s_xy_a / mu
-            omega_xy = -0.5 * inv_sqrt_2pir * ct2
-            du_x_dx1_a = e_xx_a * c - (0.5 * g_xy_a - omega_xy) * s
-            du_y_dx1_a = (0.5 * g_xy_a + omega_xy) * c + e_yy_a * s
+        (s_xx_l, s_yy_l, s_xy_l), (gxx, gxy, gyx, gyy) = _williams_unit_fields(
+            r, theta, mu, kappa, mode)
+        sig_l = torch.stack([torch.stack([s_xx_l, s_xy_l], -1),
+                             torch.stack([s_xy_l, s_yy_l], -1)], -2)
+        grad_l = torch.stack([torch.stack([gxx, gxy], -1),
+                              torch.stack([gyx, gyy], -1)], -2)
+        sig_a = R @ sig_l @ Rt          # auxiliary stress, global axes
+        grad_a = R @ grad_l @ Rt        # auxiliary du_i/dx_j, global axes
+        s_xx_a, s_yy_a, s_xy_a = sig_a[:, 0, 0], sig_a[:, 1, 1], sig_a[:, 0, 1]
+        # derivative of the auxiliary displacement along the crack direction
+        du_x_dx1_a = grad_a[:, 0, 0] * c + grad_a[:, 0, 1] * s
+        du_y_dx1_a = grad_a[:, 1, 0] * c + grad_a[:, 1, 1] * s
+        # auxiliary strain (symmetric part of grad u^a): eps_xx, eps_yy, tensor eps_xy
+        e_xx_a, e_yy_a = grad_a[:, 0, 0], grad_a[:, 1, 1]
+        e_xy_a = 0.5 * (grad_a[:, 0, 1] + grad_a[:, 1, 0])
 
-        # Interaction energy: W_int = sigma_ij * eps_ij^aux
-        W_int = sxx * e_xx_a + syy * e_yy_a + sxy * g_xy_a
+        # Interaction energy: W_int = sigma_ij eps^a_ij
+        W_int = sxx * e_xx_a + syy * e_yy_a + 2.0 * sxy * e_xy_a
 
-        # Interaction integral
         M_integrand = (
             (sxx * du_x_dx1_a + sxy * du_y_dx1_a) * dq_dx
             + (sxy * du_x_dx1_a + syy * du_y_dx1_a) * dq_dy
@@ -408,8 +499,7 @@ def compute_sif(
         )
 
         M = (M_integrand * areas * mask).sum().item()
-        K = E_prime / 2.0 * M
-        K_values.append(K)
+        K_values.append(0.5 * E_prime * M)
 
     K_I, K_II = K_values
     return K_I, K_II, J

@@ -2,6 +2,37 @@
 
 ## Unreleased
 
+### Fracture mechanics
+
+- Fix: `compute_sif` returned stress intensity factors that were wrong by a fixed
+  factor of the elastic modulus: `K_I` was 3/32 E' times too large and `K_II`
+  1/32 E' times too large (E' is the plane modulus). The rotation term of the
+  auxiliary Williams field had the units of a stress and was added to strains.
+  The auxiliary displacement gradient is now the closed-form derivative of the
+  Williams displacement, the auxiliary fields are rotated into the crack frame
+  (so a crack at an angle to the x axis works), and the plane-strain compliance
+  is used in plane strain. On a slit mesh under a Williams field, `K_I` and
+  `K_II` now reproduce the applied value to 0.02 % or better for domains of 2 to
+  8 regularisation lengths, in plane strain and plane stress, in modes I and II
+  and in mixed mode; a mesh rotated by 30, -40, 90 and 160 degrees gives the same
+  values to 1e-8.
+- Change: the default `d_process_threshold` of `compute_j_integral` and
+  `compute_sif` is now 0.9 (it was 0.01, fixed inside `compute_sif`). A cell with
+  a mean damage of 0.9 keeps 1 % of its stiffness, so the cells above the cutoff
+  carry no load; the former value also removed the damage halo of a regularised
+  crack face, which lies inside the weight ramp, and J then depended on the domain
+  radius (9.6 % between the smallest and the largest domain on a notched strip,
+  0.05 % with the new default). `compute_sif` takes the cutoff as the argument
+  `d_process_threshold`.
+- Who is affected: callers of `compute_sif`, whose results change by the factors
+  above, and callers of `compute_j_integral` on a field with damage between 0.01
+  and 0.9 that rely on the default cutoff; pass `d_process_threshold=0.01` to
+  restore the former behaviour of `compute_j_integral`. The runner does not call
+  either function.
+- For a crack that runs towards -x, pass `alpha` (the direction from the crack
+  mouth to the tip): `find_crack_tip` returns an angle in [-90, 90] degrees
+  without an orientation.
+
 ### Adaptive time stepping
 
 - Change: with `solver.adaptive_dt: true`, the YAML runner (explicit dynamics) now
