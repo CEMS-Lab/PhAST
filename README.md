@@ -26,6 +26,7 @@
   <img alt="License" src="https://img.shields.io/github/license/CEMS-Lab/PhAST">
   <img alt="Docs" src="https://img.shields.io/badge/docs-GitHub%20Pages-f97316">
   <img alt="Package" src="https://img.shields.io/badge/package-pyproject.toml-0f766e">
+  <img alt="Approximate repository page views" src="https://hits.sh/github.com/CEMS-Lab/PhAST.svg?label=repository%20views&amp;color=2b6b85">
 </p>
 
 ---
