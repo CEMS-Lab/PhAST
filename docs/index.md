@@ -2,6 +2,8 @@
 
 **Phase-field Autograd Solver in Torch**
 
+[![GitHub stars](https://img.shields.io/github/stars/CEMS-Lab/PhAST?style=social)](https://github.com/CEMS-Lab/PhAST) ![Approximate documentation views](https://hits.sh/cems-lab.github.io/PhAST.svg?label=documentation%20views&color=2b6b85)
+
 <img class="phast-hero-brand" src="phast-banner.png" alt="PhAST logo">
 
 <div class="phast-hero-panel">
