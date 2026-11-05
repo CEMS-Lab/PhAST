@@ -20,9 +20,9 @@ from phast.workflow.specs import BoundaryConditionSpec, InitialConditionSpec, Me
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = ROOT / "examples/solid_mechanics_beta/linear_plate/config.yaml"
+CONFIG = ROOT / "examples/solid_mechanics/linear_plate/config.yaml"
 EXAMPLE_SETUP = run_path(
-    str(ROOT / "examples/solid_mechanics_beta/linear_plate/fluent_setup.py"),
+    str(ROOT / "examples/solid_mechanics/linear_plate/fluent_setup.py"),
     run_name="phast_linear_plate_setup_test",
 )
 

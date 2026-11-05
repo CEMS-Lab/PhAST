@@ -13,7 +13,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-from .writer import LIBVER, sha256_file
+from phast.io.result.writer import LIBVER, sha256_file
 
 ARCHIVE_FILTERS = dict(compression="gzip", compression_opts=4, shuffle=True, fletcher32=True)
 

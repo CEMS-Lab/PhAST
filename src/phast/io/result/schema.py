@@ -11,7 +11,7 @@ from typing import Any
 
 import yaml
 
-SCHEMA_NAME = "phast.result"
+SCHEMA_NAME = "phast.api.result"
 SCHEMA_VERSION = "2.0.0"          # what the writer writes unless a 2.1 feature is used
 SCHEMA_VERSION_21 = "2.1.0"       # written when a file uses an item added in layout 2.1
 KNOWN_VERSIONS = (SCHEMA_VERSION, SCHEMA_VERSION_21)

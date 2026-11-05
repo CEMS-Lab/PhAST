@@ -17,7 +17,7 @@ import pytest
 import yaml
 
 from phast import Problem
-from phast.config.config import load_config
+from phast.io.config.config import load_config
 from phast.workflow import (
     execution_plan_from_spec, problem_spec_from_yaml, problem_spec_to_schema_v2_dict,
     run_problem_spec, validate_problem_spec,
@@ -56,7 +56,7 @@ def _cli(path: Path, *args: str) -> subprocess.CompletedProcess[str]:
     "config.yaml", "comparisons/tough_region.yaml", "comparisons/uniform_layer.yaml",
 ])
 def test_dcb_cli_validation_does_not_solve(relative_path: str, tmp_path: Path) -> None:
-    raw = yaml.safe_load((ROOT / "examples" / "two_material_dcb_beta" / relative_path).read_text())
+    raw = yaml.safe_load((ROOT / "examples" / "two_material_dcb" / relative_path).read_text())
     target = tmp_path / "must_not_exist"
     raw["outputs"]["directory"] = str(target)
     result = _cli(_write(tmp_path, raw), "--validate-only")
@@ -66,7 +66,7 @@ def test_dcb_cli_validation_does_not_solve(relative_path: str, tmp_path: Path) -
 
 @pytest.mark.parametrize("case", ["negative_Gc", "empty_seed", "interior_boundary"])
 def test_dcb_invalid_edits_fail_during_cli_validation(case: str, tmp_path: Path) -> None:
-    raw = yaml.safe_load((ROOT / "examples" / "two_material_dcb_beta" / "config.yaml").read_text())
+    raw = yaml.safe_load((ROOT / "examples" / "two_material_dcb" / "config.yaml").read_text())
     target = tmp_path / "must_not_exist"
     raw["outputs"]["directory"] = str(target)
     if case == "negative_Gc":

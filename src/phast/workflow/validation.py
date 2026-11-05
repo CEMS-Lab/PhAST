@@ -4,10 +4,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from .capabilities import validate_problem_spec_capabilities
-from .execution import WorkflowExecutionError, execution_plan_from_spec
-from .regions import validate_problem_spec_regions
-from .specs import ProblemSpec
+from phast.workflow.capabilities import validate_problem_spec_capabilities
+from phast.workflow.execution import WorkflowExecutionError, execution_plan_from_spec
+from phast.workflow.regions import validate_problem_spec_regions
+from phast.workflow.specs import ProblemSpec
 
 
 @dataclass(frozen=True)

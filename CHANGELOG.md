@@ -1,6 +1,27 @@
 # Changelog
 
-## Unreleased
+## 0.18.0 (unreleased)
+
+### Repository layout
+
+- Change: the `phast` package is organised by topic: `api` (Problem, Result), `core`, `solvers`, `physics` (including `plasticity` and `cohesive_elements`),
+  `io` (including `config`), `cli`, `viz`, `workflow` and `solid3d`. The 39 one-line modules at the package root and the `utils` package are gone. Every
+  old import path (`phast.mesh`, `phast.damage_solver`, `phast.config.run_config`, `phast.utils.visualization`, ...) still works and returns the module at its new
+  location, and `python -m phast.precheck` and its siblings still run; the table is in `phast/_compat.py`.
+- Change: example folders lose their `_beta` suffix (`solid_mechanics`, `plasticity_interface`, `two_material_dcb`, `heterogeneous_sent`); maturity is stated in each README
+  and in the capability matrix. `run_sanitizer.py` moved to `tools/`, `requirements-docs.txt` to `docs/requirements.txt` and the two style guides to `docs/maintainer/`.
+  Article-specific scalar drivers and recorded histories are under `reproduction/cmame_2026/`.
+- Fix: the three `examples/solid_mechanics/*/run.py` wrappers imported a module that does not exist; they now call `phast.workflow.runners`.
+- Add: the selected cross-mesh inversion under `examples/inverse/`, with the 0.125 mm original mesh and 0.1875 mm inverse mesh settings.
+- Remove: the diffuse-interphase script, which imported a module that is not part of the release.
+
+### 3D fracture (beta)
+
+- Add: `phast.solid3d`, a matrix-free eight-node hexahedral solver for periodic voxel unit cells with a prescribed macro strain, PF-CZM damage, per-voxel materials and
+  interface laminates, and `result.vtkhdf` output. New element primitives (`phast.core.hex8`), Voigt conversions (`phast.core.voigt`), a box-constrained scalar solver
+  (`phast.solvers.box_kkt_h8`) and the PF-CZM relations (`phast.physics.pfczm`).
+- Add: three examples in `examples/three_dimensional/` (pore, particles with an interface shell, nine-fibre cell) with mesh and boundary-condition figures, damage animations
+  and launchers. The first increments of a new run agree with the stored runs to better than 3e-14 (relative macro stress).
 
 ### Fracture mechanics
 

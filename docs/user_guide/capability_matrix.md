@@ -5,7 +5,7 @@ they have been tested. It distinguishes established use from beta,
 experimental, optional-backend, scaffold, and unsupported features.
 
 For the present scope of plasticity, cohesive-interface, and PF-CZM support,
-see the [plasticity and interface beta workflow](../supported_workflows/plasticity_interface_beta.md).
+see the [plasticity and interface beta workflow](../supported_workflows/plasticity_interface.md).
 
 ## Status Definitions
 
@@ -42,7 +42,8 @@ see the [plasticity and interface beta workflow](../supported_workflows/plastici
 | Coupled brittle PF + cohesive elements | Beta | Staggered AT2 matrix damage can be combined with zero-thickness cohesive-interface delamination. Calibrated structural validation remains incomplete. |
 | PF-CZM | Beta | Wu PF-CZM is available through `pf_model: PFCZM` for nonlinear forward damage solves with tensile-strength-calibrated rational degradation and uniaxial tests. Structural crack-growth validation is incomplete, and PF-plasticity-cohesive coupling is not supported. |
 | Coupled PF + plasticity + cohesive interfaces | Unsupported | This combined formulation is not available through the documented solver interface. |
-| 3D fracture | Unsupported | The documented fracture element pathways are two-dimensional. |
+| 3D fracture on periodic voxel cells | Beta | `phast.solid3d`: eight-node hexahedral voxel meshes, PF-CZM damage, a different material and fracture energy per voxel, periodic boundary conditions with a prescribed macro strain component, float64 on CPU or CUDA, `result.vtkhdf` output. Three runnable examples in `examples/three_dimensional/`; not validated against experiments. |
+| 3D fracture on general geometry | Unsupported | Do not advertise as available: no general 3D meshes, no notched specimens with applied face loads or displacements, no contact, no 3D dynamics. |
 | P2 / Q8 / Q9 element primitives | Scaffold | Shape functions, quadrature, and single-element stiffness tests exist for higher-order families; global solver dispatch is not supported. |
 | Native Q4 isotropic mechanics + AT2 damage | Beta | Structured Q4 mesh helpers, native Q4 mesh input, 2x2-Gauss isotropic mechanics, SciPy/MUMPS sparse-direct stiffness assembly, and matrix-free Q4 AT2 damage are tested. Q4 PF-CZM, AT1, and plasticity are not supported. |
 
@@ -65,7 +66,6 @@ see the [plasticity and interface beta workflow](../supported_workflows/plastici
 | Capability | Status | Public Statement |
 |---|---|---|
 | Differentiable forward sensitivities | Beta | Supported tensor operations can participate in PyTorch autograd, but nonsmooth history, bounds, and active-set switches require case-specific interpretation. |
-| Public inverse-analysis examples | Scaffold | `examples/inverse_problems_beta/` is a README-only landing zone until promoted inverse examples include configs, losses, retained lightweight outputs, and validation notes. |
 | General-purpose inverse-calibration framework | Unsupported | The public release does not provide a turnkey inverse-problem framework for arbitrary observations, priors, or optimizers. |
 
 Selected paper-specific inverse figures have separate
@@ -91,7 +91,7 @@ the complete companion archive is prepared.
 | JSON Schema export / IDE autocomplete | Supported | `python -m phast schema` exports the schema used for editor assistance and external validation. |
 
 New YAML/README/tutorial authors must follow the
-{download}`configuration style guide <../../CONFIGURATION_STYLE.md>` and
+{download}`configuration style guide <../maintainer/CONFIGURATION_STYLE.md>` and
 [standard simulation tutorial](../tutorial/07_standard_simulation_workflow.md).
 Legacy `precheck` is not a universal schema-2 command. Quasi-static analysis
 omits inertia; dynamics includes density and physical time, and explicit
@@ -111,7 +111,7 @@ into the public schema; their adapters and evidence must exist first.
 
 | Capability | Status | Public Statement |
 |---|---|---|
-| Result file `result.vtkhdf` | Beta | Written by the YAML runner for single-material two-dimensional T3 and Q4 runs (layout 2.x) by default (`output.result: false` turns it off), opens in ParaView, and is checked by `python -m phast result validate`. The per-solve table of layout 2.1 and refinement of the mesh during a run are not written by the runner. See [Result files](result_file.md). |
+| Result file `result.vtkhdf` | Beta | Written by the YAML runner for single-material two-dimensional T3 and Q4 runs and by `phast.solid3d` for 3D voxel runs (layout 2.x) by default (`output.result: false` turns it off), opens in ParaView, and is checked by `python -m phast result validate`. The per-solve table of layout 2.1 and refinement of the mesh during a run are not written by the runner. See [Result files](result_file.md). |
 | HDF5 snapshots | Supported | Default single-file format for new trajectory workflows. |
 | Zarr trajectory stores | Supported | Explicit opt-in for directory-based trajectory storage; existing stores remain readable. |
 | VTU / PyVista-style visualization | Beta | Available via declarative output settings; format fidelity relies on optional visualization dependencies. |

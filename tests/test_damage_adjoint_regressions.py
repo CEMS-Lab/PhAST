@@ -123,7 +123,7 @@ def test_previous_damage_receives_gradient_where_irreversibility_is_active():
 
 def _unit_square_mesh(n=8):
     """Structured T3 mesh of the unit square (no mesh generator needed)."""
-    from phast.mesh import FEMMesh
+    from phast.core.mesh import FEMMesh
 
     xs = torch.linspace(0.0, 1.0, n + 1, dtype=torch.float64)
     yy, xx = torch.meshgrid(xs, xs, indexing="ij")
@@ -138,10 +138,10 @@ def _unit_square_mesh(n=8):
 
 
 def test_history_gradient_is_not_detached_with_fixed_material():
-    from phast.device import DeviceContext
-    from phast.fem_operators import FEMOperators
-    from phast.material import Material
-    from phast.damage_solver import PhaseFieldDamageSolver
+    from phast.core.device import DeviceContext
+    from phast.core.fem_operators import FEMOperators
+    from phast.physics.material import Material
+    from phast.solvers.damage_solver import PhaseFieldDamageSolver
 
     mesh = _unit_square_mesh()
     material = Material(E=210000.0, nu=0.3, Gc=2.7, l0=0.1, rho=7.8e-9,

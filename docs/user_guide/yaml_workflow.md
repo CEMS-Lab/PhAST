@@ -30,9 +30,9 @@ Legacy `precheck --config` is not a universal schema-2 replacement.
 For the full DCB reference:
 
 ```bash
-python -m phast explain-config examples/two_material_dcb_beta/config.yaml
-python -m phast run examples/two_material_dcb_beta/config.yaml --validate-only
-python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference
+python -m phast explain-config examples/two_material_dcb/config.yaml
+python -m phast run examples/two_material_dcb/config.yaml --validate-only
+python -m phast run examples/two_material_dcb/config.yaml --output_dir runs/dcb_fine_reference
 ```
 
 Preflight stops before meshing and solving. It does not establish non-empty
@@ -42,7 +42,7 @@ experimental agreement. Use the selected runner's documented scope.
 ## Schema-2 order
 
 New standard-workflow inputs must follow the
-{download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`:
+{download}`configuration authoring rules <../maintainer/CONFIGURATION_STYLE.md>`:
 
 | Order | Key | Contents |
 |---|---|---|
@@ -59,8 +59,8 @@ New standard-workflow inputs must follow the
 | 11 | `solver` | Numerical algorithm, tolerances, iteration limits. |
 | 12 | `outputs` | Directory, fields, histories, visuals. |
 
-Use the {download}`complete DCB input <../../examples/two_material_dcb_beta/config.yaml>`
-or {download}`heterogeneous SENT input <../../examples/heterogeneous_sent_beta/config.yaml>`,
+Use the {download}`complete DCB input <../../examples/two_material_dcb/config.yaml>`
+or {download}`heterogeneous SENT input <../../examples/heterogeneous_sent/config.yaml>`,
 not a mixture of unrelated partial examples. The companion single-material
 inputs under `examples/standard_workflow/` require their documented adapter
 checks before promotion.

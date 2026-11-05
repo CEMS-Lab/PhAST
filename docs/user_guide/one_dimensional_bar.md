@@ -12,7 +12,7 @@ The API is independent of the 2D `FEMMesh` and `Problem` workflow.
 import phast
 import torch
 
-mesh = phast.line_mesh(length=100.0, n_elements=10)
+mesh = phast.core.line_mesh(length=100.0, n_elements=10)
 print(mesh.nodes)             # 11 coordinates
 print(mesh.elements)          # 10 pairs of adjacent node indices
 print(mesh.element_lengths)  # ten lengths of 10 mm
@@ -33,7 +33,7 @@ origin, with integer `n_elements >= 1`.
 ## Material, boundary condition and solve
 
 ```python
-mesh = phast.line_mesh(length=100.0, n_elements=10)
+mesh = phast.core.line_mesh(length=100.0, n_elements=10)
 result = phast.solve_bar(
     mesh,
     young_modulus=210000.0,

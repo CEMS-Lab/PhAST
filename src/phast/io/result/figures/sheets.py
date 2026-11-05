@@ -18,11 +18,11 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 from matplotlib.ticker import FuncFormatter, LogFormatterSciNotation, LogLocator, MaxNLocator
 
-from .data import FieldInfo, RunData, Table, unit_suffix
-from .maps import (auto_deform_scale, draw_interfaces_2d, draw_interfaces_iso, draw_mesh_cells, draw_mesh_values,
+from phast.io.result.figures.data import FieldInfo, RunData, Table, unit_suffix
+from phast.io.result.figures.maps import (auto_deform_scale, draw_interfaces_2d, draw_interfaces_iso, draw_mesh_cells, draw_mesh_values,
                    draw_points_iso, draw_section, draw_surface_colours, draw_surface_iso, iso, iso_axes_labels,
                    iso_draw, iso_geometry, limits, section_planes, voxel_rgba)
-from .style import LINE_COLOURS, SET_COLOURS, clean, content_bottom, figure, phase_colour, save
+from phast.io.result.figures.style import LINE_COLOURS, SET_COLOURS, clean, content_bottom, figure, phase_colour, save
 
 SCALAR_ROLES = {"damage", "scalar", "vector", "perpoint"}
 
@@ -811,7 +811,7 @@ def interface_sheet(run: RunData, step: int, reason: str, norms: dict, path: Pat
                     art, xy = draw_interfaces_iso(ax, run, b, values, cmap, norm)
                     pts.append(xy)
             if run.kind == "mesh3d" and pts:
-                from .maps import _frame_iso
+                from phast.io.result.figures.maps import _frame_iso
                 _frame_iso(ax, np.concatenate(pts + [np.array(ax.dataLim.get_points())]))
             ax.set_title(f"{words}, mean of {n_qp} interface point{'s' if n_qp != 1 else ''}", fontsize=8.8, loc="left")
             if art is not None:

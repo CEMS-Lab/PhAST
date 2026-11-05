@@ -31,7 +31,7 @@ def test_three_dimensional_elements_are_refused():
 
 def test_first_side_is_the_side_the_normal_points_to_on_solver_elements():
     """Elements from ``insert_cohesive_layer``: the first side keeps the original node ids and lies on the normal's side."""
-    from phast.cohesive_elements import insert_cohesive_layer
+    from phast.physics.cohesive_elements import insert_cohesive_layer
     nodes = np.array([[0, 0], [1, 0], [0, .5], [1, .5], [0, 1], [1, 1]], float)
     tris = np.array([[0, 1, 3], [0, 3, 2], [2, 3, 5], [2, 5, 4]])
     new_nodes, new_tris, cohesives = insert_cohesive_layer(nodes, tris, [(2, 3)])

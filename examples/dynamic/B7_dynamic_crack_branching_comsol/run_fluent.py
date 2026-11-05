@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 
 import phast
-from phast.config import (
+from phast.io.config import (
     BoundaryConditionEntry,
     GeometryConfig,
     InitialConditionsConfig,

@@ -40,7 +40,7 @@ information when investigating the issue.
 ## Contributing
 
 - Use `CONTRIBUTING.md` for workflow expectations and code review requirements.
-- Follow `DOCUMENTATION_STYLE.md` for README, documentation, tutorial, and
+- Follow `docs/maintainer/DOCUMENTATION_STYLE.md` for README, documentation, tutorial, and
   notebook prose.
 - Keep new capability claims aligned with
   [capability matrix](user_guide/capability_matrix.md).
@@ -49,6 +49,6 @@ information when investigating the issue.
 ## Standards and references
 
 - Release notes: https://github.com/CEMS-Lab/PhAST/releases
-- API + docs dependencies: `requirements-docs.txt`
+- API + docs dependencies: `docs/requirements.txt`
 - GitHub Releases is the project changelog; Issues records user-reported
   defects, questions, and proposed improvements.

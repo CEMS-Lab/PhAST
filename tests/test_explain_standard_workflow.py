@@ -6,7 +6,7 @@ import sys
 
 import pytest
 
-from phast.config.explain_config import build_explanation
+from phast.io.config.explain_config import build_explanation
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,9 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 @pytest.mark.parametrize("relative_path", [
     "standard_workflow/quasistatic_sent/config.yaml",
     "standard_workflow/dynamic_sent/config.yaml",
-    "two_material_dcb_beta/config.yaml",
-    "two_material_dcb_beta/comparisons/tough_region.yaml",
-    "two_material_dcb_beta/comparisons/uniform_layer.yaml",
+    "two_material_dcb/config.yaml",
+    "two_material_dcb/comparisons/tough_region.yaml",
+    "two_material_dcb/comparisons/uniform_layer.yaml",
 ])
 def test_schema_v2_explanation_cli(relative_path, tmp_path):
     config = ROOT / "examples" / relative_path
@@ -39,7 +39,7 @@ def test_explanation_does_not_resolve_multimaterial_mesh(monkeypatch):
         pytest.fail("explanation attempted to build the geometric mesh")
 
     monkeypatch.setattr("phast.workflow.multimaterial_fracture._build_mesh", must_not_build)
-    report, code = build_explanation(str(ROOT / "examples/two_material_dcb_beta/config.yaml"))
+    report, code = build_explanation(str(ROOT / "examples/two_material_dcb/config.yaml"))
     assert code == 0, report
     assert "Declared settings only" in report
 

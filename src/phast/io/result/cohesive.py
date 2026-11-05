@@ -3,7 +3,7 @@
 An interface cell lists the nodes of one side first and the nodes of the other side after them. The first side is the
 side the solver calls ``top`` (``CohesiveElement.nodes_top``): the side to which the interface normal
 ``n = (-t_y, t_x)`` of the tangent ``t`` points, whose nodes keep their original ids when a cohesive layer is inserted
-(``phast.cohesive_elements.insert_cohesive_layer``). The second side is ``bottom``. At rest the two sides coincide; a
+(``phast.physics.cohesive_elements.insert_cohesive_layer``). The second side is ``bottom``. At rest the two sides coincide; a
 drawing of the interface uses the first side, which follows its own displacement when the interface opens.
 
 2D cell ``COH2`` (four entries): ``top0, top1, bottom1, bottom0``, a ring around the zero-thickness quadrilateral.

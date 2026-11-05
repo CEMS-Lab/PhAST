@@ -17,7 +17,7 @@ environment creation on Linux, macOS, and Windows.
 
 SENT means single-edge-notched tension. Both inputs use the same ordered
 configuration sections, explained in
-[CONFIGURATION_STYLE.md](../../CONFIGURATION_STYLE.md).
+[CONFIGURATION_STYLE.md](../../docs/maintainer/CONFIGURATION_STYLE.md).
 Choose the closest physical example before changing parameters. Changing only
 a solver label is not sufficient to convert a loading experiment into a
 different analysis.
@@ -52,7 +52,7 @@ inspect the new mesh. After changing the mesh or phase-field length, reassess
 spatial resolution. A finer dynamic mesh may also require a smaller time step.
 
 For a complete retained crack-growth illustration, use the
-[layered DCB example](../two_material_dcb_beta/README.md). DCB means
+[layered DCB example](../two_material_dcb/README.md). DCB means
 double-cantilever beam. Its README distinguishes the observed response from
 unverified penetration, bypass, or interface-debonding claims.
 

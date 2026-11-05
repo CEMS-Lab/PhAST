@@ -1,48 +1,47 @@
-# Paper reproduction
+# Paper examples and recorded results
 
-The [paper reproduction directory](https://github.com/CEMS-Lab/PhAST/tree/main/reproduction/paper1)
-contains the manuscript and supplement catalogue and its commands. The
-catalogue follows the paper's order and uses stable figure and table labels.
-It also maps numerical statements in the text to their supporting studies.
+PhAST 0.18.0 contains the solver, worked examples and selected inversion
+recipes for the [CMAME article](https://doi.org/10.1016/j.cma.2026.119547).
+The 3D examples are a later extension, separate from the paper's 2D results.
 
-The existing example folders and YAML configurations remain the starting
-point for using PhAST. Each study records the relationship between its exact
-paper configuration and the related public example. Large numerical fields,
-meshes and historical execution sources belong in the companion archive.
-Its publication details will be added after the archive is complete.
+## What this software ZIP contains
 
-From the repository root, list the paper entries and check their mappings.
+| Material | Location | How to use it |
+| --- | --- | --- |
+| Dynamic fracture inputs and stored outputs | `examples/dynamic/` | Run the example's `config.yaml`; inspect its README and plots |
+| Quasi-static SENT and holed plate | `examples/quasistatic/` | Run the YAML input; inspect the stored load-displacement curves |
+| Selected cross-mesh toughness recovery | [examples/inverse](../examples/inverse/README.md) | Original mesh h=0.125 mm, inverse mesh h=0.1875 mm; repeat AD or inspect the recorded AD/Brent values |
+| Scalar glass and alumina inversions | [reproduction/cmame_2026](../reproduction/cmame_2026/README.md) | Run the isolated original driver or replot its recorded history |
+| Three periodic voxel demonstrations | [3D examples](../examples/three_dimensional/README.md) | Run the Python setup; inspect the damage animations and stored stress-strain curves |
+
+Most 2D examples use `config.yaml` and optionally `run_fluent.py`.
+The 3D examples use `run.py` to define the geometry, material phases,
+loading and voxel mesh. A YAML file is not required for those Python setups.
+The fibre example also includes its microstructure array.
+
+Public example names predate the paper's benchmark labels. Dynamic SENT is
+paper B1 and repository `B3_dynamic_sent`; branching is paper B3 and
+`B7_dynamic_crack_branching_comsol`; the `B6_perforated_*` examples relate
+to paper B4. Similar names do not establish identical solver settings.
+
+## Exact paper plots
+
+The larger collection of recorded arrays, comparison-code sources and
+historical settings is in the separate `PhAST-paper-reproduction.zip`.
+For those materials, extract that archive and follow
+its `REPRODUCING.md`, for example:
 
 ```bash
-python reproduction/paper1/reproduce.py list
-python reproduction/paper1/reproduce.py check
+python -m pip install -r environments/replot-requirements.txt
+python analysis/run_analysis.py --archive . --output ../phast-analysis
 ```
 
-With the retained data available locally, check its file hashes and regenerate
-the selected quasi-static holed-plate figure.
+Run those commands from the extracted `phast-paper-reproduction` directory,
+not from this software checkout. Some figures use saved images where the
+original fields are unavailable. The archive identifies those limits.
+Its large B4 energy-field file is only needed for the analyses that use it.
 
-```bash
-python reproduction/paper1/reproduce.py check --data /path/to/phast-paper-reproduction
-python reproduction/paper1/reproduce.py replot q2 --data /path/to/phast-paper-reproduction --output runs/paper-q2
-```
-
-The `forward` group covers standing-wave and damage-update-interval plots. The
-`inverse` group covers the selected scalar, cross-mesh, joint, finite-difference
-and memory plots. Install the separate plotting requirements described in the
-reproduction directory before running these commands. Output directories must
-be fresh and separate from the retained data.
-
-The commands check the archive manifest and document-edition hashes against
-the catalogue before using the files. Use a trusted data archive because the
-plotting adapters load its preserved experiment code.
-
-A checksum check establishes input integrity. Replotting checks the recorded
-data and figure-generation route. Complete simulation reproduction also
-requires the executed solver version, all numerical inputs, the environment
-and a verified run command. These statuses are recorded separately for each
-study, including inputs still being collected.
-
-This separation of the solver and experiment dependencies follows
-[Firedrake's reproduction guidance](https://www.firedrakeproject.org/zenodo.html).
-The problem-based ordering also follows the approach used in the
-[DOLFINx demonstrations](https://docs.fenicsproject.org/dolfinx/main/python/demos.html).
+This release provides code and examples that users can extend. It does not
+promise that the software ZIP alone regenerates every paper or supplementary
+figure. Stored-result plotting, a fresh simulation, and comparison with the
+published result are separate operations.

@@ -9,7 +9,6 @@ PhAST workflows.
 - arbitrary weak-form YAML compilation;
 - general-purpose coupled elastoplastic cohesive phase-field fracture;
 - inverse identification workflows beyond the released paper-specific scope;
-- hybrid/deep-learning solver switching workflows;
 - raw trajectory archives or proprietary COMSOL model binaries.
 
 ## How to read experimental material

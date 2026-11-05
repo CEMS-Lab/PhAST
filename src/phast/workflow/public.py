@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from .specs import (
+from phast.workflow.specs import (
     AnalysisStepSpec,
     BoundaryConditionSpec,
     FieldOutputSpec,

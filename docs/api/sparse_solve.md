@@ -3,7 +3,7 @@
 This is an advanced module reference. It documents a low-level assembled sparse linear-solve seam, not an alternative public workflow.
 
 ```{eval-rst}
-.. automodule:: phast.sparse_solve
+.. automodule:: phast.solvers.sparse_solve
    :members:
    :show-inheritance:
 ```

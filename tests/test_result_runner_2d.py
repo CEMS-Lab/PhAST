@@ -14,7 +14,7 @@ import h5py
 import numpy as np
 import pytest
 
-from phast.config.result_output import resolve_result_settings
+from phast.io.config.result_output import resolve_result_settings
 from result_v2 import runner_helpers as R
 
 pytestmark = [pytest.mark.timeout(180)]
@@ -227,7 +227,7 @@ def _short_default_deck(tmp_path, **output):
 
 
 def test_the_result_file_is_written_by_default_beside_the_legacy_files(tmp_path):
-    from phast.config.config import OutputConfig
+    from phast.io.config.config import OutputConfig
     import phast
 
     assert OutputConfig().result is True
@@ -277,7 +277,7 @@ def test_a_synchronised_folder_warns_and_still_writes_the_result_file(tmp_path):
 
 
 def test_invalid_result_settings_are_rejected_when_the_configuration_is_validated():
-    from phast.config.config_validation import validate_config
+    from phast.io.config.config_validation import validate_config
 
     base = {"solver": {"solver_type": "quasi_static"}}
     assert [e for e in validate_config(dict(base, output={"result": {"every": 2}})) if e.path == "output"] == []

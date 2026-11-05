@@ -39,9 +39,9 @@
     <p><small>The base source installation does not require a separate PhAST
     compilation step. Optional HPC backends are not required for validation.</small></p>
     <pre><code>pip install -e .
-python run_sanitizer.py
+python tools/run_sanitizer.py
 python -m phast doctor
-python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate</code></pre>
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate</code></pre>
   </div>
 </div>
 
@@ -109,7 +109,7 @@ If you are new to PhAST, follow one continuous route:
 
 | Goal | First page | Stable surface |
 |---|---|
-| Install and run a first case | [Install](install.md) and [Getting started](getting-started.md) | `python run_sanitizer.py` followed by `python -m phast doctor` |
+| Install and run a first case | [Install](install.md) and [Getting started](getting-started.md) | `python tools/run_sanitizer.py` followed by `python -m phast doctor` |
 | Author new models | [Python API](user_guide/python_api.md) and [Setting up problems](user_guide/setup_problems.md) | `phast.Problem` |
 | Reproduce or batch-run examples | [YAML workflow](user_guide/yaml_workflow.md) | `python -m phast run config.yaml` |
 | Edit a standard student problem | [Standard simulation workflow](tutorial/07_standard_simulation_workflow.md) | Schema-2 sections with route-specific capability checks |
@@ -193,7 +193,7 @@ user_guide/example_contract
 supported_workflows/solid_mechanics
 supported_workflows/quasistatic_fracture
 supported_workflows/dynamic_fracture
-supported_workflows/plasticity_interface_beta
+supported_workflows/plasticity_interface
 supported_workflows/experimental_3d_geometry
 supported_workflows/unsupported_experimental
 ```

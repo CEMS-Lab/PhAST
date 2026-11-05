@@ -1,0 +1,13 @@
+schema_version: 1
+example: standalone_j2_plasticity_validation
+source_contract: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
+script: examples/plasticity_interface/run_j2_validation.py
+parameters:
+  n_load: 48
+  n_unload: 18
+visual_requirements: docs/visualisation_requirements.md
+outputs:
+  - summary.json
+  - j2_stress_strain.csv
+  - j2_stress_strain.png
+  - visual_manifest.json

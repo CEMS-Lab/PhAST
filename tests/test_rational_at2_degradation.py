@@ -17,10 +17,10 @@ import torch
 
 import phast
 from phast.core.fem_operators import stress_split_of
-from phast.fem_operators import FEMOperators
-from phast.damage_solver import PhaseFieldDamageSolver
-from phast.material import Material
-from phast.mesh import FEMMesh
+from phast.core.fem_operators import FEMOperators
+from phast.solvers.damage_solver import PhaseFieldDamageSolver
+from phast.physics.material import Material
+from phast.core.mesh import FEMMesh
 
 DTYPE = torch.float64
 

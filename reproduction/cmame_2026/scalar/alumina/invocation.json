@@ -1,0 +1,43 @@
+{
+  "recorded_command": "python -u -m phast.paper.demos.demo_inversion --device cpu --optimizer lbfgs --gradient_mode autograd --lbfgs_lr 0.5 --n_steps 200 --n_iters 10 --Gc_true 0.0268 --Gc_init 0.054 --material_preset alumina_kumar --l0 0.5 --h_crack 1.0 --h_coarse 8.0 --sigma_load 60.0 --energy_split spectral --output_dir \"$RESULTS_DIR\"",
+  "command_source_path": "scripts/slurm/inverse/hpc_paper1_alumina_autograd_cpu.slurm",
+  "arguments": [
+    "--device",
+    "cpu",
+    "--optimizer",
+    "lbfgs",
+    "--gradient_mode",
+    "autograd",
+    "--lbfgs_lr",
+    "0.5",
+    "--n_steps",
+    "200",
+    "--n_iters",
+    "10",
+    "--Gc_true",
+    "0.0268",
+    "--Gc_init",
+    "0.054",
+    "--material_preset",
+    "alumina_kumar",
+    "--l0",
+    "0.5",
+    "--h_crack",
+    "1.0",
+    "--h_coarse",
+    "8.0",
+    "--sigma_load",
+    "60.0",
+    "--energy_split",
+    "spectral"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "8",
+    "MKL_NUM_THREADS": "8"
+  },
+  "portable_changes": [
+    "Replace module invocation with runpy execution of the unchanged original_driver.py.",
+    "Prepend only bundled historical_src inside an isolated Python subprocess; omit package convenience exports.",
+    "Replace the output directory variable with a new user-selected directory."
+  ]
+}

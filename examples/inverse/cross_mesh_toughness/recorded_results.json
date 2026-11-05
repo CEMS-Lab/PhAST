@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "kind": "recorded-paper-results-excerpt",
+  "runtime_recomputed": false,
+  "original_toughness_N_per_mm": 0.003,
+  "original_mesh_size_mm": 0.125,
+  "recovery_mesh_size_mm": 0.1875,
+  "training_points": 263,
+  "check_points": 88,
+  "observation_times_microseconds": [
+    10,
+    15,
+    18,
+    20,
+    22,
+    25,
+    28,
+    30
+  ],
+  "AD": {
+    "recovered_toughness_N_per_mm": 0.002933393010351646,
+    "parameter_relative_error": 0.0222023298827847,
+    "training_displacement_relative_error": 0.06011484856139562,
+    "check_displacement_relative_error": 0.009874135084146545,
+    "objective_evaluations": 20,
+    "source_document_sha256": "5e80c3f6f09c73eef2313965c08e81cb43d519388f992bff4d6e408696aabc9d",
+    "selected_forward_receipt_sha256": "4d79d461e6c47fd0ee2049221cb84c83d2f47422ebdabcb7a7c0a309396b5371"
+  },
+  "Brent": {
+    "recovered_toughness_N_per_mm": 0.002950450247000056,
+    "parameter_relative_error": 0.0165165843333146,
+    "training_displacement_relative_error": 0.05935742353177235,
+    "check_displacement_relative_error": 0.01209502868040956,
+    "source_document_sha256": "b5b08731e4e30564787c8d94e91b431ea542844feb59230c8d5f25ce22123b38",
+    "selected_forward_receipt_sha256": "72aa11673556354b7270b0ec2500872e6f4a5a232cdb0321a2f3c3f3d989f757"
+  },
+  "scope": "Numerical excerpt of the two selected historical recoveries, not a current-source run receipt or a complete reproduction dataset."
+}

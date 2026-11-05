@@ -336,7 +336,7 @@ class BoundaryConditions:
     def __init__(self, n_nodes: int, device=None,
                  dtype: torch.dtype = torch.float64):
         if device is None:
-            from ..utils.device import detect_device
+            from phast.core.device import detect_device
             device = detect_device()
         self.n_nodes = n_nodes
         self.device = device

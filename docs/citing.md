@@ -1,23 +1,26 @@
 # Citing PhAST
 
-If PhAST contributes to your research, please cite the associated arXiv
-manuscript and the software repository.
+If PhAST contributes to your research, please cite the journal article
+(doi:10.1016/j.cma.2026.119547) and the software repository. The preprint is arXiv:2606.23458; its title
+differs from the journal title.
 
 GitHub reads [`CITATION.cff`](../CITATION.cff) and shows a **Cite this
 repository** button on the repository sidebar. Use that button for the most
 current machine-readable citation metadata.
 
-## Manuscript BibTeX
+## Article BibTeX
 
 ```bibtex
-@misc{ani2026phast,
-  title={A matrix-free, differentiable PyTorch solver for phase-field fracture: Formulation, benchmarks, and inverse analysis},
-  author={Ani, Allamaprabhu and Molinari, Jean-François and Subhash, Ghatu and Ponnusami, Sathiskumar Anusuya},
+@article{ani2026phast,
+  title={PhAST: A differentiable, matrix-free finite-element solver for dynamic phase-field fracture: Formulation, benchmarks, and inverse analysis},
+  author={Ani, Allamaprabhu and Molinari, Jean-François and Subhash, Ghatu and Ponnusami, Sathiskumar A.},
+  journal={Computer Methods in Applied Mechanics and Engineering},
   year={2026},
+  note={In press, accepted 27 October 2026},
+  doi={10.1016/j.cma.2026.119547},
   eprint={2606.23458},
   archivePrefix={arXiv},
-  primaryClass={cs.CE},
-  url={https://arxiv.org/abs/2606.23458}
+  primaryClass={cs.CE}
 }
 ```
 
@@ -29,10 +32,10 @@ current machine-readable citation metadata.
                   Ghatu Subhash and Sathiskumar A. Ponnusami},
   title        = {{PhAST}: Phase-field Autograd Solver in Torch},
   year         = {2026},
-  version      = {0.16.2},
+  version      = {0.18.0},
   license      = {MIT},
   url          = {https://github.com/CEMS-Lab/PhAST},
-  note         = {Official code repository for arXiv:2606.23458.}
+  note         = {Official code repository for doi:10.1016/j.cma.2026.119547.}
 }
 ```
 

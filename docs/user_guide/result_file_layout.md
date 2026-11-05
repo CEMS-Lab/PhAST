@@ -62,7 +62,7 @@ Four fixed choices apply to every file.
 ```
 result.vtkhdf
 ├─ attrs (root)
-│   phast_schema = "phast.result"           phast_schema_version = "2.0.0"
+│   phast_schema = "phast.api.result"           phast_schema_version = "2.0.0"
 │   dim = 2 | 3                              analysis = plane_strain | plane_stress | 3d
 │   history_coupling = fresh | lagged        profile = setup | run
 │   run_id, parent_run_id                    (identity; the parent is the run this one continues or repeats)
@@ -251,7 +251,7 @@ state per step and 4.8 MB of stress and strain cell means per step, and a 48
 by 48 by 48 voxel cell with H at 8 points stores 10.8 MB and 10.6 MB.
 
 The 2D YAML runner (`phast run`, implemented in
-`src/phast/config/result_output.py`) uses the settings as follows.
+`src/phast/io/config/result_output.py`) uses the settings as follows.
 
 - `output.result` is `true` by default and writes `<output_dir>/result.vtkhdf`
   with the defaults above. A mapping overrides the keys above, and `false` writes no file. Unknown keys, and `fields` lists that omit `displacement`, `damage`,

@@ -7,9 +7,9 @@ from matplotlib import colormaps
 from matplotlib.collections import LineCollection, PolyCollection
 from matplotlib.tri import Triangulation
 
-from ..surface import face_normals
-from .data import InterfaceBlock, Mesh2D, RunData, node_to_cell, voxel_slice
-from .style import DAMAGE_CMAP, DIVERGING_CMAP, SEQUENTIAL_CMAP
+from phast.io.result.surface import face_normals
+from phast.io.result.figures.data import InterfaceBlock, Mesh2D, RunData, node_to_cell, voxel_slice
+from phast.io.result.figures.style import DAMAGE_CMAP, DIVERGING_CMAP, SEQUENTIAL_CMAP
 
 C30 = np.cos(np.pi / 6)
 SHADE = {"x": 0.88, "y": 0.76, "z": 1.0}     # face brightness: the cell is lit from above

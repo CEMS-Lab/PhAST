@@ -21,14 +21,14 @@ import numpy as np
 from PIL import Image
 import torch
 
-from ..damage_solver import PhaseFieldDamageSolver
-from ..fem_operators import FEMOperators
-from ..material import Material
-from ..mechanics_solver import QuasiStaticSolver
-from ..mesh import FEMMesh
-from ..io_utils import init_h5, write_h5_snapshot
-from .specs import ProblemSpec
-from .setup_plot import save_material_setup
+from phast.solvers.damage_solver import PhaseFieldDamageSolver
+from phast.core.fem_operators import FEMOperators
+from phast.physics.material import Material
+from phast.solvers.mechanics_solver import QuasiStaticSolver
+from phast.core.mesh import FEMMesh
+from phast.io.outputs import init_h5, write_h5_snapshot
+from phast.workflow.specs import ProblemSpec
+from phast.workflow.setup_plot import save_material_setup
 
 
 class MultimaterialWorkflowError(RuntimeError):

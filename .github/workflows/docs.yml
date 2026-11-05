@@ -12,7 +12,7 @@ on:
       - 'docs/**'
       - 'src/**'
       - 'pyproject.toml'
-      - 'requirements-docs.txt'
+      - 'docs/requirements.txt'
       - '.github/workflows/docs.yml'
   schedule:
     - cron: '17 4 * * 1'
@@ -40,7 +40,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -e .
-          pip install -r requirements-docs.txt
+          pip install -r docs/requirements.txt
       - name: Build
         run: |
           sphinx-build -W -b html docs docs/_build/html

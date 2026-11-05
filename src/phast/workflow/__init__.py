@@ -1,12 +1,12 @@
 """Internal PhAST workflow contract and compatibility adapters."""
-from .adapters import (
+from phast.workflow.adapters import (
     problem_spec_from_config,
     problem_spec_from_problem,
     problem_spec_from_yaml,
     problem_specs_from_yaml,
     problem_spec_to_schema_v2_dict,
 )
-from .capabilities import (
+from phast.workflow.capabilities import (
     CapabilityIssue,
     WorkflowCapability,
     capability_names,
@@ -14,13 +14,13 @@ from .capabilities import (
     list_capabilities,
     validate_problem_spec_capabilities,
 )
-from .execution import (
+from phast.workflow.execution import (
     WorkflowExecutionError,
     WorkflowExecutionPlan,
     execution_plan_from_spec,
     run_problem_spec,
 )
-from .public import (
+from phast.workflow.public import (
     AnalysisStep,
     BoundaryCondition,
     FieldOutput,
@@ -33,8 +33,8 @@ from .public import (
     Region,
     SolverSettings,
 )
-from .regions import RegionReferenceIssue, validate_problem_spec_regions
-from .specs import (
+from phast.workflow.regions import RegionReferenceIssue, validate_problem_spec_regions
+from phast.workflow.specs import (
     AnalysisStepSpec,
     BoundaryConditionSpec,
     FieldOutputSpec,
@@ -49,7 +49,7 @@ from .specs import (
     RegionSpec,
     SolverSpec,
 )
-from .validation import WorkflowValidationIssue, validate_problem_spec
+from phast.workflow.validation import WorkflowValidationIssue, validate_problem_spec
 
 __all__ = [
     "AnalysisStepSpec",

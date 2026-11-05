@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .schema import load_schema
+from phast.io.result.schema import load_schema
 
 _EDGES = {
     "T3": [(0, 1), (1, 2), (2, 0)],

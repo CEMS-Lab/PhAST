@@ -18,7 +18,7 @@ import h5py
 import numpy as np
 import pytest
 
-from phast.config.config import LoadingConfig, compute_load_factor
+from phast.io.config.config import LoadingConfig, compute_load_factor
 from result_v2 import runner_helpers as R
 
 pytestmark = [pytest.mark.timeout(180)]

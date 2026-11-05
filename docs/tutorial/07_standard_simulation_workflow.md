@@ -62,7 +62,7 @@ python -m pip install -e .
 ```
 
 Optional GPU/HPC solvers are not prerequisites for the CPU teaching route.
-Install `requirements-docs.txt` only if you need to build the website.
+Install `docs/requirements.txt` only if you need to build the website.
 
 ## 2. Follow the three-problem teaching route
 
@@ -70,13 +70,13 @@ Install `requirements-docs.txt` only if you need to build the website.
 |---|---|---|
 | `examples/standard_workflow/quasistatic_sent/config.yaml` | How is a small single-material single-edge-notched tension (SENT) problem loaded without inertia? | Short setup exercise; adapter and exact CLI checks must be recorded before promotion. |
 | `examples/standard_workflow/dynamic_sent/config.yaml` | How does a single-material SENT setup include inertia and explicit time integration? | Short setup exercise; successful execution is not implied by this path or by a completed quasi-static run. |
-| `examples/two_material_dcb_beta/config.yaml` | How does a crack interact with a tougher disk inside a weak bulk layer? | Full retained calculation and coarse matched control; qualitative evidence, not calibrated inclusion bypass. |
+| `examples/two_material_dcb/config.yaml` | How does a crack interact with a tougher disk inside a weak bulk layer? | Full retained calculation and coarse matched control; qualitative evidence, not calibrated inclusion bypass. |
 
 The first two inputs use the same schema as the DCB example. Their combined
 implementation and execution checks remain a release requirement; this page
 does not claim those checks have passed. A short exercise may show correct
 setup and output without appreciable new crack growth. The additional
-`examples/heterogeneous_sent_beta/config.yaml` applies the layout to a
+`examples/heterogeneous_sent/config.yaml` applies the layout to a
 multi-material square plate.
 
 Frozen historical course assets and separate 3D research keep their own
@@ -114,9 +114,9 @@ python -m phast run examples/standard_workflow/dynamic_sent/config.yaml --output
 For the full fine-mesh DCB reference:
 
 ```bash
-python -m phast explain-config examples/two_material_dcb_beta/config.yaml
-python -m phast run examples/two_material_dcb_beta/config.yaml --validate-only
-python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference
+python -m phast explain-config examples/two_material_dcb/config.yaml
+python -m phast run examples/two_material_dcb/config.yaml --validate-only
+python -m phast run examples/two_material_dcb/config.yaml --output_dir runs/dcb_fine_reference
 ```
 
 The explanation command describes the input. `--validate-only` checks
@@ -134,7 +134,7 @@ rerun; its trajectory writer refuses to overwrite `training_data.h5`.
 
 ## 4. Read the sections in the same order
 
-Open the {download}`complete DCB input <../../examples/two_material_dcb_beta/config.yaml>`.
+Open the {download}`complete DCB input <../../examples/two_material_dcb/config.yaml>`.
 
 | Section | Meaning in this example |
 |---|---|
@@ -149,7 +149,7 @@ Open the {download}`complete DCB input <../../examples/two_material_dcb_beta/con
 | `solver` | Algorithms, tolerances, and iteration/cutback limits. |
 | `outputs` | Result directory, fields, histories, and visuals. |
 
-Use the {download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`
+Use the {download}`configuration authoring rules <../maintainer/CONFIGURATION_STYLE.md>`
 for new inputs. Older schema-1 benchmarks use singular `material`,
 `loading`, and `output` sections. Do not mix the two layouts or migrate a
 file by changing its version number alone.
@@ -301,7 +301,7 @@ These figures are **retained evidence**, not a new run executed by this page.
 Coordinates are in mm; damage ranges from zero to one. Grey outlines show
 bulk-material boundaries.
 
-```{figure} ../../examples/two_material_dcb_beta/results/damage_final.png
+```{figure} ../../examples/two_material_dcb/results/damage_final.png
 :alt: Retained DCB damage field with a forked crack in the weak layer near the circular tougher region.
 :width: 100%
 
@@ -310,7 +310,7 @@ at least 0.80 enter the disk. Neither penetration nor completed bypass is
 demonstrated; this is qualitative layered-material interaction.
 ```
 
-```{figure} ../../examples/two_material_dcb_beta/results/damage_evolution.gif
+```{figure} ../../examples/two_material_dcb/results/damage_evolution.gif
 :alt: Retained DCB damage evolution from the starter crack to 0.30 mm total opening, with material boundaries outlined.
 :width: 100%
 
@@ -328,8 +328,8 @@ evidence.
 | Final reaction, recorded unit-thickness convention | 0.61495 |
 | Connected front at `d >= 0.80` | 2.0625 mm |
 
-Sources: {download}`solver summary <../../examples/two_material_dcb_beta/results/summary.json>`
-and {download}`numerical audit <../../examples/two_material_dcb_beta/results/numerical_review.json>`.
+Sources: {download}`solver summary <../../examples/two_material_dcb/results/summary.json>`
+and {download}`numerical audit <../../examples/two_material_dcb/results/numerical_review.json>`.
 The historical generating source fingerprint was not recorded at runtime
 and remains unknown. A later public-availability fingerprint does not attest
 which source generated these fields. Independent stored-field checks found
@@ -342,9 +342,9 @@ solver-recorded maximum over accepted steps and are not independent reruns.
 
 Two compact, complete inputs reuse the same runner and section order:
 
-- {download}`tough_region.yaml <../../examples/two_material_dcb_beta/comparisons/tough_region.yaml>`
+- {download}`tough_region.yaml <../../examples/two_material_dcb/comparisons/tough_region.yaml>`
   uses the full DCB physics/settings with `nx: 120` instead of `160`.
-- {download}`uniform_layer.yaml <../../examples/two_material_dcb_beta/comparisons/uniform_layer.yaml>`
+- {download}`uniform_layer.yaml <../../examples/two_material_dcb/comparisons/uniform_layer.yaml>`
   uses that coarse configuration with only disk `Gc: 0.12` changed to
   `0.04`, equal to the weak layer.
 
@@ -357,13 +357,13 @@ mesh supplies the original triangle connectivity used by the comparison
 plots. Full trajectory files are not included in the compact public results.
 
 ```bash
-python -m phast explain-config examples/two_material_dcb_beta/comparisons/tough_region.yaml
-python -m phast run examples/two_material_dcb_beta/comparisons/tough_region.yaml --validate-only
-python -m phast run examples/two_material_dcb_beta/comparisons/tough_region.yaml --output_dir runs/dcb_coarse_tough_region
+python -m phast explain-config examples/two_material_dcb/comparisons/tough_region.yaml
+python -m phast run examples/two_material_dcb/comparisons/tough_region.yaml --validate-only
+python -m phast run examples/two_material_dcb/comparisons/tough_region.yaml --output_dir runs/dcb_coarse_tough_region
 
-python -m phast explain-config examples/two_material_dcb_beta/comparisons/uniform_layer.yaml
-python -m phast run examples/two_material_dcb_beta/comparisons/uniform_layer.yaml --validate-only
-python -m phast run examples/two_material_dcb_beta/comparisons/uniform_layer.yaml --output_dir runs/dcb_coarse_uniform_layer
+python -m phast explain-config examples/two_material_dcb/comparisons/uniform_layer.yaml
+python -m phast run examples/two_material_dcb/comparisons/uniform_layer.yaml --validate-only
+python -m phast run examples/two_material_dcb/comparisons/uniform_layer.yaml --output_dir runs/dcb_coarse_uniform_layer
 ```
 
 Use these explicit, separate output directories rather than the inherited
@@ -385,7 +385,7 @@ advance and a higher final reaction in this discrete comparison, but cannot
 be credited with causing the initial branching. The fine reaction
 `0.61495` is not the coarse matched tough-region reaction.
 
-See the {download}`matched comparison record <../../examples/two_material_dcb_beta/results/matched_control_review.json>`.
+See the {download}`matched comparison record <../../examples/two_material_dcb/results/matched_control_review.json>`.
 The disk radius is only `2 l0`, and its clearance from the outer regions is
 `l0`. Confinement, regularisation, centroid-based boundaries, load-increment
 sensitivity, and small-strain/rotation assumptions remain relevant. Two mesh
@@ -398,7 +398,7 @@ validation is claimed.
 The compact-data postprocessor is separate from the FEM commands above:
 
 ```bash
-python examples/two_material_dcb_beta/compare_results.py --output-dir runs/dcb_comparison_replot
+python examples/two_material_dcb/compare_results.py --output-dir runs/dcb_comparison_replot
 ```
 
 It reads the retained `coarse_tough_history.csv`, `uniform_layer_history.csv`,

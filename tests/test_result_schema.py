@@ -13,7 +13,7 @@ SPEC = (ROOT / "docs" / "user_guide" / "result_file_layout.md").read_text(encodi
 
 def test_schema_loads_with_declared_name_and_version():
     schema = load_schema()
-    assert schema["schema"] == SCHEMA_NAME == "phast.result"
+    assert schema["schema"] == SCHEMA_NAME == "phast.api.result"
     assert schema["version"] == SCHEMA_VERSION == "2.0.0"
     assert "phast_schema_version" in schema_text()
 

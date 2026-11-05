@@ -26,19 +26,19 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Optional, Literal
 
-from ..core.mesh import FEMMesh
-from ..physics.material import Material
-from ..physics.boundary_conditions import BoundaryConditions
-from ..core.fem_operators import FEMOperators
-from .damage_solver import PhaseFieldDamageSolver
-from .mechanics_solver import (ExplicitDynamics, GeneralizedAlphaDynamics,
+from phast.core.mesh import FEMMesh
+from phast.physics.material import Material
+from phast.physics.boundary_conditions import BoundaryConditions
+from phast.core.fem_operators import FEMOperators
+from phast.solvers.damage_solver import PhaseFieldDamageSolver
+from phast.solvers.mechanics_solver import (ExplicitDynamics, GeneralizedAlphaDynamics,
                                 StaticSolver,
                                 QuasiStaticSolver, SecantCGSolver, LBFGSSolver,
                                 MonolithicSolver)
-from ..utils.io_utils import (write_vtu, write_visualization, write_h5_snapshot,
+from phast.io.outputs import (write_vtu, write_visualization, write_h5_snapshot,
                         init_h5, CSVHistory)
-from ..utils.device import DeviceContext
-from ..plasticity import DuctilePhaseFieldCoupling, MeshJ2Elastoplasticity
+from phast.core.device import DeviceContext
+from phast.physics.plasticity import DuctilePhaseFieldCoupling, MeshJ2Elastoplasticity
 
 
 @dataclass
@@ -136,7 +136,7 @@ class SolverConfig:
     #   False (default): corrector uses ``d_n`` (lagged damage). This is the
     #     "fully decoupled lagged" explicit scheme matching Borden 2012's
     #     reference ordering — preserves bit-exact reproducibility against
-    #     all existing benchmarks (B1, B5, dataset_benchmark dynamic runs).
+    #     all existing benchmarks (B1, B5 and the other dynamic runs).
     #   True: predictor -> step_solve_damage(d_{n+1}) -> corrector with the
     #     fresh ``d_{n+1}``. Matches PhaFiDyn (Barki 2025) and the typical
     #     "segregated" interpretation of COMSOL's N=2 staggered solver.
@@ -841,7 +841,7 @@ class StaggeredSolver:
         scale = self.config.H_update_scale
         if scale is not None and scale > 0 and method == 'custom_subgrad':
             kwargs['scale'] = scale
-        from ..physics.h_update import dispatch as _h_dispatch  # local import: avoid cycle
+        from phast.physics.h_update import dispatch as _h_dispatch  # local import: avoid cycle
         return _h_dispatch(method, H_old, psi, **kwargs)
 
     def step_compute_driving_force(self, strain=None) -> torch.Tensor:
@@ -1117,7 +1117,7 @@ class StaggeredSolver:
                 return self._step_full_explicit_fresh_d()
 
             # Cache previous-step damage for adaptive-dt Δd diagnostic.
-            # Stored on self so external code (tests, neural-op hooks) can
+            # Stored on self so external code (tests, diagnostics) can
             # inspect the last increment without recomputing.
             if self.config.adaptive_dt:
                 self.d_prev = self.d.clone()
@@ -1581,7 +1581,7 @@ class StaggeredSolver:
         elif hasattr(self, 'd_prev'):
             self.d_prev = None
         if self.plasticity_operator is not None and 'plasticity_state' in state:
-            from ..plasticity import MeshJ2State
+            from phast.physics.plasticity import MeshJ2State
             ps = state['plasticity_state']
             restored = MeshJ2State(
                 strain=ps['strain'].to(self.device),
@@ -1780,7 +1780,7 @@ class StaggeredSolver:
         -------
         psi : (E_new,) psi_plus on the (possibly new) mesh
         """
-        from .adaptive import (compute_refinement_indicator, refine_mesh,
+        from phast.solvers.adaptive import (compute_refinement_indicator, refine_mesh,
                                interpolate_field, interpolate_elem_field)
 
         cfg = self.config

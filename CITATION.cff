@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use PhAST, please cite the associated arXiv manuscript and this software repository."
+message: "If you use PhAST, please cite the journal article and this software repository."
 title: "PhAST: Phase-field Autograd Solver in Torch"
 authors:
   - family-names: Ani
@@ -15,12 +15,12 @@ authors:
   - family-names: Ponnusami
     given-names: Sathiskumar A.
     affiliation: "City St George's, University of London; Queen Mary University of London"
-version: 0.16.2
-date-released: 2026-06-22
+version: 0.18.0
+date-released: 2026-11-05
 license: MIT
 repository-code: "https://github.com/CEMS-Lab/PhAST"
 url: "https://cems-lab.github.io/PhAST/"
-abstract: "A PyTorch-native finite-element solver for reproducible two-dimensional phase-field fracture, explicit dynamics, and selected solid-mechanics workflows. Supported tensor operations can be used in differentiability studies; the public software does not provide a general-purpose inverse-analysis framework."
+abstract: "A PyTorch finite-element solver for two-dimensional phase-field fracture and three-dimensional periodic voxel examples. The release includes dynamic and quasi-static 2D solvers, beta 3D fracture examples, HDF5 result output, and selected inversion recipes from the accompanying article. Differentiability is limited to the documented solver routes."
 keywords:
   - phase-field fracture
   - finite element method
@@ -29,7 +29,7 @@ keywords:
   - differentiable mechanics
 preferred-citation:
   type: article
-  title: "A matrix-free, differentiable PyTorch solver for phase-field fracture: Formulation, benchmarks, and inverse analysis"
+  title: "PhAST: A differentiable, matrix-free finite-element solver for dynamic phase-field fracture: Formulation, benchmarks, and inverse analysis"
   authors:
     - family-names: Ani
       given-names: Allamaprabhu
@@ -38,10 +38,13 @@ preferred-citation:
     - family-names: Subhash
       given-names: Ghatu
     - family-names: Ponnusami
-      given-names: Sathiskumar Anusuya
+      given-names: Sathiskumar A.
+  journal: "Computer Methods in Applied Mechanics and Engineering"
   year: 2026
-  url: "https://arxiv.org/abs/2606.23458"
+  status: in-press
+  doi: "10.1016/j.cma.2026.119547"
+  url: "https://doi.org/10.1016/j.cma.2026.119547"
   identifiers:
     - type: other
       value: "arXiv:2606.23458"
-      description: "arXiv identifier"
+      description: "arXiv preprint (title differs from the journal title)"

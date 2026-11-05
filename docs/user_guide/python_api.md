@@ -7,7 +7,7 @@ public examples, CI, shared runs, or HPC submission.
 ## Fluent API Mental Model
 
 For the small CPU axial-elasticity pathway, see the
-[one-dimensional bar API](one_dimensional_bar.md): `phast.line_mesh` and
+[one-dimensional bar API](one_dimensional_bar.md): `phast.core.line_mesh` and
 `phast.solve_bar` provide a mesh and differentiable static solve directly.
 
 ```{toctree}

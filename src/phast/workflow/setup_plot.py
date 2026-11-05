@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import BoundaryNorm, ListedColormap
 import numpy as np
 
-from .specs import BoundaryConditionSpec, ProblemSpec
+from phast.workflow.specs import BoundaryConditionSpec, ProblemSpec
 
 
 MATERIAL_COLOURS = {

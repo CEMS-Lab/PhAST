@@ -37,7 +37,7 @@ docker build --tag phast:local .
 docker run --rm phast:local
 ```
 
-The image runs `run_sanitizer.py` only. It does not run a long simulation.
+The image runs `tools/run_sanitizer.py` only. It does not run a long simulation.
 
 Phase-field fracture simulations are sensitive to units, mesh resolution,
 boundary conditions, and time-step choices. This page lists common symptoms and

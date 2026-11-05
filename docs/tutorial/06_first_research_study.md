@@ -27,9 +27,9 @@ Begin from the repository root in a Python 3.10-or-newer environment. Python
 
 ```bash
 python -m phast doctor
-python run_sanitizer.py
+python tools/run_sanitizer.py
 python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only
-python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 
@@ -97,7 +97,7 @@ choice, retained histories, and animation back to one public configuration.
 
 | Intended study | Appropriate starting point | Boundary |
 |---|---|---|
-| Installation and general FEM execution | `examples/solid_mechanics_beta/linear_plate/config.yaml` | A mechanics check, not a fracture benchmark. |
+| Installation and general FEM execution | `examples/solid_mechanics/linear_plate/config.yaml` | A mechanics check, not a fracture benchmark. |
 | Quasi-static fracture | `examples/quasistatic/notched_holed_plate/config.yaml` or the example identified as closest to the target problem | Requires convergence, mesh, parameter, and comparison evidence for a new claim. |
 | Explicit dynamic fracture | `examples/dynamic/B2_kalthoff_winkler/config.yaml` or another curated dynamic example | Requires stable time-step and output-cost assessment. |
 | Elementwise heterogeneous properties | `examples/heterogeneous_fields/parameters.yaml` with its script-contract runner | A bounded teaching route, not a general heterogeneous YAML adapter or validated microstructure study. |

@@ -16,7 +16,7 @@ From the repository root:
 ```bash
 conda env create -f environment.yml
 conda activate phast
-python run_sanitizer.py
+python tools/run_sanitizer.py
 ```
 
 The supplied environment is a portable Python 3.11 CPU configuration. PETSc/MUMPS,
@@ -33,7 +33,7 @@ docker build -t phast:cpu .
 docker run --rm phast:cpu
 ```
 
-The image runs `python run_sanitizer.py` by default. It does not claim CUDA,
+The image runs `python tools/run_sanitizer.py` by default. It does not claim CUDA,
 Apple MPS, PETSc/MUMPS, MPI, or host-native performance.
 
 For a completed example with a persistent host output directory, including
@@ -161,7 +161,7 @@ Use the linear-elastic plate to verify mesh construction, solver execution,
 artifact writing, and result loading:
 
 ```bash
-python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 
@@ -278,7 +278,7 @@ usage questions. An unclear step is a documentation defect worth reporting.
 ## 11. Build The Documentation
 
 ```bash
-python -m pip install -r requirements-docs.txt
+python -m pip install -r docs/requirements.txt
 sphinx-build -W -b html docs docs/_build/html
 ```
 

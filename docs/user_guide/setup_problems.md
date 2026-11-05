@@ -14,7 +14,7 @@ complete YAML for shared runs. New adapter checks remain a promotion gate.
 Use the order `schema_version`, `name`, `reference`, `geometry`,
 `regions`, `materials`, `assignments`, `initial_conditions`,
 `boundary_conditions`, `analysis_steps`, `solver`, `outputs`.
-The {download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`
+The {download}`configuration authoring rules <../maintainer/CONFIGURATION_STYLE.md>`
 are mandatory for new YAML/README/tutorial contributions.
 
 | Edit | Input location | Dependency or interpretation |
@@ -159,7 +159,7 @@ result = problem.run(output_dir="runs/linear_plate", return_result=True)
 For the same workflow as a durable declarative configuration:
 
 ```bash
-python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 

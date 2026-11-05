@@ -205,7 +205,7 @@ class ProblemSpec:
 
     def run(self, *, output_dir: str | None = None, validate_only: bool = False) -> int:
         """Run a YAML-backed spec through the existing compatibility CLI."""
-        from .execution import run_problem_spec
+        from phast.workflow.execution import run_problem_spec
 
         return run_problem_spec(
             self,

@@ -1,0 +1,35 @@
+{
+  "recorded_command": null,
+  "reconstructed_command": "python -m phast.paper.demos.demo_inversion --device cpu --optimizer lbfgs --gradient_mode autograd --n_steps 200 --n_iters 10 --Gc_init 0.006 --h_crack 1.5 --h_coarse 8.0 --output_dir \"$RESULTS_DIR\"",
+  "arguments": [
+    "--device",
+    "cpu",
+    "--optimizer",
+    "lbfgs",
+    "--gradient_mode",
+    "autograd",
+    "--n_steps",
+    "200",
+    "--n_iters",
+    "10",
+    "--Gc_init",
+    "0.006",
+    "--h_crack",
+    "1.5",
+    "--h_coarse",
+    "8.0"
+  ],
+  "arguments_lineage": {
+    "recorded_result": "L-BFGS, autograd, 200 steps, ten iterations, initial Gc 0.006, hard_max history, and null history-smoothing settings.",
+    "source_defaults": "CPU and mesh sizes 1.5/8.0 mm are the original driver defaults; mesh counts are described with the archived glass result.",
+    "driver_constants": "Glass material preset glass_borden, true Gc 0.003, l0 0.5 and traction magnitude 1.0 are hard-coded in the unchanged driver, not new CLI options.",
+    "unknowns": "The exact ten-iteration shell command, thread exports, installed dependencies and full runtime core hash lock were not captured with this JSON. The earlier recorded three-iteration command is not substituted for this result."
+  },
+  "environment": {},
+  "historical_environment_exports": null,
+  "portable_changes": [
+    "Execute unchanged original_driver.py instead of installing the old package.",
+    "Select only historical_src inside an isolated Python subprocess; omit unrelated package convenience exports.",
+    "Use a new external output directory; preserve caller thread settings without assigning unrecorded historical values."
+  ]
+}

@@ -8,11 +8,11 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from ....result import Result, ResultLoadError, load_result
-from .data import RunData
-from .sheets import SCALAR_ROLES, compute_interface_norms, compute_norms, component_sheet, damage_steps_sheet, \
+from phast.api.result import Result, ResultLoadError, load_result
+from phast.io.result.figures.data import RunData
+from phast.io.result.figures.sheets import SCALAR_ROLES, compute_interface_norms, compute_norms, component_sheet, damage_steps_sheet, \
     evolution_sheet, field_pages, field_sheet, interface_sheet, setup_sheet
-from .style import DEFAULT_DPI
+from phast.io.result.figures.style import DEFAULT_DPI
 
 MANIFEST = "manifest.json"
 KINDS = ("setup", "fields", "evolution")

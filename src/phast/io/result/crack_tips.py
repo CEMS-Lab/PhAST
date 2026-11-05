@@ -1,6 +1,6 @@
 """Crack-tip table of layout 2.1 (``history/crack_tips/``) and the crack speed derived from it.
 
-The speed is computed as ``phast.utils.postprocess_paper`` computes the
+The speed is computed as ``phast.viz.postprocess`` computes the
 crack-tip velocity of the legacy ``crack_tip.csv``: the tip position is
 smoothed with a 5-point Savitzky-Golay filter (order 2) before it is
 differentiated, so snapshot-level jumps of the position (one element width)

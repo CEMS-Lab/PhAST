@@ -1,0 +1,56 @@
+{
+  "historical_source_metadata": {
+    "source_commit": "298a38451775b71f74b7c89c1bc4155b21aa5751",
+    "source_path": "pyproject.toml",
+    "package": "phast",
+    "version": "0.16.2",
+    "requires_python": ">=3.10",
+    "declared_dependencies": [
+      "torch>=2.0.0",
+      "numpy>=1.24",
+      "scipy>=1.10",
+      "matplotlib>=3.6",
+      "h5py>=3.7",
+      "meshio>=5.0",
+      "gmsh>=4.10",
+      "Pillow>=9.0",
+      "pyyaml>=6.0",
+      "zarr>=2.18",
+      "numcodecs>=0.13"
+    ]
+  },
+  "historical_runtime": {
+    "dependency_versions": null,
+    "python_version": null,
+    "reason": "The retained successful JSON, saved driver, job stdout and committed Slurm recipe do not record installed dependency versions. A present-day cluster environment is not a historical lockfile.",
+    "verified_facts": {
+      "device": "cpu",
+      "dtype": "torch.float64",
+      "scheduler": "Slurm",
+      "job_id": "48270",
+      "cpus_per_task_requested": 8,
+      "memory_requested": "32GB",
+      "partition_requested": "normal",
+      "OMP_NUM_THREADS": "8",
+      "MKL_NUM_THREADS": "8",
+      "module_in_recorded_recipe": "cuda/13.1.1/none-none/a-imd4uac",
+      "module_does_not_imply_gpu_execution": true
+    }
+  },
+  "portable_setup": {
+    "requirements_path": "requirements.txt",
+    "exact_historical_environment_recreation": false,
+    "optional_omissions": "No PyAMG, AmgX, PETSc, CuPy, HDF5 or Zarr is needed by the recorded T3 explicit/Jacobi step_full route. Whole original modules are retained where required by eager imports; their unrelated lazy APIs are not supported by this focused bundle.",
+    "optional_plot_style": "The original driver optionally imports phast.paper_figure_style and catches its absence. This publication-specific module is deliberately not included; numerical code and driver bytes are unchanged."
+  },
+  "validation_environment": {
+    "purpose": "Help/import and static/hash verification only; not a numerical rerun or historical runtime claim.",
+    "python": "3.10.18",
+    "torch": "2.8.0",
+    "numpy": "2.2.6",
+    "scipy": "1.14.1",
+    "meshio": "5.3.5",
+    "gmsh": "4.15.1",
+    "matplotlib": "3.10.8"
+  }
+}

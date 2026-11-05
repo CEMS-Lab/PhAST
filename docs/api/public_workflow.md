@@ -71,7 +71,7 @@ Python-built `ProblemSpec` through the same YAML runner. From the repository
 root, the linear-plate fluent companion provides a complete setup:
 
 ```bash
-PYTHONPATH=src:. python examples/solid_mechanics_beta/linear_plate/run_fluent.py --run --output-dir runs/linear_plate_python
+PYTHONPATH=src:. python examples/solid_mechanics/linear_plate/run_fluent.py --run --output-dir runs/linear_plate_python
 ```
 
 The script reuses `fluent_setup.build_problem()` and calls

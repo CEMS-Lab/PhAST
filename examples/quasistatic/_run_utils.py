@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass
 
 import torch
 
-from phast.io_utils import (
+from phast.io.outputs import (
     init_h5,
     init_zarr,
     write_h5_snapshot,

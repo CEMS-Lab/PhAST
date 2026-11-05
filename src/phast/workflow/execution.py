@@ -18,14 +18,14 @@ from typing import Any
 
 import yaml
 
-from ..solid_mechanics_runner import solid_example_id, _validate_solid_mechanics_config
-from ..config.config import OutputConfig as LegacyOutputConfig
-from ..config.config import SolverSettings as LegacySolverSettings
-from ..config.config import MaterialConfig, get_geometry_registry
-from ..config.config_validation import validate_config
-from ..utils.units import MATERIAL_OVERRIDE_KINDS, BOUNDARY_VALUE_QUANTITY_KINDS, parse_quantity
-from .capabilities import CapabilityIssue, validate_problem_spec_capabilities
-from .specs import ProblemSpec
+from phast.workflow.solid_mechanics_runner import solid_example_id, _validate_solid_mechanics_config
+from phast.io.config.config import OutputConfig as LegacyOutputConfig
+from phast.io.config.config import SolverSettings as LegacySolverSettings
+from phast.io.config.config import MaterialConfig, get_geometry_registry
+from phast.io.config.config_validation import validate_config
+from phast.core.units import MATERIAL_OVERRIDE_KINDS, BOUNDARY_VALUE_QUANTITY_KINDS, parse_quantity
+from phast.workflow.capabilities import CapabilityIssue, validate_problem_spec_capabilities
+from phast.workflow.specs import ProblemSpec
 
 
 class WorkflowExecutionError(ValueError):
@@ -143,7 +143,7 @@ def execution_plan_from_spec(spec: ProblemSpec) -> WorkflowExecutionPlan:
         if bridge_issues:
             raise WorkflowExecutionError("; ".join(bridge_issues))
         if len(spec.materials) > 1 and spec.solver.kind == "quasi_static":
-            from .multimaterial_fracture import (
+            from phast.workflow.multimaterial_fracture import (
                 MultimaterialWorkflowError,
                 validate_multimaterial_fracture_spec,
             )
@@ -238,7 +238,7 @@ def run_problem_spec(
     solid-mechanics specs are lowered to the existing YAML runner.
     """
     if spec.source == "yaml:v2":
-        from .validation import validate_problem_spec
+        from phast.workflow.validation import validate_problem_spec
 
         issues = validate_problem_spec(spec)
         if issues:
@@ -448,7 +448,7 @@ def _material_domain_issue(spec: ProblemSpec) -> str | None:
     aliases = {"from_mesh", "mesh_group", "physical_group", "element_set"}
     if spec.mesh is None or not spec.mesh.path or len(region.selector) != 1 or not set(region.selector) <= aliases:
         return message + "; selected domains require an external mesh element group"
-    from ..mesh_inspection import inspect_mesh
+    from phast.core.mesh_inspection import inspect_mesh
 
     path = Path(spec.mesh.path).expanduser()
     if not path.is_absolute():
@@ -998,7 +998,7 @@ def _run_schema_v2_fracture_spec(
     output_dir: str | os.PathLike | None = None,
 ) -> int:
     if len(spec.materials) > 1:
-        from .multimaterial_fracture import run_multimaterial_fracture_spec
+        from phast.workflow.multimaterial_fracture import run_multimaterial_fracture_spec
 
         return run_multimaterial_fracture_spec(spec, output_dir=output_dir)
     payload = _schema_v2_fracture_legacy_yaml(spec)
