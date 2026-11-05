@@ -10,9 +10,9 @@ The 3D examples are a later extension, separate from the paper's 2D results.
 | --- | --- | --- |
 | Dynamic fracture inputs and stored outputs | `examples/dynamic/` | Run the example's `config.yaml`; inspect its README and plots |
 | Quasi-static SENT and holed plate | `examples/quasistatic/` | Run the YAML input; inspect the stored load-displacement curves |
-| Selected cross-mesh toughness recovery | [examples/inverse](../examples/inverse/README.md) | Original mesh h=0.125 mm, inverse mesh h=0.1875 mm; repeat AD or inspect the recorded AD/Brent values |
-| Scalar glass and alumina inversions | [reproduction/cmame_2026](../reproduction/cmame_2026/README.md) | Run the isolated original driver or replot its recorded history |
-| Three periodic voxel demonstrations | [3D examples](../examples/three_dimensional/README.md) | Run the Python setup; inspect the damage animations and stored stress-strain curves |
+| Selected cross-mesh toughness recovery | [examples/inverse](https://github.com/CEMS-Lab/PhAST/tree/main/examples/inverse) | Original mesh h=0.125 mm, inverse mesh h=0.1875 mm; repeat AD or inspect the recorded AD/Brent values |
+| Scalar glass and alumina inversions | [reproduction/cmame_2026](https://github.com/CEMS-Lab/PhAST/tree/main/reproduction/cmame_2026) | Run the isolated original driver or replot its recorded history |
+| Three periodic voxel demonstrations | [3D examples](https://github.com/CEMS-Lab/PhAST/tree/main/examples/three_dimensional) | Run the Python setup; inspect the damage animations and stored stress-strain curves |
 
 Most 2D examples use `config.yaml` and optionally `run_fluent.py`.
 The 3D examples use `run.py` to define the geometry, material phases,

@@ -16,8 +16,9 @@ version = _version_match.group(1) if _version_match else "unknown"
 release = version
 commit = os.environ.get("PHAST_COMMIT", os.environ.get("GITHUB_SHA", "unavailable"))
 site_description = (
-    "PhAST is an open-source PyTorch finite-element solver for two-dimensional "
-    "dynamic and quasi-static phase-field fracture."
+    "PhAST is an open-source PyTorch finite-element solver for 2D and 3D "
+    "phase-field fracture, with dynamic and quasi-static 2D models and "
+    "beta quasi-static 3D periodic voxel models."
 )
 html_context = {
     "phast_version": version,

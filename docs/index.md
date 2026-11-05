@@ -193,7 +193,7 @@ user_guide/example_contract
 supported_workflows/solid_mechanics
 supported_workflows/quasistatic_fracture
 supported_workflows/dynamic_fracture
-supported_workflows/plasticity_interface
+supported_workflows/plasticity_interface_beta
 supported_workflows/experimental_3d_geometry
 supported_workflows/unsupported_experimental
 ```

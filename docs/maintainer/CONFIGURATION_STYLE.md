@@ -6,7 +6,7 @@ orphan: true
 
 These rules are mandatory for new public YAML examples, their READMEs, and
 tutorials. Use them with [DOCUMENTATION_STYLE.md](DOCUMENTATION_STYLE.md) and
-the [example contract](docs/user_guide/example_contract.md). Write for an
+the [example contract](../user_guide/example_contract.md). Write for an
 undergraduate who knows forces and displacements but is new to PhAST.
 
 ## One layout, supported execution routes
@@ -37,7 +37,7 @@ changing a value next to the input. Label partial YAML excerpts as partial;
 use a complete checked-in file for runnable instructions.
 
 A common layout is not a promise that every solver supports every section.
-Check the [capability matrix](docs/user_guide/capability_matrix.md). The
+Check the [capability matrix](../user_guide/capability_matrix.md). The
 documented multi-material route is a CPU float64, structured-T3 rectangle,
 quasi-static Amor AT2 model with elementwise `E` and `Gc`, shared `nu`
 and `l0`, and Dirichlet conditions. It is not dynamic multi-material

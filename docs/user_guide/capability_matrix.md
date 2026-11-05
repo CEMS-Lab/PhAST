@@ -5,7 +5,7 @@ they have been tested. It distinguishes established use from beta,
 experimental, optional-backend, scaffold, and unsupported features.
 
 For the present scope of plasticity, cohesive-interface, and PF-CZM support,
-see the [plasticity and interface beta workflow](../supported_workflows/plasticity_interface.md).
+see the [plasticity and interface beta workflow](../supported_workflows/plasticity_interface_beta.md).
 
 ## Status Definitions
 
