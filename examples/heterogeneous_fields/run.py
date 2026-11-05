@@ -17,11 +17,11 @@ import numpy as np
 import torch
 import yaml
 
-from phast.damage_solver import PhaseFieldDamageSolver
-from phast.fem_operators import FEMOperators
-from phast.material import Material
-from phast.mesh import FEMMesh
-from phast.visualization import write_visual_manifest
+from phast.solvers.damage_solver import PhaseFieldDamageSolver
+from phast.core.fem_operators import FEMOperators
+from phast.physics.material import Material
+from phast.core.mesh import FEMMesh
+from phast.viz.visualization import write_visual_manifest
 
 
 def build_t3_mesh(nx: int, ny: int, length: float, height: float) -> tuple[np.ndarray, np.ndarray]:

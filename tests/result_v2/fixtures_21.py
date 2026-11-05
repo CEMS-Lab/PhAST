@@ -67,7 +67,7 @@ def _write(path, desc):
     vtk = desc["vtk"]
     increments = desc["increments"]                       # list of dict(mesh=version, step=stored step or -1)
     f = h5py.File(path, "w", libver=LIBVER, track_order=True)
-    root = dict(phast_schema="phast.result", phast_schema_version=SCHEMA_VERSION, unit_system="mm-MPa-N-s", created=CREATED,
+    root = dict(phast_schema="phast.api.result", phast_schema_version=SCHEMA_VERSION, unit_system="mm-MPa-N-s", created=CREATED,
                 mesh_varies=True, index_basis="increment", kinematics="small", history_update="hard_max",
                 history_coupling="fresh", status="running", profile="run", dim=2, analysis="plane_strain",
                 run_id=desc["run_id"])
@@ -170,7 +170,7 @@ def _write(path, desc):
         _ds(hist, name, col, attrs)
     meta = f.create_group("meta")
     _ds(meta, "config_resolved_yaml", "fixture: true\n")
-    _ds(meta, "schema_yaml", f"schema: phast.result\nversion: {SCHEMA_VERSION}\n")
+    _ds(meta, "schema_yaml", f"schema: phast.api.result\nversion: {SCHEMA_VERSION}\n")
     _set_attrs(meta, dict(software="phast", software_version="fixture", machine="fixture", solver_dtype="float64"))
     f.attrs["status"] = "complete"
     f.attrs["finished"] = CREATED

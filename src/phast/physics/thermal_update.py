@@ -18,7 +18,7 @@ Typical use
 -----------
 ::
 
-    from phast.thermal_update import ThermalUpdate
+    from phast.physics.thermal_update import ThermalUpdate
 
     therm = ThermalUpdate(fem, rho_c=3.5e6, k_therm=45.0, eta_crack=0.9,
                           dt=1e-7, T_ref=293.15)
@@ -36,7 +36,7 @@ Integration test
 ----------------
 ::
 
-    python -m phast.thermal_update
+    python -m phast.physics.thermal_update
 """
 from __future__ import annotations
 
@@ -268,9 +268,9 @@ def _run_integration_test() -> None:
     if _here not in sys.path:
         sys.path.insert(0, os.path.dirname(_here))
 
-    from phast.mesh import FEMMesh
-    from phast.material import Material
-    from phast.fem_operators import FEMOperators
+    from phast.core.mesh import FEMMesh
+    from phast.physics.material import Material
+    from phast.core.fem_operators import FEMOperators
 
     dtype = torch.float64
     device = "cpu"

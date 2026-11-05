@@ -17,8 +17,8 @@ from typing import Any
 
 import numpy as np
 
-from ....result import Result, ResultLoadError
-from ..surface import Surface, boundary_surface, cells_by_type, near_octant_removed
+from phast.api.result import Result, ResultLoadError
+from phast.io.result.surface import Surface, boundary_surface, cells_by_type, near_octant_removed
 
 VECTOR = ("x", "y", "z")
 TENSOR_2D = ("xx", "yy", "xy")

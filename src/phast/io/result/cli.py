@@ -10,9 +10,9 @@ import json
 import sys
 from typing import Callable, Sequence
 
-from .finalize import finalize
-from .recover import recover
-from .validate import validate
+from phast.io.result.finalize import finalize
+from phast.io.result.recover import recover
+from phast.io.result.validate import validate
 
 
 def _validate(args: argparse.Namespace) -> int:

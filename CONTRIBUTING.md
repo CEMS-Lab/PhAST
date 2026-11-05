@@ -95,12 +95,12 @@ commands, inputs, outputs, or visuals usually require both docs and example
 README updates.
 
 All documentation, README, tutorial, and notebook prose must follow
-[`DOCUMENTATION_STYLE.md`](DOCUMENTATION_STYLE.md). The guide defines the
+[`docs/maintainer/DOCUMENTATION_STYLE.md`](docs/maintainer/DOCUMENTATION_STYLE.md). The guide defines the
 project's academic tone, terminology, capability labels, command conventions,
 and checks for avoiding internal development language in public text.
 
 New YAML inputs, example READMEs, and tutorials must additionally follow
-[`CONFIGURATION_STYLE.md`](CONFIGURATION_STYLE.md). Keep the same schema-2
+[`docs/maintainer/CONFIGURATION_STYLE.md`](docs/maintainer/CONFIGURATION_STYLE.md). Keep the same schema-2
 section order across supported student problems, define units and editable
 choices, and use the explain/check/run sequence. A common layout does not
 imply an execution adapter: require adapter and command checks before
@@ -110,7 +110,7 @@ course assets and separate 3D research are not migration targets.
 Install the documentation dependencies:
 
 ```bash
-pip install -r requirements-docs.txt
+pip install -r docs/requirements.txt
 ```
 
 Build the documentation locally:
@@ -134,7 +134,7 @@ When editing curated examples, use `docs/user_guide/example_contract.md` as
 the source of truth for required files, README content, visuals, and artifact
 conventions.
 
-Contributions should follow `DOCUMENTATION_STYLE.md`, verify commands where
+Contributions should follow `docs/maintainer/DOCUMENTATION_STYLE.md`, verify commands where
 possible and must not invent solver capabilities, benchmark results, paper
 metadata, or local/HPC provenance.
 

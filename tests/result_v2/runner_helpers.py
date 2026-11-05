@@ -115,7 +115,7 @@ _DRIVER = textwrap.dedent("""
         np.savez(final, **arrays)
     atexit.register(save)
     sys.argv = ["run_config"] + sys.argv[4:]
-    from phast.config.run_config import main
+    from phast.io.config.run_config import main
     main()
 """)
 

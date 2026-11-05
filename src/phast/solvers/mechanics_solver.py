@@ -23,9 +23,9 @@ GPU strategy:
 import torch
 import warnings
 import math
-from ..core.fem_operators import FEMOperators, stress_split_of
-from ..utils.device import device_supports_float64
-from .time_integrators import gen_alpha_params
+from phast.core.fem_operators import FEMOperators, stress_split_of
+from phast.core.device import device_supports_float64
+from phast.solvers.time_integrators import gen_alpha_params
 
 
 class LBFGSPreconditioner:
@@ -639,7 +639,7 @@ class StaticSolver:
         if self.backend == 'cg':
             return 'cg'
         try:
-            from .sparse_solve import scipy_available
+            from phast.solvers.sparse_solve import scipy_available
             ok = scipy_available()
         except Exception:
             ok = False
@@ -741,7 +741,7 @@ class StaticSolver:
     def _solve_scipy(self, bc_mask, bc_vals, u_init=None):
         """Sparse-direct linear elastic solve via SciPy SuperLU (#106)."""
         import numpy as np
-        from .sparse_solve import SparseSolveAutograd
+        from phast.solvers.sparse_solve import SparseSolveAutograd
 
         mesh = self.fem.mesh
         if u_init is not None:
@@ -864,7 +864,7 @@ class QuasiStaticSolver:
             * ``'cg'``    — original matrix-free preconditioned-CG path (default
               behaviour preserved).
             * ``'scipy'`` — assemble K and call
-              :class:`~phast.sparse_solve.SparseSolveAutograd`
+              :class:`~phast.solvers.sparse_solve.SparseSolveAutograd`
               (SuperLU).  Raises if scipy is unavailable.
             * ``'mumps'`` — PETSc/MUMPS sparse-direct backend (Phase 2 of
               epic #105).  Raises ``ImportError`` if petsc4py is not
@@ -1035,7 +1035,7 @@ class QuasiStaticSolver:
             # Runtime smoke test (#403): a broken petsc4py install imports
             # cleanly but its solve raises, so import-only checks would route
             # us to a backend that dies mid-Newton. Smoke test result caches.
-            from .sparse_solve import scipy_available, _petsc_functional
+            from phast.solvers.sparse_solve import scipy_available, _petsc_functional
             scipy_ok = scipy_available()
             mumps_ok = _petsc_functional()
         except Exception:
@@ -1258,7 +1258,7 @@ class QuasiStaticSolver:
             Which sparse-direct backend's autograd Function to dispatch to.
         """
         import numpy as np
-        from .sparse_solve import (
+        from phast.solvers.sparse_solve import (
             SparseSolveAutograd, _MumpsSparseSolveAutograd)
 
         split = stress_split_of(self.fem.material)
@@ -1434,7 +1434,7 @@ class QuasiStaticSolver:
 
         mumps_handle = None
         if backend_used == 'mumps':
-            from .sparse_solve import make_factor_handle
+            from phast.solvers.sparse_solve import make_factor_handle
             mumps_handle = make_factor_handle()
 
         ds = float(ds)
@@ -1640,7 +1640,7 @@ class QuasiStaticSolver:
                     "J2 plasticity requires sparse tangent assembly; use "
                     "backend='auto', 'scipy', 'mumps', or 'cudss'.")
             if self._plasticity_solver is None:
-                from ..plasticity import SparseJ2QuasiStaticSolver
+                from phast.physics.plasticity import SparseJ2QuasiStaticSolver
                 self._plasticity_solver = SparseJ2QuasiStaticSolver(
                     self.plasticity_operator,
                     tol=self.tol,
@@ -1745,7 +1745,7 @@ class QuasiStaticSolver:
         # change across load steps or boundary-condition updates.
         mumps_handle = None
         if backend_used == 'mumps':
-            from .sparse_solve import make_factor_handle
+            from phast.solvers.sparse_solve import make_factor_handle
             mumps_handle = make_factor_handle()
 
         self.last_iter = 0
@@ -1845,7 +1845,7 @@ class QuasiStaticSolver:
             raise NotImplementedError(
                 "Cohesive interfaces currently require sparse-direct backend")
 
-        from .sparse_solve import resolve_sparse_backend, solve as sparse_solve
+        from phast.solvers.sparse_solve import resolve_sparse_backend, solve as sparse_solve
 
         mesh = self.fem.mesh
         if u_init is None:
@@ -2332,7 +2332,7 @@ class QuasiStaticSolver:
         """
         import numpy as np
         from scipy import sparse as sp
-        from .sparse_solve import (
+        from phast.solvers.sparse_solve import (
             SparseSolveAutograd, _MumpsSparseSolveAutograd)
 
         candidates = self._backend_candidates(n_dof + n_rc, backend)
@@ -2425,7 +2425,7 @@ def _try_import_cupy():
 
 # Re-export for stable public API; implementation lives in a self-contained
 # module so it can be imported without pulling in FEM dependencies (#118).
-from .mixed_precision_cg import cg_mixed_precision  # noqa: E402,F401
+from phast.solvers.mixed_precision_cg import cg_mixed_precision  # noqa: E402,F401
 
 
 def _spsolve_auto(A_csr, rhs, device):
@@ -2618,7 +2618,7 @@ class DirectSolver:
         self._needs_cpu_fallback = not device_supports_float64(dev)
         self._cpu_fem = None
         if self._needs_cpu_fallback:
-            from ..core.mesh import FEMMesh
+            from phast.core.mesh import FEMMesh
             cpu_mesh = FEMMesh.from_tensors(
                 fem.mesh.nodes, fem.mesh.elements, fem.mesh.node_sets,
                 device='cpu', dtype=torch.float64)
@@ -3216,7 +3216,7 @@ class SecantCGSolver:
         self._needs_cpu_fallback = not device_supports_float64(dev)
         self._cpu_fem = None
         if self._needs_cpu_fallback:
-            from ..core.mesh import FEMMesh
+            from phast.core.mesh import FEMMesh
             cpu_mesh = FEMMesh.from_tensors(
                 fem.mesh.nodes, fem.mesh.elements, fem.mesh.node_sets,
                 device='cpu', dtype=torch.float64)

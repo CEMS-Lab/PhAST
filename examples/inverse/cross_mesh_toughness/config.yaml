@@ -1,0 +1,70 @@
+schema_version: 1
+example: cross_mesh_toughness
+observation_kind: displacement
+geometry:
+  width_mm: 40.0
+  height_mm: 40.0
+  notch_length_mm: 20.0
+  notch_half_width_mm: 0.001
+  refinement_band_mm: 1.5
+material:
+  E_MPa: 32000.0
+  nu: 0.2
+  rho_tonne_per_mm3: 2.45e-09
+  eta_residual: 1.0e-06
+  energy_split: spectral
+  pf_model: AT2
+loading:
+  type: ramped_displacement
+  top_displacement_mm: 0.002
+  bottom_displacement_mm: -0.002
+  ramp_time_s: 2.0e-05
+  end_time_s: 3.0e-05
+parameters:
+  Gc:
+    truth: 0.003
+    initial: 0.006
+    bounds:
+    - 0.0015
+    - 0.006
+  l0:
+    truth: 0.5
+    initial: 0.5
+numerics:
+  device: cpu
+  threads: 1
+  damage_tolerance: 1.0e-07
+  damage_max_iterations: 1000
+  adjoint_relative_tolerance: 1.0e-08
+  history_update: hard_max
+  bounds: post_clamp
+profiles:
+  full:
+    h_target_mm: 0.125
+    h_trial_mm: 0.1875
+    h_coarse_mm: 2.0
+    dt_s: 9.436929852154765e-09
+    steps: 3179
+observations:
+  requested_times_s:
+  - 1.0e-05
+  - 1.5e-05
+  - 1.8e-05
+  - 2.0e-05
+  - 2.2e-05
+  - 2.5e-05
+  - 2.8e-05
+  - 3.0e-05
+  grid_start_mm: 2.0
+  grid_stop_mm: 40.0
+  grid_spacing_mm: 2.0
+  loss_scale_mm: 0.002
+inverse:
+  method: lbfgsb
+  max_iterations: 20
+  max_evaluations: 20
+  fd_step: 0.001
+  parameter_relative_tolerance: 0.05
+  maximum_check_relative_error: 0.05
+  minimum_loss_reduction: 0.1
+  truth_based_stopping: false

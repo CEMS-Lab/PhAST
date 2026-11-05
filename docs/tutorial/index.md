@@ -128,12 +128,12 @@ record and to distinguish execution evidence from scientific evidence.
 
 | Workflow | Entry point | Typical output |
 |---|---|---|
-| Full layered DCB teaching model, beta | `python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference` | HDF5 trajectory, CSV, PNG/GIF, and manifests; retained evidence is qualitative, not a validated bypass result. |
+| Full layered DCB teaching model, beta | `python -m phast run examples/two_material_dcb/config.yaml --output_dir runs/dcb_fine_reference` | HDF5 trajectory, CSV, PNG/GIF, and manifests; retained evidence is qualitative, not a validated bypass result. |
 | Complete square-plate teaching workflow | `jupyter lab docs/tutorial/notebook_square_plate_fracture.ipynb` | Fresh mesh, resolved YAML, histories, stored fields, final-field figure, and crack animation. |
 | Dynamic-fracture preflight | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --validate-only` | Configuration acceptance report only; no simulation fields are generated. |
 | Dynamic-branching preflight | `python -m phast run examples/dynamic/B7_dynamic_crack_branching_comsol/config.yaml --validate-only` | Configuration acceptance report only; retained artifacts are separate evidence. |
 | Quasi-static fracture | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | Final damage, response histories, comparison artifacts, and result manifests. |
-| Solid mechanics | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | Displacement/stress plots, response history, and metadata. |
+| Solid mechanics | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate` | Displacement/stress plots, response history, and metadata. |
 | Heterogeneous AT2 teaching problem | `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields` | Elementwise material CSV, nodal damage CSV, field plots, metadata, and manifests. |
 
 The example gallery lists the current public examples and their expected
@@ -162,7 +162,7 @@ result = (
 Use YAML when you want an exact configuration file:
 
 ```bash
-python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
+python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 

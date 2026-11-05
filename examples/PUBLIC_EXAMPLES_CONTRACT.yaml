@@ -49,20 +49,20 @@ families:
   tier: yaml_first
   examples:
   - id: heterogeneous_sent_setup
-    path: examples/heterogeneous_sent_beta
+    path: examples/heterogeneous_sent
     tutorial_ready: false
     role: Beta multi-material setup; retained DCB results do not validate this geometry.
     required_artifacts:
     - README.md
     - config.yaml
   - id: two_material_dcb_phase_field
-    path: examples/two_material_dcb_beta
+    path: examples/two_material_dcb
     kind: heterogeneous_phase_field_teaching
     tutorial_ready: true
     tutorial_blockers: []
-    workflow_entrypoint: examples/two_material_dcb_beta/config.yaml
-    workflow_command: python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/two_material_dcb
-    retained_result: examples/two_material_dcb_beta/results
+    workflow_entrypoint: examples/two_material_dcb/config.yaml
+    workflow_command: python -m phast run examples/two_material_dcb/config.yaml --output_dir runs/two_material_dcb
+    retained_result: examples/two_material_dcb/results
     role: Executed beta bulk-layer crack-interaction illustration with HDF5 output and a matched toughness comparison; not completed bypass, penetration, interface debonding, or a validated fracture benchmark.
     required_artifacts:
     - README.md
@@ -346,7 +346,7 @@ families:
   tier_note: mesh_fea examples are yaml_first; diagnostic examples are script_contract.
   examples:
   - id: linear_plate
-    path: examples/solid_mechanics_beta/linear_plate
+    path: examples/solid_mechanics/linear_plate
     kind: mesh_fea
     tutorial_ready: true
     required_artifacts:
@@ -369,7 +369,7 @@ families:
     - visual_manifest.json
     - run_manifest.json
   - id: neohookean_plate
-    path: examples/solid_mechanics_beta/neohookean_plate
+    path: examples/solid_mechanics/neohookean_plate
     kind: mesh_fea
     tutorial_ready: true
     required_artifacts:
@@ -393,7 +393,7 @@ families:
     - visual_manifest.json
     - run_manifest.json
   - id: j2_bar
-    path: examples/solid_mechanics_beta/j2_bar
+    path: examples/solid_mechanics/j2_bar
     kind: mesh_fea
     tutorial_ready: true
     required_artifacts:
@@ -445,7 +445,7 @@ families:
   source_manifest: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
   examples:
   - id: j2_validation
-    path: examples/plasticity_interface_beta/run_j2_validation.py
+    path: examples/plasticity_interface/run_j2_validation.py
     kind: plasticity
     tutorial_ready: false
     tutorial_blockers:
@@ -454,33 +454,23 @@ families:
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id j2_validation
     validation_id: j2_validation
-    retained_result: examples/plasticity_interface_beta/results/j2_validation
-    fluent_setup: examples/plasticity_interface_beta/fluent_setups/j2_validation.py
+    retained_result: examples/plasticity_interface/results/j2_validation
+    fluent_setup: examples/plasticity_interface/fluent_setups/j2_validation.py
     role: Standard J2 return-map validation example for the curated plasticity slice.
   - id: ductile_pf_plasticity
-    path: examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py
+    path: examples/plasticity_interface/run_ductile_pf_plasticity_validation.py
     kind: sparse_j2_plus_ductile_pf_validation
     tutorial_ready: false
     tutorial_blockers:
     - Beta validation script pending YAML/fluent curation.
     - Needs full tutorial folder, trajectory store or manifest, and animations.
   - id: ductile_pf_sensitivity
-    path: examples/plasticity_interface_beta/run_ductile_pf_sensitivity_study.py
+    path: examples/plasticity_interface/run_ductile_pf_sensitivity_study.py
     kind: sensitivity_study
     tutorial_ready: false
     tutorial_blockers:
     - Sensitivity study is not a first-run public tutorial.
     - Needs curated reduced tutorial case before curation.
-  - id: diffuse_interphase
-    path: examples/plasticity_interface_beta/run_diffuse_interphase_validation.py
-    kind: diffuse_interface_validation
-    tutorial_ready: false
-    tutorial_blockers:
-    - Script-contract beta workflow; not yet a flat YAML-first tutorial folder.
-    - Needs fluent/YAML curation plus trajectory and animation bundle.
-    workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
-    workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id diffuse_interphase
-    validation_id: diffuse_interphase
   - id: cohesive_benchmarks
     path: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     kind: cohesive_and_pfczm_script_contract_family
@@ -489,7 +479,7 @@ families:
     - Aggregate beta contract rather than a single tutorial example.
     - Needs individual curated tutorial folders for cohesive/PF-CZM examples.
   - id: structural_dcb_cohesive
-    path: examples/plasticity_interface_beta/run_structural_dcb_cohesive_benchmark.py
+    path: examples/plasticity_interface/run_structural_dcb_cohesive_benchmark.py
     kind: cohesive_elements
     tutorial_ready: false
     tutorial_blockers:
@@ -498,11 +488,11 @@ families:
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id structural_dcb_cohesive
     validation_id: structural_dcb_cohesive
-    retained_result: examples/plasticity_interface_beta/results/structural_dcb_cohesive
-    fluent_setup: examples/plasticity_interface_beta/fluent_setups/structural_dcb_cohesive.py
+    retained_result: examples/plasticity_interface/results/structural_dcb_cohesive
+    fluent_setup: examples/plasticity_interface/fluent_setups/structural_dcb_cohesive.py
     role: DCB-style structural cohesive benchmark for the curated cohesive/interface slice.
   - id: structural_dcb_refinement
-    path: examples/plasticity_interface_beta/run_structural_dcb_refinement_study.py
+    path: examples/plasticity_interface/run_structural_dcb_refinement_study.py
     kind: cohesive_elements
     tutorial_ready: false
     tutorial_blockers:
@@ -513,7 +503,7 @@ families:
     validation_id: structural_dcb_refinement
     role: Lightweight DCB cohesive mesh/load-step refinement trend for the curated cohesive/interface slice.
   - id: pfczm_uniaxial_strength
-    path: examples/plasticity_interface_beta/run_pfczm_uniaxial_strength_validation.py
+    path: examples/plasticity_interface/run_pfczm_uniaxial_strength_validation.py
     kind: pfczm
     tutorial_ready: false
     tutorial_blockers:
@@ -522,6 +512,74 @@ families:
     workflow_entrypoint: configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml
     workflow_command: python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id pfczm_uniaxial_strength
     validation_id: pfczm_uniaxial_strength
-    retained_result: examples/plasticity_interface_beta/results/pfczm_uniaxial_strength
-    fluent_setup: examples/plasticity_interface_beta/fluent_setups/pfczm_uniaxial_strength.py
+    retained_result: examples/plasticity_interface/results/pfczm_uniaxial_strength
+    fluent_setup: examples/plasticity_interface/fluent_setups/pfczm_uniaxial_strength.py
     role: One-dimensional PF-CZM strength calibration baseline verification for the curated PF-CZM slice.
+- id: three_dimensional
+  tier: script_contract
+  status: beta
+  examples:
+  - id: pore_in_cube
+    path: examples/three_dimensional/pore_in_cube
+    kind: periodic_voxel_3d_fracture
+    tutorial_ready: false
+    tutorial_blockers:
+    - Beta periodic voxel solver; not yet expressible through `python -m phast run`.
+    - The result file of the full run (about 0.5 GB for the 110,592-element cells) is not stored in the repository.
+    workflow_command: python examples/three_dimensional/pore_in_cube/run.py --output-dir runs/pore_in_cube
+    role: Crack nucleation at a spherical pore in a periodic cube (110,592 hexahedral elements).
+    required_artifacts:
+    - README.md
+    - run.py
+    - assets/initial_conditions.png
+    - assets/thumbnail.png
+    - assets/damage_final.png
+    - assets/damage_evolution.gif
+    - assets/damage_evolution.mp4
+    - assets/stress_strain.png
+    - assets/history.csv
+    - assets/visual_manifest.json
+    - assets/run_manifest.json
+  - id: particles_in_cube
+    path: examples/three_dimensional/particles_in_cube
+    kind: periodic_voxel_3d_fracture
+    tutorial_ready: false
+    tutorial_blockers:
+    - Beta periodic voxel solver; not yet expressible through `python -m phast run`.
+    - The result file of the full run (about 0.5 GB for the 110,592-element cells) is not stored in the repository.
+    workflow_command: python examples/three_dimensional/particles_in_cube/run.py --output-dir runs/particles_in_cube
+    role: Interface debonding around four spherical particles in a periodic cube (110,592 hexahedral elements).
+    required_artifacts:
+    - README.md
+    - run.py
+    - assets/initial_conditions.png
+    - assets/thumbnail.png
+    - assets/damage_final.png
+    - assets/damage_evolution.gif
+    - assets/damage_evolution.mp4
+    - assets/stress_strain.png
+    - assets/history.csv
+    - assets/visual_manifest.json
+    - assets/run_manifest.json
+  - id: fibre_unit_cell
+    path: examples/three_dimensional/fibre_unit_cell
+    kind: periodic_voxel_3d_fracture
+    tutorial_ready: false
+    tutorial_blockers:
+    - Beta periodic voxel solver; not yet expressible through `python -m phast run`.
+    - The result file of the full run (about 0.5 GB for the 110,592-element cells) is not stored in the repository.
+    workflow_command: python examples/three_dimensional/fibre_unit_cell/run.py --output-dir runs/fibre_unit_cell
+    role: Nine-fibre unit cell under transverse tension, solved with 3D elements (21,218 hexahedral elements).
+    required_artifacts:
+    - README.md
+    - run.py
+    - assets/initial_conditions.png
+    - assets/thumbnail.png
+    - assets/damage_final.png
+    - assets/damage_evolution.gif
+    - assets/damage_evolution.mp4
+    - assets/stress_strain.png
+    - assets/history.csv
+    - assets/visual_manifest.json
+    - assets/run_manifest.json
+    - microstructure.npz

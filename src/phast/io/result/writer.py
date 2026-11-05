@@ -46,8 +46,8 @@ from typing import Any, Iterable, Mapping
 import h5py
 import numpy as np
 
-from .cells import cell_info, edge_index
-from .schema import SCHEMA_NAME, SCHEMA_VERSION, SCHEMA_VERSION_21, load_schema, schema_text
+from phast.io.result.cells import cell_info, edge_index
+from phast.io.result.schema import SCHEMA_NAME, SCHEMA_VERSION, SCHEMA_VERSION_21, load_schema, schema_text
 
 LIBVER = ("earliest", "v114")
 TIME_LIMIT_EXIT_CODE = 11
@@ -458,7 +458,7 @@ class ResultWriter:
     @classmethod
     def _check_resumable(cls, fr, src, mesh, fields, upto, run_id):
         """The read-only part of :meth:`resume`; returns what the change needs or raises :class:`ResumeRefused`."""
-        from .recover import _consistent_steps
+        from phast.io.result.recover import _consistent_steps
         a = fr.attrs
         text = lambda v: v.decode() if isinstance(v, bytes) else str(v)
         if text(a.get("phast_schema", "")) != SCHEMA_NAME or "VTKHDF" not in fr or "history" not in fr:
@@ -534,7 +534,7 @@ class ResultWriter:
     def _resume_apply(cls, final, partial, src, mesh, fields, upto, keep, n, moved, prior_rows, prior_steps,
                       prior_status, version, n_backup, backup, history_units, history_attrs, sidecars, validate_on_close):
         """The changing part of :meth:`resume`: backup, rename to ``.partial``, cut, restore the writer's state."""
-        from .recover import _clear_flag, _trim_history, trim_steps
+        from phast.io.result.recover import _clear_flag, _trim_history, trim_steps
         import shutil
         bak = src.with_name(f"{src.name}.pre-resume-{n_backup}.bak") if backup else None
         previous_sha = sha256_file(src)
@@ -1424,7 +1424,7 @@ class ResultWriter:
         state = self._tables.get("crack_tips")
         if not state or not state["n"]:
             return
-        from .crack_tips import FIT_METHOD, FIT_POLYORDER, FIT_WINDOW, fit_speed
+        from phast.io.result.crack_tips import FIT_METHOD, FIT_POLYORDER, FIT_WINDOW, fit_speed
         g = self.f["history/crack_tips"]
         inc = np.asarray(self.f["history/increment"][...], np.int64)
         time_of = dict(zip(inc.tolist(), np.asarray(self.f["history/time"][...], float).tolist()))
@@ -1501,7 +1501,7 @@ def _dump_yaml(obj) -> str:
 
 
 def _provenance() -> dict:
-    from phast.utils.provenance import dependency_versions, git_state
+    from phast.io.provenance import dependency_versions, git_state
     git = git_state()
     deps = {k: v for k, v in dependency_versions().items() if v is not None}
     deps["HDF5"] = h5py.version.hdf5_version
@@ -1520,7 +1520,7 @@ def _portable_command(argv) -> str:
 
 def _validate(path):
     try:
-        from .validate import validate
+        from phast.io.result.validate import validate
     except ImportError:          # validator not installed in this build
         return None
     return validate(path, allow_running=False)

@@ -15,7 +15,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-from .validate import Report, _text, validate
+from phast.io.result.validate import Report, _text, validate
 
 LIBVER = ("earliest", "v114")
 _STEP_DATASETS = ("Values", "PartOffsets", "NumberOfParts", "PointOffsets", "CellOffsets", "ConnectivityIdOffsets")

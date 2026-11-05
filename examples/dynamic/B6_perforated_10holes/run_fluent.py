@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 
 import phast
-from phast.config import BoundaryConditionEntry, GeometryConfig, LoadingConfig, MaterialConfig, OutputConfig, SolverSettings
+from phast.io.config import BoundaryConditionEntry, GeometryConfig, LoadingConfig, MaterialConfig, OutputConfig, SolverSettings
 
 
 def _apply_num_steps(problem: phast.Problem, num_steps: int | None) -> phast.Problem:

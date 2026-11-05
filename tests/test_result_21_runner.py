@@ -16,7 +16,7 @@ import pytest
 import torch
 
 from phast import load_result
-from phast.config.result_output import plane_strain_stress_zz, resolve_result_settings
+from phast.io.config.result_output import plane_strain_stress_zz, resolve_result_settings
 from phast.core.fem_operators import FEMOperators
 from phast.core.mesh import FEMMesh
 from phast.physics.material import Material
@@ -361,7 +361,7 @@ def test_crack_tips_are_refused_on_q4(tmp_path):
 
 def test_an_unknown_boundary_condition_type_is_refused_in_layout_21_only():
     from types import SimpleNamespace
-    from phast.config.result_output import RunResultRecorder
+    from phast.io.config.result_output import RunResultRecorder
     entry = SimpleNamespace(type="mystery", nodes="top", component=1, value=1.0)
     cfg = SimpleNamespace(boundary_conditions=[entry], loading=SimpleNamespace(ramp_type="constant"))
     solver = SimpleNamespace(bcs=SimpleNamespace(neumann_bcs=[]))

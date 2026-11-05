@@ -19,7 +19,7 @@ not test solver execution or establish scientific validity.
 From a source checkout, run:
 
 ```bash
-python run_sanitizer.py
+python tools/run_sanitizer.py
 ```
 
 The sanitizer exercises one T3 element, the fixed-history AT2 damage solve,

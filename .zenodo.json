@@ -1,0 +1,33 @@
+{
+  "title": "PhAST 0.18.0: Phase-field Autograd Solver in Torch",
+  "upload_type": "software",
+  "version": "0.18.0",
+  "license": "mit",
+  "description": "<p>PhAST is a PyTorch finite-element solver for phase-field fracture. Version 0.18.0 extends the two-dimensional dynamic and quasi-static solver with a beta three-dimensional periodic-voxel solver and three worked 3D examples.</p><p>The release contains solver sources, installation requirements, documentation, tests, YAML and Python examples, selected stored results, and glass and alumina scalar-inversion recipes associated with the CMAME article. It does not contain every dataset or figure-generation input from that article. The reproduction guide describes the coverage and limitations.</p><p>Code is licensed under MIT. The two archived scalar recovery histories retain CC BY 4.0; see reproduction/cmame_2026/README.md.</p>",
+  "creators": [
+    {
+      "name": "Ani, Allamaprabhu",
+      "affiliation": "City St George's, University of London; Queen Mary University of London"
+    },
+    {
+      "name": "Molinari, Jean-Francois",
+      "affiliation": "Ecole Polytechnique Federale de Lausanne (EPFL)"
+    },
+    {
+      "name": "Subhash, Ghatu",
+      "affiliation": "University of Florida"
+    },
+    {
+      "name": "Ponnusami, Sathiskumar A.",
+      "affiliation": "City St George's, University of London; Queen Mary University of London"
+    }
+  ],
+  "keywords": ["phase-field fracture", "finite element method", "PyTorch", "matrix-free solvers", "differentiable mechanics"],
+  "related_identifiers": [
+    {
+      "identifier": "10.1016/j.cma.2026.119547",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    }
+  ]
+}

@@ -16,7 +16,7 @@ preserving resolution near the crack front.
 
 Usage::
 
-    from phast.multigrid import NodeAggregation, ScalarMultigrid
+    from phast.solvers.multigrid import NodeAggregation, ScalarMultigrid
 
     # Build aggregation (once, or when crack topology changes)
     agg = NodeAggregation(mesh)

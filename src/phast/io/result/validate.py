@@ -19,7 +19,7 @@ import h5py
 import numpy as np
 import yaml
 
-from .schema import LATEST_VERSION, SCHEMA_VERSION, load_schema, schema_version_for
+from phast.io.result.schema import LATEST_VERSION, SCHEMA_VERSION, load_schema, schema_version_for
 
 LEVELS = ("ERROR", "WARN", "INFO")
 # HDF5 filter ids of the filter names allowed by the schema ("none" means no filter)

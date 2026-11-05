@@ -7,7 +7,7 @@ from pathlib import Path
 import matplotlib
 from matplotlib.figure import Figure
 
-from ....utils.paper_figure_style import PAPER_STYLE
+from phast.viz.figure_style import PAPER_STYLE
 
 MAX_PX = 1990            # every PNG stays below 2000 px on both axes
 DEFAULT_DPI = 150

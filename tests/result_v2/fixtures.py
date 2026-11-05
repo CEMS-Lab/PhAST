@@ -109,7 +109,7 @@ def write_fixture(path, desc, kill=None):
         raise RefusedLayout("layout 2.0 refuses changing meshes (mesh_varies = true)")
     path = Path(path)
     f = h5py.File(path, "w", libver=LIBVER, track_order=True)
-    root = dict(phast_schema="phast.result", phast_schema_version=SCHEMA_VERSION, unit_system="mm-MPa-N-s",
+    root = dict(phast_schema="phast.api.result", phast_schema_version=SCHEMA_VERSION, unit_system="mm-MPa-N-s",
                 created=CREATED, mesh_varies=False, index_basis="increment", kinematics="small",
                 history_update="hard_max", history_coupling="fresh", status="running")
     root.update({k: v for k, v in desc["root"].items() if k != "final_status"}); root["mesh_varies"] = False
@@ -241,7 +241,7 @@ def _write_groups(f, desc, n_pts, n_cells):
         _set_attrs(f.require_group(path), attrs)
     meta = f.require_group("meta")
     _ds(meta, "config_resolved_yaml", desc.get("config", "fixture: true\n"))
-    _ds(meta, "schema_yaml", f"schema: phast.result\nversion: {SCHEMA_VERSION}\n")
+    _ds(meta, "schema_yaml", f"schema: phast.api.result\nversion: {SCHEMA_VERSION}\n")
     _set_attrs(meta, dict(software="phast", software_version="fixture", machine="fixture", solver_dtype="float64"))
     _set_attrs(meta, desc.get("meta_attrs", {}))
 

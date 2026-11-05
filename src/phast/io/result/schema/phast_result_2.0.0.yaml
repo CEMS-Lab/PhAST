@@ -1,7 +1,7 @@
 # PhAST result file schema, machine-readable form of
 # docs/user_guide/result_file_layout.md (layout 2.0.0).
 # Writers embed this text in meta/schema_yaml; the validator checks files against it.
-schema: phast.result
+schema: phast.api.result
 version: 2.0.0
 specification: docs/user_guide/result_file_layout.md
 
@@ -25,7 +25,7 @@ file:
 
 root_attributes:
   required:
-    phast_schema: {value: phast.result}
+    phast_schema: {value: phast.api.result}
     phast_schema_version: {pattern: "^2\\.\\d+\\.\\d+$"}
     profile: {values: [setup, run]}
     dim: {values: [2, 3]}

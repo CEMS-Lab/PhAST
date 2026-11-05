@@ -142,7 +142,7 @@ class Material:
     #
     # NOTE: These are stored on Material so a single object describes the
     # full constitutive model. The plasticity kernel itself is implemented
-    # in ``phast.plasticity`` as a *standalone* module — it is
+    # in ``phast.physics.plasticity`` as a *standalone* module — it is
     # NOT yet wired into the staggered phase-field solver. Coupled
     # PF–plasticity (Ambati 2015 / Borden 2016 / Miehe 2016 ductile
     # fracture) is tracked as a separate sub-issue under #262.
@@ -475,7 +475,7 @@ class Material:
         C : (3, 3) tensor
         """
         if device is None:
-            from ..utils.device import detect_device
+            from phast.core.device import detect_device
             device = detect_device()
         lam, mu = self.lam, self.mu
         # Use torch.stack to keep gradients flowing if lam, mu are tensors.
@@ -592,7 +592,7 @@ def create_material(preset=None, **overrides) -> Material:
     Unit conventions for each preset are documented in the dict below
     next to the original literature source.
     """
-    from ..utils.units import parse_quantity, MATERIAL_OVERRIDE_KINDS
+    from phast.core.units import parse_quantity, MATERIAL_OVERRIDE_KINDS
     # Internal units throughout: E [MPa], Gc [N/mm], l0 [mm], rho [tonne/mm^3].
     # SI equivalents are stated alongside each preset so the conversion
     # factor is auditable; literal values are unchanged for bit-identical

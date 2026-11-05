@@ -32,7 +32,7 @@ def test_linear_plate_newcomer_run_and_result_loading(tmp_path: Path):
     output = tmp_path / "linear_plate"
     run_command(
         "-m", "phast", "run",
-        "examples/solid_mechanics_beta/linear_plate/config.yaml",
+        "examples/solid_mechanics/linear_plate/config.yaml",
         "--output_dir", str(output),
     )
     for filename in (

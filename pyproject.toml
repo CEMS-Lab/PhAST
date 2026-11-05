@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phast"
-version = "0.16.2"
+version = "0.18.0"
 authors = [
   { name="Allamaprabhu Ani", email="allamaprabhu.ani@city.ac.uk" },
 ]
@@ -23,7 +23,6 @@ classifiers = [
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
     "Topic :: Scientific/Engineering :: Physics",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Intended Audience :: Science/Research",
 ]
 dependencies = [
@@ -133,7 +132,7 @@ include = ["phast*"]
 [tool.cibuildwheel]
 build = "cp310-* cp311-* cp312-*"
 skip = "*-musllinux_* pp*"
-test-command = "python -c 'from phast.sparse_solve import solve; from phast.time_integrators import gen_alpha_params; print(\"OK\")'"
+test-command = "python -c 'from phast.solvers.sparse_solve import solve; from phast.solvers.time_integrators import gen_alpha_params; print(\"OK\")'"
 
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]

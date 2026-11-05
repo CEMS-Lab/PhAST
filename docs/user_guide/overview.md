@@ -35,12 +35,12 @@ result API + visualization + provenance
 
 | Area | Main modules | Role |
 |---|---|---|
-| Authoring | `phast.core.problem`, `phast.workflow` | Fluent `Problem` objects and workflow contracts. |
-| Configuration | `phast.config` | YAML parsing, schema validation, `run`, `doctor`, and `explain-config` entry points. |
+| Authoring | `phast.api.problem`, `phast.workflow` | Fluent `Problem` objects and workflow contracts. |
+| Configuration | `phast.io.config` | YAML parsing, schema validation, `run`, `doctor`, and `explain-config` entry points. |
 | Mesh and geometry | `phast.core.mesh`, `phast.core.geometry_dsl`, `phast.core.geometry_compiler` | Mesh loading, declarative geometry parsing, Gmsh-backed geometry compilation, and mesh inspection. |
 | Physics | `phast.physics`, `phast.core.fem_operators` | Materials, initial conditions, boundary conditions, fracture mechanics, and FEM tensor operators. |
 | Solvers | `phast.solvers` | Mechanics, damage, staggered solves, sparse/direct solves, time integrators, and optional acceleration paths. |
-| Results | `phast.result`, `phast.utils.visualization`, `phast.utils.provenance` | Result loading, visual outputs, metadata, manifests, and reproducibility records. |
+| Results | `phast.api.result`, `phast.viz.visualization`, `phast.io.provenance` | Result loading, visual outputs, metadata, manifests, and reproducibility records. |
 
 ## Design Principles
 
@@ -75,11 +75,11 @@ a pathway for a publication, automated study, or external comparison.
 
 `phast` is not a PINN package. It solves discretised finite-element
 phase-field equations and can expose supported tensor computations to autograd,
-but the public release is scoped to forward fracture workflows rather than
-neural surrogates.
+but the public release is scoped to forward fracture workflows.
 
-It is also not a full 3D fracture platform. The principal supported fracture
-workflows use two-dimensional triangulated meshes.
+It is not yet a general 3D fracture platform. The principal supported fracture
+workflows use two-dimensional triangulated meshes; 3D fracture on periodic voxel
+cells is available as a beta capability (`examples/three_dimensional/`).
 
 ## Major Workflows
 

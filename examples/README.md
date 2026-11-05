@@ -2,17 +2,14 @@
 
 This directory contains the runnable PhAST examples grouped by physics family:
 dynamic fracture, quasi-static fracture, solid mechanics, heterogeneous-field teaching, beta
-plasticity/interface workflows, and a documentation-only location for possible
-future inverse-analysis
-examples. Each public example is kept compact so that a new user can inspect
+plasticity/interface workflows, and beta three-dimensional fracture. Each public example is kept compact so that a new user can inspect
 the input deck, run it, and compare the output bundle without searching through
 solver internals.
 
 Start with the dynamic and quasi-static fracture examples if you are learning
 the solver. Solid-mechanics folders provide supporting finite-element checks,
 while plasticity/interface folders are beta validation workflows with a narrower
-evidence boundary. `inverse_problems_beta/` contains documentation only and is
-not a runnable inverse-analysis example.
+evidence boundary.
 
 Most public examples use declarative YAML input configurations. Validate and
 run them from the repository root:
@@ -28,6 +25,11 @@ includes `run_fluent.py`, that script shows the equivalent Python setup;
 
 For detailed artifact and curation rules, see the
 [example contract](../docs/user_guide/example_contract.md).
+
+Paper-specific inversion recipes are listed under
+[inverse examples](inverse/README.md) and [CMAME article calculations](../reproduction/cmame_2026/README.md).
+These include the selected cross-mesh recovery and the recorded glass and
+alumina scalar histories.
 
 ## Dynamic Fracture
 
@@ -59,17 +61,17 @@ YAML runner.
 
 | Example | Status | Physics / Scenario | Command |
 | :--- | :--- | :--- | :--- |
-| [`linear_plate`](solid_mechanics_beta/linear_plate/) | Supporting solver example | Linear elastic cantilever | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml` |
-| [`neohookean_plate`](solid_mechanics_beta/neohookean_plate/) | Supporting solver example | Nonlinear neo-Hookean cantilever | `python -m phast run examples/solid_mechanics_beta/neohookean_plate/config.yaml` |
-| [`j2_bar`](solid_mechanics_beta/j2_bar/) | Beta material-model example | Mesh-level J2 plasticity bar | `python -m phast run examples/solid_mechanics_beta/j2_bar/config.yaml` |
+| [`linear_plate`](solid_mechanics/linear_plate/) | Supporting solver example | Linear elastic cantilever | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml` |
+| [`neohookean_plate`](solid_mechanics/neohookean_plate/) | Supporting solver example | Nonlinear neo-Hookean cantilever | `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml` |
+| [`j2_bar`](solid_mechanics/j2_bar/) | Beta material-model example | Mesh-level J2 plasticity bar | `python -m phast run examples/solid_mechanics/j2_bar/config.yaml` |
 
 For the YAML-first solid examples, `run_fluent.py` provides the equivalent
 manual Python setup:
 
 ```bash
-python examples/solid_mechanics_beta/linear_plate/run_fluent.py
-python examples/solid_mechanics_beta/neohookean_plate/run_fluent.py
-python examples/solid_mechanics_beta/j2_bar/run_fluent.py
+python examples/solid_mechanics/linear_plate/run_fluent.py
+python examples/solid_mechanics/neohookean_plate/run_fluent.py
+python examples/solid_mechanics/j2_bar/run_fluent.py
 ```
 
 ## Heterogeneous Material Fields
@@ -89,9 +91,9 @@ strain field. It does not claim coupled microstructure-fracture validation.
 
 ## Beta Plasticity And Interface
 
-All folders and validation bundles under `examples/plasticity_interface_beta/`
+All folders and validation bundles under `examples/plasticity_interface/`
 are beta workflows for J2 plasticity, cohesive/interface operators, PF-CZM
-calibration, and diffuse interphase screening. Their reproducibility manifest
+calibration, and interface-fracture path screening. Their reproducibility manifest
 is:
 
 ```text
@@ -107,15 +109,8 @@ python -m phast run configs/benchmarks/plasticity_interface/reproducibility_cont
 python -m phast run configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml --validation-id pfczm_uniaxial_strength
 ```
 
-See [`plasticity_interface/README.md`](plasticity_interface_beta/) for the full
+See [`plasticity_interface/README.md`](plasticity_interface/) for the full
 beta capability boundary and direct script commands.
-
-## Inverse Problems Beta
-
-[`inverse_problems_beta/`](inverse_problems_beta/) documents requirements for a
-possible future differentiable inverse-analysis example. It must not be
-described as runnable unless a configuration, loss definition, lightweight
-outputs, and validation notes are added.
 
 ## Common CLI Flags
 

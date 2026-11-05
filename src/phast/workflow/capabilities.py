@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from .specs import ProblemSpec
+from phast.workflow.specs import ProblemSpec
 
 
 @dataclass(frozen=True)

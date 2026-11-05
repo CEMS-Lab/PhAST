@@ -13,8 +13,8 @@ from phast.workflow.specs import FieldOutputSpec, HistoryOutputSpec, InitialCond
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = ROOT / "examples" / "two_material_dcb_beta" / "config.yaml"
-SENT_CONFIG = ROOT / "examples" / "heterogeneous_sent_beta" / "config.yaml"
+CONFIG = ROOT / "examples" / "two_material_dcb" / "config.yaml"
+SENT_CONFIG = ROOT / "examples" / "heterogeneous_sent" / "config.yaml"
 
 
 def test_dcb_config_uses_standard_executable_workflow():

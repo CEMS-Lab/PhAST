@@ -47,9 +47,9 @@ import torch
 # Set TORCH_PF_CG_DETERMINISTIC=1 in the env to enable. Slightly slower but
 # correct for gradient-checkpointed inverse-problem demos.
 _CG_DETERMINISTIC = os.environ.get('TORCH_PF_CG_DETERMINISTIC', '0') in ('1', 'true', 'TRUE')
-from ..core.fem_operators import FEMOperators
-from ..physics.material import Material
-from ..utils.device import device_supports_float64
+from phast.core.fem_operators import FEMOperators
+from phast.physics.material import Material
+from phast.core.device import device_supports_float64
 
 
 class DamageActiveSet(NamedTuple):
@@ -1530,7 +1530,7 @@ class PhaseFieldDamageSolver:
         Returns the name of the preconditioner that was actually built.
         """
         if requested == 'auto':
-            from ..utils.device import get_device_tier
+            from phast.core.device import get_device_tier
             tier = get_device_tier(self._cg_device)
             print(f"[PhaseFieldDamageSolver] Auto-selecting preconditioner for "
                   f"{tier['name']} ({tier['tier']})", flush=True)
@@ -1552,7 +1552,7 @@ class PhaseFieldDamageSolver:
 
         if requested == 'amgx':
             try:
-                from .multigrid import AmgXPreconditioner
+                from phast.solvers.multigrid import AmgXPreconditioner
                 self._multigrid = AmgXPreconditioner(
                     self.mesh, Gc_l0=self._Gc_l0,
                     device=self._cg_device, dtype=self._cg_dtype)
@@ -1567,7 +1567,7 @@ class PhaseFieldDamageSolver:
 
         if requested == 'amg':
             try:
-                from .multigrid import AMGPreconditioner
+                from phast.solvers.multigrid import AMGPreconditioner
                 self._multigrid = AMGPreconditioner(
                     self.mesh, Gc_l0=self._Gc_l0,
                     device=self._cg_device, dtype=self._cg_dtype)
@@ -1582,7 +1582,7 @@ class PhaseFieldDamageSolver:
 
         if requested == 'gmg':
             try:
-                from .multigrid import NodeAggregation, ScalarMultigrid
+                from phast.solvers.multigrid import NodeAggregation, ScalarMultigrid
                 agg = NodeAggregation(self.mesh, device=self._cg_device)
                 self._multigrid = ScalarMultigrid(
                     self.mesh, agg, Gc_l0=self._Gc_l0,
@@ -1631,7 +1631,7 @@ class PhaseFieldDamageSolver:
         if reaction_coeff is not None and not torch.isfinite(reaction_coeff).all():
             return False
         try:
-            from .multigrid import NodeAggregation, ScalarMultigrid
+            from phast.solvers.multigrid import NodeAggregation, ScalarMultigrid
             agg = NodeAggregation(self.mesh, device=self._cg_device)
             if d is not None:
                 agg.rebuild(d)
@@ -2101,7 +2101,7 @@ class PhaseFieldDamageSolver:
         gives a tighter bound than Jacobi.
         """
         if self._preconditioner == 'spectral':
-            from .multigrid import _scalar_spectral_diag
+            from phast.solvers.multigrid import _scalar_spectral_diag
             # Determine Gc_l0 (scalar or per-element for gamma correction)
             Gc_l0 = self._Gc_l0_e if self._Gc_l0_e is not None else self._Gc_l0
             return _scalar_spectral_diag(
@@ -3265,8 +3265,8 @@ class PhaseFieldDamageSolver:
                 "damage solves only; direct assembled damage solves would need "
                 "the same eta/dt mass term added to the sparse matrix and RHS.")
         import numpy as np
-        from .multigrid import _assemble_sparse_cpu, _assemble_sparse_nodal_H
-        from .mechanics_solver import _spsolve_auto
+        from phast.solvers.multigrid import _assemble_sparse_cpu, _assemble_sparse_nodal_H
+        from phast.solvers.mechanics_solver import _spsolve_auto
 
         orig_device = d_prev.device
         orig_dtype = d_prev.dtype

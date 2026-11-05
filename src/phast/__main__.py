@@ -40,31 +40,31 @@ def main():
     sys.argv = [sys.argv[0]] + sys.argv[2:]
 
     if cmd == 'run':
-        from .config.run_config import main as run_main
+        from phast.io.config.run_config import main as run_main
         run_main()
     elif cmd == 'precheck':
-        from .config.precheck import main as pc_main
+        from phast.io.config.precheck import main as pc_main
         pc_main()
     elif cmd in ('explain-config', 'explain'):
-        from .config.explain_config import main as explain_main
+        from phast.io.config.explain_config import main as explain_main
         raise SystemExit(explain_main())
     elif cmd in ('schema', 'json-schema'):
-        from .config.config_schema import main as schema_main
+        from phast.io.config.config_schema import main as schema_main
         raise SystemExit(schema_main())
     elif cmd == 'doctor':
-        from .utils.doctor import main as doctor_main
+        from phast.cli.doctor import main as doctor_main
         raise SystemExit(doctor_main())
     elif cmd == 'postprocess':
-        from .postprocess_paper import main as pp_main
+        from phast.viz.postprocess import main as pp_main
         pp_main()
     elif cmd == 'new':
-        from .scaffolder import main as new_main
+        from phast.cli.scaffolder import main as new_main
         new_main()
     elif cmd == 'result':
-        from .io.result.cli import main as result_main
+        from phast.io.result.cli import main as result_main
         raise SystemExit(result_main())
     elif cmd == 'figures':
-        from .io.result.figures import main as figures_main
+        from phast.io.result.figures import main as figures_main
         raise SystemExit(figures_main())
     else:
         print(f"Unknown subcommand: '{cmd}'")

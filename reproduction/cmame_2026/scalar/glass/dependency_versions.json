@@ -1,0 +1,46 @@
+{
+  "historical_source_metadata": {
+    "source_commit": "56e4dda3236c1dad64756be8ed9ba83c3f7c1ce1",
+    "source_path": "pyproject.toml",
+    "package": "phast",
+    "version": "0.16.2",
+    "requires_python": ">=3.10",
+    "declared_dependencies": [
+      "torch>=2.0.0",
+      "numpy>=1.24",
+      "scipy>=1.10",
+      "matplotlib>=3.6",
+      "h5py>=3.7",
+      "meshio>=5.0",
+      "gmsh>=4.10",
+      "Pillow>=9.0",
+      "pyyaml>=6.0",
+      "zarr>=2.18",
+      "numcodecs>=0.13"
+    ]
+  },
+  "historical_runtime": {
+    "dependency_versions": null,
+    "python_version": null,
+    "environment_exports": null,
+    "full_core_hash_lock": null,
+    "reason": "The original glass JSON does not record installed dependency versions, Python version, thread exports, or a full runtime source lock. Source defaults are not measurements of that environment."
+  },
+  "portable_setup": {
+    "requirements_path": "requirements.txt",
+    "exact_historical_environment_recreation": false,
+    "scope": "The glass CPU/T3/explicit/Jacobi route and optional plotting only. Whole required files keep unused methods; this is not the complete historical framework.",
+    "optional_omissions": "PyAMG, AmgX, PETSc, CuPy, HDF5 and Zarr are not needed by this focused step_full route.",
+    "optional_plot_style": "The unchanged driver already permits an absent optional phast.paper_figure_style module; that module is not included."
+  },
+  "validation_environment": {
+    "purpose": "Hash, syntax, help and import checks only; not a numerical rerun or historical runtime claim.",
+    "python": "3.10.18",
+    "torch": "2.8.0",
+    "numpy": "2.2.6",
+    "scipy": "1.14.1",
+    "meshio": "5.3.5",
+    "gmsh": "4.15.1",
+    "matplotlib": "3.10.8"
+  }
+}

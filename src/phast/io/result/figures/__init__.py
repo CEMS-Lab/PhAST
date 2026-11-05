@@ -24,6 +24,6 @@ reader keeps depending on h5py and NumPy only.
 """
 from __future__ import annotations
 
-from .cli import draw_all, main
+from phast.io.result.figures.cli import draw_all, main
 
 __all__ = ["draw_all", "main"]

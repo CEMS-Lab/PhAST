@@ -16,8 +16,8 @@ Provides:
 import warnings
 
 import torch
-from .mesh import FEMMesh
-from ..physics.material import Material
+from phast.core.mesh import FEMMesh
+from phast.physics.material import Material
 
 
 
@@ -91,7 +91,7 @@ class FEMOperators:
               f"(c_p={material.c_p:.2f})", flush=True)
 
         # Optional per-element Young's modulus field for spatially heterogeneous
-        # elasticity (paper-2 stiff-inclusion / spatial-E inversion). When None,
+        # elasticity with spatially varying Young's modulus. When None,
         # all stiffness paths fall back to the scalar material.E and the solver
         # behaviour is bit-equivalent to the pre-field implementation.
         # Currently supported with energy_split='amor' only; the staggered

@@ -95,12 +95,12 @@ def custom_subgrad(
     """Custom-subgradient smooth backward (closes #362).
 
     Wires the dispatcher to the standalone module
-    ``phast.h_update_custom_subgrad.custom_subgrad``
+    ``phast.physics.h_update_custom_subgrad.custom_subgrad``
     landed in PR #367. Forward is byte-exact ``torch.maximum``;
     backward is sigmoid-weighted so both operands get nonzero
     gradient near the active-set transition.
     """
-    from .h_update_custom_subgrad import custom_subgrad as _impl
+    from phast.physics.h_update_custom_subgrad import custom_subgrad as _impl
     return _impl(a, b, scale=scale)
 
 

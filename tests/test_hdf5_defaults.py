@@ -11,12 +11,12 @@ import numpy as np
 import pytest
 import torch
 
-from examples.plasticity_interface_beta import _promoted_result_utils as promoted
+from examples.plasticity_interface import _promoted_result_utils as promoted
 from examples.quasistatic import _run_utils as quasistatic
-from phast.config.config import OutputConfig
-from phast.result import Result, ResultLoadError
-from phast.solid_mechanics_runners import _common as solid
-from phast.utils.io_utils import load_state_from_h5, load_state_from_zarr
+from phast.io.config.config import OutputConfig
+from phast.api.result import Result, ResultLoadError
+from phast.workflow.runners import _common as solid
+from phast.io.outputs import load_state_from_h5, load_state_from_zarr
 
 
 @pytest.fixture

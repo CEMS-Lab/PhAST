@@ -36,9 +36,9 @@ from typing import Any, Iterator
 
 import numpy as np
 
-from ...result import ResultLoadError
+from phast.api.result import ResultLoadError
 
-SCHEMA_NAME = "phast.result"
+SCHEMA_NAME = "phast.api.result"
 SUPPORTED_MAJOR = 2
 VECTOR_COMPONENTS = ("x", "y", "z")
 
@@ -69,7 +69,7 @@ def _components(attrs: dict[str, Any]) -> list[str]:
 
 
 def is_result_file(path: str | Path) -> bool:
-    """True when ``path`` is an HDF5 file whose root declares ``phast_schema = "phast.result"``."""
+    """True when ``path`` is an HDF5 file whose root declares ``phast_schema = "phast.api.result"``."""
     path = Path(path)
     if not path.is_file():
         return False
@@ -661,7 +661,7 @@ class ResultFile:
                 out["speed_source"] = "file"
                 out["speed_fit"] = _attrs(g["speed"])
         if "speed" not in out:
-            from .crack_tips import FIT_METHOD, FIT_POLYORDER, FIT_WINDOW, fit_speed
+            from phast.io.result.crack_tips import FIT_METHOD, FIT_POLYORDER, FIT_WINDOW, fit_speed
             out["speed"] = fit_speed(tip, position, time)
             out["speed_source"] = "computed"
             out["speed_fit"] = {"fit_method": FIT_METHOD, "fit_window": FIT_WINDOW, "fit_polyorder": FIT_POLYORDER}

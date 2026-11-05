@@ -35,7 +35,6 @@ This module provides ``custom_subgrad(a, b, scale=1e10)``, a custom
   zero, and the equality is *smoothly* crossed. This is what unblocks
   gradient flow to ``psi_plus`` for the inverse problem.
 
-This is the headline mechanism for paper 3 contribution C4 (closes #362).
 """
 
 from __future__ import annotations

@@ -13,7 +13,7 @@ function, and J then depends on the domain radius.
 
 Usage::
 
-    from phast.fracture_mechanics import compute_j_integral, compute_sif
+    from phast.physics.fracture_mechanics import compute_j_integral, compute_sif
 
     J = compute_j_integral(mesh, u, d, material, fem_ops)
     K_I, K_II, J = compute_sif(mesh, u, d, material, fem_ops)

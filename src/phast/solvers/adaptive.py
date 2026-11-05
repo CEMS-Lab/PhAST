@@ -14,7 +14,7 @@ the resulting mesh has no hanging nodes.
 
 Typical usage::
 
-    from phast.adaptive import (
+    from phast.solvers.adaptive import (
         compute_refinement_indicator, refine_mesh,
         interpolate_field, interpolate_elem_field,
     )
@@ -38,7 +38,7 @@ import torch
 import numpy as np
 from typing import Tuple, Dict, Iterable, List, Optional, Sequence
 
-from ..core.mesh import FEMMesh
+from phast.core.mesh import FEMMesh
 
 
 # -------------------------------------------------------------------- #

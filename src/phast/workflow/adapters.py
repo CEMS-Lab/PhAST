@@ -7,7 +7,7 @@ from typing import Any
 
 import yaml
 
-from ..config.config import (
+from phast.io.config.config import (
     BoundaryConditionEntry,
     GeometryConfig,
     InitialConditionsConfig,
@@ -18,8 +18,8 @@ from ..config.config import (
     SolverSettings,
     load_config,
 )
-from ..solid_mechanics_runner import solid_example_id
-from .specs import (
+from phast.workflow.solid_mechanics_runner import solid_example_id
+from phast.workflow.specs import (
     AnalysisStepSpec,
     BoundaryConditionSpec,
     FieldOutputSpec,

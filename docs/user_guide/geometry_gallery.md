@@ -43,9 +43,9 @@ Use `--output_dir runs/<case>` for a full run.
 
 | Example | Setup preview | Geometry and input |
 |---|---|---|
-| Linear plate | ![Linear plate setup](../../examples/solid_mechanics_beta/linear_plate/initial_conditions.png) | [`mesh.geo`](../../examples/solid_mechanics_beta/linear_plate/mesh.geo), [`config.yaml`](../../examples/solid_mechanics_beta/linear_plate/config.yaml) |
-| Neo-Hookean plate | ![Neo-Hookean plate setup](../../examples/solid_mechanics_beta/neohookean_plate/initial_conditions.png) | [`mesh.geo`](../../examples/solid_mechanics_beta/neohookean_plate/mesh.geo), [`config.yaml`](../../examples/solid_mechanics_beta/neohookean_plate/config.yaml) |
-| J2 bar | ![J2 bar setup](../../examples/solid_mechanics_beta/j2_bar/initial_conditions.png) | [`mesh.geo`](../../examples/solid_mechanics_beta/j2_bar/mesh.geo), [`config.yaml`](../../examples/solid_mechanics_beta/j2_bar/config.yaml) |
+| Linear plate | ![Linear plate setup](../../examples/solid_mechanics/linear_plate/initial_conditions.png) | [`mesh.geo`](../../examples/solid_mechanics/linear_plate/mesh.geo), [`config.yaml`](../../examples/solid_mechanics/linear_plate/config.yaml) |
+| Neo-Hookean plate | ![Neo-Hookean plate setup](../../examples/solid_mechanics/neohookean_plate/initial_conditions.png) | [`mesh.geo`](../../examples/solid_mechanics/neohookean_plate/mesh.geo), [`config.yaml`](../../examples/solid_mechanics/neohookean_plate/config.yaml) |
+| J2 bar | ![J2 bar setup](../../examples/solid_mechanics/j2_bar/initial_conditions.png) | [`mesh.geo`](../../examples/solid_mechanics/j2_bar/mesh.geo), [`config.yaml`](../../examples/solid_mechanics/j2_bar/config.yaml) |
 
 ## Reading a setup preview
 

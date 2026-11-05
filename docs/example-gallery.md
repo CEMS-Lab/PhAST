@@ -33,11 +33,11 @@ archives. They point to the same workflows listed in the sections that follow.
 |---|---|---|---|---|---|
 | Miehe tension | Supported | YAML-first | `python -m phast run examples/quasistatic/miehe_tension/config.yaml --output_dir runs/miehe_tension` | CSV histories, run metadata/lockfile, and gallery visuals; run explicit postprocessing if you need regenerated animations from a fresh solve | `phast.load_result("runs/miehe_tension")` |
 | Notched-holed plate | Supported | YAML-first | `python -m phast run examples/quasistatic/notched_holed_plate/config.yaml --output_dir runs/notched_holed_plate` | final damage, response CSVs, comparison report, visual manifest | `phast.load_result("runs/notched_holed_plate")` |
-| Linear plate | Supported | YAML-first | `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` |
+| Linear plate | Supported | YAML-first | `python -m phast run examples/solid_mechanics/linear_plate/config.yaml --output_dir runs/linear_plate` | response curve, displacement, von Mises, strain energy, manifests | `phast.load_result("runs/linear_plate")` |
 | Kalthoff-Winkler | Supported | YAML-first | `python -m phast run examples/dynamic/B2_kalthoff_winkler/config.yaml --output_dir runs/B2_kalthoff_winkler` | setup preview, damage image, energy/history CSVs, manifests | `phast.load_result("runs/B2_kalthoff_winkler")` |
 | Heterogeneous fields | Teaching example | Script contract | `python examples/heterogeneous_fields/run.py --config examples/heterogeneous_fields/parameters.yaml --output-dir runs/heterogeneous_fields` | elementwise `E`/`Gc` CSV, nodal damage CSV, field plots, manifests | `phast.load_result("runs/heterogeneous_fields")` |
-| Layered DCB with tough disk | Beta; retained qualitative evidence | Schema-2 YAML | `python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/dcb_fine_reference` | HDF5, CSV, PNG/GIF, VTU, manifests | `phast.load_result("runs/dcb_fine_reference")` |
-| Heterogeneous SENT | Beta configuration | Schema-2 YAML | `python -m phast run examples/heterogeneous_sent_beta/config.yaml --output_dir runs/heterogeneous_sent` | CSV, PNG/GIF, VTU, manifests; trajectory opt-in | `phast.load_result("runs/heterogeneous_sent")` |
+| Layered DCB with tough disk | Beta; retained qualitative evidence | Schema-2 YAML | `python -m phast run examples/two_material_dcb/config.yaml --output_dir runs/dcb_fine_reference` | HDF5, CSV, PNG/GIF, VTU, manifests | `phast.load_result("runs/dcb_fine_reference")` |
+| Heterogeneous SENT | Beta configuration | Schema-2 YAML | `python -m phast run examples/heterogeneous_sent/config.yaml --output_dir runs/heterogeneous_sent` | CSV, PNG/GIF, VTU, manifests; trajectory opt-in | `phast.load_result("runs/heterogeneous_sent")` |
 
 Use the [capability matrix](user_guide/capability_matrix.md) before assuming a
 workflow status. Use the
@@ -113,13 +113,13 @@ The quasi-static family provides documented pathways for selected literature com
 
 ### Solid mechanics FEA
 
-- `python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml`
+- `python -m phast run examples/solid_mechanics/linear_plate/config.yaml`
   Linear elastic plate FEA with displacement, stress, deformed-shape, response,
   and visual-manifest outputs.
-- `python -m phast run examples/solid_mechanics_beta/neohookean_plate/config.yaml`
+- `python -m phast run examples/solid_mechanics/neohookean_plate/config.yaml`
   Nonlinear neo-Hookean cantilever FEA with Newton convergence and final-state
   field outputs.
-- `python -m phast run examples/solid_mechanics_beta/j2_bar/config.yaml`
+- `python -m phast run examples/solid_mechanics/j2_bar/config.yaml`
   Mesh-level J2 plasticity bar FEA with von Mises and equivalent-plastic-strain
   fields.
 
@@ -137,7 +137,7 @@ The quasi-static family provides documented pathways for selected literature com
 
 ### DCB-style layered fracture (beta)
 
-- `python -m phast run examples/two_material_dcb_beta/config.yaml --output_dir runs/two_material_dcb`
+- `python -m phast run examples/two_material_dcb/config.yaml --output_dir runs/two_material_dcb`
   runs the standard schema-v2 staggered quasi-static AT2 workflow in which a
   mid-plane crack in a weak bulk layer approaches a circular Material 2
   inclusion between fracture-resistant outer regions.
@@ -149,7 +149,7 @@ The quasi-static family provides documented pathways for selected literature com
   than the weak layer, not the outer regions; its confinement is part of this
   teaching model.
 
-```{figure} ../examples/two_material_dcb_beta/results/damage_final.png
+```{figure} ../examples/two_material_dcb/results/damage_final.png
 :alt: Retained DCB final damage showing a forked crack in a weak layer near a circular tougher region.
 :width: 100%
 
@@ -166,8 +166,8 @@ pair changes only disk `Gc`: reactions are `0.60938` (tough region) and
 region. Both fork early; the disk cannot be credited with causing branching.
 The control retains the weak layer and outer regions.
 
-Complete inputs are `examples/two_material_dcb_beta/comparisons/tough_region.yaml`
-and `examples/two_material_dcb_beta/comparisons/uniform_layer.yaml`.
+Complete inputs are `examples/two_material_dcb/comparisons/tough_region.yaml`
+and `examples/two_material_dcb/comparisons/uniform_layer.yaml`.
 The [standard tutorial](tutorial/07_standard_simulation_workflow.md) gives
 exact commands with separate output directories, a retained animation, and
 numerical records. These inputs reuse the common runner. Independent fixed-field
@@ -182,12 +182,12 @@ Dirichlet conditions, not dynamic multi-material or independent-interface physic
 ### Beta plasticity, cohesive, and PF-CZM validation
 
 - **J2 plasticity and ductile PF-plasticity**:
-  `examples/plasticity_interface_beta/run_j2_validation.py` and
-  `examples/plasticity_interface_beta/run_ductile_pf_plasticity_validation.py`.
+  `examples/plasticity_interface/run_j2_validation.py` and
+  `examples/plasticity_interface/run_ductile_pf_plasticity_validation.py`.
 - **Cohesive/interface benchmarks**:
   mode-I jump, mixed-mode, contact-compression, delamination patch, structural
   DCB, diffuse-interface, and coupled PF-cohesive validation workflows live under
-  `examples/plasticity_interface_beta/`.
+  `examples/plasticity_interface/`.
 - **Manifested reproduction set**:
   `configs/benchmarks/plasticity_interface/reproducibility_contracts.yaml`.
 - **Generated visual outputs**:

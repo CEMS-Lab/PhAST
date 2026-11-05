@@ -20,7 +20,7 @@ Those files remain machine-readable manifests, but this page is the
 human-facing source of truth.
 
 New YAML examples, READMEs, and tutorials must follow the mandatory
-{download}`configuration authoring rules <../../CONFIGURATION_STYLE.md>`.
+{download}`configuration authoring rules <../maintainer/CONFIGURATION_STYLE.md>`.
 The [standard simulation tutorial](../tutorial/07_standard_simulation_workflow.md)
 is the student-facing companion, not a claim that every adapter is verified.
 

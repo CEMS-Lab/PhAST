@@ -4,7 +4,7 @@
 # 2.1 file apart from the items 2.1 makes optional).
 # Writers embed this text in meta/schema_yaml; the validator checks a file against the
 # schema of its own phast_schema_version.
-schema: phast.result
+schema: phast.api.result
 version: 2.1.0
 specification: docs/user_guide/result_file_layout.md
 
@@ -32,7 +32,7 @@ file:
 
 root_attributes:
   required:
-    phast_schema: {value: phast.result}
+    phast_schema: {value: phast.api.result}
     phast_schema_version: {pattern: "^2\\.\\d+\\.\\d+$"}
     profile: {values: [setup, run]}
     dim: {values: [2, 3]}

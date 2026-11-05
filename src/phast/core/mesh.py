@@ -31,7 +31,7 @@ class FEMMesh:
     def __init__(self, mesh_path: str, device=None,
                  dtype: torch.dtype = torch.float64):
         if device is None:
-            from ..utils.device import detect_device
+            from phast.core.device import detect_device
             device = detect_device()
         self.device = device
         self.dtype = dtype
@@ -109,7 +109,7 @@ class FEMMesh:
             Fully initialised mesh with all precomputed quantities.
         """
         if device is None:
-            from ..utils.device import detect_device
+            from phast.core.device import detect_device
             device = detect_device()
 
         # Bypass __init__ (which requires a file path) by creating a
@@ -304,7 +304,7 @@ class FEMMesh:
 
     def _precompute_q4(self):
         """Precompute Q4 quadrature geometry and scalar lumped mass."""
-        from .quad_elements import q4_quadrature_geometry
+        from phast.core.quad_elements import q4_quadrature_geometry
 
         N_q, gradN_q, wdetJ_q = q4_quadrature_geometry(
             self.nodes, self.elements)

@@ -41,7 +41,7 @@ conda activate phast
 Install documentation tooling separately when building the site:
 
 ```bash
-python -m pip install -r requirements-docs.txt
+python -m pip install -r docs/requirements.txt
 ```
 
 ## Platform activation
@@ -86,7 +86,7 @@ docker run --rm \
   --cpus 2 --memory 4g \
   --volume "$PWD/runs:/opt/phast/runs" \
   phast:local \
-  python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml \
+  python -m phast run examples/solid_mechanics/linear_plate/config.yaml \
   --output_dir runs/linear_plate
 ```
 
@@ -98,7 +98,7 @@ docker run --rm `
   --cpus 2 --memory 4g `
   --mount "type=bind,source=$((Resolve-Path .\runs).Path),target=/opt/phast/runs" `
   phast:local `
-  python -m phast run examples/solid_mechanics_beta/linear_plate/config.yaml `
+  python -m phast run examples/solid_mechanics/linear_plate/config.yaml `
   --output_dir runs/linear_plate
 ```
 
