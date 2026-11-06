@@ -437,8 +437,7 @@ with a repository BibTeX entry and reproducibility notes.
 Official code for the article is hosted in this repository:
 <https://github.com/CEMS-Lab/PhAST>.
 
-Developed by [Allamaprabhu Ani](https://allamaprabhuani.github.io/) and
-collaborators. Project home: [CEMS-Lab/PhAST](https://github.com/CEMS-Lab/PhAST).
+<!-- PhAST | Allamaprabhu Ani | https://allamaprabhuani.github.io/ -->
 
 ## Acknowledgments
 
