@@ -35,6 +35,8 @@ solid3d   : 3D voxel fracture on periodic unit cells (beta)
 Old flat import paths such as ``phast.mesh`` and ``phast.damage_solver`` keep working; see ``phast._compat``.
 """
 
+# PhAST | Allamaprabhu Ani | https://allamaprabhuani.github.io/
+
 # Guard against being imported under the wrong package name. When pytest
 # collects modules from a clone whose directory name is not
 # ``phast`` (for example ``phast-feature-x``), Python may try to import this file as
