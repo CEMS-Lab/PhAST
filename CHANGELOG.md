@@ -15,6 +15,15 @@
 - Add: the selected cross-mesh inversion under `examples/inverse/`, with the 0.125 mm original mesh and 0.1875 mm inverse mesh settings.
 - Remove: the diffuse-interphase script, which imported a module that is not part of the release.
 
+### Tutorials
+
+- Add: `docs/tutorial/notebook_own_shape.ipynb`, a quasi-static walk-through for a shape of your own: a Gmsh `.geo` description of a notched plate with a hole,
+  meshing with named edges, material and boundary conditions on named regions with `phast.Problem`, a laptop-CPU solve (about 2-3 min), and force,
+  crack and deformed-shape plots from `phast.load_result`. Linked from the tutorial index and the setup guide, which now notes that a `simple`-protocol
+  displacement `value` is a rate and that `reaction_kN` is the reaction magnitude divided by 1000.
+- Fix: a second `phast.Problem.material(...)` call for a different region raised no error and silently replaced the first material; it now raises
+  `NotImplementedError` and points to schema-v2 element regions for region-wise materials.
+
 ### 3D fracture (beta)
 
 - Add: `phast.solid3d`, a matrix-free eight-node hexahedral solver for periodic voxel unit cells with a prescribed macro strain, PF-CZM damage, per-voxel materials and

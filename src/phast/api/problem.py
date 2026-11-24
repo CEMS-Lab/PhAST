@@ -108,7 +108,23 @@ class Problem:
         return self
 
     def material(self, preset='miehe_tension', region=None, **overrides):
-        """Set material from a preset name with optional overrides."""
+        """Set material from a preset name with optional overrides.
+
+        One material per fluent problem: it applies to the whole domain. A
+        second call for a different region raises instead of silently
+        replacing the first material. Region-wise materials use a schema-v2
+        deck with element regions (see examples/heterogeneous_sent).
+        """
+        previous = getattr(self, '_material_region_set', False)
+        previous_region = getattr(self._config.material, '_workflow_region', None)
+        if previous and region != previous_region:
+            raise NotImplementedError(
+                "The fluent Problem applies one material to the whole domain, so "
+                f"a second .material() call for region {region!r} (first one: "
+                f"{previous_region!r}) would silently replace the first. For "
+                "region-wise materials use a schema-v2 deck with element regions, "
+                "as in examples/heterogeneous_sent.")
+        self._material_region_set = True
         self._config.material = MaterialConfig(preset=preset, overrides=overrides)
         if region is not None:
             self._config.material._workflow_region = region
