@@ -1,5 +1,9 @@
 # Citing PhAST
 
+PhAST is led by [Allamaprabhu Ani](https://allamaprabhuani.github.io/).
+
+The [journal article](https://doi.org/10.1016/j.cma.2026.119547) is by Allamaprabhu Ani, Jean-François Molinari, Ghatu Subhash and Sathiskumar Anusuya Ponnusami.
+
 If PhAST contributes to your research, please cite the journal article
 (doi:10.1016/j.cma.2026.119547) and the software repository. The preprint is arXiv:2606.23458; its title
 differs from the journal title.
