@@ -189,9 +189,10 @@ curves and surfaces, mesh it with `gmsh -2`, and pass the `.msh` file to
 names through `problem.region(name, from_mesh=name)`. The
 [own-shape notebook](../tutorial/notebook_own_shape.ipynb) walks through every
 stage for a notched plate with a hole. Two points catch new users: with the
-`simple` load protocol a prescribed displacement `value` is a rate (the applied
-displacement is `value` times time), and the `reaction_kN` column of
-`results.csv` is the reaction magnitude divided by 1000.
+`simple` load protocol a prescribed `value` is multiplied by the load factor
+`num_steps × dt` (set `dt = 1 / num_steps` to make `value` the final
+displacement), and the `reaction_kN` column of `results.csv` is the reaction
+magnitude divided by 1000.
 
 Use built-in geometry names for common benchmark shapes:
 
@@ -383,6 +384,29 @@ problem.solver("quasi_static", backend="auto", preconditioner="jacobi", max_stag
 
 For explicit dynamics, the YAML examples expose the full time-step and output
 cadence controls and are the recommended starting point for reproducible runs.
+
+### Quasi-static or dynamic loading
+
+Boundary conditions are written the same way for both analyses; the analysis
+step decides how the prescribed `value` grows. Every prescribed displacement
+or traction is multiplied by one load factor:
+
+| | Quasi-static (`type: quasi_static`) | Dynamic (`type: explicit`) |
+|---|---|---|
+| `dt` | load-factor increment (no units) | physical time step in seconds, below about `h_min / c_p` |
+| Load factor | `n × dt` after `n` increments | `ramp(t)`: `constant`, `linear`, `smooth` or `smooth_step` over `t_ramp`, then 1 |
+| Make `value` the final load | set `dt = 1 / num_steps` | reached at `t_ramp` and held |
+| Inertia | none | included; the material needs `rho` |
+
+`examples/standard_workflow/quasistatic_sent` and
+`examples/standard_workflow/dynamic_sent` set up the same plate both ways.
+Other dynamic loads: impact velocity with `ramp_type: velocity_impact`, `v0`
+and `t_ramp` (`examples/dynamic/B2_kalthoff_winkler`), an applied stress with a
+ramped `neumann` condition (`examples/dynamic/B7_dynamic_crack_branching_comsol`),
+and pre-stretch then hold with `protocol: two_step_prestrain`. Switching a load
+on at once (`constant`) sends a stress wave through the part; prefer a ramp
+unless the wave is the point of the study. The
+[own-shape notebook](../tutorial/notebook_own_shape.ipynb) plots the four ramps.
 
 ## Outputs
 
