@@ -183,6 +183,16 @@ Examples are YAML-first because they are reproducible. When available,
 
 ## Geometry and Meshes
 
+To model a shape of your own, write a Gmsh `.geo` file with named physical
+curves and surfaces, mesh it with `gmsh -2`, and pass the `.msh` file to
+`problem.mesh(...)`; boundary conditions and materials then refer to the
+names through `problem.region(name, from_mesh=name)`. The
+[own-shape notebook](../tutorial/notebook_own_shape.ipynb) walks through every
+stage for a notched plate with a hole. Two points catch new users: with the
+`simple` load protocol a prescribed displacement `value` is a rate (the applied
+displacement is `value` times time), and the `reaction_kN` column of
+`results.csv` is the reaction magnitude divided by 1000.
+
 Use built-in geometry names for common benchmark shapes:
 
 ```python

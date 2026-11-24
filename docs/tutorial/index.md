@@ -19,21 +19,27 @@ silently migrate them or add 3D fracture support.
    performs a fresh, laptop-scale calculation: generate the mesh, inspect named
    boundaries, define material and loading data, select the supported dynamic
    solver route, follow progress, and plot displacement, strain, stress, and damage.
-2. [Dynamic SENT: inspect a complete public example](notebook_dynamic_sent.ipynb)
+2. [Your own shape: from a drawing to a cracked part](notebook_own_shape.ipynb)
+   designs a new part in a Gmsh `.geo` file (a notched plate with a hole),
+   meshes it, names its edges, applies the material, supports and load through
+   named regions with `phast.Problem`, runs a quasi-static solve on a laptop
+   CPU, and reads the force, crack and deformed shape back with
+   `phast.load_result`.
+3. [Dynamic SENT: inspect a complete public example](notebook_dynamic_sent.ipynb)
    connects an existing mesh, named regions, boundary conditions, YAML,
    explicit solver route, retained energy history, and visible crack-growth
    animation. It does not rerun the full dynamic calculation by default.
-3. [SENT setup and two-step CPU workflow check](notebook_setup.ipynb)
+4. [SENT setup and two-step CPU workflow check](notebook_setup.ipynb)
    teaches geometry, meshing, named regions, boundary conditions, material,
    solver selection, and retained outputs. Its default run is not crack-growth
    validation.
-4. [Mesh-resolution diagnostic](notebook_mesh_resolution.ipynb)
+5. [Mesh-resolution diagnostic](notebook_mesh_resolution.ipynb)
    samples an AT2 profile at several $h/\ell_0$ ratios. It is not a solved
    convergence study.
-5. [Retained Miehe SENT results](notebook_retained_results.ipynb)
+6. [Retained Miehe SENT results](notebook_retained_results.ipynb)
    examines checked-in load-displacement and damage evidence and states the
    current post-processing boundary.
-6. [Layered DCB: understand, edit, and interpret a fracture model](notebook_layered_dcb.ipynb)
+7. [Layered DCB: understand, edit, and interpret a fracture model](notebook_layered_dcb.ipynb)
    explains material regions, the initial crack, boundary conditions, the
    implicit staggered solution, and result interpretation. It displays retained
    evidence by default and makes a new simulation an explicit choice.
@@ -62,6 +68,7 @@ checkout, and prints the resolved commit before installation.
 | [Layered DCB student notebook](notebook_layered_dcb.ipynb) | Self-paced; full solve optional | Connect the physical model and equations to editable YAML, view a geometry schematic, inspect retained fields and animation, and design a material-contrast comparison. |
 | [Getting started](../getting-started.md) | 10-20 min on a fresh machine | Create an environment, install PyTorch and PhAST, run `doctor`, validate a shipped example, and inspect a result. A prepared teaching environment is faster. |
 | [Square-plate fracture: complete workflow](notebook_square_plate_fracture.ipynb) | 25-40 min including installation; about 15-60 s for the solve on a prepared laptop | Generate the B3 square-plate mesh, inspect named boundaries, assemble a CFL-safe teaching configuration, run explicit mechanics with an implicit damage update, and create fresh field plots and a crack animation. Runtime is machine-dependent. |
+| [Your own shape](notebook_own_shape.ipynb) | 20-30 min; about 2-3 min for the solve on a laptop CPU | Write a Gmsh geometry for a new part, mesh it with named edges, apply material, supports and a load through named regions, run a quasi-static solve, and plot force against displacement, the crack path and the deformed shape. |
 | [Dynamic SENT example](notebook_dynamic_sent.ipynb) | 20-30 min | Inspect the existing B3 mesh, named regions, loading, explicit solver route, retained histories, and crack-growth animation without presenting retained evidence as a new run. |
 | [Phase-field primer](01_phase_field_primer.md) | 15 min | Connect Griffith fracture energy, regularization, degradation, energy splits, history, and the staggered solve. |
 | [Problem setup notebook](notebook_setup.ipynb) | 35-50 min | Predict the setup, create and inspect the geometry and named regions, apply conditions and solver settings, run a short solve, change one parameter, and interpret the artifacts. A rendered fallback supports sessions without a working runtime. |

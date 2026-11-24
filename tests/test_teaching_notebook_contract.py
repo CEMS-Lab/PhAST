@@ -1,4 +1,4 @@
-"""Bounded contracts for the three executable teaching notebooks."""
+"""Bounded contracts for the executable teaching notebooks."""
 from __future__ import annotations
 
 import ast
@@ -14,6 +14,7 @@ NAMES = (
     "notebook_setup.ipynb",
     "problem_setup_walkthrough.ipynb",
     "notebook_square_plate_fracture.ipynb",
+    "notebook_own_shape.ipynb",
 )
 
 
