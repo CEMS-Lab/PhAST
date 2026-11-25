@@ -541,6 +541,37 @@ def _bc_state(n_nodes: int, resolved, factor: float):
     return mask, values
 
 
+def _write_mesh_copy(output: Path, spec: ProblemSpec, nodes: np.ndarray,
+                     elements: np.ndarray, material_ids: np.ndarray,
+                     region_names: list[str]) -> list[str]:
+    """Keep the mesh a run used next to its outputs, as the main runner does.
+
+    An external mesh is copied as ``mesh.msh`` (with a sibling ``.geo`` as
+    ``mesh.geo`` when present). A generated mesh is written as Gmsh 2.2
+    ``mesh.msh`` with one named physical surface per material region, so
+    ``phast.inspect_mesh`` and Gmsh show the regions the materials used.
+    """
+    if spec.mesh is not None and spec.mesh.path:
+        source = Path(spec.mesh.path)
+        shutil.copy2(source, output / "mesh.msh")
+        written = ["mesh.msh"]
+        geo = source.with_suffix(".geo")
+        if geo.is_file():
+            shutil.copy2(geo, output / "mesh.geo")
+            written.append("mesh.geo")
+        return written
+    tags = np.asarray(material_ids, dtype=np.int64) + 1
+    field_data = {name: np.array([index + 1, 2]) for index, name in enumerate(region_names)}
+    meshio.write(
+        output / "mesh.msh",
+        meshio.Mesh(np.column_stack([nodes, np.zeros(nodes.shape[0])]),
+                    [("triangle", np.asarray(elements, dtype=np.int64))],
+                    cell_data={"gmsh:physical": [tags], "gmsh:geometrical": [tags]},
+                    field_data=field_data),
+        file_format="gmsh22", binary=False)
+    return ["mesh.msh"]
+
+
 def run_multimaterial_fracture_spec(spec: ProblemSpec, *, output_dir=None) -> int:
     """Execute a reusable heterogeneous schema-v2 quasi-static problem."""
     started = time.perf_counter()
@@ -835,6 +866,9 @@ def run_multimaterial_fracture_spec(spec: ProblemSpec, *, output_dir=None) -> in
                    "equivalent_strain": [eq_strain], "von_mises": [von_mises],
                    "eps_xx": [eps_xx], "eps_yy": [eps_yy], "gamma_xy": [gamma_xy],
                    "sxx": [sxx], "syy": [syy], "sxy": [sxy]})
+    mesh_files = _write_mesh_copy(
+        output, spec, nodes_np, elements_np, material_ids,
+        [material.region for material in spec.materials])
     if spec.source_path:
         shutil.copy2(spec.source_path, output / "config.yaml")
         config_text = Path(spec.source_path).read_text(encoding="utf-8")
@@ -890,7 +924,7 @@ def run_multimaterial_fracture_spec(spec: ProblemSpec, *, output_dir=None) -> in
         visual_rows.append(entry)
     (output / "visual_manifest.json").write_text(
         json.dumps(visual_rows, indent=2) + "\n", encoding="utf-8")
-    files = ["config.yaml", "history.csv", "solver_telemetry.csv", "timing_per_step.csv",
+    files = ["config.yaml", *mesh_files, "history.csv", "solver_telemetry.csv", "timing_per_step.csv",
              "nodal_fields.csv", "element_fields.csv", "final_fields.vtu", *visuals,
              "summary.json", "run_metadata.json", "run_lockfile.json",
              "visual_manifest.json", "run_manifest.json"]

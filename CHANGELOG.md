@@ -24,6 +24,9 @@
 - Fix: a second `phast.Problem.material(...)` call for a different region raised no error and silently replaced the first material; it now raises
   `NotImplementedError` and points to schema-v2 element regions for region-wise materials.
 
+- Change: the schema-v2 multi-material runner keeps the mesh it used in the run folder: a generated mesh is written as Gmsh 2.2 `mesh.msh` with one
+  named physical surface per material region, and an external mesh is copied as `mesh.msh` (with its `.geo` as `mesh.geo`). Both are listed in `run_manifest.json`.
+
 ### 3D fracture (beta)
 
 - Add: `phast.solid3d`, a matrix-free eight-node hexahedral solver for periodic voxel unit cells with a prescribed macro strain, PF-CZM damage, per-voxel materials and
